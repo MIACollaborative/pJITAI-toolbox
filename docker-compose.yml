@@ -32,6 +32,8 @@ services:
     restart: always
     env_file: .env_docker
     build: .
+    ports:
+      - "5005:5005"  # host:container ports mapping
     networks:
       - db_network
       - web_network
