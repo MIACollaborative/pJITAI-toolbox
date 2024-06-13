@@ -17,7 +17,7 @@ Running this bash script will setup the environment and run the repo on local. `
 
 Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing and how to debug, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). If you would like to set up your environment manually, you can also run this repo on local using the command `python run.py`. 
 
-Check `DBMS = mysql+pymysql://root:pass@localhost:3306/pJITAI` is printed when `python run.py` or `./setup_and_run.sh
+Check `DBMS = mysql+pymysql://root:pass@localhost:3306/pJITAI` is printed when `python run.py` or `./setup_and_run.sh`
 
 ## MySQL
 
