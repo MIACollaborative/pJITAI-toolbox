@@ -2,7 +2,22 @@
 
 ### About mDOT
 The mHealth Center for Discovery, Optimization & Translation of Temporally-Precise Interventions is supported by the National Institutes of Health's National Institute of Biomedical Imaging and Bioengineering through its Biomedical Technology Resource Centers Program.
-# Getting Started
+
+# Ways of Running this Repo
+
+You can run this repo either on 1. local environment, or 2. Docker. Explanations on how to run Docker can be found under 'Running on Docker.'
+
+## Running on Local
+
+```bash
+./setup_and_run.sh
+```
+
+Running this bash script will setup the environment and run the repo on local. Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). If you would like to set up your environment manually, you can also run this repo on local using the command `python run.py`. 
+
+
+
+## Running on Docker
 
 We recommend using a native installation of [Visual Studio Code](https://code.visualstudio.com/) to edit and debug this project. Additionally, you will need [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/).  If you are using the interactive capabilities of Visual Studio Code, you will need to install the Python requirements located in the `requirements.txt` file.  Prior to installing these, you need to install a mysql-client and associated development files for the database library.  
 
