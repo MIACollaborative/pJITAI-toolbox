@@ -5,7 +5,7 @@ The mHealth Center for Discovery, Optimization & Translation of Temporally-Preci
 
 # Ways of Running this Repo
 
-You can run this repo either on 1. local environment, or 2. Docker. Explanations on how to run Docker can be found under 'Running on Docker.'
+You can run this repo either on 1. local environment, or 2. Docker. Explanations on how to run Docker can be found under '2. Running on Docker.'
 
 # 1. Running on Local
 
