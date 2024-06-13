@@ -7,17 +7,34 @@ The mHealth Center for Discovery, Optimization & Translation of Temporally-Preci
 
 You can run this repo either on 1. local environment, or 2. Docker. Explanations on how to run Docker can be found under 'Running on Docker.'
 
-## Running on Local
+# 1. Running on Local
 
 ```bash
 ./setup_and_run.sh
 ```
 
-Running this bash script will setup the environment and run the repo on local. Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). If you would like to set up your environment manually, you can also run this repo on local using the command `python run.py`. 
+Running this bash script will setup the environment and run the repo on local. `chmod +x setup_and_run.sh` may be necessary in order to run it. Once it is running, you can go to `http://127.0.0.1:5005` to check the running repo. 
 
+Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing and how to debug, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). If you would like to set up your environment manually, you can also run this repo on local using the command `python run.py`. 
 
+Check `DBMS = mysql+pymysql://root:pass@localhost:3306/pJITAI` is printed when `python run.py` or `./setup_and_run.sh
 
-## Running on Docker
+## MySQL
+
+If using `./setup_and_run.sh` does not work due to an error caused by password on MySQL, try changing the password using the next commands on MySQL prompt. 
+
+```bash
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'pass';
+FLUSH PRIVILEGES;
+```
+
+Use `brew services restart mysql` to restart MySQL with the new password.
+
+## Nginx
+
+Use `sudo nginx -t` to check whether nginx is running successfully. You can also use `curl -l http://localhost:85` to check whether nginx is running successfully.
+
+# 2. Running on Docker
 
 We recommend using a native installation of [Visual Studio Code](https://code.visualstudio.com/) to edit and debug this project. Additionally, you will need [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/).  If you are using the interactive capabilities of Visual Studio Code, you will need to install the Python requirements located in the `requirements.txt` file.  Prior to installing these, you need to install a mysql-client and associated development files for the database library.  
 
