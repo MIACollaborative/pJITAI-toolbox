@@ -8,20 +8,31 @@ The mHealth Center for Discovery, Optimization & Translation of Temporally-Preci
 You can run this repo either on 1. local environment, or 2. Docker. Explanations on how to run Docker can be found under '2. Running on Docker.'
 
 # 1. Running on Local
-
+## Step 1: Setup Environment
 ```bash
-./setup_and_run.sh
+./setup.sh
 ```
 
-Running this bash script will setup the environment and run the repo on local. `chmod +x setup_and_run.sh` may be necessary in order to run it. Once it is running, you can go to `http://127.0.0.1:5005` to check the running repo. 
+Running this bash script will setup the necessary environment for running. `chmod +x setup.sh` may be necessary in order to run it. Note that only need to run this only once, and after then you can directly run the repo using the following commands. Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing and how to debug, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). 
 
-Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing and how to debug, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). If you would like to set up your environment manually, you can also run this repo on local using the command `python run.py`. 
+## Step 2: Run the Repo
+Once environment setting has been done, use one of the following commands to run it.
 
-Check `DBMS = mysql+pymysql://root:pass@localhost:3306/pJITAI` is printed when `python run.py` or `./setup_and_run.sh`
+```bash
+python run.py
+```
+```bash
+gunicorn --config gunicorn-cfg.py run:app
+```
+Both commands are doing the same task, but the difference is which server it is using. The first command uses Flask server to run it, and the second command uses gunicorn to run. During development, you can use the first command, but during production, gunicorn can be more appropriate.
+
+Once the repo is running, you can go to `http://127.0.0.1:5005` to check the running repo. 
+
+Check `DBMS = mysql+pymysql://root:pass@localhost:3306/pJITAI` is printed when `python run.py` or `gunicorn --config gunicorn-cfg.py run:app`
 
 ## MySQL
 
-If using `./setup_and_run.sh` does not work due to an error caused by password on MySQL, try changing the password using the next commands on MySQL prompt. 
+If using `./setup.sh` does not work due to an error caused by password on MySQL, try changing the password using the next commands on MySQL prompt. 
 
 ```bash
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'pass';
@@ -32,7 +43,7 @@ Use `brew services restart mysql` to restart MySQL with the new password.
 
 ## Nginx
 
-Use `sudo nginx -t` to check whether nginx is running successfully. You can also use `curl -l http://localhost:85` to check whether nginx is running successfully.
+Use `sudo nginx -t` to check whether nginx document has no error. You can use `curl -l http://localhost:85` to check whether nginx is running successfully.
 
 # 2. Running on Docker
 
