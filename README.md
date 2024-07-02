@@ -4,7 +4,7 @@
 The mHealth Center for Discovery, Optimization & Translation of Temporally-Precise Interventions is supported by the National Institutes of Health's National Institute of Biomedical Imaging and Bioengineering through its Biomedical Technology Resource Centers Program.
 
 # Important note
-The `source setup.sh` script is Mac specific, using `homebrew` to setup the environment.
+The `setup.sh` script is Mac specific, using `homebrew` to setup the environment.
 
 # Ways of Running this Repo
 
