@@ -2,6 +2,22 @@
 export PYTHONDONTWRITEBYTECODE=1
 export PYTHONUNBUFFERED=1
 
+# Initialize conda
+conda init
+
+# Check if the conda environment 'pJITAI' exists
+if conda info --envs | grep -q "^pJITAI"; then
+  echo "Conda environment 'pJITAI' already exists. Activating the environment..."
+  conda activate pJITAI
+else
+  echo "Conda environment 'pJITAI' does not exist. Creating the environment..."
+  conda create --name pJITAI python=3.11 -y
+  conda activate pJITAI
+fi
+
+# print Python version
+python --version
+
 # update & install cron (macOS)
 brew update
 brew install cron

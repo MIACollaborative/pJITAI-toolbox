@@ -3,6 +3,9 @@
 ### About mDOT
 The mHealth Center for Discovery, Optimization & Translation of Temporally-Precise Interventions is supported by the National Institutes of Health's National Institute of Biomedical Imaging and Bioengineering through its Biomedical Technology Resource Centers Program.
 
+# Important note
+The `source setup.sh` script is Mac specific, using `homebrew` to setup the environment.
+
 # Ways of Running this Repo
 
 You can run this repo either on 1. local environment, or 2. Docker. Explanations on how to run Docker can be found under '2. Running on Docker.'
@@ -10,10 +13,10 @@ You can run this repo either on 1. local environment, or 2. Docker. Explanations
 # 1. Running on Local
 ## Step 1: Setup Environment
 ```bash
-./setup.sh
+source setup.sh
 ```
 
-Running this bash script will setup the necessary environment for running. `chmod +x setup.sh` may be necessary in order to run it. Note that only need to run this only once, and after then you can directly run the repo using the following commands. Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing and how to debug, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). 
+Running this bash script will setup the necessary environment for running. `chmod +x setup.sh` may be necessary in order to run it. Note that only need to run this **only once**, and after then you can directly run the repo using the following commands. Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing and how to debug, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). 
 
 ## Step 2: Run the Repo
 Once environment setting has been done, use one of the following commands to run it.
@@ -30,9 +33,9 @@ Once the repo is running, you can go to `http://127.0.0.1:5005` to check the run
 
 Check `DBMS = mysql+pymysql://root:pass@localhost:3306/pJITAI` is printed when `python run.py` or `gunicorn --config gunicorn-cfg.py run:app`
 
-## MySQL
+## Note: MySQL
 
-If using `./setup.sh` does not work due to an error caused by password on MySQL, try changing the password using the next commands on MySQL prompt. 
+If using `source setup.sh` does not work due to an error caused by password on MySQL, try changing the password using the next commands on MySQL prompt. 
 
 ```bash
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'pass';
@@ -41,7 +44,7 @@ FLUSH PRIVILEGES;
 
 Use `brew services restart mysql` to restart MySQL with the new password.
 
-## Nginx
+## Note: Nginx
 
 Use `sudo nginx -t` to check whether nginx document has no error. You can use `curl -l http://localhost:85` to check whether nginx is running successfully.
 
