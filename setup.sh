@@ -66,10 +66,14 @@ NGINX_FILE=$(dirname $(dirname $NGINX_PATH))/etc/nginx/nginx.conf
 INCLUDE_LINE="include $(dirname $(dirname $NGINX_PATH))/etc/nginx/conf.d/*;"
 
 if [ -f "$NGINX_FILE" ]; then
-  sudo sed -i.bak "/http {/a\\
-  $INCLUDE_LINE
-  " "$NGINX_FILE"
-  echo "Line added to $NGINX_FILE"
+  if ! grep -qF "$INCLUDE_LINE" "$NGINX_FILE"; then
+    sudo sed -i.bak "/http {/a\\
+    $INCLUDE_LINE
+    " "$NGINX_FILE"
+    echo "Line added to $NGINX_FILE"
+  else
+    echo "Line alreay exists in $NGINX_FILE"
+  fi
 else
   echo "$NGINX_FILE does not exist."
   exit 1
