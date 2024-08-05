@@ -16,7 +16,7 @@ You can run this repo either on 1. local environment, or 2. Docker. Explanations
 source setup.sh
 ```
 
-Running this bash script will setup the necessary environment for running. `chmod +x setup.sh` may be necessary in order to run it. Note that only need to run this **only once**, and after then you can directly run the repo using the following commands. Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing and how to debug, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). 
+Running this bash script will setup the necessary environment for running. `chmod +x setup.sh` may be necessary in order to run it. Note that you can run the bash script as much as you want before running the repo (step 2), but *running it only once will setup the environment successfully*. Running it multiple times will update homebrew and pip to the latest version. Note that this file is assuming you will be using Mac environment and typical nginx path. For detailed explanations on what this bash script is doing and how to debug, refer to this [document](https://docs.google.com/document/d/1OXymWaQtf1ktAW6F5Q-c-ozTKyu9UjhKw9_rOy75p1Q/edit?usp=sharing). 
 
 ## Step 2: Run the Repo
 Once environment setting has been done, use one of the following commands to run it.
