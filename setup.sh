@@ -39,10 +39,21 @@ MYSQL="root"
 MYSQL_HOST="localhost"
 MYSQL_PASSWORD="pass"   # May need to change password from current to 'pass' manually, if this doesn't work
 
+# Check mysql DB pjitai exists
+DB_EXISTS=$(mysql -u $MYSQL -p$MYSQL_PASSWORD -h $MYSQL_HOST -e "SHOW DATABASES LIKE 'pjitai';" | grep "pjitai" > /dev/null; echo "$?")
+
+if [ $DB_EXISTS -eq 1 ]; then
+  echo "Database pjitai does not exist. Creating now..."
+  mysql -u $MYSQL -p$MYSQL_PASSWORD -h $MYSQL_HOST <<EOF
+  CREATE DATABASE pjitai;
+EOF
+else
+  echo "Database pjitai already exists. Using the existing database."
+fi
+
 mysql -u $MYSQL -p$MYSQL_PASSWORD -h $MYSQL_HOST <<EOF
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
-CREATE DATABASE pjitai;
 EOF
 
 echo "mysql is running, privileges flushed and db pjitai created."
@@ -79,6 +90,8 @@ else
   exit 1
 fi
 sudo nginx -s reload
+
+echo "Setup has been completed!"
 
 # gunicorn
 # gunicorn --config gunicorn-cfg.py run:app
