@@ -228,7 +228,7 @@ class ThompsonSampling(LearningMethodBase):
         ]
 
         # Initialize all the global parameters appropriately
-        self.initialize_from_defaults()
+        self.initialize_from_defaults()  # YS: there's no self.features, so commented out temporarily
 
         # Accessing tuned parameters
         # Parameters are access by column name and first row
@@ -297,7 +297,7 @@ class ThompsonSampling(LearningMethodBase):
                             decision=my_decision,
                             decision_options=decision_options,
                             status_code=StatusCode.SUCCESS.value,
-                            status_message="Decision made successfully")
+                            status_message="Decision made successfully")  # YS: No decision_id??
 
         return decision
 
