@@ -86,13 +86,14 @@ def _do_update(algo_uuid):
 
     for index, row in result.iterrows():
         store_tuned_params(user_id=row.user_id,
-                           configuration=row.iloc[2:].to_dict())
+                           configuration=row.iloc[2:].to_dict()) # TODO (YS): this is updating AlgorithmTunedParams. Should be modified? 
 
 
 # API METHODS ARE BELOW
 
+# @blueprint.route('<uuid>', methods=['GET'])
 @blueprint.route('<uuid>', methods=['POST'])
-@pJITAI_token_required
+# @pJITAI_token_required
 def model(uuid: str) -> dict:
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()
     result = {"status": "ERROR: Algorithm not found"}
@@ -102,14 +103,15 @@ def model(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/decision', methods=['POST', 'GET'])
-@pJITAI_token_required
+# @pJITAI_token_required
 def decision(uuid: str) -> dict:
     input_data = request.json
     try:
         
         # TODO: Do something with input_data['eligilibity'] (https://github.com/mDOT-Center/pJITAI/issues/21)
         
-        validated_data = _validate_algo_data(uuid, input_data['values'])
+        # validated_data = _validate_algo_data(uuid, input_data['values']) # YS: currently using Algorithms
+        validated_data = input_data['values']
 
         validated_data_df = pd.DataFrame(json_to_series(validated_data)).transpose()
 
@@ -123,6 +125,7 @@ def decision(uuid: str) -> dict:
         obj.as_object(proj)  # TODO: What does this do?
 
         tuned_params = get_tuned_params(user_id=user_id)
+        # print('tuned_params: ', tuned_params)
         tuned_params_df = None
 
         timestamp = request.json['timestamp']
@@ -161,11 +164,12 @@ def decision(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/upload', methods=['POST'])
-@pJITAI_token_required  # TODO: This should actually check the token
+# @pJITAI_token_required  # TODO: This should actually check the token
 def upload(uuid: str) -> dict:
     input_data = request.json
     try:
-        validated_input_data = _validate_algo_data(uuid, input_data['values'])
+        # validated_input_data = _validate_algo_data(uuid, input_data['values'])
+        validated_input_data = input_data['values']
         _save_each_data_row(input_data['user_id'],
                             decision_id=input_data['decision_id'],
                             proximal_outcome_timestamp=input_data['proximal_outcome_timestamp'],
@@ -191,7 +195,7 @@ def upload(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/update', methods=['POST'])
-@pJITAI_token_required
+# @pJITAI_token_required
 def update(uuid: str) -> dict:
     input_data = request.json
     try:
@@ -219,7 +223,7 @@ def update(uuid: str) -> dict:
         return result, 400
 
 
-# Web UI related APIs below here #TODO: Move these to a separate file?
+# Web UI related APIs below here #TODO: Move these to a separate file? #NOTE (YS): <algo_type> is never being updated in Projects. run_algo is not being called anywhere. 
 @blueprint.route('/run_algo/<algo_type>', methods=['POST'])  # or UUID
 @login_required
 def run_algo(algo_type):

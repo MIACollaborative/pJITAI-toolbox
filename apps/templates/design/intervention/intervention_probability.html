@@ -130,7 +130,7 @@ $(document).ready(function(){
                                 <!-- [ tabs ] start -->
                                 <div class="col-sm-12">
 
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="home-tab" data-toggle="tab"
                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
@@ -141,10 +141,12 @@ $(document).ready(function(){
                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
                                                 Example</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                     <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab">
+                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                             aria-labelledby="home-tab"> -->
+                                        <div class="tab-item">
+                                            <h5>Explanation</h5>
                                             <p>
                                             <p>Before your study begins, you need to set the lower and upper bounds of 
                                                 the probability of sending Intervention Option A.
@@ -165,17 +167,24 @@ $(document).ready(function(){
                                                 that you choose a smaller upper bound.</p>
                                             </p>
                                         </div>
-                                        <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab">
+                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                             aria-labelledby="profile-tab"> -->
+                                        <div class="tab-item">
+                                            <h5>HeartSteps Example</h5>
+                                            <h6>Intervention Probability Lowerbound</h6>
+                                            <p>0.1</p>
+                                            <h6>Intervention Probability Upperbound</h6>
+                                            <p>0.8</p>
                                             <p>For the HeartSteps study, the behavioral scientists determined that
-                                               the intervention probability should be between 0.1 and 0.8. 
+                                               the intervention probability should be between <b>0.1 and 0.8.</b>
                                                 Note that with 5 decision
                                                 points/day, an intervention probability of 0.1 yields an average
-                                                of 0.1 x 5 = 0.5 activity suggestion messages (Intervention Option A) per day. 
+                                                of 0.1 x 5 = <u>0.5 activity suggestion messages</u> (Intervention Option A) per day. 
                                                 Similarly, an intervention probability of 0.8 yields an average
-                                                of 0.8 x 5 = 4 activity suggestion messages (Intervention Option A) per day.
-                                                In other words, on average, between 0.5 and 4 
-                                                activity suggestions will be sent per day.</p>
+                                                of 0.8 x 5 = <u>4 activity suggestion messages</u> (Intervention Option A) per day. </p>
+                                            <p>
+                                                In other words, on average, between <u>0.5 and 4 
+                                                activity suggestions</u> will be sent per day.</p>
                                         </div>
 
                                     </div>

@@ -212,7 +212,7 @@ $(document).ready(function() {
                                 <!-- [ tabs ] start -->
                                 <div class="col-sm-12">
 
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="home-tab" data-toggle="tab"
                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
@@ -223,10 +223,12 @@ $(document).ready(function() {
                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
                                                 Example</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                     <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab">
+                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                             aria-labelledby="home-tab"> -->
+                                        <div class="tab-item">
+                                            <h5>Explanation</h5>
                                             <p>Please use “Add another covariate” to add a covariate that is likely to
                                                 be correlated with (predictive of) the proximal outcome.</p>
 
@@ -239,11 +241,17 @@ $(document).ready(function() {
 
                                             <p>If you want to remove a covariate, please click the trashcan.</p>
                                         </div>
-                                        <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab">
+                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                             aria-labelledby="profile-tab"> -->
+                                        <div class="tab-item">
+                                            <h5>Covariates</h5>
+                                            <ul>
+                                                <li>Location of the individual</li>
+                                                <li>30-minute step count prior to a decision point</li>
+                                            </ul>
                                             <p>In HeartSteps, both the location of the individual and 30-minute step
                                                 count just prior to a decision point were found to be correlated with the
-                                                proximal outcome of (log) Next 30 minute step count.
+                                                <u>proximal outcome of (log) Next 30 minute step count.</u>
                                             </p>
                                         </div>
 
