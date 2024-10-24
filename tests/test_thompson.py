@@ -9,6 +9,7 @@ from apps.learning_methods.ThompsonSampling import ThompsonSampling
 import pytest
 
 def test_thompson(monkeypatch):
+
   features = {
     '1': {
          'feature_name': 'step_count',
@@ -22,7 +23,7 @@ def test_thompson(monkeypatch):
 
   ts = ThompsonSampling(features)
 
-  monkeypatch.setattr(ts, 'initialize_from_defaults', lambda: None)
+  monkeypatch.setattr(ts, 'initialize_from_defaults', lambda: None) # disable
 
   # DECISION PARAMS
   user_id = 'user1'

@@ -102,3 +102,15 @@ use pJITAI;
 ```
 Then go to the files, under the sql_data folder, find heartstep.sql document.
 Copy the third line of the heartstep.sql document and paste the third line in the new terminal. 
+
+## Testing
+To run unit tests, type
+```
+pytest
+```
+
+If you want to see print statements (i.e., `print('blah blah')`), you need to run
+
+```
+pytest -s
+```
