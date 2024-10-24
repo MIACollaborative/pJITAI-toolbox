@@ -49,7 +49,7 @@ class ThompsonSampling(LearningMethodBase):
     ## the state variables need to be standardized.
     ## In addition, to initialize the prior parameters, the hyperparameters from the UI need to be transformed accordingly.
 
-    def __init__(self):
+    def __init__(self, features=[]):
         super().__init__()
         self.type = "ThompsonSampling"  # this should be same as class name
         self.description = 'This is the thomson sampling algorithm definition.'
@@ -59,6 +59,8 @@ class ThompsonSampling(LearningMethodBase):
         # more info/tutorial
         # should have a left/right pane on the same screen
         # after run, finalize/contract (create a micro service, create a new url, where a 3rd party can accesss the finalized algo)
+        
+        self.features = features # added by mwn
 
         self.parameters = {
             "alpha0_mu": {
@@ -209,6 +211,69 @@ class ThompsonSampling(LearningMethodBase):
             "walking": False,
             "driving": False,
         }
+       
+        ### WAS IN initialize_from_defaults()
+
+        # Let's for now not set it as numpy array
+        # We can also initialize the following as an numpy array. Not sure what we prefer. For now, I keep everything consistent.
+        alpha0_mu = []
+        beta_mu = []
+        alpha0_std_sigma = []
+        beta_std_sigma = []
+        action_center_ind = []
+
+        feature_name_list = []
+
+        for key, feature in self.features.items():
+            index = int(key) - 1  # TODO: Why do I have to change the type on the index? and subtract 1
+            # There might be a better way to do this. Let me try to be safe to ensure the order of the features is consistent.
+            feature_name = feature['feature_name']
+            feature_name_list.append(feature_name)
+            alpha0_mu.append(float(feature['feature_parameter_alpha0_mu']))
+            alpha0_std_sigma.append(float(feature['feature_parameter_alpha0_sigma']))
+            if (feature['feature_parameter_beta_selected_features'] == 'yes'):
+                beta_mu.append(float(feature['feature_parameter_beta_mu']))
+                beta_std_sigma.append(float(feature['feature_parameter_beta_sigma']))
+                action_center_ind.append(1)
+            else:
+                action_center_ind.append(0)
+
+        #alpha0_mu.append(float(self.standalone_parameters['alpha_0_mu_bias']))
+        #beta_mu.append(float(self.standalone_parameters['beta_sigma_bias']))
+        #alpha0_std_sigma.append(float(self.standalone_parameters['alpha_0_sigma_bias']))
+        #beta_std_sigma.append(float(self.standalone_parameters['beta_sigma_bias']))
+
+        alpha0_mu.append(float(self.standalone_parameters['alpha_0_mu_bias']['default_value'])) #mwn
+        beta_mu.append(float(self.standalone_parameters['beta_sigma_bias']['default_value']))#mwn
+        alpha0_std_sigma.append(float(self.standalone_parameters['alpha_0_sigma_bias']['default_value']))#mwn
+        beta_std_sigma.append(float(self.standalone_parameters['beta_sigma_bias']['default_value']))#mwn
+
+        # Let's setup all the global parameters
+        #self._degree_ini = float(self.standalone_parameters['noise_degree'])
+        #self._scale_ini = float(self.standalone_parameters['noise_scale'])
+        #self._lower_clip = float(self.other_parameters['lower_clip'])
+        #self._upper_clip = float(self.other_parameters['upper_clip'])
+
+        self._degree_ini = float(self.standalone_parameters['noise_degree']['default_value']) #mwn
+        self._scale_ini = float(self.standalone_parameters['noise_scale']['default_value']) #mwn
+        self._lower_clip = float(self.other_parameters['lower_clip']['default_value']) #mwn
+        self._upper_clip = float(self.other_parameters['upper_clip']['default_value']) #mwn
+
+        self._state_dim = len(self.features.items())  # Number of states
+        self._action_center_ind = np.array([action_center_ind]).T  # Which of these states are tailoring variables
+        self._alpha_len = len(alpha0_mu) + len(beta_mu)
+        # This is for reading through the values of each feature and the validation code
+        self._feature_name_list = feature_name_list
+
+        # We can initialize theta_mu and theta_sigma here
+        # Eventually the standardization would need to happen here
+        # Right now we haven't changed theta_Sigma with respect to the scaling parameter of the noise
+        theta_mu_ini = np.array([alpha0_mu + beta_mu + beta_mu]).T
+        theta_sigma_list = alpha0_std_sigma + beta_std_sigma + beta_std_sigma
+        theta_Sigma_ini = np.diag(np.array(theta_sigma_list) ** 2 / self._scale_ini)
+
+        self._theta_mu_ini = theta_mu_ini
+        self._theta_Sigma_ini = theta_Sigma_ini
 
 
     # TODO: Add a variable for elibibility based on a computation on self.eligibility in the calling method (TWH)
@@ -228,7 +293,7 @@ class ThompsonSampling(LearningMethodBase):
         ]
 
         # Initialize all the global parameters appropriately
-        self.initialize_from_defaults()
+        # self.initialize_from_defaults()
 
         # Accessing tuned parameters
         # Parameters are access by column name and first row
@@ -269,7 +334,8 @@ class ThompsonSampling(LearningMethodBase):
         # Personalization (Thompson Sampling)
         else:
             beta_mu = theta_mu[self._alpha_len:]
-            beta_Sigma = theta_Sigma[self._alpha_len:, :][:, self._alpha_len:]
+            # beta_Sigma = theta_Sigma[self._alpha_len:, :][:, self._alpha_len:]
+            beta_Sigma = theta_Sigma[self._alpha_len:] #, :] #[:, self._alpha_len:] --mwn -- can't figure out how to initialize this as 2D array
 
             # mu_t and Sigma_t are associated with the f(S)*beta
             mu_t = np.matmul(np.transpose(self.action_center(state)), beta_mu)

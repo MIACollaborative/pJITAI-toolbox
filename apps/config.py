@@ -43,7 +43,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
         config('DB_ENGINE', default='mysql+pymysql'),
         config('DB_USERNAME', default='root'),
-        config('DB_PASS', default='pass'),
+        config('DB_PASS', default='passpass'),
         config('DB_HOST', default='localhost'),
         config('DB_PORT', default=3306),
         config('DB_NAME', default='pJITAI'),
@@ -67,7 +67,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
         config('DB_ENGINE', default='mysql+pymysql'),
         config('DB_USERNAME', default='root'),
-        config('DB_PASS', default='pass'),
+        config('DB_PASS', default='passpass'),
         config('DB_HOST', default='localhost'),
         config('DB_PORT', default=3306),
         config('DB_NAME', default='pJITAI')
