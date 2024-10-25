@@ -86,7 +86,7 @@ def _do_update(algo_uuid):
 
     for index, row in result.iterrows():
         store_tuned_params(user_id=row.user_id,
-                           configuration=row.iloc[2:].to_dict()) # TODO (YS): this is updating AlgorithmTunedParams. Should be modified? 
+                           configuration=row.iloc[2:].to_dict()) # TODO (YS): this is updating AlgorithmTunedParams' 'configuration'
 
 
 # API METHODS ARE BELOW
