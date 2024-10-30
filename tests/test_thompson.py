@@ -1,5 +1,6 @@
 import sys
 import os
+import random
 import pandas as pd
 import numpy as np
 import pytest
@@ -7,6 +8,12 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
 
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
+
+def test_example(monkeypatch):
+  assert (3 + 4) == 7
+  assert (5 + 7) != 11
+  monkeypatch.setattr(random, 'random', lambda: 0.6) # how to use monkeypatch
+  assert (random.random() > 0.5)
 
 
 def test_decision(monkeypatch):
@@ -117,7 +124,7 @@ def test_upload(monkeypatch):
   # TODO: provide example data that matches what would be expected given the HeartSteps Example config
   # TODO: call ts.upload with the data (and anything else that's needed)
   # TODO: verify that "it worked"--i.e., what would be written to the DB is correct given the data
-  pass
+  assert False # fail
   ###########
   #  end test_upload()
   ###########
@@ -126,7 +133,7 @@ def test_update(monkeypatch):
   # TODO: provide the data that the algo would read from the DB, given the HS config and N expected uploads  
   # TODO: provide starting values for tuned params
   # TODO: test that the resulting values for tuned params are correct given the inputs
-  pass
+  assert False # fail
   ###########
   #  end test_upload()
   ###########
