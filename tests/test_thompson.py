@@ -5,9 +5,11 @@ import pandas as pd
 import numpy as np
 import pytest
 
+
 sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
 
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
+from apps.api import sql_helper
 
 def test_example(monkeypatch):
   assert (3 + 4) == 7
@@ -113,7 +115,6 @@ def test_decision(monkeypatch):
 
   d = ts.decision(user_id, timestamp, tuned_params, input_data)
   print(d) # just to see if it works; still need to write an actual test
- 
   # TODO: verify that the decision that's produced is correct given the input data, HS config, and provided values for tuned params
   ###########
   #  end test_decision()
@@ -124,6 +125,8 @@ def test_upload(monkeypatch):
   # TODO: provide example data that matches what would be expected given the HeartSteps Example config
   # TODO: call ts.upload with the data (and anything else that's needed)
   # TODO: verify that "it worked"--i.e., what would be written to the DB is correct given the data
+  
+  
   assert False # fail
   ###########
   #  end test_upload()
@@ -133,6 +136,10 @@ def test_update(monkeypatch):
   # TODO: provide the data that the algo would read from the DB, given the HS config and N expected uploads  
   # TODO: provide starting values for tuned params
   # TODO: test that the resulting values for tuned params are correct given the inputs
+
+  the_data_frame = None
+  monkeypatch.setattr(sql_helper, 'get_merged_data', lambda: the_data_frame) # how to use monkeypatch
+
   assert False # fail
   ###########
   #  end test_upload()
