@@ -56,7 +56,7 @@ services:
     ports:
       - 3307:3306 # HOST:CONTAINER
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-pass}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-passpass}
       - MYSQL_DATABASE=${MYSQL_DATABASE:-pJITAI}
     networks:
       - db_network
