@@ -49,7 +49,7 @@ class ThompsonSampling(LearningMethodBase):
     ## the state variables need to be standardized.
     ## In addition, to initialize the prior parameters, the hyperparameters from the UI need to be transformed accordingly.
 
-    def __init__(self, features=[]):
+    def __init__(self, features=[], standalone_parameters={}, other_parameters={}):
         super().__init__()
         self.type = "ThompsonSampling"  # this should be same as class name
         self.description = 'This is the thomson sampling algorithm definition.'
@@ -61,158 +61,163 @@ class ThompsonSampling(LearningMethodBase):
         # after run, finalize/contract (create a micro service, create a new url, where a 3rd party can accesss the finalized algo)
         
         self.features = features # added by mwn
+        self.standalone_parameters = standalone_parameters
+        self.other_parameters = other_parameters
+        ## Jane: IMPORTANT: Eligibility is currently not implemented in ThompsonSampling.py
 
-        self.parameters = {
-            "alpha0_mu": {
-                "description": "baseline prior mean",
-                "type": "float",
-                "lower_bound": "-inf",
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 0
-            },
-            "alpha0_sigma": {
-                "description": "baseline prior std",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 3.16
-            },
-            "beta_selected_features": {
-                "description": "tailoring variable or not",
-                "type": "str",
-                "lower_bound": "no",
-                "upper_bound": "yes",
-                "inclusive": [True, True],
-                "default_value": "yes"
-            },
-            "beta_mu": {
-                "description": "tailored effect prior mean",
-                "type": "float",
-                "lower_bound": "-inf",
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 0
-            },
-            "beta_sigma": {
-                "description": "tailored effect prior std",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 3.16
-            }
-        }
+        # self.parameters = {
+        #     "alpha0_mu": {
+        #         "description": "baseline prior mean",
+        #         "type": "float",
+        #         "lower_bound": "-inf",
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 0
+        #     },
+        #     "alpha0_sigma": {
+        #         "description": "baseline prior std",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 3.16
+        #     },
+        #     "beta_selected_features": {
+        #         "description": "tailoring variable or not",
+        #         "type": "str",
+        #         "lower_bound": "no",
+        #         "upper_bound": "yes",
+        #         "inclusive": [True, True],
+        #         "default_value": "yes"
+        #     },
+        #     "beta_mu": {
+        #         "description": "tailored effect prior mean",
+        #         "type": "float",
+        #         "lower_bound": "-inf",
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 0
+        #     },
+        #     "beta_sigma": {
+        #         "description": "tailored effect prior std",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 3.16
+        #     }
+        # }
         
         # TODO Change to "model parameters"?
-        self.standalone_parameters = {
-            # I may want to change the names of all of these
-            "alpha_0_mu_bias": {
-                "description": "intercept prior mean",
-                "type": "float",
-                "lower_bound": "-inf",
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 0
-            },
-            "alpha_0_sigma_bias": {
-                "description": "intercept prior std",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 3.16
-            },
-            "beta_mu_bias": {
-                "description": "main effect prior mean",
-                "type": "float",
-                "lower_bound": "-inf",
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 0
-            },
-            "beta_sigma_bias": {
-                "description": "main effect prior std",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 3.16
-            },
-            "noise_scale": {
-                "description": "scaling parameter of scaled inverse chi square",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 1
-            },
+        # self.standalone_parameters = {
+        #     # I may want to change the names of all of these
+        #     "alpha_0_mu_bias": {
+        #         "description": "intercept prior mean",
+        #         "type": "float",
+        #         "lower_bound": "-inf",
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 0
+        #     },
+        #     "alpha_0_sigma_bias": {
+        #         "description": "intercept prior std",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 3.16
+        #     },
+        #     "beta_mu_bias": {
+        #         "description": "main effect prior mean",
+        #         "type": "float",
+        #         "lower_bound": "-inf",
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 0
+        #     },
+        #     "beta_sigma_bias": {
+        #         "description": "main effect prior std",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 3.16
+        #     },
+        #     "noise_scale": {
+        #         "description": "scaling parameter of scaled inverse chi square",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 1
+        #     },
 
-            "noise_degree": {
-                "description": "degree of freedom of scaled inverse chi square",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": "inf",
-                "inclusive": [False, False],
-                "default_value": 0.2
-            }
+        #     "noise_degree": {
+        #         "description": "degree of freedom of scaled inverse chi square",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": "inf",
+        #         "inclusive": [False, False],
+        #         "default_value": 0.2
+        #     }
 
-        }
-        # For now you can change it to "intervention parameters"
-        self.other_parameters = {
-            "lower_clip": {
-                "description": "randomization probability lower bound",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": 1,
-                "inclusive": [True, True],
-                "default_value": 0.1
-            },
-            "upper_clip": {
-                "description": "randomization probability upper bound",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": 1,
-                "inclusive": [True, True],
-                "default_value": 0.8
-            },
-            # I'm not sure what the unit should be
-            "fixed_randomization_period": {
-                "description": "length of the fixed randomization period",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": "inf",
-                "inclusive": [True, False],
-                "default_value": 3
-            },
-            "fixed_randomization_probability": {
-                "description": "fixed randomization probability",
-                "type": "float",
-                "lower_bound": 0,
-                "upper_bound": 1,
-                "inclusive": [True, True],
-                "default_value": 0.3
-            }
-        }
+        # }
+        # # For now you can change it to "intervention parameters"
+        # self.other_parameters = {
+        #     "lower_clip": {
+        #         "description": "randomization probability lower bound",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": 1,
+        #         "inclusive": [True, True],
+        #         "default_value": 0.1
+        #     },
+        #     "upper_clip": {
+        #         "description": "randomization probability upper bound",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": 1,
+        #         "inclusive": [True, True],
+        #         "default_value": 0.8
+        #     },
+        #     # I'm not sure what the unit should be
+        #     "fixed_randomization_period": {
+        #         "description": "length of the fixed randomization period",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": "inf",
+        #         "inclusive": [True, False],
+        #         "default_value": 3
+        #     },
+        #     "fixed_randomization_probability": {
+        #         "description": "fixed randomization probability",
+        #         "type": "float",
+        #         "lower_bound": 0,
+        #         "upper_bound": 1,
+        #         "inclusive": [True, True],
+        #         "default_value": 0.3
+        #     }
+        # }
         
-        self.tuning_scheduler = {
-            "name": "update_interval",
-            "description": "time interval between running algorithm and update policy. Time is in seconds/minutes???",
-            "type": "float",
-            "lower_bound": 0,
-            "upper_bound": "pinf",
-            "inclusive": [True, True],
-            "default_value": 0.39
-        }
+        # self.tuning_scheduler = {
+        #     "name": "update_interval",
+        #     "description": "time interval between running algorithm and update policy. Time is in seconds/minutes???",
+        #     "type": "float",
+        #     "lower_bound": 0,
+        #     "upper_bound": "pinf",
+        #     "inclusive": [True, True],
+        #     "default_value": 0.39
+        # }
         
-        # TODO: This needs populated via the web interface when complete.
-        self.eligibility = {
-            "walking": False,
-            "driving": False,
-        }
+        # # TODO: This needs populated via the web interface when complete.
+        # self.eligibility = {
+        #     "walking": False,
+        #     "driving": False,
+        # }
        
         ### WAS IN initialize_from_defaults()
+
+        ## Jane: IMPORTANT: standardization is not implemented!!!!!!!!
 
         # Let's for now not set it as numpy array
         # We can also initialize the following as an numpy array. Not sure what we prefer. For now, I keep everything consistent.
@@ -225,7 +230,7 @@ class ThompsonSampling(LearningMethodBase):
         feature_name_list = []
 
         for key, feature in self.features.items():
-            index = int(key) - 1  # TODO: Why do I have to change the type on the index? and subtract 1
+            #index = int(key) - 1  # TODO: Why do I have to change the type on the index? and subtract 1
             # There might be a better way to do this. Let me try to be safe to ensure the order of the features is consistent.
             feature_name = feature['feature_name']
             feature_name_list.append(feature_name)
@@ -243,10 +248,10 @@ class ThompsonSampling(LearningMethodBase):
         #alpha0_std_sigma.append(float(self.standalone_parameters['alpha_0_sigma_bias']))
         #beta_std_sigma.append(float(self.standalone_parameters['beta_sigma_bias']))
 
-        alpha0_mu.append(float(self.standalone_parameters['alpha_0_mu_bias']['default_value'])) #mwn
-        beta_mu.append(float(self.standalone_parameters['beta_sigma_bias']['default_value']))#mwn
-        alpha0_std_sigma.append(float(self.standalone_parameters['alpha_0_sigma_bias']['default_value']))#mwn
-        beta_std_sigma.append(float(self.standalone_parameters['beta_sigma_bias']['default_value']))#mwn
+        alpha0_mu.append(float(self.standalone_parameters['alpha_0_mu_bias'])) #mwn
+        beta_mu.append(float(self.standalone_parameters['beta_sigma_bias']))#mwn
+        alpha0_std_sigma.append(float(self.standalone_parameters['alpha_0_sigma_bias']))#mwn
+        beta_std_sigma.append(float(self.standalone_parameters['beta_sigma_bias']))#mwn
 
         # Let's setup all the global parameters
         #self._degree_ini = float(self.standalone_parameters['noise_degree'])
@@ -254,10 +259,10 @@ class ThompsonSampling(LearningMethodBase):
         #self._lower_clip = float(self.other_parameters['lower_clip'])
         #self._upper_clip = float(self.other_parameters['upper_clip'])
 
-        self._degree_ini = float(self.standalone_parameters['noise_degree']['default_value']) #mwn
-        self._scale_ini = float(self.standalone_parameters['noise_scale']['default_value']) #mwn
-        self._lower_clip = float(self.other_parameters['lower_clip']['default_value']) #mwn
-        self._upper_clip = float(self.other_parameters['upper_clip']['default_value']) #mwn
+        self._degree_ini = float(self.standalone_parameters['noise_degree']) #mwn
+        self._scale_ini = float(self.standalone_parameters['noise_scale']) #mwn
+        self._lower_clip = float(self.other_parameters['lower_clip']) #mwn
+        self._upper_clip = float(self.other_parameters['upper_clip']) #mwn
 
         self._state_dim = len(self.features.items())  # Number of states
         self._action_center_ind = np.array([action_center_ind]).T  # Which of these states are tailoring variables
@@ -277,7 +282,7 @@ class ThompsonSampling(LearningMethodBase):
 
 
     # TODO: Add a variable for elibibility based on a computation on self.eligibility in the calling method (TWH)
-    def decision(self,  user_id: str, timestamp: str, tuned_params=None, input_data=None) -> pd.DataFrame:
+    def decision(self,  user_id: str, timestamp: str, tuned_params=None, input_data=None): #-> pd.DataFrame: (Jane: IMPORTANT: Need to be implemented))
 
         # These need to be read from the web user interface
         # I added "value" to represent what each option means in the linear regression. It's super important.
@@ -314,11 +319,12 @@ class ThompsonSampling(LearningMethodBase):
         state = []
         for feature_name in self._feature_name_list:
             # We will need to check the eligibility as well!
+            # Jane: IMPORTANT: Here we only consider valid state values
             if (input_data.iloc[0][feature_name + '_validation_status_code'] == 'SUCCESS'):
                 state.append(input_data.iloc[0][feature_name])
         state = np.array([state]).T
 
-        # Check whether it's eligible 
+        # Check whether it's eligible # Jane: IMPORTANT: Eligibility is currently not implemented in ThompsonSampling.py
         if (False):
             pi = 0
 
@@ -334,9 +340,8 @@ class ThompsonSampling(LearningMethodBase):
         # Personalization (Thompson Sampling)
         else:
             beta_mu = theta_mu[self._alpha_len:]
-            # beta_Sigma = theta_Sigma[self._alpha_len:, :][:, self._alpha_len:]
-            beta_Sigma = theta_Sigma[self._alpha_len:] #, :] #[:, self._alpha_len:] --mwn -- can't figure out how to initialize this as 2D array
-
+            beta_Sigma = theta_Sigma[self._alpha_len:, :][:, self._alpha_len:]
+            
             # mu_t and Sigma_t are associated with the f(S)*beta
             mu_t = np.matmul(np.transpose(self.action_center(state)), beta_mu)
             Sigma_t = np.matmul(np.transpose(self.action_center(state)), beta_Sigma)
@@ -356,19 +361,22 @@ class ThompsonSampling(LearningMethodBase):
         else:
             my_decision = 0  # decision_options[0]['name']
 
-        # We need to record pi as well
+        status=StatusCode.SUCCESS.value
 
-        decision = Decision(user_id=user_id,
-                            algo_uuid=self.uuid,
-                            decision=my_decision,
-                            decision_options=decision_options,
-                            status_code=StatusCode.SUCCESS.value,
-                            status_message="Decision made successfully")
+        # Jane: IMPORTANT: We need to record pi as well
 
-        return decision
+        # Jane: IMPORTANT: It looks like the below is broken. What we really need is the decision, the probability pi, and the status
+        # decision = Decision(user_id=user_id,
+        #                     algo_uuid=self.uuid,
+        #                     decision=my_decision,
+        #                     decision_options=decision_options,
+        #                     status_code=StatusCode.SUCCESS.value,
+        #                     status_message="Decision made successfully")
 
-    def update(self) -> dict:
-        data = get_merged_data(algo_id=self.uuid)
+        return my_decision, pi, status
+
+    def update(self, data) -> dict: # Jane: IMPORTANT: previously, data isn't part of the input
+        #data = get_merged_data(algo_id=self.uuid)
 
         columns = ['timestamp', 'user_id']
 
@@ -382,7 +390,7 @@ class ThompsonSampling(LearningMethodBase):
         result = pd.DataFrame([], columns=columns)
 
         # I move the initialization out because it only needs to be done once for everyone
-        self.initialize_from_defaults()
+        # self.initialize_from_defaults()
 
         for u in data.user_id.unique():
             result_data = [time_8601(), u]
@@ -412,7 +420,7 @@ class ThompsonSampling(LearningMethodBase):
         feature_name_list = []
 
         for key, feature in self.features.items():
-            index = int(key) - 1  # TODO: Why do I have to change the type on the index? and subtract 1
+            #index = int(key) - 1  # TODO: Why do I have to change the type on the index? and subtract 1
             # There might be a better way to do this. Let me try to be safe to ensure the order of the features is consistent.
             feature_name = feature['feature_name']
             feature_name_list.append(feature_name)
@@ -470,9 +478,15 @@ class ThompsonSampling(LearningMethodBase):
                 state = np.array([state]).T
                 # Check how to grab the decision and how the decision is coded in numerical values
 
-                action = getattr(row, 'decision__decision')  # index of the action chosen
+                # Jane: I edited the below because I don't think we need the exact same format as the original code
+                # action = getattr(row, 'decision__decision')  # index of the action chosen
+                action = getattr(row, 'decision')
+                
                 # we will need to grab the intervention probability as well
-                pi = getattr(row, 'decision__decision_options')[getattr(row, 'decision__decision')]['value']
+                # Jane: I edited the below because I don't think we need the exact same format as the original code
+                # pi = getattr(row, 'decision__decision_options')[getattr(row, 'decision__decision')]['value']
+                pi = getattr(row, 'decision_probability')
+
                 Phi = self.reward_model(state, action, pi)
                 Phi_all = np.hstack((Phi_all, Phi))
                 reward_all.append(getattr(row, 'proximal_outcome'))
