@@ -77,6 +77,14 @@ def test_decision(monkeypatch):
     "uuid": "7a2a9edb-e150-4e08-8547-f855f2d48d4c" #project ID?
   }
 
+  heart_steps_update_point = {  # Added by YS
+
+  }
+
+  heart_steps_decision_freq = {  # Added by YS
+
+  }
+
   #TODO: move all hardcoded sample values into this test case, document where they should come from in reality (i.e., which DB table)
   features = {
     '1': {
