@@ -89,6 +89,10 @@ def test_initialize(monkeypatch):
     feature['feature_parameter_beta_selected_features']=value['tailoring_variable']
     feature['feature_parameter_beta_mu']=value['interaction_coefficient_prior_mean']
     feature['feature_parameter_beta_sigma']=value['interaction_coefficient_prior_standard_deviation']
+    ### Jane2
+    feature['feature_parameter_state_lower']=value['covariate_min_val']
+    feature['feature_parameter_state_upper']=value['covariate_max_val']
+
     features[key_init]=feature
     key_init+=1
 
@@ -100,11 +104,15 @@ def test_initialize(monkeypatch):
   standalone_parameters['beta_sigma_bias'] = heart_steps_example['model_settings']['treatment_prior_standard_deviation']
   standalone_parameters['noise_degree'] = heart_steps_example['model_settings']['noise_degree_of_freedom']
   standalone_parameters['noise_scale'] = heart_steps_example['model_settings']['noise_scale']
+  ### Jane2
+  standalone_parameters['min_proximal_outcome'] = heart_steps_example['model_settings']['min_proximal_outcome']
+  standalone_parameters['max_proximal_outcome'] = heart_steps_example['model_settings']['max_proximal_outcome']
 
   ## create other_parameters
   other_parameters = {}
   other_parameters['lower_clip'] = heart_steps_example['intervention_settings']['intervention_probability_lower_bound']
   other_parameters['upper_clip'] = heart_steps_example['intervention_settings']['intervention_probability_upper_bound']
+
 
   ts=ThompsonSampling(features, standalone_parameters, other_parameters)
   return ts
@@ -125,8 +133,8 @@ def test_decision(monkeypatch):
   tuned_params_dict = {
       'theta_mu': [ts._theta_mu_ini], #can't figure out the dimensions of any of these
       'theta_Sigma': [ts._theta_Sigma_ini],
-      'degree': [ts._degree_ini], 
-      'scale': [ts._scale_ini]
+      'degree': [ts._L_ini], 
+      'scale': [ts._noise_ini]
   }
   tuned_params = pd.DataFrame(tuned_params_dict)
 
