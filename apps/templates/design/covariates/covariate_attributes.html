@@ -58,7 +58,7 @@
                                             <script>
                                                 function remove_binary_div(){
                                                     covariate_type = document.getElementById("covariate_type").value;
-                                                    if(covariate_type!="Binary"){
+                                                    if(covariate_type=="Continuous"){
                                                         $('#binary_covariates_div').hide();
                                                         $("#covariate_min_val").removeAttr('min');
                                                         $("#covariate_min_val").removeAttr("max");
@@ -66,7 +66,15 @@
                                                         $("#covariate_max_val").removeAttr("max");
                                                         $("#covariate_min_val").attr("step",0.01);
                                                         $("#covariate_max_val").attr("step",0.01);
-                                                    }else{
+                                                    } else if (covariate_type=="Integer"){
+                                                        $('#binary_covariates_div').hide();
+                                                        $("#covariate_min_val").removeAttr('min');
+                                                        $("#covariate_min_val").removeAttr("max");
+                                                        $("#covariate_max_val").removeAttr("min");
+                                                        $("#covariate_max_val").removeAttr("max");
+                                                        $("#covariate_min_val").attr("step",1);
+                                                        $("#covariate_max_val").attr("step",1);
+                                                    } else{
                                                         $('#binary_covariates_div').show();
                                                         $("#covariate_min_val").attr('min', 0);
                                                         $("#covariate_min_val").attr("max",0);
