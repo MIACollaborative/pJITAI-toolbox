@@ -166,6 +166,14 @@ def compute_probability(data, action_state_dict):
         curr_stand_action_state= (v-beta_state_med[k])/(beta_state_half_range[k])
         stand_action_state.append(curr_stand_action_state)
     
+    print('stand_action_state: ', stand_action_state)
+    print('stand_beta_mu: ', stand_beta_mu)
+    print('stand_beta_Sigma: ', stand_beta_Sigma)
+    print('L: ', L)
+    print('stand_noise: ', stand_noise)
+    print('lower_clip: ', lower_clip)
+    print('upper_clip: ', upper_clip)
+    
     pi = decision(stand_action_state, stand_beta_mu, stand_beta_Sigma, L, stand_noise, lower_clip, upper_clip)
 
     return pi*100
@@ -247,6 +255,9 @@ def decision(stand_action_state, stand_beta_mu, stand_beta_Sigma, L, stand_noise
 
         
     # mu_t and Sigma_t are associated with the f(S)*beta
+    if len(stand_action_state) == 0:  # Added by YS
+        stand_action_state = np.array(stand_action_state)  # Added by YS
+        stand_action_state = stand_action_state[:, np.newaxis]  # Added by YS
     stand_action_state=np.concatenate((stand_action_state, np.ones((1,1))),axis=0)
     mu_t=np.matmul(np.transpose(stand_action_state),stand_beta_mu)
     Sigma_t=np.matmul(np.transpose(stand_action_state),stand_beta_Sigma)
