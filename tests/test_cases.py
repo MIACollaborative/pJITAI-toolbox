@@ -57,32 +57,43 @@ heart_steps_example = {
   "uuid": "7a2a9edb-e150-4e08-8547-f855f2d48d4c" #project ID?
 }
 
-heart_steps_covariate_not_tailoring = {  # YS
+heart_steps_two_covariates = {
   "algo_type": "algorithm_type",
   "covariates": {
-    "dc1732cf-10a9-460f-a2d7-6554778cd686": {
+    "39365837-e898-448d-9dfc-9367413c5add": {
+      "covariate_max_val": "1",
+      "covariate_meaning_0": "Home or Work",
+      "covariate_meaning_1": "Neither at home nor at work",
+      "covariate_min_val": "0",
+      "covariate_name": "Location",
+      "covariate_type": "Binary",
+      "interaction_coefficient_prior_mean": "-0.33",
+      "interaction_coefficient_prior_standard_deviation": "1.38",
+      "main_effect_prior_mean": "0",
+      "main_effect_prior_standard_deviation": "3.16",
+      "tailoring_variable": "yes"
+    },
+    "3d93e188-ce85-4db6-9d5d-9e3a23069d18": {
       "covariate_max_val": "8.0",
       "covariate_min_val": "-0.69",
       "covariate_name": "(log) Prior 30 minute step count",
       "covariate_type": "Continuous",
-      "intervention_component_name": "activity suggestions",
       "main_effect_prior_mean": "0",
       "main_effect_prior_standard_deviation": "3.16",
-      "proximal_outcome_name": "(log) Next 30 min step count",
       "tailoring_variable": "no"
     }
   },
   "created_by": 2,
-  "created_on": "Wed, 13 Nov 2024 22:01:55 GMT",
+  "created_on": "Wed, 20 Nov 2024 16:30:54 GMT",
   "general_settings": {
     "intervention_component_name": "activity suggestions",
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "One covariate, not a tailoring variable (continuous type)",
-    "study_name": "HeartSteps_covariate_not_tailoring"
+    "study_description": "two covariates: 1 tailoring, 1 not tailoring",
+    "study_name": "HeartSteps_two_covariates"
   },
-  "id": 12,
+  "id": 13,
   "intervention_settings": {
     "condition_1": "Currently walking",
     "decision_point_frequency": "5",
@@ -97,7 +108,7 @@ heart_steps_covariate_not_tailoring = {  # YS
   "model_settings": {
     "intercept_prior_mean": "0",
     "intercept_prior_standard_deviation": "3.16",
-    "max_proximal_outcome": "7.99",
+    "max_proximal_outcome": "8.0",
     "min_proximal_outcome": "-0.69",
     "noise_degree_of_freedom": "5",
     "noise_scale": "3.16",
@@ -105,9 +116,219 @@ heart_steps_covariate_not_tailoring = {  # YS
     "treatment_prior_mean": "0.13",
     "treatment_prior_standard_deviation": "0.07"
   },
-  "modified_on": "Wed, 20 Nov 2024 13:56:51 GMT",
+  "modified_on": "Wed, 20 Nov 2024 16:34:18 GMT",
   "project_status": 1,
-  "uuid": "2203d770-1336-4bc8-86c2-fed2238e3529"
+  "uuid": "56e6a124-9b2d-46bc-b131-29c68710078a"
+}
+
+heart_steps_covariate_int = {
+  "algo_type": "algorithm_type",
+  "covariates": {
+    "e20a934b-8514-44e3-8845-185b62cb3460": {
+      "covariate_max_val": "6",
+      "covariate_min_val": "0",
+      "covariate_name": "Day of the week",
+      "covariate_type": "Integer",
+      "interaction_coefficient_prior_mean": "-0.33",
+      "interaction_coefficient_prior_standard_deviation": "1.38",
+      "main_effect_prior_mean": "0",
+      "main_effect_prior_standard_deviation": "3.16",
+      "tailoring_variable": "yes"
+    }
+  },
+  "created_by": 2,
+  "created_on": "Wed, 20 Nov 2024 17:27:29 GMT",
+  "general_settings": {
+    "intervention_component_name": "activity suggestions",
+    "personalization_method": "ThompsonSampling",
+    "personalized_scenario": "I am using results from an MRT",
+    "proximal_outcome_name": "(log) Next 30 min step count",
+    "study_description": "covariate: tailoring, type: integer",
+    "study_name": "HeartSteps_covariate_integer"
+  },
+  "id": 14,
+  "intervention_settings": {
+    "condition_1": "Currently walking",
+    "decision_point_frequency": "5",
+    "decision_point_frequency_time": "Day",
+    "intervention_option_a": "send an activity suggestion",
+    "intervention_option_b": "Do nothing",
+    "intervention_probability_lower_bound": "0.1",
+    "intervention_probability_upper_bound": "0.8",
+    "update_day": "Daily",
+    "update_hour": "1:00am"
+  },
+  "model_settings": {
+    "intercept_prior_mean": "0",
+    "intercept_prior_standard_deviation": "3.16",
+    "max_proximal_outcome": "8.0",
+    "min_proximal_outcome": "-0.69",
+    "noise_degree_of_freedom": "5",
+    "noise_scale": "3.16",
+    "proximal_outcome_type": "Continuous",
+    "treatment_prior_mean": "0.13",
+    "treatment_prior_standard_deviation": "0.07"
+  },
+  "modified_on": "Wed, 20 Nov 2024 17:56:11 GMT",
+  "project_status": 1,
+  "uuid": "7a1ca672-a502-4d4f-a315-edbe0de0c68a"
+}
+
+heart_steps_covariate_continuous = {
+  "algo_type": "algorithm_type",
+  "covariates": {
+    "672a206d-69cb-4171-91b8-1e69040f5ad4": {
+      "covariate_max_val": "122",
+      "covariate_min_val": "-58",
+      "covariate_name": "Temperature",
+      "covariate_type": "Continuous",
+      "interaction_coefficient_prior_mean": "-0.33",
+      "interaction_coefficient_prior_standard_deviation": "1.38",
+      "main_effect_prior_mean": "0",
+      "main_effect_prior_standard_deviation": "3.16",
+      "tailoring_variable": "yes"
+    }
+  },
+  "created_by": 2,
+  "created_on": "Wed, 20 Nov 2024 18:04:49 GMT",
+  "general_settings": {
+    "intervention_component_name": "activity suggestions",
+    "personalization_method": "ThompsonSampling",
+    "personalized_scenario": "I am using results from an MRT",
+    "proximal_outcome_name": "(log) Next 30 min step count",
+    "study_description": "Covariate: tailoring, type: continuous",
+    "study_name": "HeartSteps_covariate_continuous"
+  },
+  "id": 15,
+  "intervention_settings": {
+    "condition_1": "Currently walking",
+    "decision_point_frequency": "5",
+    "decision_point_frequency_time": "Day",
+    "intervention_option_a": "send an activity suggestion",
+    "intervention_option_b": "Do nothing",
+    "intervention_probability_lower_bound": "0.1",
+    "intervention_probability_upper_bound": "0.8",
+    "update_day": "Daily",
+    "update_hour": "1:00am"
+  },
+  "model_settings": {
+    "intercept_prior_mean": "0",
+    "intercept_prior_standard_deviation": "3.16",
+    "max_proximal_outcome": "8.0",
+    "min_proximal_outcome": "-0.69",
+    "noise_degree_of_freedom": "5",
+    "noise_scale": "3.16",
+    "proximal_outcome_type": "Continuous",
+    "treatment_prior_mean": "0.13",
+    "treatment_prior_standard_deviation": "0.07"
+  },
+  "modified_on": "Wed, 20 Nov 2024 18:07:37 GMT",
+  "project_status": 1,
+  "uuid": "36041837-0be3-49a6-bffd-e4d5b2d2f264"
+}
+
+heart_steps_cov_not_tailoring_binary = {
+  "algo_type": "algorithm_type",
+  "covariates": {
+    "14783889-476a-4d9e-9cac-7e739e1dd197": {
+      "covariate_max_val": "1",
+      "covariate_meaning_0": "Employed",
+      "covariate_meaning_1": "Unemployed",
+      "covariate_min_val": "0",
+      "covariate_name": "Employment status",
+      "covariate_type": "Binary",
+      "main_effect_prior_mean": "0",
+      "main_effect_prior_standard_deviation": "3.16",
+      "tailoring_variable": "no"
+    }
+  },
+  "created_by": 2,
+  "created_on": "Wed, 20 Nov 2024 18:08:54 GMT",
+  "general_settings": {
+    "intervention_component_name": "activity suggestions",
+    "personalization_method": "ThompsonSampling",
+    "personalized_scenario": "I am using results from an MRT",
+    "proximal_outcome_name": "(log) Next 30 min step count",
+    "study_description": "Covariate: not tailoring, type: binary",
+    "study_name": "HeartSteps_cov_not_tailoring_binary"
+  },
+  "id": 16,
+  "intervention_settings": {
+    "condition_1": "Currently walking",
+    "decision_point_frequency": "5",
+    "decision_point_frequency_time": "Day",
+    "intervention_option_a": "send an activity suggestion",
+    "intervention_option_b": "Do nothing",
+    "intervention_probability_lower_bound": "0.1",
+    "intervention_probability_upper_bound": "0.8",
+    "update_day": "Daily",
+    "update_hour": "1:00am"
+  },
+  "model_settings": {
+    "intercept_prior_mean": "0",
+    "intercept_prior_standard_deviation": "3.16",
+    "max_proximal_outcome": "8.0",
+    "min_proximal_outcome": "-0.69",
+    "noise_degree_of_freedom": "5",
+    "noise_scale": "3.16",
+    "proximal_outcome_type": "Continuous",
+    "treatment_prior_mean": "0.13",
+    "treatment_prior_standard_deviation": "0.07"
+  },
+  "modified_on": "Wed, 20 Nov 2024 18:11:11 GMT",
+  "project_status": 1,
+  "uuid": "a91565e5-eb84-40a9-8c20-16cd9ed6f48a"
+}
+
+heart_steps_cov_not_tailoring_int = {
+  "algo_type": "algorithm_type",
+  "covariates": {
+    "ec7cc548-fc74-46ec-b233-42912f446448": {
+      "covariate_max_val": "100",
+      "covariate_min_val": "0",
+      "covariate_name": "Age",
+      "covariate_type": "Integer",
+      "main_effect_prior_mean": "0",
+      "main_effect_prior_standard_deviation": "3.16",
+      "tailoring_variable": "no"
+    }
+  },
+  "created_by": 2,
+  "created_on": "Wed, 20 Nov 2024 18:12:53 GMT",
+  "general_settings": {
+    "intervention_component_name": "activity suggestions",
+    "personalization_method": "ThompsonSampling",
+    "personalized_scenario": "I am using results from an MRT",
+    "proximal_outcome_name": "(log) Next 30 min step count",
+    "study_description": "Covariate: not tailoring, type: integer",
+    "study_name": "HeartSteps_covariate_not_tailoring_int"
+  },
+  "id": 17,
+  "intervention_settings": {
+    "condition_1": "Currently walking",
+    "decision_point_frequency": "5",
+    "decision_point_frequency_time": "Day",
+    "intervention_option_a": "send an activity suggestion",
+    "intervention_option_b": "Do nothing",
+    "intervention_probability_lower_bound": "0.1",
+    "intervention_probability_upper_bound": "0.8",
+    "update_day": "Daily",
+    "update_hour": "1:00am"
+  },
+  "model_settings": {
+    "intercept_prior_mean": "0",
+    "intercept_prior_standard_deviation": "3.16",
+    "max_proximal_outcome": "8.0",
+    "min_proximal_outcome": "-0.69",
+    "noise_degree_of_freedom": "5",
+    "noise_scale": "3.16",
+    "proximal_outcome_type": "Continuous",
+    "treatment_prior_mean": "0.13",
+    "treatment_prior_standard_deviation": "0.07"
+  },
+  "modified_on": "Wed, 20 Nov 2024 18:15:00 GMT",
+  "project_status": 1,
+  "uuid": "744185a1-8494-4f19-b9cb-f92fd1a6472c"
 }
 
 heart_steps_update_point = {  # Added by YS
