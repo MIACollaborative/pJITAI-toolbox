@@ -57,6 +57,59 @@ heart_steps_example = {
   "uuid": "7a2a9edb-e150-4e08-8547-f855f2d48d4c" #project ID?
 }
 
+heart_steps_covariate_not_tailoring = {
+  "algo_type": "algorithm_type",
+  "covariates": {
+    "dc1732cf-10a9-460f-a2d7-6554778cd686": {
+      "covariate_max_val": "8.0",
+      "covariate_min_val": "-0.69",
+      "covariate_name": "(log) Prior 30 minute step count",
+      "covariate_type": "Continuous",
+      "intervention_component_name": "activity suggestions",
+      "main_effect_prior_mean": "0",
+      "main_effect_prior_standard_deviation": "3.16",
+      "proximal_outcome_name": "(log) Next 30 min step count",
+      "tailoring_variable": "no"
+    }
+  },
+  "created_by": 2,
+  "created_on": "Wed, 13 Nov 2024 22:01:55 GMT",
+  "general_settings": {
+    "intervention_component_name": "activity suggestions",
+    "personalization_method": "ThompsonSampling",
+    "personalized_scenario": "I am using results from an MRT",
+    "proximal_outcome_name": "(log) Next 30 min step count",
+    "study_description": "One covariate, not a tailoring variable (continuous type)",
+    "study_name": "HeartSteps_covariate_not_tailoring"
+  },
+  "id": 12,
+  "intervention_settings": {
+    "condition_1": "Currently walking",
+    "decision_point_frequency": "5",
+    "decision_point_frequency_time": "Day",
+    "intervention_option_a": "send an activity suggestion",
+    "intervention_option_b": "Do nothing",
+    "intervention_probability_lower_bound": "0.1",
+    "intervention_probability_upper_bound": "0.8",
+    "update_day": "Daily",
+    "update_hour": "1:00am"
+  },
+  "model_settings": {
+    "intercept_prior_mean": "0",
+    "intercept_prior_standard_deviation": "3.16",
+    "max_proximal_outcome": "7.99",
+    "min_proximal_outcome": "-0.69",
+    "noise_degree_of_freedom": "5",
+    "noise_scale": "3.16",
+    "proximal_outcome_type": "Continuous",
+    "treatment_prior_mean": "0.13",
+    "treatment_prior_standard_deviation": "0.07"
+  },
+  "modified_on": "Wed, 20 Nov 2024 13:56:51 GMT",
+  "project_status": 1,
+  "uuid": "2203d770-1336-4bc8-86c2-fed2238e3529"
+}
+
 heart_steps_two_covariates = {
   "algo_type": "algorithm_type",
   "covariates": {
@@ -227,7 +280,7 @@ heart_steps_covariate_continuous = {
   "uuid": "36041837-0be3-49a6-bffd-e4d5b2d2f264"
 }
 
-heart_steps_cov_not_tailoring_binary = {
+heart_steps_covariate_not_tailoring_binary = {
   "algo_type": "algorithm_type",
   "covariates": {
     "14783889-476a-4d9e-9cac-7e739e1dd197": {
@@ -250,7 +303,7 @@ heart_steps_cov_not_tailoring_binary = {
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
     "study_description": "Covariate: not tailoring, type: binary",
-    "study_name": "HeartSteps_cov_not_tailoring_binary"
+    "study_name": "HeartSteps_covariate_not_tailoring_binary"
   },
   "id": 16,
   "intervention_settings": {
@@ -280,7 +333,7 @@ heart_steps_cov_not_tailoring_binary = {
   "uuid": "a91565e5-eb84-40a9-8c20-16cd9ed6f48a"
 }
 
-heart_steps_cov_not_tailoring_int = {
+heart_steps_covariate_not_tailoring_int = {
   "algo_type": "algorithm_type",
   "covariates": {
     "ec7cc548-fc74-46ec-b233-42912f446448": {
