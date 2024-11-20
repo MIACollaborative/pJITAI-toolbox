@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
 
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
 from apps.api import sql_helper
-from tests.test_cases import heart_steps_example, heart_steps_update_point, heart_steps_decision_freq
+from tests.test_cases import heart_steps_example, heart_steps_update_point, heart_steps_decision_freq, heart_steps_covariate_not_tailoring
 
 def test_example(monkeypatch):
   assert (3 + 4) == 7
@@ -19,6 +19,8 @@ def test_example(monkeypatch):
   assert (random.random() > 0.5)
 
 def test_initialize(monkeypatch):
+  ## Select test case
+  test_case = heart_steps_example  ## Added by YS
 
   ## create features
   features = {}
@@ -40,20 +42,20 @@ def test_initialize(monkeypatch):
 
   ## create standalone_parameters
   standalone_parameters = {}
-  standalone_parameters['alpha_0_mu_bias'] = heart_steps_example['model_settings']['intercept_prior_mean']
-  standalone_parameters['alpha_0_sigma_bias'] = heart_steps_example['model_settings']['intercept_prior_standard_deviation']
-  standalone_parameters['beta_mu_bias'] = heart_steps_example['model_settings']['treatment_prior_mean']
-  standalone_parameters['beta_sigma_bias'] = heart_steps_example['model_settings']['treatment_prior_standard_deviation']
-  standalone_parameters['noise_degree'] = heart_steps_example['model_settings']['noise_degree_of_freedom']
-  standalone_parameters['noise_scale'] = heart_steps_example['model_settings']['noise_scale']
+  standalone_parameters['alpha_0_mu_bias'] = test_case['model_settings']['intercept_prior_mean']
+  standalone_parameters['alpha_0_sigma_bias'] = test_case['model_settings']['intercept_prior_standard_deviation']
+  standalone_parameters['beta_mu_bias'] = test_case['model_settings']['treatment_prior_mean']
+  standalone_parameters['beta_sigma_bias'] = test_case['model_settings']['treatment_prior_standard_deviation']
+  standalone_parameters['noise_degree'] = test_case['model_settings']['noise_degree_of_freedom']
+  standalone_parameters['noise_scale'] = test_case['model_settings']['noise_scale']
   ### Jane2
-  standalone_parameters['min_proximal_outcome'] = heart_steps_example['model_settings']['min_proximal_outcome']
-  standalone_parameters['max_proximal_outcome'] = heart_steps_example['model_settings']['max_proximal_outcome']
+  standalone_parameters['min_proximal_outcome'] = test_case['model_settings']['min_proximal_outcome']
+  standalone_parameters['max_proximal_outcome'] = test_case['model_settings']['max_proximal_outcome']
 
   ## create other_parameters
   other_parameters = {}
-  other_parameters['lower_clip'] = heart_steps_example['intervention_settings']['intervention_probability_lower_bound']
-  other_parameters['upper_clip'] = heart_steps_example['intervention_settings']['intervention_probability_upper_bound']
+  other_parameters['lower_clip'] = test_case['intervention_settings']['intervention_probability_lower_bound']
+  other_parameters['upper_clip'] = test_case['intervention_settings']['intervention_probability_upper_bound']
 
 
   ts=ThompsonSampling(features, standalone_parameters, other_parameters)
