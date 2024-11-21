@@ -50,6 +50,7 @@ class AlgorithmTunedParams(db.Model):
                           db.String(100),
                           default=time_8601)
     configuration = db.Column('configuration', db.JSON)
+    # YS: Maybe create project_id field to connect AlgorithmTunedParams & Project
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():

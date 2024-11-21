@@ -94,7 +94,7 @@ function remove_form_fields(rid) {
                                 <!-- [ tabs ] start -->
                                 <div class="col-sm-12">
 
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="home-tab" data-toggle="tab"
                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
@@ -105,10 +105,12 @@ function remove_form_fields(rid) {
                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
                                                 Example</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                     <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab">
+                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                             aria-labelledby="home-tab"> -->
+                                        <div class="tab-item">
+                                            <h5>Explanation</h5>
                                             <p>
                                             <p>Please list all the conditions when Intervention Option A is <span
                                                     style="color:#f65959;"> not</span> eligible to be delivered to an
@@ -117,8 +119,16 @@ function remove_form_fields(rid) {
                                             <p>If you want to remove a condition, please click on the trash can.</p>
                                             </p>
                                         </div>
-                                        <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab">
+                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                             aria-labelledby="profile-tab"> -->
+                                        <div class="tab-item">
+                                            <h5>HeartSteps Example</h5>
+                                            <h6>Ineligible Situations</h6>
+                                            <ul>
+                                                <li>Currently walking</li>
+                                                <li>Currently running</li>
+                                                <li>Finished an activity in the previous 90 min</li>
+                                            </ul>
                                             <p>HeartSteps should deliver activity suggestions to participants only if,
                                                 at a decision point, they are eligible. Participants are considered to
                                                 be ineligible if they are currently walking or running, because the

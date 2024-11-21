@@ -126,9 +126,9 @@ def json_to_series(variable_list):
     for variable in variable_list:
         keys.append(variable['name'])
         values.append(variable['value'])
-        for validation_key, validation_value in variable['validation'].items():
-            keys.append(f'{variable["name"]}_validation_{validation_key}')
-            values.append(validation_value)
+        # for validation_key, validation_value in variable['validation'].items():  # YS: what is validation?
+        #     keys.append(f'{variable["name"]}_validation_{validation_key}')
+        #     values.append(validation_value)
 
     return pd.Series(values, index=keys)
 
@@ -147,8 +147,8 @@ def get_tuned_params(user_id: str = None):
 
     else:
         tuned_params = AlgorithmTunedParams.query.order_by(AlgorithmTunedParams.timestamp.desc())
-
-    if tuned_params:
+    # print('tuned params: ', tuned_params.all())
+    if tuned_params.all():  # YS: tuned_parmas returns SQL query, not the result. using .all() allows whether real data is queried.
         df_from_records = pd.read_sql(tuned_params.statement, db.session().bind)
         return df_from_records
     return pd.DataFrame()

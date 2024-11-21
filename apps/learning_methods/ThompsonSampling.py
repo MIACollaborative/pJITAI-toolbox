@@ -372,6 +372,7 @@ class ThompsonSampling(LearningMethodBase):
         # Jane: IMPORTANT: I assume that the initialization is done in the __init__ function
         # self.initialize_from_defaults()
 
+
         # Accessing tuned parameters
         # Parameters are access by column name and first row
 
@@ -441,7 +442,6 @@ class ThompsonSampling(LearningMethodBase):
 
         # Jane: IMPORTANT: We need to record pi as well
 
-        # Jane: IMPORTANT: It looks like the below is broken. What we really need is the decision, the probability pi, and the status
         # decision = Decision(user_id=user_id,
         #                     algo_uuid=self.uuid,
         #                     decision=my_decision,

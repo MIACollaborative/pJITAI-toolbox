@@ -36,7 +36,7 @@ from flask import request
 from sqlalchemy.exc import SQLAlchemyError
 
 from apps import db
-from apps.algorithms.models import Algorithms
+from apps.algorithms.models import Algorithms, Projects
 from apps.api.codes import StatusCode
 from .models import Log
 
@@ -51,7 +51,7 @@ def pJITAI_token_required(f):
                        'status_message': 'Token not found'
                    }, 400
 
-        result = db.session.query(Algorithms).filter(Algorithms.auth_token == token).first()
+        result = db.session.query(Algorithms).filter(Algorithms.auth_token == token).first()  # NOTE (YS): Why is this querying Algorithms?
         if result:
             return f(*args, **kwargs)
         else:
@@ -81,7 +81,8 @@ def get_class_object(class_path: str):
 
 
 def _validate_algo_data(uuid: str, feature_values: list) -> list:
-    algo = Algorithms.query.filter(Algorithms.uuid.like(uuid)).first()
+    # algo = Algorithms.query.filter(Algorithms.uuid.like(uuid)).first()
+    algo = Projects.query.filter(Projects.uuid.like(uuid)).first()  # YS: Changed to Projects
     if not algo:
         raise Exception(f'ERROR: Invalid algorithm ID.')
     algorithm_features_ = algo.configuration.get('features', [])

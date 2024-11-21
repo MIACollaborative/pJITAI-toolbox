@@ -38,7 +38,7 @@
                                                 <input type="number" step="0.01"
                                                        value="{{settings.min_proximal_outcome}}"
                                                        id="min_proximal_outcome" name="min_proximal_outcome"
-                                                       class="form-control" placeholder="The minimum value of the proximal outcome">
+                                                       class="form-control" placeholder="The minimum value of the proximal outcome" required>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-control-label" for="max_proximal_outcome">The maximum
@@ -46,7 +46,7 @@
                                                 <input type="number" step="0.01"
                                                        value="{{settings.max_proximal_outcome}}"
                                                        id="max_proximal_outcome" name="max_proximal_outcome"
-                                                       class="form-control" placeholder="The maximum value of the proximal outcome">
+                                                       class="form-control" placeholder="The maximum value of the proximal outcome" required>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-control-label" for="max_proximal_outcome">Type of the
@@ -67,7 +67,7 @@
                                 <!-- [ tabs ] start -->
                                 <div class="col-sm-12">
 
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="home-tab" data-toggle="tab"
                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
@@ -78,10 +78,12 @@
                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
                                                 Example</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                     <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab">
+                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                             aria-labelledby="home-tab"> -->
+                                        <div class="tab-item">
+                                            <h5>Explanation</h5>
                                              <p> We use the minimum and maximum values of the proximal outcome to check if the API
                                                 receives inappropriate values from your mobile app. Please read
                                                 [tutorial] for more details.
@@ -89,24 +91,30 @@
                                              <p>In this version of pJITAI, we assume the proximal outcome is continuous. In the future,
                                                 categorical proximal outcomes will be incorporated.
                                             </p>
-                                            <p> Note 1. If you're reading the HeartSteps demo, the HeartSteps numbers look 
-                                                weird because in HeartSteps the proximal outcome (the 30-minute step count
-                                                 after each decision point) is log-transformed.
-                                                (See the HeartSteps Example tab for more explanation.) 
-                                            </p>
-                                            <p> Note 2. You determine whether your proximal outcome needs to be transformed. 
-                                                If you decide to transform your proximal outcome, please read the following.
-                                                If your proximal outcome needs to be transformed, the
-                                                transformation needs to be implemented in the mobile application; the
-                                                algorithm will not do the transformation. Hence, if there is transformation, we are asking 
-                                                for the minimum and maximum values of the transformed proximal outcome. 
-                                                (If your proximal outcome need not be transformed, we are asking for the minimum and maximum 
-                                                values of the proximal outcome without any transformation.)
-                                            </p>
-                                            
+                                            <h6>Notes</h6>
+                                            <ol>
+                                                <li>If you're reading the HeartSteps demo, the HeartSteps numbers look 
+                                                    weird because in HeartSteps the proximal outcome (the 30-minute step count
+                                                     after each decision point) is log-transformed.
+                                                    (See the HeartSteps Example tab for more explanation.)</li>
+                                                <li>You determine whether your proximal outcome needs to be transformed. 
+                                                    If you decide to transform your proximal outcome, please read the following.
+                                                    If your proximal outcome needs to be transformed, the
+                                                    transformation needs to be implemented in the mobile application; the
+                                                    algorithm will not do the transformation. Hence, if there is transformation, we are asking 
+                                                    for the minimum and maximum values of the transformed proximal outcome. 
+                                                    (If your proximal outcome need not be transformed, we are asking for the minimum and maximum 
+                                                    values of the proximal outcome without any transformation.)</li>
+                                            </ol>                                            
                                         </div>
-                                        <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab">
+                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                             aria-labelledby="profile-tab"> -->
+                                        <div class="tab-item">
+                                            <h5>HeartSteps Explanation</h5>
+                                            <h6>Minumum Value</h6>
+                                            <p>-0.69</p>
+                                            <h6>Maximum Value</h6>
+                                            <p>8.0</p>
                                             <p>In HeartSteps, the proximal outcome, the 30-minute step count after each decision point, 
                                                 is right-skewed. 
                                                 Thus, the HeartSteps team decided to log-transform the
@@ -116,10 +124,10 @@
                                                 (recall that log<sub>e</sub>(0) becomes minus infinity), we added 0.5 to
                                                 the step count before the transformation, i.e., log<sub>e</sub>(next
                                                 30-minute step count+0.5).</p>
-                                            <p> Our assumption was that people walk between 0
-                                                and 3000 steps in the next 30 minutes. Hence, the minimum value of the
-                                                (log) 30-minute step count is log<sub>e</sub>(0+0.5)=-0.69. The maximum
-                                                value of the (log) 30-minute step count is log<sub>e</sub>(3000+0.5)=8.0.
+                                            <p> Our assumption was that <b>people walk between 0
+                                                and 3000 steps in the next 30 minutes.</b> Hence, the minimum value of the
+                                                (log) 30-minute step count is <u>log<sub>e</sub>(0+0.5)=-0.69.</u> The maximum
+                                                value of the (log) 30-minute step count is <u>log<sub>e</sub>(3000+0.5)=8.0.</u>
                                                 These values are continuous.</p>
                                         </div>
 
