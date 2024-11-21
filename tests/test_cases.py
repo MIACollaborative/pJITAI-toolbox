@@ -1,9 +1,12 @@
 ### YS: This file has the test cases used for testing in test_thompson.py
 ### Jane: IMPORTANT: The covariates need to follow a fixed order. This needs to match with the order of the states. We need this to be done outside of ThompsonSampling.py
-heart_steps_example = {
+
+
+# One Covariate, binary, tailoring
+hs1 = { 
   "algo_type": "algorithm_type",
-  "covariates": { # aka features? called "covariates" in the UI--how many can there be and what are their possible settings?
-    "4b9f1794-b29f-4f5e-9895-1ef12e904370": { # does not appear to map to anything, but maybe somewhat to self.parameters?
+  "covariates": {
+    "4b9f1794-b29f-4f5e-9895-1ef12e904370": { 
       "covariate_max_val": "1",
       "covariate_meaning_0": "Home or Work",
       "covariate_meaning_1": "Neither at home nor at work",
@@ -57,7 +60,63 @@ heart_steps_example = {
   "uuid": "7a2a9edb-e150-4e08-8547-f855f2d48d4c" #project ID?
 }
 
-heart_steps_covariate_not_tailoring = {
+hs1_state_data = { # state data, must match covariates? # Jane: Yes
+  'Location_validation_status_code': ['SUCCESS'],
+  'Location': 1,
+}  
+
+# Create fake data
+# Currently extract from this: https://github.com/mDOT-Center/pJITAI/wiki/pJITAI-Interfaces
+# Jane: Currently I only take the ones that are needed for the Thompson Sampling
+# Jane: IMPORTANT: algo_uuid needs to be checked!!! << where and how?
+hs1_update_rows = [
+  {
+    "id": 537, # Jane: This is the ID that can match with each decision
+    "user_id": "user1",
+    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "decision_timestamp": "2024-10-23T16:57:39Z",
+    "decision": 1,
+    "decision_probability": 0.6,
+    "proximal_outcome": 0.5,
+    "Location": 1,
+    "Location_validation_status_code": "SUCCESS",
+  },
+  {
+    "id": 538, 
+    "user_id": "user1",
+    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "decision_timestamp": "2024-10-23T16:57:39Z",
+    "decision": 0,
+    "decision_probability": 0.2,
+    "proximal_outcome": 0.1,
+    "Location": 1,
+    "Location_validation_status_code": "SUCCESS",
+  },
+  {
+    "id": 539, 
+    "user_id": "user1",
+    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "decision_timestamp": "2024-10-23T16:57:39Z",
+    "decision": 0,
+    "decision_probability": 0.3,
+    "proximal_outcome": 0.7,
+    "Location": 0,
+    "Location_validation_status_code": "SUCCESS",
+  },
+  {
+    "id": 540, 
+    "user_id": "user1",
+    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "decision_timestamp": "2024-10-23T16:57:39Z",
+    "decision": 0,
+    "decision_probability": 0.7,
+    "proximal_outcome": 0.1,
+    "Location": 1,
+    "Location_validation_status_code": "SUCCESS",
+  }
+]
+
+heart_steps_covariate_not_tailoring = { # one_cv_continuous_not_tailoring
   "algo_type": "algorithm_type",
   "covariates": {
     "dc1732cf-10a9-460f-a2d7-6554778cd686": {
@@ -110,7 +169,7 @@ heart_steps_covariate_not_tailoring = {
   "uuid": "2203d770-1336-4bc8-86c2-fed2238e3529"
 }
 
-heart_steps_two_covariates = {
+heart_steps_two_covariates = {  # two_cv_binary_tailoring_continuous_not_tailoring
   "algo_type": "algorithm_type",
   "covariates": {
     "39365837-e898-448d-9dfc-9367413c5add": {
