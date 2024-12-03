@@ -17,42 +17,43 @@ def _initialize(monkeypatch, config):
   # can't TS just take in a project config and do all this internally?
 
 
-  ## create features
-  features = {}
-  key_init = 0
-  for key, value in config["covariates"].items():
-    feature = {}
-    feature['feature_name']=value['covariate_name']
-    feature['feature_parameter_alpha0_mu']=value['main_effect_prior_mean']
-    feature['feature_parameter_alpha0_sigma']=value['main_effect_prior_standard_deviation']
-    feature['feature_parameter_beta_selected_features']=value['tailoring_variable']
-    feature['feature_parameter_beta_mu']=value['interaction_coefficient_prior_mean']
-    feature['feature_parameter_beta_sigma']=value['interaction_coefficient_prior_standard_deviation']
-    ### Jane2
-    feature['feature_parameter_state_lower']=value['covariate_min_val']
-    feature['feature_parameter_state_upper']=value['covariate_max_val']
+  # ## create features
+  # features = {}
+  # key_init = 0
+  # for key, value in config["covariates"].items():
+  #   feature = {}
+  #   feature['feature_name']=value['covariate_name']
+  #   feature['feature_parameter_alpha0_mu']=value['main_effect_prior_mean']
+  #   feature['feature_parameter_alpha0_sigma']=value['main_effect_prior_standard_deviation']
+  #   feature['feature_parameter_beta_selected_features']=value['tailoring_variable']
+  #   feature['feature_parameter_beta_mu']=value['interaction_coefficient_prior_mean']
+  #   feature['feature_parameter_beta_sigma']=value['interaction_coefficient_prior_standard_deviation']
+  #   ### Jane2
+  #   feature['feature_parameter_state_lower']=value['covariate_min_val']
+  #   feature['feature_parameter_state_upper']=value['covariate_max_val']
 
-    features[key_init]=feature
-    key_init+=1
+  #   features[key_init]=feature
+  #   key_init+=1
 
-  ## create standalone_parameters
-  standalone_parameters = {}
-  standalone_parameters['alpha_0_mu_bias'] = config['model_settings']['intercept_prior_mean']
-  standalone_parameters['alpha_0_sigma_bias'] = config['model_settings']['intercept_prior_standard_deviation']
-  standalone_parameters['beta_mu_bias'] = config['model_settings']['treatment_prior_mean']
-  standalone_parameters['beta_sigma_bias'] = config['model_settings']['treatment_prior_standard_deviation']
-  standalone_parameters['noise_degree'] = config['model_settings']['noise_degree_of_freedom']
-  standalone_parameters['noise_scale'] = config['model_settings']['noise_scale']
-  ### Jane2
-  standalone_parameters['min_proximal_outcome'] = config['model_settings']['min_proximal_outcome']
-  standalone_parameters['max_proximal_outcome'] = config['model_settings']['max_proximal_outcome']
+  # ## create standalone_parameters
+  # standalone_parameters = {}
+  # standalone_parameters['alpha_0_mu_bias'] = config['model_settings']['intercept_prior_mean']
+  # standalone_parameters['alpha_0_sigma_bias'] = config['model_settings']['intercept_prior_standard_deviation']
+  # standalone_parameters['beta_mu_bias'] = config['model_settings']['treatment_prior_mean']
+  # standalone_parameters['beta_sigma_bias'] = config['model_settings']['treatment_prior_standard_deviation']
+  # standalone_parameters['noise_degree'] = config['model_settings']['noise_degree_of_freedom']
+  # standalone_parameters['noise_scale'] = config['model_settings']['noise_scale']
+  # ### Jane2
+  # standalone_parameters['min_proximal_outcome'] = config['model_settings']['min_proximal_outcome']
+  # standalone_parameters['max_proximal_outcome'] = config['model_settings']['max_proximal_outcome']
 
-  ## create other_parameters
-  other_parameters = {}
-  other_parameters['lower_clip'] = config['intervention_settings']['intervention_probability_lower_bound']
-  other_parameters['upper_clip'] = config['intervention_settings']['intervention_probability_upper_bound']
+  # ## create other_parameters
+  # other_parameters = {}
+  # other_parameters['lower_clip'] = config['intervention_settings']['intervention_probability_lower_bound']
+  # other_parameters['upper_clip'] = config['intervention_settings']['intervention_probability_upper_bound']
 
-  ts=ThompsonSampling(features, standalone_parameters, other_parameters)
+  # ts=ThompsonSampling(features, standalone_parameters, other_parameters)
+  ts = ThompsonSampling(config=config)
   return ts
 
 def _decision(monkeypatch, example, state_data):
