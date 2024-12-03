@@ -141,8 +141,11 @@ def _update(monkeypatch, config, update_rows):
 
 
 def test_init_hs_example(monkeypatch):
-  _initialize(monkeypatch, hs1)
+  ts = _initialize(monkeypatch, hs1)
   # TODO: test that it was initialized as expected
+  assert ts._default_mu == 0
+  assert ts._state_dim == len(hs1["covariates"].items())  # _state_dim should match the number of covariates
+  assert ts._feature_name_list[0] == "Location"  # _feature_name_list contains 'covariate_name'
 
 def test_init_hs_update_point(monkeypatch):
   _initialize(monkeypatch, heart_steps_update_point)
