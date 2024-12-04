@@ -78,6 +78,8 @@ def _decision(monkeypatch, example, state_data):
 
   decision, pi, status = ts.decision(user_id, timestamp, tuned_params, input_data)
   print(pi) # just to see if it works; still need to write an actual test
+
+  return decision, pi, status
   # TODO: verify that the decision that's produced is correct given the input data, HS config, and provided values for tuned params
   ###########
   #  end test_decision()
@@ -163,8 +165,10 @@ def test_init_hs_continous_not_tailoring(monkeypatch):
 # TODO: write decision tests for all example configs; need to figure out correct input_data
 
 def test_decision_1cv_binary_tailoring(monkeypatch):
-  _decision(monkeypatch, hs1, hs1_state_data)
+  decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)  # can't check decision (uses random number)
   # TODO: test correct output
+  assert pi == 0.2386883044226933
+  assert status == 'SUCCESS'
 
 def test_update_1cv_binary_tailoring(monkeypatch):
   _update(monkeypatch, hs1, hs1_update_rows)

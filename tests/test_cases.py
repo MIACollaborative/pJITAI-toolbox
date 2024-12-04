@@ -62,7 +62,7 @@ hs1 = {
 
 hs1_state_data = { # state data, must match covariates? # Jane: Yes
   'Location_validation_status_code': ['SUCCESS'],
-  'Location': 1,
+  'Location': 1,  # YS: What does this mean?
 }  
 
 # Create fake data
