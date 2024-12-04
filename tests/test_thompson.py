@@ -92,54 +92,56 @@ def _update(monkeypatch, config, update_rows):
   # ^^^ are these all done?
   # TODO: test that the resulting values for tuned params are correct given the inputs
   
-  row0={
-    "id": 537, # Jane: This is the ID that can match with each decision
-    "user_id": "user1",
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-    "decision_timestamp": "2024-10-23T16:57:39Z",
-    "decision": 1,
-    "decision_probability": 0.6,
-    "proximal_outcome": 0.5,
-    "Location": 1,
-    "Location_validation_status_code": "SUCCESS",
-  }
-  row1={
-    "id": 538, 
-    "user_id": "user1",
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-    "decision_timestamp": "2024-10-23T16:57:39Z",
-    "decision": 0,
-    "decision_probability": 0.2,
-    "proximal_outcome": 0.1,
-    "Location": 1,
-    "Location_validation_status_code": "SUCCESS",
-  }
-  row2={
-    "id": 539, 
-    "user_id": "user1",
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-    "decision_timestamp": "2024-10-23T16:57:39Z",
-    "decision": 0,
-    "decision_probability": 0.3,
-    "proximal_outcome": 0.7,
-    "Location": 0,
-    "Location_validation_status_code": "SUCCESS",
-  }
-  row3={
-    "id": 540, 
-    "user_id": "user1",
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-    "decision_timestamp": "2024-10-23T16:57:39Z",
-    "decision": 0,
-    "decision_probability": 0.7,
-    "proximal_outcome": 0.1,
-    "Location": 1,
-    "Location_validation_status_code": "SUCCESS",
-  }
+  # row0={  ## YS: These are all located under test_cases.py
+  #   "id": 537, # Jane: This is the ID that can match with each decision
+  #   "user_id": "user1",
+  #   "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+  #   "decision_timestamp": "2024-10-23T16:57:39Z",
+  #   "decision": 1,
+  #   "decision_probability": 0.6,
+  #   "proximal_outcome": 0.5,
+  #   "Location": 1,
+  #   "Location_validation_status_code": "SUCCESS",
+  # }
+  # row1={
+  #   "id": 538, 
+  #   "user_id": "user1",
+  #   "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+  #   "decision_timestamp": "2024-10-23T16:57:39Z",
+  #   "decision": 0,
+  #   "decision_probability": 0.2,
+  #   "proximal_outcome": 0.1,
+  #   "Location": 1,
+  #   "Location_validation_status_code": "SUCCESS",
+  # }
+  # row2={
+  #   "id": 539, 
+  #   "user_id": "user1",
+  #   "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+  #   "decision_timestamp": "2024-10-23T16:57:39Z",
+  #   "decision": 0,
+  #   "decision_probability": 0.3,
+  #   "proximal_outcome": 0.7,
+  #   "Location": 0,
+  #   "Location_validation_status_code": "SUCCESS",
+  # }
+  # row3={
+  #   "id": 540, 
+  #   "user_id": "user1",
+  #   "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+  #   "decision_timestamp": "2024-10-23T16:57:39Z",
+  #   "decision": 0,
+  #   "decision_probability": 0.7,
+  #   "proximal_outcome": 0.1,
+  #   "Location": 1,
+  #   "Location_validation_status_code": "SUCCESS",
+  # }
 
   the_data_frame = pd.DataFrame(update_rows)
   ts = _initialize(monkeypatch, config)
   tuned_params = ts.update(the_data_frame)
+  # print(tuned_params.iloc[0]['degree'])
+  return tuned_params
 
 
 def test_init_hs_example(monkeypatch):
@@ -165,14 +167,16 @@ def test_init_hs_continous_not_tailoring(monkeypatch):
 # TODO: write decision tests for all example configs; need to figure out correct input_data
 
 def test_decision_1cv_binary_tailoring(monkeypatch):
-  decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)  # can't check decision (uses random number)
+  decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)  # can't check 'decision' (uses random number)
   # TODO: test correct output
   assert pi == 0.2386883044226933
   assert status == 'SUCCESS'
 
 def test_update_1cv_binary_tailoring(monkeypatch):
-  _update(monkeypatch, hs1, hs1_update_rows)
+  result = _update(monkeypatch, hs1, hs1_update_rows)
   # TODO: test correct output
+  assert result.columns[1] == 'user_id'
+  assert result.iloc[0]['degree'] == 9.0
 
 def _test_upload(monkeypatch):
   # TODO: provide example data that matches what would be expected given the HeartSteps Example config
