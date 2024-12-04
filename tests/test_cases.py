@@ -116,7 +116,7 @@ hs1_update_rows = [
   }
 ]
 
-heart_steps_covariate_not_tailoring = { # one_cv_continuous_not_tailoring
+hs1_continuous_not_tailoring = { # one_cv_continuous_not_tailoring
   "algo_type": "algorithm_type",
   "covariates": {
     "dc1732cf-10a9-460f-a2d7-6554778cd686": {

@@ -88,8 +88,9 @@ class ThompsonSampling(LearningMethodBase):
             feature['feature_parameter_alpha0_mu']=value['main_effect_prior_mean']
             feature['feature_parameter_alpha0_sigma']=value['main_effect_prior_standard_deviation']
             feature['feature_parameter_beta_selected_features']=value['tailoring_variable']
-            feature['feature_parameter_beta_mu']=value['interaction_coefficient_prior_mean']
-            feature['feature_parameter_beta_sigma']=value['interaction_coefficient_prior_standard_deviation']
+            if (feature['feature_parameter_beta_selected_features'] == 'yes'):
+                feature['feature_parameter_beta_mu']=value['interaction_coefficient_prior_mean']
+                feature['feature_parameter_beta_sigma']=value['interaction_coefficient_prior_standard_deviation']
             ### Jane2
             feature['feature_parameter_state_lower']=value['covariate_min_val']
             feature['feature_parameter_state_upper']=value['covariate_max_val']

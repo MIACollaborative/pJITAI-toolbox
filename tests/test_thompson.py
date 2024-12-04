@@ -9,7 +9,7 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
 
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
-from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, heart_steps_update_point, heart_steps_decision_freq, heart_steps_covariate_not_tailoring
+from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, heart_steps_update_point, heart_steps_decision_freq, hs1_continuous_not_tailoring
 
 def _initialize(monkeypatch, config):
 
@@ -142,26 +142,27 @@ def _update(monkeypatch, config, update_rows):
 
 def test_init_hs_example(monkeypatch):
   ts = _initialize(monkeypatch, hs1)
-  # TODO: test that it was initialized as expected
   assert ts._default_mu == 0
   assert ts._state_dim == len(hs1["covariates"].items())  # _state_dim should match the number of covariates
   assert ts._feature_name_list[0] == "Location"  # _feature_name_list contains 'covariate_name'
+  assert ts._action_center_ind == np.array([[1]])  # 1 for tailoring
 
-def test_init_hs_update_point(monkeypatch):
-  _initialize(monkeypatch, heart_steps_update_point)
+def test_init_hs_update_point(monkeypatch):  ## YS: Currently, update point is not being used anywhere in the TS class
+  ts = _initialize(monkeypatch, heart_steps_update_point) 
   # TODO: test that it was initialized as expected
 
-def test_init_hs_decision_freq(monkeypatch):
-  _initialize(monkeypatch, heart_steps_decision_freq)
+def test_init_hs_decision_freq(monkeypatch):  ## YS: Currently, decision freq is not being used anywhere in the TS class
+  ts = _initialize(monkeypatch, heart_steps_decision_freq)
   # TODO: test that it was initialized as expected
 
-def test_init_hs_covariate_not_tailoring(monkeypatch):
-  _initialize(monkeypatch, heart_steps_covariate_not_tailoring)
-  # now test that it was initialized as expected
+def test_init_hs_continous_not_tailoring(monkeypatch):
+  ts = _initialize(monkeypatch, hs1_continuous_not_tailoring)
+  assert ts.features[0]['feature_parameter_beta_selected_features'] == 'no'  # 'yes' for tailoring, 'no' for not tailoring cov
+  assert ts._action_center_ind == np.array([[0]])  # 0 for not tailoring
 
 # TODO: write decision tests for all example configs; need to figure out correct input_data
 
-def test_decision_1cv_binary_tailoring (monkeypatch):
+def test_decision_1cv_binary_tailoring(monkeypatch):
   _decision(monkeypatch, hs1, hs1_state_data)
   # TODO: test correct output
 
