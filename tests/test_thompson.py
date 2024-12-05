@@ -9,7 +9,7 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
 
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
-from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, heart_steps_update_point, heart_steps_decision_freq, hs1_continuous_not_tailoring
+from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_point, hs1_decision_freq, hs1_continuous_not_tailoring, hs2_binary_tailoring_continuous_not_tailoring
 
 def _initialize(monkeypatch, config):
 
@@ -152,17 +152,22 @@ def test_init_hs_example(monkeypatch):
   assert ts._action_center_ind == np.array([[1]])  # 1 for tailoring
 
 def test_init_hs_update_point(monkeypatch):  ## YS: Currently, update point is not being used anywhere in the TS class
-  ts = _initialize(monkeypatch, heart_steps_update_point) 
+  ts = _initialize(monkeypatch, hs1_update_point) 
   # TODO: test that it was initialized as expected
 
 def test_init_hs_decision_freq(monkeypatch):  ## YS: Currently, decision freq is not being used anywhere in the TS class
-  ts = _initialize(monkeypatch, heart_steps_decision_freq)
+  ts = _initialize(monkeypatch, hs1_decision_freq)
   # TODO: test that it was initialized as expected
 
 def test_init_hs_continous_not_tailoring(monkeypatch):
   ts = _initialize(monkeypatch, hs1_continuous_not_tailoring)
   assert ts.features[0]['feature_parameter_beta_selected_features'] == 'no'  # 'yes' for tailoring, 'no' for not tailoring cov
   assert ts._action_center_ind == np.array([[0]])  # 0 for not tailoring
+
+def test_init_hs_two_binary_tailoring_continous_not_tailoring(monkeypatch):
+  ts = _initialize(monkeypatch, hs2_binary_tailoring_continuous_not_tailoring)
+  assert ts._state_dim == len(hs2_binary_tailoring_continuous_not_tailoring["covariates"].items()) 
+  assert ts._feature_name_list[1] == "(log) Prior 30 minute step count" 
 
 # TODO: write decision tests for all example configs; need to figure out correct input_data
 

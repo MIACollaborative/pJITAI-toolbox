@@ -169,7 +169,7 @@ hs1_continuous_not_tailoring = { # one_cv_continuous_not_tailoring
   "uuid": "2203d770-1336-4bc8-86c2-fed2238e3529"
 }
 
-heart_steps_two_covariates = {  # two_cv_binary_tailoring_continuous_not_tailoring
+hs2_binary_tailoring_continuous_not_tailoring = {  # two_cv_binary_tailoring_continuous_not_tailoring
   "algo_type": "algorithm_type",
   "covariates": {
     "39365837-e898-448d-9dfc-9367413c5add": {
@@ -233,7 +233,7 @@ heart_steps_two_covariates = {  # two_cv_binary_tailoring_continuous_not_tailori
   "uuid": "56e6a124-9b2d-46bc-b131-29c68710078a"
 }
 
-heart_steps_covariate_int = {
+hs1_int_tailoring = {
   "algo_type": "algorithm_type",
   "covariates": {
     "e20a934b-8514-44e3-8845-185b62cb3460": {
@@ -286,7 +286,7 @@ heart_steps_covariate_int = {
   "uuid": "7a1ca672-a502-4d4f-a315-edbe0de0c68a"
 }
 
-heart_steps_covariate_continuous = {
+hs1_continuous_tailoring = {
   "algo_type": "algorithm_type",
   "covariates": {
     "672a206d-69cb-4171-91b8-1e69040f5ad4": {
@@ -339,7 +339,7 @@ heart_steps_covariate_continuous = {
   "uuid": "36041837-0be3-49a6-bffd-e4d5b2d2f264"
 }
 
-heart_steps_covariate_not_tailoring_binary = {
+hs1_binary_not_tailoring = {
   "algo_type": "algorithm_type",
   "covariates": {
     "14783889-476a-4d9e-9cac-7e739e1dd197": {
@@ -392,7 +392,7 @@ heart_steps_covariate_not_tailoring_binary = {
   "uuid": "a91565e5-eb84-40a9-8c20-16cd9ed6f48a"
 }
 
-heart_steps_covariate_not_tailoring_int = {
+hs1_int_not_tailoring = {
   "algo_type": "algorithm_type",
   "covariates": {
     "ec7cc548-fc74-46ec-b233-42912f446448": {
@@ -443,7 +443,7 @@ heart_steps_covariate_not_tailoring_int = {
   "uuid": "744185a1-8494-4f19-b9cb-f92fd1a6472c"
 }
 
-heart_steps_update_point = {  # Added by YS
+hs1_update_point = {  # Added by YS
   "algo_type": "algorithm_type",
   "covariates": {
     "99167b02-95c0-4ad6-a748-91c53e3fc4df": {
@@ -500,7 +500,7 @@ heart_steps_update_point = {  # Added by YS
   "uuid": "4d6f4771-ffbe-4d55-a2b9-62707a1fb264"
 }
 
-heart_steps_decision_freq = {  # Added by YS
+hs1_decision_freq = {  # Added by YS
   "algo_type": "algorithm_type",
   "covariates": {
     "3d8a585b-dc1c-463d-a10e-749539d5782b": {
