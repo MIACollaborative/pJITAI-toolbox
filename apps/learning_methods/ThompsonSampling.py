@@ -50,7 +50,8 @@ class ThompsonSampling(LearningMethodBase):
     ## the state variables need to be standardized.
     ## In addition, to initialize the prior parameters, the hyperparameters from the UI need to be transformed accordingly.
 
-    def __init__(self, features=[], standalone_parameters={}, other_parameters={}):
+    # def __init__(self, features=[], standalone_parameters={}, other_parameters={}):
+    def __init__(self, config=[]):
         super().__init__()
         self.type = "ThompsonSampling"  # this should be same as class name
         self.description = 'This is the thomson sampling algorithm definition.'
@@ -73,9 +74,54 @@ class ThompsonSampling(LearningMethodBase):
         self._default_beta_sigma0_2 = 0.1
 
 
-        self.features = features # added by mwn
-        self.standalone_parameters = standalone_parameters
-        self.other_parameters = other_parameters
+        # self.features = features # added by mwn
+        # self.standalone_parameters = standalone_parameters
+        # self.other_parameters = other_parameters
+
+        ## YS: Move initialization from test_thompson.py to TS class
+        ## create features
+        features = {}
+        key_init = 0
+        for key, value in config["covariates"].items():
+            feature = {}
+            feature['feature_name']=value['covariate_name']
+            feature['feature_parameter_alpha0_mu']=value['main_effect_prior_mean']
+            feature['feature_parameter_alpha0_sigma']=value['main_effect_prior_standard_deviation']
+            feature['feature_parameter_beta_selected_features']=value['tailoring_variable']
+            if (feature['feature_parameter_beta_selected_features'] == 'yes'):
+                feature['feature_parameter_beta_mu']=value['interaction_coefficient_prior_mean']
+                feature['feature_parameter_beta_sigma']=value['interaction_coefficient_prior_standard_deviation']
+            ### Jane2
+            feature['feature_parameter_state_lower']=value['covariate_min_val']
+            feature['feature_parameter_state_upper']=value['covariate_max_val']
+
+            features[key_init]=feature
+            key_init+=1
+
+        self.features = features  ## added by YS
+
+        ## create standalone_parameters
+        standalone_parameters = {}
+        standalone_parameters['alpha_0_mu_bias'] = config['model_settings']['intercept_prior_mean']
+        standalone_parameters['alpha_0_sigma_bias'] = config['model_settings']['intercept_prior_standard_deviation']
+        standalone_parameters['beta_mu_bias'] = config['model_settings']['treatment_prior_mean']
+        standalone_parameters['beta_sigma_bias'] = config['model_settings']['treatment_prior_standard_deviation']
+        standalone_parameters['noise_degree'] = config['model_settings']['noise_degree_of_freedom']
+        standalone_parameters['noise_scale'] = config['model_settings']['noise_scale']
+        ### Jane2
+        standalone_parameters['min_proximal_outcome'] = config['model_settings']['min_proximal_outcome']
+        standalone_parameters['max_proximal_outcome'] = config['model_settings']['max_proximal_outcome']
+
+        self.standalone_parameters = standalone_parameters  ## added by YS
+
+        ## create other_parameters
+        other_parameters = {}
+        other_parameters['lower_clip'] = config['intervention_settings']['intervention_probability_lower_bound']
+        other_parameters['upper_clip'] = config['intervention_settings']['intervention_probability_upper_bound']
+        
+        self.other_parameters = other_parameters  ## added by YS
+
+        
         ## Jane: IMPORTANT: Eligibility is currently not implemented in ThompsonSampling.py
 
         # self.parameters = {
@@ -357,16 +403,16 @@ class ThompsonSampling(LearningMethodBase):
         # These need to be read from the web user interface
         # I added "value" to represent what each option means in the linear regression. It's super important.
         ### Jane: The below isn't used at all... It shouldn't be set up here.
-        decision_options = [
-            {  # Index 0
-                'name': 'Do Nothing',
-                'value': 0.7,
-            },
-            {  # Index 1
-                'name': 'Send an Intervention',
-                'value': 0.3,
-            }
-        ]
+        # decision_options = [
+        #     {  # Index 0
+        #         'name': 'Do Nothing',
+        #         'value': 0.7,
+        #     },
+        #     {  # Index 1
+        #         'name': 'Send an Intervention',
+        #         'value': 0.3,
+        #     }
+        # ]
 
         # Initialize all the global parameters appropriately
         # Jane: IMPORTANT: I assume that the initialization is done in the __init__ function
