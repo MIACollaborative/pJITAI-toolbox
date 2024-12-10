@@ -172,11 +172,16 @@ def test_init_hs_two_binary_tailoring_continous_not_tailoring(monkeypatch):
 # TODO: write decision tests for all example configs; need to figure out correct input_data
 
 def test_decision_1cv_binary_tailoring(monkeypatch):
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.1) ## less than pi
+  assert random.uniform(0, 1) == 0.1
   decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)  # can't check 'decision' (uses random number)
-  # TODO: test correct output
+  assert decision == 1
   assert pi == 0.2386883044226933
   assert status == 'SUCCESS'
-
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.3) ## greater than pi
+  decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)  # can't check 'decision' (uses random number)
+  assert decision == 0
+ 
 def test_update_1cv_binary_tailoring(monkeypatch):
   result = _update(monkeypatch, hs1, hs1_update_rows)
   # TODO: test correct output

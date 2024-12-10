@@ -73,11 +73,6 @@ class ThompsonSampling(LearningMethodBase):
         self._default_alpha0_sigma0_2 = 0.1
         self._default_beta_sigma0_2 = 0.1
 
-
-        # self.features = features # added by mwn
-        # self.standalone_parameters = standalone_parameters
-        # self.other_parameters = other_parameters
-
         ## YS: Move initialization from test_thompson.py to TS class
         ## create features
         features = {}
@@ -121,161 +116,7 @@ class ThompsonSampling(LearningMethodBase):
         
         self.other_parameters = other_parameters  ## added by YS
 
-        
         ## Jane: IMPORTANT: Eligibility is currently not implemented in ThompsonSampling.py
-
-        # self.parameters = {
-        #     "alpha0_mu": {
-        #         "description": "baseline prior mean",
-        #         "type": "float",
-        #         "lower_bound": "-inf",
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 0
-        #     },
-        #     "alpha0_sigma": {
-        #         "description": "baseline prior std",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 3.16
-        #     },
-        #     "beta_selected_features": {
-        #         "description": "tailoring variable or not",
-        #         "type": "str",
-        #         "lower_bound": "no",
-        #         "upper_bound": "yes",
-        #         "inclusive": [True, True],
-        #         "default_value": "yes"
-        #     },
-        #     "beta_mu": {
-        #         "description": "tailored effect prior mean",
-        #         "type": "float",
-        #         "lower_bound": "-inf",
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 0
-        #     },
-        #     "beta_sigma": {
-        #         "description": "tailored effect prior std",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 3.16
-        #     }
-        # }
-        
-        # TODO Change to "model parameters"?
-        # self.standalone_parameters = {
-        #     # I may want to change the names of all of these
-        #     "alpha_0_mu_bias": {
-        #         "description": "intercept prior mean",
-        #         "type": "float",
-        #         "lower_bound": "-inf",
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 0
-        #     },
-        #     "alpha_0_sigma_bias": {
-        #         "description": "intercept prior std",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 3.16
-        #     },
-        #     "beta_mu_bias": {
-        #         "description": "main effect prior mean",
-        #         "type": "float",
-        #         "lower_bound": "-inf",
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 0
-        #     },
-        #     "beta_sigma_bias": {
-        #         "description": "main effect prior std",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 3.16
-        #     },
-        #     "noise_scale": {
-        #         "description": "scaling parameter of scaled inverse chi square",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 1
-        #     },
-
-        #     "noise_degree": {
-        #         "description": "degree of freedom of scaled inverse chi square",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": "inf",
-        #         "inclusive": [False, False],
-        #         "default_value": 0.2
-        #     }
-
-        # }
-        # # For now you can change it to "intervention parameters"
-        # self.other_parameters = {
-        #     "lower_clip": {
-        #         "description": "randomization probability lower bound",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": 1,
-        #         "inclusive": [True, True],
-        #         "default_value": 0.1
-        #     },
-        #     "upper_clip": {
-        #         "description": "randomization probability upper bound",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": 1,
-        #         "inclusive": [True, True],
-        #         "default_value": 0.8
-        #     },
-        #     # I'm not sure what the unit should be
-        #     "fixed_randomization_period": {
-        #         "description": "length of the fixed randomization period",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": "inf",
-        #         "inclusive": [True, False],
-        #         "default_value": 3
-        #     },
-        #     "fixed_randomization_probability": {
-        #         "description": "fixed randomization probability",
-        #         "type": "float",
-        #         "lower_bound": 0,
-        #         "upper_bound": 1,
-        #         "inclusive": [True, True],
-        #         "default_value": 0.3
-        #     }
-        # }
-        
-        # self.tuning_scheduler = {
-        #     "name": "update_interval",
-        #     "description": "time interval between running algorithm and update policy. Time is in seconds/minutes???",
-        #     "type": "float",
-        #     "lower_bound": 0,
-        #     "upper_bound": "pinf",
-        #     "inclusive": [True, True],
-        #     "default_value": 0.39
-        # }
-        
-        # # TODO: This needs populated via the web interface when complete.
-        # self.eligibility = {
-        #     "walking": False,
-        #     "driving": False,
-        # }
-       
-        ### WAS IN initialize_from_defaults()
-
 
         # Let's for now not set it as numpy array
         # We can also initialize the following as an numpy array. Not sure what we prefer. For now, I keep everything consistent.
@@ -417,7 +258,6 @@ class ThompsonSampling(LearningMethodBase):
         # Initialize all the global parameters appropriately
         # Jane: IMPORTANT: I assume that the initialization is done in the __init__ function
         # self.initialize_from_defaults()
-
 
         # Accessing tuned parameters
         # Parameters are access by column name and first row
