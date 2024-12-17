@@ -60,9 +60,9 @@ hs1 = {
   "uuid": "7a2a9edb-e150-4e08-8547-f855f2d48d4c" #project ID?
 }
 
-hs1_state_data = { # state data, must match covariates? # Jane: Yes
+hs1_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These data should be attached from client session
   'Location_validation_status_code': ['SUCCESS'],
-  'Location': 1,  # YS: What does this mean?
+  'Location': 1, 
 }  
 
 # Create fake data
@@ -71,15 +71,15 @@ hs1_state_data = { # state data, must match covariates? # Jane: Yes
 # Jane: IMPORTANT: algo_uuid needs to be checked!!! << where and how?
 hs1_update_rows = [
   {
-    "id": 537, # Jane: This is the ID that can match with each decision
-    "user_id": "user1",
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-    "decision_timestamp": "2024-10-23T16:57:39Z",
-    "decision": 1,
-    "decision_probability": 0.6,
-    "proximal_outcome": 0.5,
-    "Location": 1,
-    "Location_validation_status_code": "SUCCESS",
+    "id": 537, # Jane: This is the ID that can match with each decision # YS: In which case we can refer Decision DB
+    "user_id": "user1",  # YS: can be attached from the client session
+    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",  # YS: Can we remove algo_uuid and unify into projects_uuid? 
+    "decision_timestamp": "2024-10-23T16:57:39Z", # YS: currently in Decision DB
+    "decision": 1,  # YS: currently in Decision DB
+    "decision_probability": 0.6,  # YS: currently Nowhere
+    "proximal_outcome": 0.5, # YS: currently in Data DB
+    "Location": 1,  # YS: same as hs1_state_data, used in decision
+    "Location_validation_status_code": "SUCCESS",  # YS: same as hs1_state_data, used in decision
   },
   {
     "id": 538, 

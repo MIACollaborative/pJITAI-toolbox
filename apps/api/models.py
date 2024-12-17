@@ -42,15 +42,15 @@ def time_8601() -> str:
 
 
 @dataclass
-class AlgorithmTunedParams(db.Model):
-    __tablename__ = 'algorithm_tuned_params'
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
+class AlgorithmTunedParams(db.Model):  # YS: Should match 'tuned_params' in test_thompson.py
+    __tablename__ = 'algorithm_tuned_params'  # YS: 👆 in this case, this table is used in decision(), update()
+    id = db.Column(db.Integer, primary_key=True, nullable=False)  
     user_id = db.Column('user_id', db.String(36))
-    timestamp = db.Column('timestamp',
+    timestamp = db.Column('timestamp',   # YS: May not need this
                           db.String(100),
                           default=time_8601)
-    configuration = db.Column('configuration', db.JSON)
-    # YS: Maybe create project_id field to connect AlgorithmTunedParams & Project
+    configuration = db.Column('configuration', db.JSON)  # YS: May not need this
+    # YS: Should add theta_mu, theta_Sigma, degree, scale
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
@@ -64,23 +64,25 @@ class AlgorithmTunedParams(db.Model):
 
 
 @dataclass
-class Decision(db.Model):
+class Decision(db.Model):  # YS: saved in decision()
     __tablename__ = 'decision'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     user_id = db.Column('user_id', db.String(36))
-    algo_uuid = db.Column('algo_uuid', db.String(36))
+    algo_uuid = db.Column('algo_uuid', db.String(36))  # YS: Can we change this to project id
 
-    decision_id = db.Column('decision_id', db.String(36), unique=True, default=uuid.uuid4, nullable=False)  # UUID
+    # YS: 👇 What's the difference between 'id'?
+    decision_id = db.Column('decision_id', db.String(36), unique=True, default=uuid.uuid4, nullable=False)  # UUID  
 
-    timestamp = db.Column('timestamp',
+    timestamp = db.Column('timestamp',  # YS: Used in update()
                           db.String(100),
                           default=time_8601)
-    decision = db.Column('decision', db.Integer)
+    decision = db.Column('decision', db.Integer)  # YS: One of Return values of decision(), Used in update()
 
-    decision_options = db.Column('decision_options', db.JSON)
+    decision_options = db.Column('decision_options', db.JSON)  # YS: May not need this
 
-    status_code = db.Column('status_code', db.String(250))
-    status_message = db.Column('status_message', db.String(250))
+    status_code = db.Column('status_code', db.String(250))  # YS: One of Return values of decision()
+    status_message = db.Column('status_message', db.String(250))  # YS: May not need this
+    # YS: Add a field 'pi'
 
     # TODO: Add eligible variable (TWH)
     # TODO: Add eligibility vector which comes from the user API call (TWH)
@@ -106,22 +108,22 @@ class Decision(db.Model):
 
 
 @dataclass
-class Data(db.Model):
+class Data(db.Model):  # YS: Used in update(), upload()
     __tablename__ = 'data'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     user_id = db.Column('user_id', db.String(36))
-    algo_uuid = db.Column('algo_uuid', db.String(36))
+    algo_uuid = db.Column('algo_uuid', db.String(36))  # YS: Can we change to project id?
     timestamp = db.Column('timestamp',
                           db.String(100),
                           default=time_8601)
 
-    proximal_outcome = db.Column('proximal_outcome', db.Float)
-    proximal_outcome_timestamp = db.Column('proximal_outcome_timestamp',
+    proximal_outcome = db.Column('proximal_outcome', db.Float)  # YS: Used in update()
+    proximal_outcome_timestamp = db.Column('proximal_outcome_timestamp', # YS: May not need this
                                            db.String(64))
 
-    decision_id = db.Column('decision_id', db.String(36), unique=True, nullable=False)  # UUID
+    decision_id = db.Column('decision_id', db.String(36), unique=True, nullable=False)  # UUID # YS: Need this
 
-    values = db.Column('values', db.JSON)
+    values = db.Column('values', db.JSON)  # YS: May not need this
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
