@@ -424,7 +424,7 @@ class ThompsonSampling(LearningMethodBase):
             np.matmul(np.matmul(np.transpose(Phi_all), self._theta_Sigma_ini), Phi_all) + np.identity(len(reward_all)),
             tmp0)
         noise = 1 / degree * (len(reward_all) * self._noise_ini + np.matmul(np.transpose(tmp0), tmp))
-
+        # print('theta_mu: ', type(theta_mu), 'theta_Sigma: ', type(theta_Sigma), 'degree: ', type(degree), 'noise: ', type(noise))
         return theta_mu, theta_Sigma, degree, noise
 
     # The follows are helper functions for Thompson sampling

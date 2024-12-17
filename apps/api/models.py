@@ -43,14 +43,16 @@ def time_8601() -> str:
 
 @dataclass
 class AlgorithmTunedParams(db.Model):  # YS: Should match 'tuned_params' in test_thompson.py
-    __tablename__ = 'algorithm_tuned_params'  # YS: 👆 in this case, this table is used in decision(), update()
+    __tablename__ = 'algorithm_tuned_params'  # YS: used in decision(), update()
     id = db.Column(db.Integer, primary_key=True, nullable=False)  
     user_id = db.Column('user_id', db.String(36))
     timestamp = db.Column('timestamp',   # YS: May not need this
                           db.String(100),
                           default=time_8601)
-    configuration = db.Column('configuration', db.JSON)  # YS: May not need this
-    # YS: Should add theta_mu, theta_Sigma, degree, scale
+    theta_mu = db.Column('theta_mu', db.JSON)  # added by YS, theta_mu is np.ndarray -> save in JSON
+    theta_Sigma = db.Column('theta_Sigma', db.JSON)  # added by YS, theta_Sigma is np.ndarray -> save in JSON
+    degree = db.Column('degree', db.Float)  # added by YS
+    scale = db.Column('scale', db.JSON)  # added by YS, scale is np.ndarray -> save in JSON
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
@@ -68,21 +70,23 @@ class Decision(db.Model):  # YS: saved in decision()
     __tablename__ = 'decision'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     user_id = db.Column('user_id', db.String(36))
-    algo_uuid = db.Column('algo_uuid', db.String(36))  # YS: Can we change this to project id
+    # algo_uuid = db.Column('algo_uuid', db.String(36))  # YS: changed to project id
+    project_uuid = db.Column('algo_uuid', db.String(36))
 
-    # YS: 👇 What's the difference between 'id'?
-    decision_id = db.Column('decision_id', db.String(36), unique=True, default=uuid.uuid4, nullable=False)  # UUID  
-
+    state_data = db.Column('state_data', db.JSON)   # YS: 👇 example of state_data
+                                                    # hs1_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These data should be attached from client session
+                                                    #   'Location_validation_status_code': ['SUCCESS'],
+                                                    #   'Location': 1, 
+                                                    # }
     timestamp = db.Column('timestamp',  # YS: Used in update()
                           db.String(100),
                           default=time_8601)
     decision = db.Column('decision', db.Integer)  # YS: One of Return values of decision(), Used in update()
 
-    decision_options = db.Column('decision_options', db.JSON)  # YS: May not need this
-
     status_code = db.Column('status_code', db.String(250))  # YS: One of Return values of decision()
-    status_message = db.Column('status_message', db.String(250))  # YS: May not need this
-    # YS: Add a field 'pi'
+    # status_message = db.Column('status_message', db.String(250))  # YS: May not need this
+    pi = db.Column('pi', db.Float)  # added by YS, pi is decision probability
+    random_number = db.Column('random_number', db.Float)  # added by YS, random number used for decision() in TS
 
     # TODO: Add eligible variable (TWH)
     # TODO: Add eligibility vector which comes from the user API call (TWH)
@@ -112,18 +116,17 @@ class Data(db.Model):  # YS: Used in update(), upload()
     __tablename__ = 'data'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     user_id = db.Column('user_id', db.String(36))
-    algo_uuid = db.Column('algo_uuid', db.String(36))  # YS: Can we change to project id?
+    # algo_uuid = db.Column('algo_uuid', db.String(36))
+    project_uuid = db.Column('project_uuid', db.String(36))  # YS: Changed to project id
     timestamp = db.Column('timestamp',
                           db.String(100),
                           default=time_8601)
 
     proximal_outcome = db.Column('proximal_outcome', db.Float)  # YS: Used in update()
-    proximal_outcome_timestamp = db.Column('proximal_outcome_timestamp', # YS: May not need this
+    proximal_outcome_timestamp = db.Column('proximal_outcome_timestamp',
                                            db.String(64))
 
     decision_id = db.Column('decision_id', db.String(36), unique=True, nullable=False)  # UUID # YS: Need this
-
-    values = db.Column('values', db.JSON)  # YS: May not need this
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():

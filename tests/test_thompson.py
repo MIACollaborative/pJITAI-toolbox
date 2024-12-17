@@ -91,51 +91,6 @@ def _update(monkeypatch, config, update_rows):
   # TODO: provide starting values for tuned params
   # ^^^ are these all done?
   # TODO: test that the resulting values for tuned params are correct given the inputs
-  
-  # row0={  ## YS: These are all located under test_cases.py
-  #   "id": 537, # Jane: This is the ID that can match with each decision
-  #   "user_id": "user1",
-  #   "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-  #   "decision_timestamp": "2024-10-23T16:57:39Z",
-  #   "decision": 1,
-  #   "decision_probability": 0.6,
-  #   "proximal_outcome": 0.5,
-  #   "Location": 1,
-  #   "Location_validation_status_code": "SUCCESS",
-  # }
-  # row1={
-  #   "id": 538, 
-  #   "user_id": "user1",
-  #   "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-  #   "decision_timestamp": "2024-10-23T16:57:39Z",
-  #   "decision": 0,
-  #   "decision_probability": 0.2,
-  #   "proximal_outcome": 0.1,
-  #   "Location": 1,
-  #   "Location_validation_status_code": "SUCCESS",
-  # }
-  # row2={
-  #   "id": 539, 
-  #   "user_id": "user1",
-  #   "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-  #   "decision_timestamp": "2024-10-23T16:57:39Z",
-  #   "decision": 0,
-  #   "decision_probability": 0.3,
-  #   "proximal_outcome": 0.7,
-  #   "Location": 0,
-  #   "Location_validation_status_code": "SUCCESS",
-  # }
-  # row3={
-  #   "id": 540, 
-  #   "user_id": "user1",
-  #   "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
-  #   "decision_timestamp": "2024-10-23T16:57:39Z",
-  #   "decision": 0,
-  #   "decision_probability": 0.7,
-  #   "proximal_outcome": 0.1,
-  #   "Location": 1,
-  #   "Location_validation_status_code": "SUCCESS",
-  # }
 
   the_data_frame = pd.DataFrame(update_rows)
   ts = _initialize(monkeypatch, config)
@@ -174,17 +129,17 @@ def test_init_hs_two_binary_tailoring_continous_not_tailoring(monkeypatch):
 def test_decision_1cv_binary_tailoring(monkeypatch):
   monkeypatch.setattr(random, 'uniform', lambda x, y: 0.1) ## less than pi
   assert random.uniform(0, 1) == 0.1
-  decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)  # can't check 'decision' (uses random number)
+  decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)
   assert decision == 1
   assert pi == 0.2386883044226933
   assert status == 'SUCCESS'
   monkeypatch.setattr(random, 'uniform', lambda x, y: 0.3) ## greater than pi
-  decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)  # can't check 'decision' (uses random number)
+  decision, pi, status = _decision(monkeypatch, hs1, hs1_state_data)
   assert decision == 0
  
 def test_update_1cv_binary_tailoring(monkeypatch):
   result = _update(monkeypatch, hs1, hs1_update_rows)
-  # TODO: test correct output
+  
   assert result.columns[1] == 'user_id'
   assert result.iloc[0]['degree'] == 9.0
 
