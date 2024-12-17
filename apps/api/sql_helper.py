@@ -38,6 +38,7 @@ from apps.api.models import Data, AlgorithmTunedParams, Decision
 
 def save_decision(decision: Decision):
     try:
+        print('save_decision')
         db.session.add(decision)
         db.session.commit()
     except SQLAlchemyError as e:

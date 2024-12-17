@@ -38,7 +38,7 @@ from scipy.linalg import block_diag
 
 from apps.api.codes import StatusCode
 from apps.api.models import Decision
-from apps.api.sql_helper import get_merged_data
+from apps.api.sql_helper import get_merged_data, save_decision
 from apps.api.util import time_8601
 from apps.learning_methods.LearningMethodBase import LearningMethodBase
 
@@ -55,6 +55,7 @@ class ThompsonSampling(LearningMethodBase):
         super().__init__()
         self.type = "ThompsonSampling"  # this should be same as class name
         self.description = 'This is the thomson sampling algorithm definition.'
+        self.project_uuid = config["uuid"]
         # TODO: for all sigma range (0 to +inf) and for all mu, (-inf, +inf), Noise is same like sigma
         # technical section: param section for behav scitn.
         # help /FAQ
@@ -334,8 +335,19 @@ class ThompsonSampling(LearningMethodBase):
         #                     decision_options=decision_options,
         #                     status_code=StatusCode.SUCCESS.value,
         #                     status_message="Decision made successfully")
-
-        return my_decision, pi, status
+        
+        # decision = Decision(id=uuid4(),
+        #                     user_id=user_id,
+        #                     project_uuid=self.project_uuid,
+        #                     state_data=json.dumps([]),
+        #                     timestamp=datetime.now(),
+        #                     decision=my_decision,
+        #                     status_code=status,
+        #                     pi=pi,
+        #                     random_number=random_number)
+        # save_decision(decision)
+        # print(decision)
+        return my_decision, pi, status, random_number
 
     def update(self, data) -> dict: # Jane: IMPORTANT: previously, data isn't part of the input
         #data = get_merged_data(algo_id=self.uuid)
@@ -424,7 +436,7 @@ class ThompsonSampling(LearningMethodBase):
             np.matmul(np.matmul(np.transpose(Phi_all), self._theta_Sigma_ini), Phi_all) + np.identity(len(reward_all)),
             tmp0)
         noise = 1 / degree * (len(reward_all) * self._noise_ini + np.matmul(np.transpose(tmp0), tmp))
-        # print('theta_mu: ', type(theta_mu), 'theta_Sigma: ', type(theta_Sigma), 'degree: ', type(degree), 'noise: ', type(noise))
+        
         return theta_mu, theta_Sigma, degree, noise
 
     # The follows are helper functions for Thompson sampling

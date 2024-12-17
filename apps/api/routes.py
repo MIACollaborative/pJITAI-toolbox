@@ -42,6 +42,9 @@ from apps.api.sql_helper import get_tuned_params, json_to_series, save_decision,
 from apps.learning_methods.learning_method_service import get_all_available_methods
 from .models import Data, Decision
 from .util import get_class_object, pJITAI_token_required, _validate_algo_data, _add_log
+from uuid import uuid4
+from datetime import datetime
+import json
 
 
 def _save_each_data_row(user_id: str,
@@ -105,18 +108,15 @@ def model(uuid: str) -> dict:
 @blueprint.route('<uuid>/decision', methods=['POST', 'GET'])
 # @pJITAI_token_required
 def decision(uuid: str) -> dict:
-    input_data = request.json
+    data = request.json
     try:
         
         # TODO: Do something with input_data['eligilibity'] (https://github.com/mDOT-Center/pJITAI/issues/21)
-        
-        # validated_data = _validate_algo_data(uuid, input_data['values']) # YS: currently using Algorithms
-        validated_data = input_data['values']
 
-        validated_data_df = pd.DataFrame(json_to_series(validated_data)).transpose()
-
-        user_id = input_data['user_id'],
-        input_data = validated_data_df
+        user_id = data['user_id']
+        timestamp = data['timestamp']
+        tuned_params = data['tuned_params']
+        input_data = data['input_data']
 
         proj = Projects.query.filter(Projects.uuid == uuid).first()
         proj_type = proj.general_settings.get("personalization_method")
@@ -124,18 +124,19 @@ def decision(uuid: str) -> dict:
         obj = cls()
         obj.as_object(proj)  # TODO: What does this do?
 
-        tuned_params = get_tuned_params(user_id=user_id)
-        # print('tuned_params: ', tuned_params)
-        tuned_params_df = None
+        my_decision, pi, status, random_number = obj.decision(user_id, timestamp, tuned_params, input_data)
 
-        timestamp = request.json['timestamp']
-
-        if len(tuned_params) > 0:
-            tuned_params = tuned_params.iloc[0]['configuration']
-            tuned_params_df = pd.json_normalize(tuned_params)
-
-        decision = obj.decision(user_id, timestamp, tuned_params_df, input_data)
+        decision = Decision(id=uuid4(),
+                            user_id=user_id,
+                            project_uuid=uuid,
+                            state_data=json.dumps([]),
+                            timestamp=datetime.now(),
+                            decision=my_decision,
+                            status_code=status,
+                            pi=pi,
+                            random_number=random_number)
         save_decision(decision)  # Save the decision to the database
+
         decision_output = decision.as_dataframe()
         if len(decision_output) > 0:
 
@@ -147,7 +148,7 @@ def decision(uuid: str) -> dict:
         else:
             result = {
                 'status_code': StatusCode.ERROR.value,
-                'status_message': f'A decision was unable to be made for: {uuid} with validated data: {validated_data}'
+                'status_message': f'A decision was unable to be made for: {uuid} with data: {input_data}'
             }
             _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(
             ), 'response': None, 'error': result, 'http_status_code': 400})

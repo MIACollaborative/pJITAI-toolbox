@@ -96,16 +96,16 @@ class Decision(db.Model):  # YS: saved in decision()
             setattr(self, property, value)
 
     def __repr__(self):
-        return str(self.name)
+        return str(self.id)
 
     def as_dataframe(self):
-        temp = self.as_dict()
-        temp.pop('decision_options')
-        result = pd.DataFrame(temp, index=[0])
-        result['decision_options'] = None
-        result['decision_options'].astype(object)
-        result.at[0, 'decision_options'] = self.as_dict()['decision_options']
-        return result
+        # temp = self.as_dict()
+        # temp.pop('decision_options')
+        # result = pd.DataFrame(temp, index=[0])
+        # result['decision_options'] = None
+        # result['decision_options'].astype(object)
+        # result.at[0, 'decision_options'] = self.as_dict()['decision_options']
+        return self.as_dict()
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
