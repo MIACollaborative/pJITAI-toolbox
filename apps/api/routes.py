@@ -118,7 +118,7 @@ def decision(uuid: str) -> dict:
         tuned_params = data['tuned_params']
         input_data = data['input_data']
 
-        proj = Projects.query.filter(Projects.uuid == uuid).first()
+        proj = Projects.query.filter(Projects.uuid == uuid).first() # retrieve project data
         proj_type = proj.general_settings.get("personalization_method")
         cls = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
         obj = cls()
@@ -130,7 +130,7 @@ def decision(uuid: str) -> dict:
                             user_id=user_id,
                             project_uuid=uuid,
                             state_data=json.dumps([]),
-                            timestamp=datetime.now(),
+                            timestamp=timestamp,
                             decision=my_decision,
                             status_code=status,
                             pi=pi,

@@ -46,7 +46,8 @@ class AlgorithmTunedParams(db.Model):  # YS: Should match 'tuned_params' in test
     __tablename__ = 'algorithm_tuned_params'  # YS: used in decision(), update()
     id = db.Column(db.Integer, primary_key=True, nullable=False)  
     user_id = db.Column('user_id', db.String(36))
-    timestamp = db.Column('timestamp',   # YS: May not need this
+    proj_uuid = db.Column('proj_uuid', db.String(36))
+    timestamp = db.Column('timestamp',
                           db.String(100),
                           default=time_8601)
     theta_mu = db.Column('theta_mu', db.JSON)  # added by YS, theta_mu is np.ndarray -> save in JSON
@@ -71,7 +72,7 @@ class Decision(db.Model):  # YS: saved in decision()
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     user_id = db.Column('user_id', db.String(36))
     # algo_uuid = db.Column('algo_uuid', db.String(36))  # YS: changed to project id
-    project_uuid = db.Column('algo_uuid', db.String(36))
+    proj_uuid = db.Column('proj_uuid', db.String(36))
 
     state_data = db.Column('state_data', db.JSON)   # YS: 👇 example of state_data
                                                     # hs1_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These data should be attached from client session
@@ -117,7 +118,7 @@ class Data(db.Model):  # YS: Used in update(), upload()
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     user_id = db.Column('user_id', db.String(36))
     # algo_uuid = db.Column('algo_uuid', db.String(36))
-    project_uuid = db.Column('project_uuid', db.String(36))  # YS: Changed to project id
+    proj_uuid = db.Column('proj_uuid', db.String(36))  # YS: Changed to project id
     timestamp = db.Column('timestamp',
                           db.String(100),
                           default=time_8601)
