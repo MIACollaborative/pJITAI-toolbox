@@ -40,7 +40,7 @@ from apps.api import blueprint
 from apps.api.codes import StatusCode
 from apps.api.sql_helper import get_tuned_params, json_to_series, save_decision, store_tuned_params
 from apps.learning_methods.learning_method_service import get_all_available_methods
-from .models import Data, Decision
+from .models import Data, Decision, AlgorithmTunedParams
 from .util import get_class_object, pJITAI_token_required, _validate_algo_data, _add_log
 from uuid import uuid4
 from datetime import datetime
@@ -115,36 +115,40 @@ def decision(uuid: str) -> dict:
 
         user_id = data['user_id']
         timestamp = data['timestamp']
-        tuned_params = data['tuned_params']
-        input_data = data['input_data']
+        state_data = data['state_data']
+        tuned_params_dict = get_tuned_params(uuid)
+
+        input_data = pd.DataFrame(state_data)  # Should be in pd.DataFrame
+        tuned_params = pd.DataFrame(tuned_params_dict)  # Should be pd.DataFrame
 
         proj = Projects.query.filter(Projects.uuid == uuid).first() # retrieve project data
         proj_type = proj.general_settings.get("personalization_method")
-        cls = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
-        obj = cls()
-        obj.as_object(proj)  # TODO: What does this do?
+        class_obj = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
+        obj = class_obj(proj.as_dict())
 
         my_decision, pi, status, random_number = obj.decision(user_id, timestamp, tuned_params, input_data)
 
-        decision = Decision(id=uuid4(),
-                            user_id=user_id,
-                            project_uuid=uuid,
+        message = ""
+        if status == "SUCCESS":
+            message = "Decision made successfully"
+        
+        decision = Decision(user_id=user_id,
+                            proj_uuid=uuid,
                             state_data=json.dumps([]),
                             timestamp=timestamp,
                             decision=my_decision,
                             status_code=status,
+                            status_message=message,
                             pi=pi,
                             random_number=random_number)
         save_decision(decision)  # Save the decision to the database
 
-        decision_output = decision.as_dataframe()
+        decision_output = decision.as_dict()
         if len(decision_output) > 0:
-
             # Only one row is currently supported.  Extract it and convert to a dictionary before returning to the calling library.
-            result = decision_output.iloc[0].to_dict()
-            _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': result,
+            _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': decision_output,
                                                  'http_status_code': 200})
-            return result, 200
+            return decision_output, 200
         else:
             result = {
                 'status_code': StatusCode.ERROR.value,

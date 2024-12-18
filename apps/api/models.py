@@ -45,7 +45,9 @@ def time_8601() -> str:
 class AlgorithmTunedParams(db.Model):  # YS: Should match 'tuned_params' in test_thompson.py
     __tablename__ = 'algorithm_tuned_params'  # YS: used in decision(), update()
     id = db.Column(db.Integer, primary_key=True, nullable=False)  
-    user_id = db.Column('user_id', db.String(36))
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id'),
+                        nullable=False)
     proj_uuid = db.Column('proj_uuid', db.String(36))
     timestamp = db.Column('timestamp',
                           db.String(100),
@@ -70,7 +72,9 @@ class AlgorithmTunedParams(db.Model):  # YS: Should match 'tuned_params' in test
 class Decision(db.Model):  # YS: saved in decision()
     __tablename__ = 'decision'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    user_id = db.Column('user_id', db.String(36))
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id'),
+                        nullable=False)
     # algo_uuid = db.Column('algo_uuid', db.String(36))  # YS: changed to project id
     proj_uuid = db.Column('proj_uuid', db.String(36))
 
@@ -85,7 +89,7 @@ class Decision(db.Model):  # YS: saved in decision()
     decision = db.Column('decision', db.Integer)  # YS: One of Return values of decision(), Used in update()
 
     status_code = db.Column('status_code', db.String(250))  # YS: One of Return values of decision()
-    # status_message = db.Column('status_message', db.String(250))  # YS: May not need this
+    status_message = db.Column('status_message', db.String(250))  # YS: needed for detail info
     pi = db.Column('pi', db.Float)  # added by YS, pi is decision probability
     random_number = db.Column('random_number', db.Float)  # added by YS, random number used for decision() in TS
 
@@ -116,7 +120,9 @@ class Decision(db.Model):  # YS: saved in decision()
 class Data(db.Model):  # YS: Used in update(), upload()
     __tablename__ = 'data'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    user_id = db.Column('user_id', db.String(36))
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id'),
+                        nullable=False)
     # algo_uuid = db.Column('algo_uuid', db.String(36))
     proj_uuid = db.Column('proj_uuid', db.String(36))  # YS: Changed to project id
     timestamp = db.Column('timestamp',

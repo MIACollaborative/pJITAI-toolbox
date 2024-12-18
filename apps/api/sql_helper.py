@@ -34,11 +34,12 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from apps import db
 from apps.api.models import Data, AlgorithmTunedParams, Decision
+from apps.algorithms.models import Projects
+from apps.learning_methods.ThompsonSampling import ThompsonSampling
 
 
 def save_decision(decision: Decision):
     try:
-        print('save_decision')
         db.session.add(decision)
         db.session.commit()
     except SQLAlchemyError as e:
@@ -134,26 +135,49 @@ def json_to_series(variable_list):
     return pd.Series(values, index=keys)
 
 
-def get_tuned_params(user_id: str = None):
-    '''
-    Get data from data table, created pandas DF (parse all the dict and convert them into columns)
-    :param algo_id:
-    :param user_id:
-    :return: pandas DF
-    '''
-    if user_id:
-        tuned_params = AlgorithmTunedParams.query.filter(
-            AlgorithmTunedParams.user_id == user_id).order_by(
-            AlgorithmTunedParams.timestamp.desc())
+# def get_tuned_params(user_id: str = None):
+#     '''
+#     Get data from data table, created pandas DF (parse all the dict and convert them into columns)
+#     :param algo_id:
+#     :param user_id:
+#     :return: pandas DF
+#     '''
+#     if user_id:
+#         tuned_params = AlgorithmTunedParams.query.filter(
+#             AlgorithmTunedParams.user_id == user_id).order_by(
+#             AlgorithmTunedParams.timestamp.desc())
 
+#     else:
+#         tuned_params = AlgorithmTunedParams.query.order_by(AlgorithmTunedParams.timestamp.desc())
+#     # print('tuned params: ', tuned_params.all())
+#     if tuned_params.all():  # YS: tuned_parmas returns SQL query, not the result. using .all() allows whether real data is queried.
+#         df_from_records = pd.read_sql(tuned_params.statement, db.session().bind)
+#         return df_from_records
+#     return pd.DataFrame()
+
+def get_tuned_params(proj_uuid: str):
+    '''
+    Get data from AlgorithmsTunedParams table
+    '''
+    alg_params = AlgorithmTunedParams.query.filter(AlgorithmTunedParams.proj_uuid == proj_uuid).first()
+    if alg_params != None:
+        tuned_params = {
+            'theta_mu': [alg_params.theta_mu],
+            'theta_Sigma': [alg_params.theta_Sigma],
+            'degree': [alg_params.degree],
+            'scale': [alg_params.scale],
+        }
+        return tuned_params
     else:
-        tuned_params = AlgorithmTunedParams.query.order_by(AlgorithmTunedParams.timestamp.desc())
-    # print('tuned params: ', tuned_params.all())
-    if tuned_params.all():  # YS: tuned_parmas returns SQL query, not the result. using .all() allows whether real data is queried.
-        df_from_records = pd.read_sql(tuned_params.statement, db.session().bind)
-        return df_from_records
-    return pd.DataFrame()
-
+        proj = Projects.query.filter(Projects.uuid == proj_uuid).first().as_dict()
+        ts = ThompsonSampling(proj)
+        tuned_params = {
+            'theta_mu': [ts._theta_mu_ini],
+            'theta_Sigma': [ts._theta_Sigma_ini],
+            'degree': [ts._L_ini], 
+            'scale': [ts._noise_ini]
+        }
+        return tuned_params
 
 def store_tuned_params(user_id, configuration):
     try:

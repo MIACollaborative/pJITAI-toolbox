@@ -37,7 +37,7 @@ brew services start mysql
 
 MYSQL="root"
 MYSQL_HOST="localhost"
-MYSQL_PASSWORD="pass"   # May need to change password from current to 'pass' manually, if this doesn't work
+MYSQL_PASSWORD="passpass"   # May need to change password from current to 'pass' manually, if this doesn't work
 
 # Check mysql DB pjitai exists
 DB_EXISTS=$(mysql -u $MYSQL -p$MYSQL_PASSWORD -h $MYSQL_HOST -e "SHOW DATABASES LIKE 'pjitai';" | grep "pjitai" > /dev/null; echo "$?")

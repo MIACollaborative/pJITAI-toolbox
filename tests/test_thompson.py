@@ -62,7 +62,7 @@ def _decision(monkeypatch, example, state_data):
   #ts = ThompsonSampling(features) # TODO: initialize TS from HS config params above. << is this obsolete?
 
   # DECISION PARAMS 
-  user_id = 'user1'
+  user_id = 1
   timestamp = '2024-10-23T16:57:39Z'
 
   # Create a DataFrame with the required values

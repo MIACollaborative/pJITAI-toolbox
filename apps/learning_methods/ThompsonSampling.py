@@ -38,7 +38,6 @@ from scipy.linalg import block_diag
 
 from apps.api.codes import StatusCode
 from apps.api.models import Decision
-from apps.api.sql_helper import get_merged_data, save_decision
 from apps.api.util import time_8601
 from apps.learning_methods.LearningMethodBase import LearningMethodBase
 
