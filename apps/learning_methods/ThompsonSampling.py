@@ -243,18 +243,7 @@ class ThompsonSampling(LearningMethodBase):
 
         # These need to be read from the web user interface
         # I added "value" to represent what each option means in the linear regression. It's super important.
-        ### Jane: The below isn't used at all... It shouldn't be set up here.
-        # decision_options = [
-        #     {  # Index 0
-        #         'name': 'Do Nothing',
-        #         'value': 0.7,
-        #     },
-        #     {  # Index 1
-        #         'name': 'Send an Intervention',
-        #         'value': 0.3,
-        #     }
-        # ]
-
+    
         # Initialize all the global parameters appropriately
         # Jane: IMPORTANT: I assume that the initialization is done in the __init__ function
         # self.initialize_from_defaults()
@@ -326,26 +315,6 @@ class ThompsonSampling(LearningMethodBase):
 
         status=StatusCode.SUCCESS.value
 
-        # Jane: IMPORTANT: We need to record pi as well
-
-        # decision = Decision(user_id=user_id,
-        #                     algo_uuid=self.uuid,
-        #                     decision=my_decision,
-        #                     decision_options=decision_options,
-        #                     status_code=StatusCode.SUCCESS.value,
-        #                     status_message="Decision made successfully")
-        
-        # decision = Decision(id=uuid4(),
-        #                     user_id=user_id,
-        #                     project_uuid=self.project_uuid,
-        #                     state_data=json.dumps([]),
-        #                     timestamp=datetime.now(),
-        #                     decision=my_decision,
-        #                     status_code=status,
-        #                     pi=pi,
-        #                     random_number=random_number)
-        # save_decision(decision)
-        # print(decision)
         return my_decision, pi, status, random_number
 
     def update(self, data) -> dict: # Jane: IMPORTANT: previously, data isn't part of the input
