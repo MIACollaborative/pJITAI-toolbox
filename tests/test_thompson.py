@@ -13,46 +13,7 @@ from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_po
 
 def _initialize(monkeypatch, config):
 
-  # TODO: why is all this happening out here? It seems like we're just renaming stuff
-  # can't TS just take in a project config and do all this internally?
-
-
-  # ## create features
-  # features = {}
-  # key_init = 0
-  # for key, value in config["covariates"].items():
-  #   feature = {}
-  #   feature['feature_name']=value['covariate_name']
-  #   feature['feature_parameter_alpha0_mu']=value['main_effect_prior_mean']
-  #   feature['feature_parameter_alpha0_sigma']=value['main_effect_prior_standard_deviation']
-  #   feature['feature_parameter_beta_selected_features']=value['tailoring_variable']
-  #   feature['feature_parameter_beta_mu']=value['interaction_coefficient_prior_mean']
-  #   feature['feature_parameter_beta_sigma']=value['interaction_coefficient_prior_standard_deviation']
-  #   ### Jane2
-  #   feature['feature_parameter_state_lower']=value['covariate_min_val']
-  #   feature['feature_parameter_state_upper']=value['covariate_max_val']
-
-  #   features[key_init]=feature
-  #   key_init+=1
-
-  # ## create standalone_parameters
-  # standalone_parameters = {}
-  # standalone_parameters['alpha_0_mu_bias'] = config['model_settings']['intercept_prior_mean']
-  # standalone_parameters['alpha_0_sigma_bias'] = config['model_settings']['intercept_prior_standard_deviation']
-  # standalone_parameters['beta_mu_bias'] = config['model_settings']['treatment_prior_mean']
-  # standalone_parameters['beta_sigma_bias'] = config['model_settings']['treatment_prior_standard_deviation']
-  # standalone_parameters['noise_degree'] = config['model_settings']['noise_degree_of_freedom']
-  # standalone_parameters['noise_scale'] = config['model_settings']['noise_scale']
-  # ### Jane2
-  # standalone_parameters['min_proximal_outcome'] = config['model_settings']['min_proximal_outcome']
-  # standalone_parameters['max_proximal_outcome'] = config['model_settings']['max_proximal_outcome']
-
-  # ## create other_parameters
-  # other_parameters = {}
-  # other_parameters['lower_clip'] = config['intervention_settings']['intervention_probability_lower_bound']
-  # other_parameters['upper_clip'] = config['intervention_settings']['intervention_probability_upper_bound']
-
-  # ts=ThompsonSampling(features, standalone_parameters, other_parameters)
+  # YS: initialization is done at init() of TS Class
   ts = ThompsonSampling(config=config)
   return ts
 
@@ -143,9 +104,9 @@ def test_update_1cv_binary_tailoring(monkeypatch):
   assert result.columns[1] == 'user_id'
   assert result.iloc[0]['degree'] == 9.0
 
-def _test_upload(monkeypatch):
+def _test_upload(monkeypatch):  # YS: Don't need to implement this in TS. We can handle upload() in api/routes.py
   # TODO: provide example data that matches what would be expected given the HeartSteps Example config
   # TODO: call ts.upload with the data (and anything else that's needed)
   # TODO: verify that "it worked"--i.e., what would be written to the DB is correct given the data
-  
-  assert False # fail
+
+  assert False

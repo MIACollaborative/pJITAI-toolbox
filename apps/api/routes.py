@@ -199,10 +199,11 @@ def upload(uuid: str) -> dict:
 
         result = {
             "status_code": StatusCode.SUCCESS.value,
-            "status_message": f"Data uploaded to model {uuid}"
+            "status_message": f"Data uploaded to model {uuid}",
+            "data": data.as_dict(),
         }
         _add_log(algo_uuid=uuid,
-                 log_detail={'input_data': data, 'response': result, 'http_status_code': 200})
+                 log_detail={'input_data': data.as_dict(), 'response': result, 'http_status_code': 200})
         return result, 200
     except Exception as e:
         traceback.print_exc()
