@@ -159,7 +159,7 @@ def get_tuned_params(proj_uuid: str):
     '''
     Get data from AlgorithmsTunedParams table
     '''
-    alg_params = AlgorithmTunedParams.query.filter(AlgorithmTunedParams.proj_uuid == proj_uuid).first()
+    alg_params = AlgorithmTunedParams.query.filter(AlgorithmTunedParams.proj_uuid == proj_uuid).first()  # YS: Is this correct? Which obj should be selected?s
     if alg_params != None:
         tuned_params = {
             'theta_mu': [alg_params.theta_mu],

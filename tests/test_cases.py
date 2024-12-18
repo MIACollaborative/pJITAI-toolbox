@@ -72,7 +72,7 @@ hs1_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These
 hs1_update_rows = [
   {
     "id": 537, # Jane: This is the ID that can match with each decision # YS: In which case we can refer Decision DB
-    "user_id": "user1",  # YS: can be attached from the client session
+    "user_id": 1,  # YS: can be attached from the client session
     "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",  # YS: Can we remove algo_uuid and unify into projects_uuid? 
     "decision_timestamp": "2024-10-23T16:57:39Z", # YS: currently in Decision DB
     "decision": 1,  # YS: currently in Decision DB
@@ -83,7 +83,7 @@ hs1_update_rows = [
   },
   {
     "id": 538, 
-    "user_id": "user1",
+    "user_id": 1,
     "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
     "decision_timestamp": "2024-10-23T16:57:39Z",
     "decision": 0,
@@ -94,7 +94,7 @@ hs1_update_rows = [
   },
   {
     "id": 539, 
-    "user_id": "user1",
+    "user_id": 1,
     "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
     "decision_timestamp": "2024-10-23T16:57:39Z",
     "decision": 0,
@@ -105,7 +105,7 @@ hs1_update_rows = [
   },
   {
     "id": 540, 
-    "user_id": "user1",
+    "user_id": 1,
     "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
     "decision_timestamp": "2024-10-23T16:57:39Z",
     "decision": 0,

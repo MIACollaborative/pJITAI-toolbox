@@ -47,26 +47,28 @@ from datetime import datetime
 import json
 
 
-def _save_each_data_row(user_id: str,
-                        decision_id: str,
+def _save_each_data_row(user_id: int,
+                        proj_uuid: str,
+                        timestamp: str,
+                        proximal_outcome: float,
                         proximal_outcome_timestamp: str,
-                        proximal_outcome,
-                        data: list,
-                        algo_uuid=None) -> dict:
+                        decision_id: int) -> dict:
     resp = "Data has successfully added"
     try:
 
-        decision_obj = Decision.query.filter(Decision.decision_id == decision_id).first()
+        decision_obj = Decision.query.filter(Decision.id == decision_id).first()
 
         if decision_obj:
-            data_obj = Data(algo_uuid=algo_uuid,
-                            values=data,
-                            user_id=user_id,
+            data_obj = Data(user_id=user_id,
+                            proj_uuid=proj_uuid,
+                            timestamp=timestamp,
                             decision_id=decision_id,
-                            proximal_outcome_timestamp=proximal_outcome_timestamp,
-                            proximal_outcome=proximal_outcome)
+                            proximal_outcome=proximal_outcome,
+                            proximal_outcome_timestamp=proximal_outcome_timestamp)
             db.session.add(data_obj)
             db.session.commit()
+
+            return data_obj
         else:
             raise Exception(f'Error saving data: {resp}. {decision_id} was not found.')
 
@@ -134,7 +136,7 @@ def decision(uuid: str) -> dict:
         
         decision = Decision(user_id=user_id,
                             proj_uuid=uuid,
-                            state_data=json.dumps([]),
+                            state_data=json.dumps(state_data),
                             timestamp=timestamp,
                             decision=my_decision,
                             status_code=status,
@@ -174,25 +176,39 @@ def upload(uuid: str) -> dict:
     input_data = request.json
     try:
         # validated_input_data = _validate_algo_data(uuid, input_data['values'])
-        validated_input_data = input_data['values']
-        _save_each_data_row(input_data['user_id'],
-                            decision_id=input_data['decision_id'],
-                            proximal_outcome_timestamp=input_data['proximal_outcome_timestamp'],
-                            proximal_outcome=input_data['proximal_outcome'],
-                            data=validated_input_data,
-                            algo_uuid=uuid)
+        # validated_input_data = input_data['values']
+        # _save_each_data_row(input_data['user_id'],
+        #                     decision_id=input_data['decision_id'],
+        #                     proximal_outcome_timestamp=input_data['proximal_outcome_timestamp'],
+        #                     proximal_outcome=input_data['proximal_outcome'],
+        #                     data=validated_input_data,
+        #                     algo_uuid=uuid)
+        user_id = input_data['user_id']
+        proj_uuid = uuid
+        timestamp = input_data['timestamp']
+        proximal_outcome = input_data['proximal_outcome']
+        proximal_outcome_timestamp = input_data['proximal_outcome_timestamp']
+        decision_id = input_data['decision_id']
+
+        data = _save_each_data_row(user_id=user_id,
+                            proj_uuid=proj_uuid,
+                            timestamp=timestamp,
+                            proximal_outcome=proximal_outcome,
+                            proximal_outcome_timestamp=proximal_outcome_timestamp,
+                            decision_id=decision_id)
+
         result = {
             "status_code": StatusCode.SUCCESS.value,
-            "status_message": f"Data uploaded fo model {uuid}"
+            "status_message": f"Data uploaded to model {uuid}"
         }
         _add_log(algo_uuid=uuid,
-                 log_detail={'input_data': validated_input_data, 'response': result, 'http_status_code': 200})
+                 log_detail={'input_data': data, 'response': result, 'http_status_code': 200})
         return result, 200
     except Exception as e:
         traceback.print_exc()
         result = {
             'status_code': StatusCode.ERROR.value,
-            'status_message': f'A decision was unable to be made for: {uuid} with input data: {input_data}'
+            'status_message': f'Upload was unable to be made for: {uuid} with input data: {input_data}'
         }
         _add_log(algo_uuid=uuid,
                  log_detail={'input_data': input_data, 'response': None, 'error': result, 'http_status_code': 400})
@@ -204,12 +220,15 @@ def upload(uuid: str) -> dict:
 def update(uuid: str) -> dict:
     input_data = request.json
     try:
-        '''
-        Call the alogrithm update method
+        user_id = input_data['user_id']
 
-        '''
-        _do_update(algo_uuid=uuid)
+        proj = Projects.query.filter(Projects.uuid == uuid).first() # retrieve project data
+        proj_type = proj.general_settings.get("personalization_method")
+        class_obj = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
+        obj = class_obj(proj.as_dict())
 
+        update_result = obj.update() # TODO
+        ##########################################
         result = {
             "status_code": StatusCode.SUCCESS.value,
             "status_message": "Background update proceedure has been started.",
