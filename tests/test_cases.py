@@ -68,15 +68,15 @@ hs1_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These
 # Create fake data
 # Currently extract from this: https://github.com/mDOT-Center/pJITAI/wiki/pJITAI-Interfaces
 # Jane: Currently I only take the ones that are needed for the Thompson Sampling
-# Jane: IMPORTANT: algo_uuid needs to be checked!!! << where and how?
+# Jane: IMPORTANT: proj_uuid needs to be checked!!! << where and how?
 hs1_update_rows = [
   {  # YS: add decision id (unique)
     "id": 537, # Jane: This is the ID that can match with each decision # YS: In which case we can refer Decision DB
     "user_id": 1,  # YS: can be attached from the client session
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",  # YS: Can we remove algo_uuid and unify into projects_uuid? 
+    "proj_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",  # YS: Can we remove proj_uuid and unify into projects_uuid? 
     "decision_timestamp": "2024-10-23T16:57:39Z", # YS: currently in Decision DB
     "decision": 1,  # YS: currently in Decision DB
-    "decision_probability": 0.6,  # YS: currently Nowhere
+    "pi": 0.6,  # YS: currently Nowhere
     "proximal_outcome": 0.5, # YS: currently in Data DB
     "Location": 1,  # YS: same as hs1_state_data, used in decision
     "Location_validation_status_code": "SUCCESS",  # YS: same as hs1_state_data, used in decision
@@ -84,10 +84,10 @@ hs1_update_rows = [
   {
     "id": 538, 
     "user_id": 1,
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "proj_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
     "decision_timestamp": "2024-10-23T16:57:39Z",
     "decision": 0,
-    "decision_probability": 0.2,
+    "pi": 0.2,
     "proximal_outcome": 0.1,
     "Location": 1,
     "Location_validation_status_code": "SUCCESS",
@@ -95,10 +95,10 @@ hs1_update_rows = [
   {
     "id": 539, 
     "user_id": 1,
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "proj_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
     "decision_timestamp": "2024-10-23T16:57:39Z",
     "decision": 0,
-    "decision_probability": 0.3,
+    "pi": 0.3,
     "proximal_outcome": 0.7,
     "Location": 0,
     "Location_validation_status_code": "SUCCESS",
@@ -106,10 +106,10 @@ hs1_update_rows = [
   {
     "id": 540, 
     "user_id": 1,
-    "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "proj_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
     "decision_timestamp": "2024-10-23T16:57:39Z",
     "decision": 0,
-    "decision_probability": 0.7,
+    "pi": 0.7,
     "proximal_outcome": 0.1,
     "Location": 1,
     "Location_validation_status_code": "SUCCESS",

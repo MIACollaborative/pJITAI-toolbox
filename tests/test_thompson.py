@@ -12,15 +12,12 @@ from apps.learning_methods.ThompsonSampling import ThompsonSampling
 from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_point, hs1_decision_freq, hs1_continuous_not_tailoring, hs2_binary_tailoring_continuous_not_tailoring
 
 def _initialize(monkeypatch, config):
-
-  # YS: initialization is done at init() of TS Class
   ts = ThompsonSampling(config=config)
   return ts
 
 def _decision(monkeypatch, example, state_data):
 
   ts = _initialize(monkeypatch, example)
-  #ts = ThompsonSampling(features) # TODO: initialize TS from HS config params above. << is this obsolete?
 
   # DECISION PARAMS 
   user_id = 1
@@ -41,10 +38,6 @@ def _decision(monkeypatch, example, state_data):
   print(pi) # just to see if it works; still need to write an actual test
 
   return decision, pi, status
-  # TODO: verify that the decision that's produced is correct given the input data, HS config, and provided values for tuned params
-  ###########
-  #  end test_decision()
-  ###########
 
 
 def _update(monkeypatch, config, update_rows):
