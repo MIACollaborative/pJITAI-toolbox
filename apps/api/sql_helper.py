@@ -31,6 +31,7 @@ import traceback
 
 import pandas as pd
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import desc
 
 from apps import db
 from apps.api.models import Data, AlgorithmTunedParams, Decision
@@ -159,7 +160,11 @@ def get_tuned_params(proj_uuid: str):
     '''
     Get data from AlgorithmsTunedParams table
     '''
-    alg_params = AlgorithmTunedParams.query.filter(AlgorithmTunedParams.proj_uuid == proj_uuid).first()  # YS: Is this correct? Which obj should be selected?s
+    alg_params = (AlgorithmTunedParams.query
+                    .filter(AlgorithmTunedParams.proj_uuid == proj_uuid)
+                    .order_by(desc(AlgorithmTunedParams.timestamp))  # YS: Retrieve newest timestamp
+                    .first())
+    
     if alg_params != None:
         tuned_params = {
             'theta_mu': [alg_params.theta_mu],

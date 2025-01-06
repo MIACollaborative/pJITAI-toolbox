@@ -70,7 +70,7 @@ hs1_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These
 # Jane: Currently I only take the ones that are needed for the Thompson Sampling
 # Jane: IMPORTANT: algo_uuid needs to be checked!!! << where and how?
 hs1_update_rows = [
-  {
+  {  # YS: add decision id (unique)
     "id": 537, # Jane: This is the ID that can match with each decision # YS: In which case we can refer Decision DB
     "user_id": 1,  # YS: can be attached from the client session
     "algo_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",  # YS: Can we remove algo_uuid and unify into projects_uuid? 
