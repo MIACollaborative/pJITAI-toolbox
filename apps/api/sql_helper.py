@@ -37,6 +37,7 @@ from apps import db
 from apps.api.models import Data, AlgorithmTunedParams, Decision
 from apps.algorithms.models import Projects
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
+import json
 
 
 def save_decision(decision: Decision):
@@ -52,73 +53,115 @@ def save_decision(decision: Decision):
         print(traceback.format_exc())
 
 
-def get_decision_data(algo_id: str, user_id: str = None):
+def get_decision_data(proj_uuid: str, user_id: str = None):
     '''
     Get data from data table, created pandas DF (parse all the dict and convert them into columns)
-    :param algo_id:
+    :param proj_uuid:
     :param user_id:
     :return: pandas DF
     '''
-    if user_id:
-        data = Decision.query.filter(Decision.algo_uuid == algo_id).filter(Decision.user_id == user_id).order_by(
-            Decision.timestamp.desc())
-    else:
-        data = Decision.query.filter(Decision.algo_uuid == algo_id).order_by(Decision.timestamp.desc())
+    data = (Decision.query.filter(Decision.proj_uuid == proj_uuid)
+                        .filter(Decision.user_id == user_id)
+                        .order_by(Decision.timestamp.desc()))
+    # else:
+    #     data = Decision.query.filter(Decision.proj_uuid == proj_uuid).order_by(Decision.timestamp.desc())
     if data:
         df_from_records = pd.read_sql(data.statement, db.session().bind)
         return df_from_records
     return pd.DataFrame()
 
 
-def get_merged_data(algo_id: str, user_id: str = None):
+def get_merged_data(proj_uuid: str, user_id: str = None):
     '''
     Get data from data table, created pandas DF (parse all the dict and convert them into columns)
-    :param algo_id:
+    :param proj_uuid:
     :param user_id:
     :return: pandas DF
     '''
-    if user_id:
-        data = Data.query.outerjoin(Decision, Decision.decision_id == Data.decision_id).add_entity(Decision).filter(
-            Data.user_id == user_id).order_by(Data.timestamp.desc())
-    else:
-        data = Data.query.outerjoin(Decision, Decision.decision_id == Data.decision_id).add_entity(Decision).order_by(
-            Data.timestamp.desc())
+    decision_data = (Decision.query.filter(Decision.proj_uuid == proj_uuid)
+                                .filter(Decision.user_id == user_id)
+                                .order_by(Decision.timestamp.desc())
+                                .all())
+    data_data = (Data.query.filter(Data.proj_uuid == proj_uuid)
+                                .filter(Data.user_id == user_id)
+                                .order_by(Data.timestamp.desc())
+                                .all())
+    # assert(len(decision_data) == len(data_data))
+    # print(decision_data)
+    # print(data_data)
+
+    merged_data = []
+    for idx, dec in enumerate(decision_data):
+        merged_dict = {}
+        id = dec.id
+        decision_timestamp = dec.timestamp
+        decision = dec.decision
+        pi = dec.pi
+        state_data = json.loads(dec.state_data)
+
+        data = data_data[idx]
+        proximal_outcome = data.proximal_outcome
+
+        merged_dict['id'] = id
+        merged_dict['user_id'] = user_id
+        merged_dict['proj_uuid'] = proj_uuid
+        merged_dict['decision_timestamp'] = decision_timestamp
+        merged_dict['decision'] = decision
+        merged_dict['pi'] = pi
+        for key, value in state_data.items():
+            merged_dict[key] = value
+        merged_dict['proximal_outcome'] = proximal_outcome
+
+        merged_data.append(merged_dict)
+
+    df_merged_data = pd.DataFrame(merged_data)
+    print('-------df_merged_data--------------')
+    print(df_merged_data)
+    print('---------------------')
+    return df_merged_data
+
+    # data = Data.query.outerjoin(Decision, Decision.decision_id == Data.decision_id).add_entity(Decision).filter(
+    #         Data.user_id == user_id).order_by(Data.timestamp.desc())
+    # # else:
+    # #     data = Data.query.outerjoin(Decision, Decision.decision_id == Data.decision_id).add_entity(Decision).order_by(
+    # #         Data.timestamp.desc())
+    # if data:
+    #     df_from_records = pd.read_sql(data.statement, db.session().bind)
+
+    #     result = pd.concat([df_from_records, df_from_records['values'].apply(json_to_series)], axis=1)
+    #     result.drop('values', axis=1, inplace=True)
+    #     result.drop('id_1', axis=1, inplace=True)
+    #     result.drop('user_id_1', axis=1, inplace=True)
+    #     result.drop('algo_uuid_1', axis=1, inplace=True)
+    #     result.drop('decision_id_1', axis=1, inplace=True)
+    #     result.rename(columns={"timestamp_1": "decision__timestamp",
+    #                            "decision": "decision__decision",
+    #                            "decision_options": "decision__decision_options",
+    #                            "status_code": "decision__status_code",
+    #                            "status_message": "decision__status_message"}, inplace=True)
+    #     return result
+    # return pd.DataFrame()
+
+
+def get_data(proj_uuid: str, user_id: str = None):
+    '''
+    Get data from data table, created pandas DF (parse all the dict and convert them into columns)
+    :param proj_uuid:
+    :param user_id:
+    :return: pandas DF
+    '''
+    data = (Data.query.filter(Data.proj_uuid == proj_uuid)
+                    .filter(Data.user_id == user_id)
+                    .order_by(Data.timestamp.desc()))
+    # else:
+    #     data = Data.query.filter(Data.proj_uuid == proj_uuid).order_by(Data.timestamp.desc())
     if data:
         df_from_records = pd.read_sql(data.statement, db.session().bind)
 
         result = pd.concat([df_from_records, df_from_records['values'].apply(json_to_series)], axis=1)
         result.drop('values', axis=1, inplace=True)
-        result.drop('id_1', axis=1, inplace=True)
-        result.drop('user_id_1', axis=1, inplace=True)
-        result.drop('algo_uuid_1', axis=1, inplace=True)
-        result.drop('decision_id_1', axis=1, inplace=True)
-        result.rename(columns={"timestamp_1": "decision__timestamp",
-                               "decision": "decision__decision",
-                               "decision_options": "decision__decision_options",
-                               "status_code": "decision__status_code",
-                               "status_message": "decision__status_message"}, inplace=True)
         return result
-    return pd.DataFrame()
-
-
-def get_data(algo_id: str, user_id: str = None):
-    '''
-    Get data from data table, created pandas DF (parse all the dict and convert them into columns)
-    :param algo_id:
-    :param user_id:
-    :return: pandas DF
-    '''
-    if user_id:
-        data = Data.query.filter(Data.algo_uuid == algo_id).filter(Data.user_id == user_id).order_by(
-            Data.timestamp.desc())
-    else:
-        data = Data.query.filter(Data.algo_uuid == algo_id).order_by(Data.timestamp.desc())
-    if data:
-        df_from_records = pd.read_sql(data.statement, db.session().bind)
-
-        result = pd.concat([df_from_records, df_from_records['values'].apply(json_to_series)], axis=1)
-        result.drop('values', axis=1, inplace=True)
-        return result
+    
     return pd.DataFrame()
 
 

@@ -38,7 +38,7 @@ from apps import db
 from apps.algorithms.models import Projects
 from apps.api import blueprint
 from apps.api.codes import StatusCode
-from apps.api.sql_helper import get_tuned_params, json_to_series, save_decision, store_tuned_params
+from apps.api.sql_helper import get_tuned_params, json_to_series, save_decision, store_tuned_params, get_merged_data
 from apps.learning_methods.learning_method_service import get_all_available_methods
 from .models import Data, Decision, AlgorithmTunedParams
 from .util import get_class_object, pJITAI_token_required, _validate_algo_data, _add_log
@@ -219,22 +219,30 @@ def upload(uuid: str) -> dict:
 @blueprint.route('<uuid>/update', methods=['POST'])
 # @pJITAI_token_required
 def update(uuid: str) -> dict:
-    input_data = request.json
+    update_data = request.json
     try:
-        user_id = input_data['user_id']
+        user_id = update_data['user_id']
+
+        df_update_data = get_merged_data(uuid, user_id)
 
         proj = Projects.query.filter(Projects.uuid == uuid).first() # retrieve project data
         proj_type = proj.general_settings.get("personalization_method")
         class_obj = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
         obj = class_obj(proj.as_dict())
 
-        update_result = obj.update() # TODO
+        update_result = obj.update(df_update_data) # TODO: save to AlgorithmTunedParams
+        print('-------update_result--------------')
+        print(update_result)
+        print('----------------------------')
+
+        
         ##########################################
         result = {
             "status_code": StatusCode.SUCCESS.value,
-            "status_message": "Background update proceedure has been started.",
+            "status_message": "Update has been made successfully.",
+            "update_result": update_result.to_dict(),
         }
-        _add_log(algo_uuid=uuid, log_detail={'input_data': input_data, 'response': result, 'http_status_code': 200})
+        _add_log(algo_uuid=uuid, log_detail={'response': result, 'http_status_code': 200})
         return result, 200
 
     except Exception as e:
@@ -244,7 +252,7 @@ def update(uuid: str) -> dict:
             "status_message": str(e),
         }
         _add_log(algo_uuid=uuid,
-                 log_detail={'input_data': input_data, 'response': None, 'error': result, 'http_status_code': 400})
+                 log_detail={'update_data': update_data, 'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 
 

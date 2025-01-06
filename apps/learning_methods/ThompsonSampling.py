@@ -331,9 +331,6 @@ class ThompsonSampling(LearningMethodBase):
 
         result = pd.DataFrame([], columns=columns)
 
-        # I move the initialization out because it only needs to be done once for everyone
-        # self.initialize_from_defaults()
-
         for u in data.user_id.unique():
             result_data = [time_8601(), u]
 

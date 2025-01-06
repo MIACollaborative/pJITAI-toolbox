@@ -142,7 +142,7 @@ class Data(db.Model):  # YS: Used in update(), upload()
             setattr(self, property, value)
 
     def __repr__(self):
-        return str(self.name)
+        return str(self.id)
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
