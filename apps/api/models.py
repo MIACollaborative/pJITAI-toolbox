@@ -62,7 +62,7 @@ class AlgorithmTunedParams(db.Model):  # YS: Should match 'tuned_params' in test
             setattr(self, property, value)
 
     def __repr__(self):
-        return str(self.name)
+        return str(self.id)
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

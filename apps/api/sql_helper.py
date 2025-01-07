@@ -115,9 +115,9 @@ def get_merged_data(proj_uuid: str, user_id: str = None):
         merged_data.append(merged_dict)
 
     df_merged_data = pd.DataFrame(merged_data)
-    print('-------df_merged_data--------------')
-    print(df_merged_data)
-    print('---------------------')
+    # print('-------df_merged_data--------------')
+    # print(df_merged_data)
+    # print('---------------------')
     return df_merged_data
 
     # data = Data.query.outerjoin(Decision, Decision.decision_id == Data.decision_id).add_entity(Decision).filter(
@@ -227,11 +227,18 @@ def get_tuned_params(proj_uuid: str):
         }
         return tuned_params
 
-def store_tuned_params(user_id, configuration):
+def store_tuned_params(user_id, proj_uuid, timestamp, theta_mu, theta_Sigma, degree, scale):
     try:
-        algo_params = AlgorithmTunedParams(user_id=user_id, configuration=configuration)
-        db.session.add(algo_params)
+        algo_obj = AlgorithmTunedParams(user_id=user_id,
+                                                 proj_uuid=proj_uuid,
+                                                 timestamp=timestamp,
+                                                 theta_mu=theta_mu,
+                                                 theta_Sigma=theta_Sigma,
+                                                 degree=degree,
+                                                 scale=scale)
+        db.session.add(algo_obj)
         db.session.commit()
+        return algo_obj
     except SQLAlchemyError as e:
         resp = str(e.__dict__['orig'])
         db.session.rollback()

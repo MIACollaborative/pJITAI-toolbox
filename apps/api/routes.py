@@ -81,19 +81,6 @@ def _save_each_data_row(user_id: int,
         raise Exception(f'Error saving data: {resp}')
 
 
-def _do_update(algo_uuid):
-    proj = Projects.query.filter(Projects.uuid == algo_uuid).first()
-    proj_type = proj.general_settings.get("personalization_method")
-    cls = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
-    obj = cls()
-    obj.as_object(proj)
-    result = obj.update()
-
-    for index, row in result.iterrows():
-        store_tuned_params(user_id=row.user_id,
-                           configuration=row.iloc[2:].to_dict()) # TODO (YS): this is updating AlgorithmTunedParams' 'configuration'
-
-
 # API METHODS ARE BELOW
 
 # @blueprint.route('<uuid>', methods=['GET'])
@@ -230,17 +217,29 @@ def update(uuid: str) -> dict:
         class_obj = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
         obj = class_obj(proj.as_dict())
 
-        update_result = obj.update(df_update_data) # TODO: save to AlgorithmTunedParams
-        print('-------update_result--------------')
-        print(update_result)
-        print('----------------------------')
-
+        update_result = obj.update(df_update_data)
         
+        theta_mu = update_result.iloc[0]['theta_mu']
+        theta_Sigma = update_result.iloc[0]['theta_Sigma']
+        degree = update_result.iloc[0]['degree']
+        scale = update_result.iloc[0]['scale']
+        timestamp = str(datetime.now())
+
+        algo_tuned_params = store_tuned_params(user_id=user_id,  # save to AlgoTunedParams
+                           proj_uuid=uuid,
+                           timestamp=timestamp,
+                           theta_mu=theta_mu,
+                           theta_Sigma=theta_Sigma,
+                           degree=degree,
+                           scale=scale)
+        # print('-------algo tuned params--------------')
+        # print(algo_tuned_params.as_dict())
+        # print('---------------------')
         ##########################################
         result = {
             "status_code": StatusCode.SUCCESS.value,
             "status_message": "Update has been made successfully.",
-            "update_result": update_result.to_dict(),
+            "update_result": algo_tuned_params.as_dict(),
         }
         _add_log(algo_uuid=uuid, log_detail={'response': result, 'http_status_code': 200})
         return result, 200
@@ -252,7 +251,7 @@ def update(uuid: str) -> dict:
             "status_message": str(e),
         }
         _add_log(algo_uuid=uuid,
-                 log_detail={'update_data': update_data, 'response': None, 'error': result, 'http_status_code': 400})
+                 log_detail={'update_result': update_result, 'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 
 
