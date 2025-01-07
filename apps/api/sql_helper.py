@@ -209,6 +209,7 @@ def get_tuned_params(proj_uuid: str):
                     .first())
     
     if alg_params != None:
+        print("get_tuned_params: AlgoTunedParams exists!")
         tuned_params = {
             'theta_mu': [alg_params.theta_mu],
             'theta_Sigma': [alg_params.theta_Sigma],
@@ -217,6 +218,7 @@ def get_tuned_params(proj_uuid: str):
         }
         return tuned_params
     else:
+        print("get_tuned_params: AlgoTunedParams doesn't exist!")
         proj = Projects.query.filter(Projects.uuid == proj_uuid).first().as_dict()
         ts = ThompsonSampling(proj)
         tuned_params = {
@@ -230,12 +232,12 @@ def get_tuned_params(proj_uuid: str):
 def store_tuned_params(user_id, proj_uuid, timestamp, theta_mu, theta_Sigma, degree, scale):
     try:
         algo_obj = AlgorithmTunedParams(user_id=user_id,
-                                                 proj_uuid=proj_uuid,
-                                                 timestamp=timestamp,
-                                                 theta_mu=theta_mu,
-                                                 theta_Sigma=theta_Sigma,
-                                                 degree=degree,
-                                                 scale=scale)
+                                        proj_uuid=proj_uuid,
+                                        timestamp=timestamp,
+                                        theta_mu=theta_mu,
+                                        theta_Sigma=theta_Sigma,
+                                        degree=degree,
+                                        scale=scale)
         db.session.add(algo_obj)
         db.session.commit()
         return algo_obj
