@@ -31,14 +31,14 @@
                               <h4>Your project uuid: {{proj.get("uuid")}}</h4>
                               <div class="main_call">
                                 <h5>The main call to the server</h5>
-                                <p>When calling the below command on terminal, it will connect to the server. You can call decision, upload and update from the main function.</p>
+                                <p>When you run the command below in the terminal, it will connect to the server. From the main function, you can call decision, upload, and update.</p>
                                 <pre><code class="language-python">python simulator.py --service_id '{{proj.get("uuid")}}' --server 'http://localhost:5005/api' --service_token 'e6e74d36-a3e4-4631-b077-4fdd703636f2'</code></pre>
                               </div>
                               <div class="decision">
                                 <h5>1. Decision</h5>
-                                <p>The decision call from a client allows the RL algorithm to make a decision for this intervention.</p>
+                                <p>The decision call from a client allows the RL algorithm to make a decision for the intervention.</p>
                                 <h6>How to Make a Call</h6>
-                                <p>The following data should be attached from the client in order to make a decision call.</p>
+                                <p>The following data should be attached by the client to make a decision call.</p>
                                 <ul>
                                   <li>user id</li>
                                   <li>timestamp (use the current time)</li>
@@ -64,9 +64,9 @@
                               </div>
                               <div class="upload">
                                 <h5>2. Upload</h5>
-                                <p>The upload call from a client allows the RL algorithm to upload data following a decision.</p>
+                                <p>The upload call from a client allows the RL algorithm to upload data after making a decision.</p>
                                 <h6>How to Make a Call</h6>
-                                <p>The following data should be attached from the client in order to make a upload call.</p>
+                                <p>The following data should be attached by the client to make an upload call.</p>
                                 <ul>
                                   <li>user id</li>
                                   <li>timestamp (use the current time)</li>
@@ -90,9 +90,9 @@
                               </div>
                               <div class="update">
                                 <h5>3. Update</h5>
-                                <p>The update call from a client allows the RL algorithm to update the parameters.</p>
+                                <p>The update call from a client allows the RL algorithm to update its parameters.</p>
                                 <h6>How to Make a Call</h6>
-                                <p>The following data should be attached from the client in order to make a update call.</p>
+                                <p>The following data should be attached by the client to make an update call.</p>
                                 <ul>
                                   <li>user id</li>
                                 </ul>
