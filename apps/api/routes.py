@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import traceback
 
 import pandas as pd
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from flask_login import login_required
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -294,11 +294,15 @@ def search(query):
 @login_required
 def proj(uuid):
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()
+    covariate_names = []
+    for k, v in proj.as_dict()['covariates'].items():
+        for key, value in v.items():
+            if key == 'covariate_name':
+                covariate_names.append(value)
     if not proj:
         return {"status": "error",
                 "message": "Algorithm ID does not exist or algorithm has not been finalized yet."}, 400
-    else:
-        return proj.as_dict()
+    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names)
 
 def get_algo_name(uuid):
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()
