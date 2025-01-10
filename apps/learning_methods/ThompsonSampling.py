@@ -306,6 +306,8 @@ class ThompsonSampling(LearningMethodBase):
             pi = 1 - t.cdf(0, degree, loc=mu_t[0,0], scale=scale_t)
             pi = max(self._lower_clip, pi)
             pi = min(self._upper_clip, pi)
+        print('-----')
+        print('pi: ', pi)
 
         random_number = random.uniform(0, 1)
         if (pi > random_number):

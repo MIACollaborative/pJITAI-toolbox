@@ -293,6 +293,11 @@ hs1_int_tailoring = {
   "uuid": "7a1ca672-a502-4d4f-a315-edbe0de0c68a"
 }
 
+hs1_int_state_data = {
+  'Day of the week_validation_status_code': ['SUCCESS'],
+  'Day of the week': 5, 
+}
+
 hs1_continuous_tailoring = {
   "algo_type": "algorithm_type",
   "covariates": {
@@ -344,6 +349,11 @@ hs1_continuous_tailoring = {
   "modified_on": "Wed, 20 Nov 2024 18:07:37 GMT",
   "project_status": 1,
   "uuid": "36041837-0be3-49a6-bffd-e4d5b2d2f264"
+}
+
+hs1_continuous_state_data = {
+  'Temperature_validation_status_code': ['SUCCESS'],
+  'Temperature': 100, 
 }
 
 hs1_binary_not_tailoring = {

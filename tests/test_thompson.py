@@ -9,7 +9,7 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
 
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
-from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_point, hs1_decision_freq, hs1_continuous_not_tailoring, hs2_binary_tailoring_continuous_not_tailoring, hs2_state_data
+from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_point, hs1_decision_freq, hs1_continuous_not_tailoring, hs2_binary_tailoring_continuous_not_tailoring, hs2_state_data, hs1_int_tailoring, hs1_int_state_data, hs1_continuous_tailoring, hs1_continuous_state_data
 
 def _initialize(monkeypatch, config):
   ts = ThompsonSampling(config=config)
@@ -100,6 +100,28 @@ def test_decision_2cv_binary_tailoring_continuous_not_tailoring(monkeypatch):
   assert status == 'SUCCESS'
   monkeypatch.setattr(random, 'uniform', lambda x, y: 0.3) ## greater than pi
   decision, pi, status = _decision(monkeypatch, hs2_binary_tailoring_continuous_not_tailoring, hs2_state_data)
+  assert decision == 0
+
+def test_decision_1cv_int_tailoring(monkeypatch):
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.1) ## less than pi
+  assert random.uniform(0, 1) == 0.1
+  decision, pi, status = _decision(monkeypatch, hs1_int_tailoring, hs1_int_state_data)
+  assert decision == 1
+  assert pi == 0.19656393934600958
+  assert status == 'SUCCESS'
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.3) ## greater than pi
+  decision, pi, status = _decision(monkeypatch, hs1_int_tailoring, hs1_int_state_data)
+  assert decision == 0
+
+def test_decision_1cv_continuous_tailoring(monkeypatch):
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.1) ## less than pi
+  assert random.uniform(0, 1) == 0.1
+  decision, pi, status = _decision(monkeypatch, hs1_continuous_tailoring, hs1_continuous_state_data)
+  assert decision == 1
+  assert pi == 0.1875136233679039
+  assert status == 'SUCCESS'
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.3) ## greater than pi
+  decision, pi, status = _decision(monkeypatch, hs1_continuous_tailoring, hs1_continuous_state_data)
   assert decision == 0
  
 # TODO: write update tests for all example configs; need to figure out correct input_data
