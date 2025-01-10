@@ -376,7 +376,7 @@ class ThompsonSampling(LearningMethodBase):
                 # we will need to grab the intervention probability as well
                 # Jane: I edited the below because I don't think we need the exact same format as the original code
                 # pi = getattr(row, 'decision__decision_options')[getattr(row, 'decision__decision')]['value']
-                pi = getattr(row, 'decision_probability')
+                pi = getattr(row, 'pi')
 
                 Phi = self.reward_model(state, action, pi)
                 Phi_all = np.hstack((Phi_all, Phi))

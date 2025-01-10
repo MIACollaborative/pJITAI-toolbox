@@ -233,6 +233,13 @@ hs2_binary_tailoring_continuous_not_tailoring = {  # two_cv_binary_tailoring_con
   "uuid": "56e6a124-9b2d-46bc-b131-29c68710078a"
 }
 
+hs2_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These data should be attached from client session
+  'Location_validation_status_code': ['SUCCESS'],
+  'Location': 1, 
+  '(log) Prior 30 minute step count_validation_status_code': ['SUCCESS'],
+  '(log) Prior 30 minute step count': 3.3,
+}
+
 hs1_int_tailoring = {
   "algo_type": "algorithm_type",
   "covariates": {
