@@ -134,10 +134,15 @@ def decision(uuid: str) -> dict:
 
         decision_output = decision.as_dict()
         if len(decision_output) > 0:
+            result = {
+                "status_code": status,
+                "status_message": message,
+                "decision_result": decision_output,
+            }
             # Only one row is currently supported.  Extract it and convert to a dictionary before returning to the calling library.
-            _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': decision_output,
+            _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': result,
                                                  'http_status_code': 200})
-            return decision_output, 200
+            return result, 200
         else:
             result = {
                 'status_code': StatusCode.ERROR.value,
@@ -187,7 +192,7 @@ def upload(uuid: str) -> dict:
         result = {
             "status_code": StatusCode.SUCCESS.value,
             "status_message": f"Data uploaded to model {uuid}",
-            "data": data.as_dict(),
+            "upload_result": data.as_dict(),
         }
         _add_log(algo_uuid=uuid,
                  log_detail={'input_data': data.as_dict(), 'response': result, 'http_status_code': 200})
