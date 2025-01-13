@@ -42,6 +42,7 @@ from apps.api.sql_helper import get_tuned_params, json_to_series, save_decision,
 from apps.learning_methods.learning_method_service import get_all_available_methods
 from .models import Data, Decision
 from .util import get_class_object, pJITAI_token_required, _validate_algo_data, _add_log
+from datetime import datetime
 
 
 def _save_each_data_row(user_id: str,
@@ -293,6 +294,7 @@ def search(query):
 @blueprint.route('/projects/<uuid>', methods=['GET'])  # or UUID
 @login_required
 def proj(uuid):
+    time = str(datetime.now())
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()
     covariate_names = []
     for k, v in proj.as_dict()['covariates'].items():
@@ -303,7 +305,7 @@ def proj(uuid):
         return {"status": "error",
                 "message": "Algorithm ID does not exist or algorithm has not been finalized yet."}, 400
     segment = 'main_project_page_finalized'
-    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment)
+    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment, time=time)
 
 def get_algo_name(uuid):
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()
