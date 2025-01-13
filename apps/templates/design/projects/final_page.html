@@ -28,24 +28,27 @@
                         <div class="col-sm-12">
                           <div class="card">
                             <div class="card-header">
+                              <h4>Your base url: {{base_url}}</h4>
+                              <p>Please replace &lt;base_url&gt; with the base url above when making a call. You can make API calls from a client to the server via HTTP requests. Decision, upload and update calls can be requested, following the endpoint routes.</p>
                               <h4>Your project uuid: {{proj.get("uuid")}}</h4>
+                              <p>This is your project uuid, which is unique for this project. You need this uuid when making API calls to the server.</p>
                               <!-- <div class="main_call">
                                 <h5>The main call to the server</h5>
                                 <p>When you run the command below in the terminal, it will connect to the server. From the main function, you can call decision, upload, and update.</p>
                                 <pre><code class="language-python">python simulator.py --service_id '{{proj.get("uuid")}}' --server 'http://localhost:5005/api' --service_token 'e6e74d36-a3e4-4631-b077-4fdd703636f2'</code></pre>
                               </div> -->
                               <div class="decision">
-                                <h5>1. Decision</h5>
+                                <h5 style="margin-top: 20px;">1. Decision</h5>
                                 <p>The decision call from a client allows the RL algorithm to make a decision for the intervention.</p>
                                 <h6>Endpoint</h6>
-                                <pre><code class="language-python">http://127.0.0.1:5005/api/projects/{{proj.get("uuid")}}/decision</code></pre>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/decision</code></pre>
                                 <h6>Method</h6>
                                 <pre><code class="language-python">POST</code></pre>
                                 <h6>Request Body</h6>
                                 <pre><code class="language-python">{ 
   'user_id': {{proj.get("created_by")}},
   'timestamp': '{{time}}',
-  'state_data':{ {% for cov in covariate_names %}
+  'state_data':{ {% for cov in covariate_names %}  # This should match the project's covariate(s)
     '{{cov}}_validation_status_code': ['SUCCESS'],
     '{{cov}}': 1,{% endfor %} 
   }
@@ -74,7 +77,7 @@
                                 <h5>2. Upload</h5>
                                 <p>The upload call from a client allows the RL algorithm to upload data after making a decision.</p>
                                 <h6>Endpoint</h6>
-                                <pre><code class="language-python">http://127.0.0.1:5005/api/projects/{{proj.get("uuid")}}/upload</code></pre>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/upload</code></pre>
                                 <h6>Method</h6>
                                 <pre><code class="language-python">POST</code></pre>
                                 <h6>Request Body</h6>
@@ -103,7 +106,7 @@
                                 <h5>3. Update</h5>
                                 <p>The update call from a client allows the RL algorithm to update data after making a decision.</p>
                                 <h6>Endpoint</h6>
-                                <pre><code class="language-python">http://127.0.0.1:5005/api/projects/{{proj.get("uuid")}}/update</code></pre>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/update</code></pre>
                                 <h6>Method</h6>
                                 <pre><code class="language-python">POST</code></pre>
                                 <h6>Request Body</h6>
