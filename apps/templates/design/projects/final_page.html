@@ -28,17 +28,23 @@
                         <div class="col-sm-12">
                           <div class="card">
                             <div class="card-header">
-                              <h4>Your base url: {{base_url}}</h4>
+                              <h4><b>Your Project Information</b></h4>
+                              <h5>1. Base url: {{base_url}}</h5>
                               <p>Please replace &lt;base_url&gt; with the base url above when making a call. You can make API calls from a client to the server via HTTP requests. Decision, upload and update calls can be requested, following the endpoint routes.</p>
-                              <h4>Your project uuid: {{proj.get("uuid")}}</h4>
+                              <h5>2. Project uuid: {{proj.get("uuid")}}</h5>
                               <p>This is your project uuid, which is unique for this project. You need this uuid when making API calls to the server.</p>
+                              <h5>3. Token: [TOKEN]</h5>
+                              <p>This should be included as a header for your HTTP requests. It will be used for authentication.</p>
+                              <pre><code class="language-python">{'pJITAI_token': [TOKEN]}</code></pre>
                               <!-- <div class="main_call">
                                 <h5>The main call to the server</h5>
                                 <p>When you run the command below in the terminal, it will connect to the server. From the main function, you can call decision, upload, and update.</p>
                                 <pre><code class="language-python">python simulator.py --service_id '{{proj.get("uuid")}}' --server 'http://localhost:5005/api' --service_token 'e6e74d36-a3e4-4631-b077-4fdd703636f2'</code></pre>
                               </div> -->
+                              <br />
+                              <h4 style="margin-top: 20px;"><b>HTTP Requests</b></h4>
                               <div class="decision">
-                                <h5 style="margin-top: 20px;">1. Decision</h5>
+                                <h5>1. Decision</h5>
                                 <p>The decision call from a client allows the RL algorithm to make a decision for the intervention.</p>
                                 <h6>Endpoint</h6>
                                 <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/decision</code></pre>
