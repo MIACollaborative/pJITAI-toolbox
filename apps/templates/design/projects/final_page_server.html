@@ -1,0 +1,125 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Final Page {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                          <div class="col-sm-12">
+                              <div class="card">
+                                  <div class="card-header">
+                                      <h3>How to Connect and Make Calls from a Client</h3>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="card">
+                            <div class="card-header">
+                              <h4>Your project uuid: {{proj.get("uuid")}}</h4>
+                              <div class="main_call">
+                                <h5>The main call to the server</h5>
+                                <p>When you run the command below in the terminal, it will connect to the server. From the main function, you can call decision, upload, and update.</p>
+                                <pre><code class="language-python">python simulator.py --service_id '{{proj.get("uuid")}}' --server 'http://localhost:5005/api' --service_token 'e6e74d36-a3e4-4631-b077-4fdd703636f2'</code></pre>
+                              </div>
+                              <div class="decision">
+                                <h5>1. Decision</h5>
+                                <p>The decision call from a client allows the RL algorithm to make a decision for the intervention.</p>
+                                <h6>How to Make a Call</h6>
+                                <p>The following data should be attached by the client to make a decision call.</p>
+                                <ul>
+                                  <li>user id</li>
+                                  <li>timestamp (use the current time)</li>
+                                  <li>state data</li>
+                                </ul>
+                                <p>Your call should look like:</p>
+                                <pre><code class="language-python">def process_decision():
+  state_data = { {% for cov in covariate_names %}
+    '{{cov}}_validation_status_code': ['SUCCESS'],  # mock data
+    '{{cov}}': 1,
+  {% endfor %} }
+  user_id = {{proj.get("created_by")}}
+  timestamp = str(datetime.now())
+
+  row = {}
+  row['user_id'] = user_id
+  row['timestamp'] = timestamp
+  row['state_data'] = state_data
+
+  allevents.append(('decision', row))</code></pre>
+                                <p>The response will look like (includes mock data):</p>
+                                <pre><code class="language-python">DecisionResponse(status_code='SUCCESS', status_message='Decision made successfully', user_id={{proj.get("created_by")}}, timestamp='2025-01-07 11:23:36.675201', id=39, proj_uuid='{{proj.get("uuid")}}', state_data='{"Location_validation_status_code": ["SUCCESS"], "Location": 1}', decision=0, pi=0.1, random_number=0.104327)</code></pre>
+                              </div>
+                              <div class="upload">
+                                <h5>2. Upload</h5>
+                                <p>The upload call from a client allows the RL algorithm to upload data after making a decision.</p>
+                                <h6>How to Make a Call</h6>
+                                <p>The following data should be attached by the client to make an upload call.</p>
+                                <ul>
+                                  <li>user id</li>
+                                  <li>timestamp (use the current time)</li>
+                                  <li>proximal outcome</li>
+                                  <li>proximal outcome timestamp</li>
+                                  <li>decision id (the id of the Decision data, which the upload is referring to)</li>
+                                </ul>
+                                <p>Your call should look like:</p>
+                                <pre><code class="language-python">def process_upload():
+  upload_data = {
+    "user_id": {{proj.get("created_by")}},
+    "timestamp": str(datetime.now()),
+    "proximal_outcome": 0.5,  # mock data
+    "proximal_outcome_timestamp": "2024-10-23T16:57:39Z",  # mock data
+    "decision_id": 39,  # mock data
+  }
+
+  allevents.append(('upload', upload_data))</code></pre>
+                                <p>The response will look like (includes mock data):</p>
+                                <pre><code class="language-python">UploadResponse(status_code='SUCCESS', status_message='Data uploaded to model '{{proj.get("uuid")}}'', data={'decision_id': 39, 'id': 16, 'proj_uuid': '{{proj.get("uuid")}}', 'proximal_outcome': 0.5, 'proximal_outcome_timestamp': '2024-10-23T16:57:39Z', 'timestamp': '2025-01-07 11:23:36.675213', 'user_id': {{proj.get("created_by")}}})</code></pre>
+                              </div>
+                              <div class="update">
+                                <h5>3. Update</h5>
+                                <p>The update call from a client allows the RL algorithm to update its parameters.</p>
+                                <h6>How to Make a Call</h6>
+                                <p>The following data should be attached by the client to make an update call.</p>
+                                <ul>
+                                  <li>user id</li>
+                                </ul>
+                                <p>Your call should look like:</p>
+                                <pre><code class="language-python">def process_update():
+  user_id = {{proj.get("created_by")}}
+
+  row = {}
+  row['user_id'] = user_id
+
+  allevents.append(('update', row))</code></pre>
+                                <p>The response will look like (includes mock data):</p>
+                                <pre><code class="language-python">UpdateResponse(status_code='SUCCESS', status_message='Update has been made successfully.', update_result={'degree': 5.0, 'id': 5, 'proj_uuid': '{{proj.get("uuid")}}', 'scale': [[0.0]], 'theta_Sigma': [[0.15, 0.14999999999999997, 0.0, 0.0, 0.0, 0.0], [0.15, 0.7499999999999999, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.028607194359878133, 0.028607194359878133, 0.0, 0.0], [0.0, 0.0, 0.028607194359878133, 0.02890161833039568, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.028607194359878133, 0.028607194359878133], [0.0, 0.0, 0.0, 0.0, 0.028607194359878133, 0.02890161833039568]], 'theta_mu': [[-6.162975822039155e-33], [1.1102230246251563e-16], [-0.03797468354430311], [-0.021864211737628647], [-0.03797468354430304], [-0.021864211737628692]], 'timestamp': '2025-01-07 11:23:36.759070', 'user_id': {{proj.get("created_by")}}})</code></pre>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

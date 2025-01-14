@@ -205,7 +205,9 @@ p.text-muted {
   font-size: 17px;
   font-weight: 400;
   display: inline-block;
+  margin-top: 20px;
   margin-right: 10px;
+  margin-bottom: 10px;
   line-height: 1.1;
   position: relative;
 }
@@ -507,6 +509,12 @@ p.text-muted {
 .highlight pre code {
   font-size: inherit;
   color: #333;
+}
+
+pre, code {
+  text-align: left; /* 텍스트를 왼쪽으로 정렬 */
+  white-space: pre; /* 줄 바꿈을 유지 */
+  display: block; /* 블록 요소로 설정 */
 }
 
 /* =======================================================================
@@ -6332,13 +6340,13 @@ body.layout-8 .card:hover {
   border-radius: 0;
 }
 
-.card .card-block code {
+/* .card .card-block code {
   background-color: #eee;
   margin: 5px;
   display: inline-block;
   border-radius: 3px;
   padding: 0 3px;
-}
+} */
 
 @media screen and (max-width: 767px) {
   .user-designer [class*=col-]:last-child {
@@ -9001,13 +9009,13 @@ a.btn-theme.active {
       Prism css start
 ==========================  **/
 pre[class*="language-"] code {
-  font-size: 14px;
+  font-size: 13px;
 }
 pre[class*="language-"] [class*="language-"],
 pre[class*="language-"] .language-markup {
   background-color: transparent;
   display: block;
-  padding: 10px 15px;
+  padding: 5px 5px 5px 5px;
 }
 
 pre.line-numbers {
