@@ -1,0 +1,194 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Final Page {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                          <div class="col-sm-12">
+                              <div class="card">
+                                  <div class="card-header">
+                                      <h3>How to Connect and Make Calls from a Client</h3>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="card">
+                            <div class="card-header">
+                              <h4><b>Your Project Information</b></h4>
+                              <h5>1. Base url: {{base_url}}</h5>
+                              <p>Please replace &lt;base_url&gt; with the base url above when making a call. You can make API calls from a client to the server via HTTP requests. Decision, upload and update calls can be requested, following the endpoint routes.</p>
+                              <h5>2. Project uuid: {{proj.get("uuid")}}</h5>
+                              <p>This is your project uuid, which is unique for this project. You need this uuid when making API calls to the server.</p>
+                              <h5>3. Token: [TOKEN]</h5>
+                              <p>This should be included as a header for your HTTP requests. It will be used for authentication.</p>
+                              <pre><code class="language-python">{'pJITAI_token': [TOKEN]}</code></pre>
+                              <!-- <div class="main_call">
+                                <h5>The main call to the server</h5>
+                                <p>When you run the command below in the terminal, it will connect to the server. From the main function, you can call decision, upload, and update.</p>
+                                <pre><code class="language-python">python simulator.py --service_id '{{proj.get("uuid")}}' --server 'http://localhost:5005/api' --service_token 'e6e74d36-a3e4-4631-b077-4fdd703636f2'</code></pre>
+                              </div> -->
+                              <br />
+                              <h4 style="margin-top: 20px;"><b>HTTP Requests</b></h4>
+                              <div class="decision">
+                                <h5>1. Decision</h5>
+                                <p>The decision call from a client allows the RL algorithm to make a decision for the intervention.</p>
+                                <h6>Endpoint</h6>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/decision</code></pre>
+                                <h6>Method</h6>
+                                <pre><code class="language-python">POST</code></pre>
+                                <h6>Request Body</h6>
+                                <pre><code class="language-python">{ 
+  'user_id': {{proj.get("created_by")}},
+  'timestamp': '{{time}}',
+  'state_data':{ {% for cov in covariate_names %}  # This should match the project's covariate(s)
+    '{{cov}}_validation_status_code': ['SUCCESS'],
+    '{{cov}}': 1,{% endfor %} 
+  }
+}</code></pre>
+                                <h6>Response Body</h6>
+                                <pre><code class="language-python">{ 
+  status_code: 'SUCCESS', 
+  status_message: 'Decision made successfully',
+  decision_result: { 
+    user_id: {{proj.get("created_by")}},
+    timestamp: '{{time}}',
+    id: 39, 
+    proj_uuid: '{{proj.get("uuid")}}', 
+    state_data: '{ {% for cov in covariate_names %}
+      '{{cov}}_validation_status_code': ['SUCCESS'],
+      '{{cov}}': 1,{% endfor %} 
+    }', 
+    decision: 0, 
+    pi: 0.1, 
+    random_number: 0.104327,
+    status_code': 'SUCCESS',
+    status_message': 'Decision made successfully',
+  }
+}</code></pre>
+                              <div class="upload">
+                                <h5>2. Upload</h5>
+                                <p>The upload call from a client allows the RL algorithm to upload data after making a decision.</p>
+                                <h6>Endpoint</h6>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/upload</code></pre>
+                                <h6>Method</h6>
+                                <pre><code class="language-python">POST</code></pre>
+                                <h6>Request Body</h6>
+                                <pre><code class="language-python">{ 
+  'user_id': {{proj.get("created_by")}},
+  'timestamp': '{{time}}',
+  'proximal_outcome': 0.5,
+  'proximal_outcome_timestamp': '2024-10-23T16:57:39Z',
+  'decision_id': 39,
+}</code></pre>
+                                <h6>Response Body</h6>
+                                <pre><code class="language-python">{ 
+  status_code:'SUCCESS', 
+  status_message:'Data uploaded to model {{proj.get("uuid")}}', 
+  upload_result: {
+    'decision_id': 39, 
+    'id': 16, 
+    'proj_uuid': '{{proj.get("uuid")}}', 
+    'proximal_outcome': 0.5, 
+    'proximal_outcome_timestamp': '2024-10-23T16:57:39Z', 
+    'timestamp': '{{time}}', 
+    'user_id': {{proj.get("created_by")}}
+  }
+}</code></pre>
+                                <div class="update">
+                                <h5>3. Update</h5>
+                                <p>The update call from a client allows the RL algorithm to update data after making a decision.</p>
+                                <h6>Endpoint</h6>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/update</code></pre>
+                                <h6>Method</h6>
+                                <pre><code class="language-python">POST</code></pre>
+                                <h6>Request Body</h6>
+                                <pre><code class="language-python">{ 
+  'user_id': {{proj.get("created_by")}}
+}</code></pre>
+                                <h6>Response Body</h6>
+                                <pre><code class="language-python">{ 
+  status_code:'SUCCESS', 
+  status_message:'Update has been made successfully.', 
+  update_result: {
+    'degree': 5.0, 
+    'id': 5, 
+    'proj_uuid': '{{proj.get("uuid")}}', 
+    'scale': [[0.0]], 
+    'theta_Sigma': [[0.15, 0.14999999999999997, 0.0, 0.0, 0.0, 0.0], [0.15, 0.7499999999999999, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.028607194359878133, 0.028607194359878133, 0.0, 0.0], [0.0, 0.0, 0.028607194359878133, 0.02890161833039568, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.028607194359878133, 0.028607194359878133], [0.0, 0.0, 0.0, 0.0, 0.028607194359878133, 0.02890161833039568]], 
+    'theta_mu': [[-6.162975822039155e-33], [1.1102230246251563e-16], [-0.03797468354430311], [-0.021864211737628647], [-0.03797468354430304], [-0.021864211737628692]], 
+    'timestamp': '2025-01-07 11:23:36.759070', 
+    'user_id': {{proj.get("created_by")}}
+  }
+}</code></pre>
+                                <!-- <h6>How to Make a Call</h6>
+                                <p>The following data should be attached by the client to make an upload call.</p>
+                                <ul>
+                                  <li>user id</li>
+                                  <li>timestamp (use the current time)</li>
+                                  <li>proximal outcome</li>
+                                  <li>proximal outcome timestamp</li>
+                                  <li>decision id (the id of the Decision data, which the upload is referring to)</li>
+                                </ul>
+                                <p>Your call should look like:</p>
+                                <pre><code class="language-python">def process_upload():
+  upload_data = {
+    "user_id": {{proj.get("created_by")}},
+    "timestamp": str(datetime.now()),
+    "proximal_outcome": 0.5,  # mock data
+    "proximal_outcome_timestamp": "2024-10-23T16:57:39Z",  # mock data
+    "decision_id": 39,  # mock data
+  }
+
+  allevents.append(('upload', upload_data))</code></pre>
+                                <p>The response will look like (includes mock data):</p>
+                                <pre><code class="language-python">UploadResponse(status_code='SUCCESS', status_message='Data uploaded to model '{{proj.get("uuid")}}'', data={'decision_id': 39, 'id': 16, 'proj_uuid': '{{proj.get("uuid")}}', 'proximal_outcome': 0.5, 'proximal_outcome_timestamp': '2024-10-23T16:57:39Z', 'timestamp': '2025-01-07 11:23:36.675213', 'user_id': {{proj.get("created_by")}}})</code></pre>
+                              </div> -->
+                              <!-- <div class="update">
+                                <h5>3. Update</h5>
+                                <p>The update call from a client allows the RL algorithm to update its parameters.</p>
+                                <h6>How to Make a Call</h6>
+                                <p>The following data should be attached by the client to make an update call.</p>
+                                <ul>
+                                  <li>user id</li>
+                                </ul>
+                                <p>Your call should look like:</p>
+                                <pre><code class="language-python">def process_update():
+  user_id = {{proj.get("created_by")}}
+
+  row = {}
+  row['user_id'] = user_id
+
+  allevents.append(('update', row))</code></pre>
+                                <p>The response will look like (includes mock data):</p>
+                                <pre><code class="language-python">UpdateResponse(status_code='SUCCESS', status_message='Update has been made successfully.', update_result={'degree': 5.0, 'id': 5, 'proj_uuid': '{{proj.get("uuid")}}', 'scale': [[0.0]], 'theta_Sigma': [[0.15, 0.14999999999999997, 0.0, 0.0, 0.0, 0.0], [0.15, 0.7499999999999999, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.028607194359878133, 0.028607194359878133, 0.0, 0.0], [0.0, 0.0, 0.028607194359878133, 0.02890161833039568, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.028607194359878133, 0.028607194359878133], [0.0, 0.0, 0.0, 0.0, 0.028607194359878133, 0.02890161833039568]], 'theta_mu': [[-6.162975822039155e-33], [1.1102230246251563e-16], [-0.03797468354430311], [-0.021864211737628647], [-0.03797468354430304], [-0.021864211737628692]], 'timestamp': '2025-01-07 11:23:36.759070', 'user_id': {{proj.get("created_by")}}})</code></pre>
+                              </div> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
