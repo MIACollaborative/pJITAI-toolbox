@@ -256,7 +256,7 @@ def update(uuid: str) -> dict:
             "status_message": str(e),
         }
         _add_log(algo_uuid=uuid,
-                 log_detail={'update_result': update_result, 'response': None, 'error': result, 'http_status_code': 400})
+                 log_detail={'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 
 

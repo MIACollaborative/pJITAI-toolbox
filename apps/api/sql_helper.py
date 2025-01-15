@@ -84,6 +84,8 @@ def get_merged_data(proj_uuid: str, user_id: str):
                                 .all())
                                 
     # print(decision_data)
+    if not decision_data:
+        raise Exception(f'No decision data for the project.')
 
     merged_data = []
     for dec in decision_data:
@@ -116,6 +118,9 @@ def get_merged_data(proj_uuid: str, user_id: str):
 
             merged_data.append(merged_dict)
 
+    if not merged_data:
+        raise Exception(f'No uploaded data for the project.')
+    
     df_merged_data = pd.DataFrame(merged_data)
     print('-------df_merged_data--------------')
     print(df_merged_data)
