@@ -9,7 +9,7 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
 
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
-from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_point, hs1_decision_freq, hs1_continuous_not_tailoring, hs2_binary_tailoring_continuous_not_tailoring, hs2_state_data, hs1_int_tailoring, hs1_int_state_data, hs1_continuous_tailoring, hs1_continuous_state_data
+from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_point, hs1_decision_freq, hs1_continuous_not_tailoring, hs2_binary_tailoring_continuous_not_tailoring, hs2_state_data, hs1_int_tailoring, hs1_int_state_data, hs1_continuous_tailoring, hs1_continuous_state_data, hs1_binary_not_tailoring, hs1_binary_not_tailoring_state_data, hs1_int_not_tailoring, hs1_int_not_tailoring_state_data, hs2_update_rows
 
 def _initialize(monkeypatch, config):
   ts = ThompsonSampling(config=config)
@@ -123,7 +123,29 @@ def test_decision_1cv_continuous_tailoring(monkeypatch):
   monkeypatch.setattr(random, 'uniform', lambda x, y: 0.3) ## greater than pi
   decision, pi, status = _decision(monkeypatch, hs1_continuous_tailoring, hs1_continuous_state_data)
   assert decision == 0
- 
+
+def test_decision_1cv_binary_not_tailoring(monkeypatch):
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.1) ## less than pi
+  assert random.uniform(0, 1) == 0.1
+  decision, pi, status = _decision(monkeypatch, hs1_binary_not_tailoring, hs1_binary_not_tailoring_state_data)
+  assert decision == 1
+  assert pi == 0.8
+  assert status == 'SUCCESS'
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.9) ## greater than pi
+  decision, pi, status = _decision(monkeypatch, hs1_binary_not_tailoring, hs1_binary_not_tailoring_state_data)
+  assert decision == 0
+
+def test_decision_1cv_int_not_tailoring(monkeypatch):
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.1) ## less than pi
+  assert random.uniform(0, 1) == 0.1
+  decision, pi, status = _decision(monkeypatch, hs1_int_not_tailoring, hs1_int_not_tailoring_state_data)
+  assert decision == 1
+  assert pi == 0.8
+  assert status == 'SUCCESS'
+  monkeypatch.setattr(random, 'uniform', lambda x, y: 0.9) ## greater than pi
+  decision, pi, status = _decision(monkeypatch, hs1_int_not_tailoring, hs1_int_not_tailoring_state_data)
+  assert decision == 0
+
 # TODO: write update tests for all example configs; need to figure out correct input_data
 
 def test_update_1cv_binary_tailoring(monkeypatch):
@@ -131,6 +153,11 @@ def test_update_1cv_binary_tailoring(monkeypatch):
   
   assert result.columns[1] == 'user_id'
   assert result.iloc[0]['degree'] == 9.0
+
+def test_update_2cv_binary_tailoring_continuous_not_tailoring(monkeypatch):
+  result = _update(monkeypatch, hs2_binary_tailoring_continuous_not_tailoring, hs2_update_rows)
+  
+  assert result.columns[1] == 'user_id'
 
 def _test_upload(monkeypatch):  # YS: Don't need to implement this in TS. We can handle upload() in api/routes.py
   # TODO: provide example data that matches what would be expected given the HeartSteps Example config

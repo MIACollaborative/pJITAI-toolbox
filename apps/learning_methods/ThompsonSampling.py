@@ -357,7 +357,7 @@ class ThompsonSampling(LearningMethodBase):
         # state_list=[]
         Phi_all = np.array([], dtype=float).reshape(len(self._theta_mu_ini), 0)
         reward_all = []
-        for row in data.itertuples():
+        for idx, row in data.iterrows():
             state = []
             i = 0
             for feature_name in self._feature_name_list:

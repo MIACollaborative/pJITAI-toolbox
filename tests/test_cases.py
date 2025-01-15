@@ -240,6 +240,61 @@ hs2_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These
   '(log) Prior 30 minute step count': 3.3,
 }
 
+hs2_update_rows = [
+  {  # YS: add decision id (unique)
+    "id": 537, # Jane: This is the ID that can match with each decision # YS: In which case we can refer Decision DB
+    "user_id": 1,  # YS: can be attached from the client session
+    "proj_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",  # YS: Can we remove proj_uuid and unify into projects_uuid? 
+    "decision_timestamp": "2024-10-23T16:57:39Z", # YS: currently in Decision DB
+    "decision": 1,  # YS: currently in Decision DB
+    "pi": 0.6,  # YS: currently Nowhere
+    "proximal_outcome": 0.5, # YS: currently in Data DB
+    "Location": 1,  # YS: same as hs1_state_data, used in decision
+    "Location_validation_status_code": "SUCCESS",  # YS: same as hs1_state_data, used in decision
+    "(log) Prior 30 minute step count": 3.3,
+    "(log) Prior 30 minute step count_validation_status_code": "SUCCESS",
+  },
+  {
+    "id": 538, 
+    "user_id": 1,
+    "proj_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "decision_timestamp": "2024-10-23T16:57:39Z",
+    "decision": 0,
+    "pi": 0.2,
+    "proximal_outcome": 0.1,
+    "Location": 1,
+    "Location_validation_status_code": "SUCCESS",
+    "(log) Prior 30 minute step count": 5.0,
+    "(log) Prior 30 minute step count_validation_status_code": "SUCCESS",
+  },
+  {
+    "id": 539, 
+    "user_id": 1,
+    "proj_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "decision_timestamp": "2024-10-23T16:57:39Z",
+    "decision": 0,
+    "pi": 0.3,
+    "proximal_outcome": 0.7,
+    "Location": 0,
+    "Location_validation_status_code": "SUCCESS",
+    "(log) Prior 30 minute step count": 2.1,
+    "(log) Prior 30 minute step count_validation_status_code": "SUCCESS",
+  },
+  {
+    "id": 540, 
+    "user_id": 1,
+    "proj_uuid": "697e03e8-2065-4050-9c07-2ef87f2f39ce",
+    "decision_timestamp": "2024-10-23T16:57:39Z",
+    "decision": 0,
+    "pi": 0.7,
+    "proximal_outcome": 0.1,
+    "Location": 1,
+    "Location_validation_status_code": "SUCCESS",
+    "(log) Prior 30 minute step count": 1.9,
+    "(log) Prior 30 minute step count_validation_status_code": "SUCCESS",
+  }
+]
+
 hs1_int_tailoring = {
   "algo_type": "algorithm_type",
   "covariates": {
@@ -409,6 +464,11 @@ hs1_binary_not_tailoring = {
   "uuid": "a91565e5-eb84-40a9-8c20-16cd9ed6f48a"
 }
 
+hs1_binary_not_tailoring_state_data = {
+  'Employment status_validation_status_code': ['SUCCESS'],
+  'Employment status': 0,
+}
+
 hs1_int_not_tailoring = {
   "algo_type": "algorithm_type",
   "covariates": {
@@ -460,7 +520,13 @@ hs1_int_not_tailoring = {
   "uuid": "744185a1-8494-4f19-b9cb-f92fd1a6472c"
 }
 
-hs1_update_point = {  # Added by YS
+hs1_int_not_tailoring_state_data = {
+  'Age_validation_status_code': ['SUCCESS'],
+  'Age': 30,
+}
+
+## YS: Below are not implemented yet
+hs1_update_point = {
   "algo_type": "algorithm_type",
   "covariates": {
     "99167b02-95c0-4ad6-a748-91c53e3fc4df": {
@@ -517,7 +583,7 @@ hs1_update_point = {  # Added by YS
   "uuid": "4d6f4771-ffbe-4d55-a2b9-62707a1fb264"
 }
 
-hs1_decision_freq = {  # Added by YS
+hs1_decision_freq = {
   "algo_type": "algorithm_type",
   "covariates": {
     "3d8a585b-dc1c-463d-a10e-749539d5782b": {
