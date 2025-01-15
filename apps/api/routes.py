@@ -95,7 +95,7 @@ def model(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/decision', methods=['POST', 'GET'])
-# @pJITAI_token_required
+@pJITAI_token_required
 def decision(uuid: str) -> dict:
     data = request.json
     try:
@@ -163,7 +163,7 @@ def decision(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/upload', methods=['POST'])
-# @pJITAI_token_required  # TODO: This should actually check the token
+@pJITAI_token_required  # TODO: This should actually check the token
 def upload(uuid: str) -> dict:
     input_data = request.json
     try:
@@ -209,7 +209,7 @@ def upload(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/update', methods=['POST'])
-# @pJITAI_token_required
+@pJITAI_token_required
 def update(uuid: str) -> dict:
     update_data = request.json
     try:
@@ -343,7 +343,7 @@ def proj(uuid):
         return {"status": "error",
                 "message": "Project ID does not exist or project has not been finalized yet."}, 400
     segment = 'main_project_page_finalized'
-    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment, time=time, base_url=base_url)
+    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment, time=time, base_url=base_url, token=proj.auth_token)
 
 def get_algo_name(uuid):
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()

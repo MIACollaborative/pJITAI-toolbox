@@ -151,6 +151,7 @@ def project_settings(setting_type, project_uuid=None):
             modified_on = project_details.get("modified_on", "") #TWH Update after write
         else:
             gdata = request.form.to_dict()
+            auth_token = uuid4()
 
             Projects(created_by=user_id,
                      uuid=project_uuid,
@@ -160,7 +161,8 @@ def project_settings(setting_type, project_uuid=None):
                      project_status=0,
                      algo_type="algorithm_type",
                      modified_on=datetime.now(),
-                     created_on=datetime.now()).save()
+                     created_on=datetime.now(),
+                     auth_token=auth_token).save()
 
     all_menus = get_project_menu_pages(user_id, project_uuid)
 

@@ -158,6 +158,7 @@ def test_update_2cv_binary_tailoring_continuous_not_tailoring(monkeypatch):
   result = _update(monkeypatch, hs2_binary_tailoring_continuous_not_tailoring, hs2_update_rows)
   
   assert result.columns[1] == 'user_id'
+  assert result.columns[0] == 'timestamp'
 
 def _test_upload(monkeypatch):  # YS: Don't need to implement this in TS. We can handle upload() in api/routes.py
   # TODO: provide example data that matches what would be expected given the HeartSteps Example config

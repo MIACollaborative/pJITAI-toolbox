@@ -33,9 +33,9 @@
                               <p>Please replace &lt;base_url&gt; with the base url above when making a call. You can make API calls from a client to the server via HTTP requests. Decision, upload and update calls can be requested, following the endpoint routes.</p>
                               <h5>2. Project uuid: {{proj.get("uuid")}}</h5>
                               <p>This is your project uuid, which is unique for this project. You need this uuid when making API calls to the server.</p>
-                              <h5>3. Token: [TOKEN]</h5>
+                              <h5>3. Token: {{token}}</h5>
                               <p>This should be included as a header for your HTTP requests. It will be used for authentication.</p>
-                              <pre><code class="language-python">{'pJITAI_token': [TOKEN]}</code></pre>
+                              <pre><code class="language-python">{'pJITAI_token': {{token}}}</code></pre>
                               <!-- <div class="main_call">
                                 <h5>The main call to the server</h5>
                                 <p>When you run the command below in the terminal, it will connect to the server. From the main function, you can call decision, upload, and update.</p>
