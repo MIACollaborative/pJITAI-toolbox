@@ -44,15 +44,16 @@ from .models import Log
 def pJITAI_token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.headers.get('pJITAI_token')
+        proj_uuid = kwargs.get('uuid')
+        token = request.headers.get('TOKEN')
         if not token:
             return {
                        'status_code': StatusCode.ERROR.value,
                        'status_message': 'Token not found'
                    }, 400
-
-        result = db.session.query(Algorithms).filter(Algorithms.auth_token == token).first()  # NOTE (YS): Why is this querying Algorithms?
-        if result:
+        if db.session.query(Projects).filter(Projects.uuid == proj_uuid).first().auth_token == token:
+        # result = db.session.query(Projects).filter(Projects.auth_token == token).first()
+        # if result:
             return f(*args, **kwargs)
         else:
             return {

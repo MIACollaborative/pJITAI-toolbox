@@ -38,33 +38,37 @@ from apps import db
 from apps.algorithms.models import Projects
 from apps.api import blueprint
 from apps.api.codes import StatusCode
-from apps.api.sql_helper import get_tuned_params, json_to_series, save_decision, store_tuned_params
+from apps.api.sql_helper import get_tuned_params, json_to_series, save_decision, store_tuned_params, get_merged_data
 from apps.learning_methods.learning_method_service import get_all_available_methods
-from .models import Data, Decision
+from .models import Data, Decision, AlgorithmTunedParams
 from .util import get_class_object, pJITAI_token_required, _validate_algo_data, _add_log
+from uuid import uuid4
 from datetime import datetime
+import json
 
 
-def _save_each_data_row(user_id: str,
-                        decision_id: str,
+def _save_each_data_row(user_id: int,
+                        proj_uuid: str,
+                        timestamp: str,
+                        proximal_outcome: float,
                         proximal_outcome_timestamp: str,
-                        proximal_outcome,
-                        data: list,
-                        algo_uuid=None) -> dict:
+                        decision_id: int) -> dict:
     resp = "Data has successfully added"
     try:
 
-        decision_obj = Decision.query.filter(Decision.decision_id == decision_id).first()
+        decision_obj = Decision.query.filter(Decision.id == decision_id).first()
 
         if decision_obj:
-            data_obj = Data(algo_uuid=algo_uuid,
-                            values=data,
-                            user_id=user_id,
+            data_obj = Data(user_id=user_id,
+                            proj_uuid=proj_uuid,
+                            timestamp=timestamp,
                             decision_id=decision_id,
-                            proximal_outcome_timestamp=proximal_outcome_timestamp,
-                            proximal_outcome=proximal_outcome)
+                            proximal_outcome=proximal_outcome,
+                            proximal_outcome_timestamp=proximal_outcome_timestamp)
             db.session.add(data_obj)
             db.session.commit()
+
+            return data_obj
         else:
             raise Exception(f'Error saving data: {resp}. {decision_id} was not found.')
 
@@ -75,19 +79,6 @@ def _save_each_data_row(user_id: str,
         raise Exception(f'Error saving data: {resp}')
     except:
         raise Exception(f'Error saving data: {resp}')
-
-
-def _do_update(algo_uuid):
-    proj = Projects.query.filter(Projects.uuid == algo_uuid).first()
-    proj_type = proj.general_settings.get("personalization_method")
-    cls = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
-    obj = cls()
-    obj.as_object(proj)
-    result = obj.update()
-
-    for index, row in result.iterrows():
-        store_tuned_params(user_id=row.user_id,
-                           configuration=row.iloc[2:].to_dict()) # TODO (YS): this is updating AlgorithmTunedParams' 'configuration'
 
 
 # API METHODS ARE BELOW
@@ -104,51 +95,58 @@ def model(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/decision', methods=['POST', 'GET'])
-# @pJITAI_token_required
+@pJITAI_token_required
 def decision(uuid: str) -> dict:
-    input_data = request.json
+    data = request.json
     try:
         
         # TODO: Do something with input_data['eligilibity'] (https://github.com/mDOT-Center/pJITAI/issues/21)
-        
-        # validated_data = _validate_algo_data(uuid, input_data['values']) # YS: currently using Algorithms
-        validated_data = input_data['values']
 
-        validated_data_df = pd.DataFrame(json_to_series(validated_data)).transpose()
+        user_id = data['user_id']
+        timestamp = data['timestamp']
+        state_data = data['state_data']
+        tuned_params_dict = get_tuned_params(uuid)
 
-        user_id = input_data['user_id'],
-        input_data = validated_data_df
+        input_data = pd.DataFrame(state_data)  # Should be in pd.DataFrame
+        tuned_params = pd.DataFrame(tuned_params_dict)  # Should be pd.DataFrame
 
-        proj = Projects.query.filter(Projects.uuid == uuid).first()
+        proj = Projects.query.filter(Projects.uuid == uuid).first() # retrieve project data
         proj_type = proj.general_settings.get("personalization_method")
-        cls = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
-        obj = cls()
-        obj.as_object(proj)  # TODO: What does this do?
+        class_obj = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
+        obj = class_obj(proj.as_dict())
 
-        tuned_params = get_tuned_params(user_id=user_id)
-        # print('tuned_params: ', tuned_params)
-        tuned_params_df = None
+        my_decision, pi, status, random_number = obj.decision(user_id, timestamp, tuned_params, input_data)
 
-        timestamp = request.json['timestamp']
-
-        if len(tuned_params) > 0:
-            tuned_params = tuned_params.iloc[0]['configuration']
-            tuned_params_df = pd.json_normalize(tuned_params)
-
-        decision = obj.decision(user_id, timestamp, tuned_params_df, input_data)
+        message = ""
+        if status == "SUCCESS":
+            message = "Decision made successfully"
+        
+        decision = Decision(user_id=user_id,
+                            proj_uuid=uuid,
+                            state_data=json.dumps(state_data),
+                            timestamp=timestamp,
+                            decision=my_decision,
+                            status_code=status,
+                            status_message=message,
+                            pi=pi,
+                            random_number=random_number)
         save_decision(decision)  # Save the decision to the database
-        decision_output = decision.as_dataframe()
-        if len(decision_output) > 0:
 
+        decision_output = decision.as_dict()
+        if len(decision_output) > 0:
+            result = {
+                "status_code": status,
+                "status_message": message,
+                "decision_result": decision_output,
+            }
             # Only one row is currently supported.  Extract it and convert to a dictionary before returning to the calling library.
-            result = decision_output.iloc[0].to_dict()
             _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': result,
                                                  'http_status_code': 200})
             return result, 200
         else:
             result = {
                 'status_code': StatusCode.ERROR.value,
-                'status_message': f'A decision was unable to be made for: {uuid} with validated data: {validated_data}'
+                'status_message': f'A decision was unable to be made for: {uuid} with data: {input_data}'
             }
             _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(
             ), 'response': None, 'error': result, 'http_status_code': 400})
@@ -165,30 +163,45 @@ def decision(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/upload', methods=['POST'])
-# @pJITAI_token_required  # TODO: This should actually check the token
+@pJITAI_token_required  # TODO: This should actually check the token
 def upload(uuid: str) -> dict:
     input_data = request.json
     try:
         # validated_input_data = _validate_algo_data(uuid, input_data['values'])
-        validated_input_data = input_data['values']
-        _save_each_data_row(input_data['user_id'],
-                            decision_id=input_data['decision_id'],
-                            proximal_outcome_timestamp=input_data['proximal_outcome_timestamp'],
-                            proximal_outcome=input_data['proximal_outcome'],
-                            data=validated_input_data,
-                            algo_uuid=uuid)
+        # validated_input_data = input_data['values']
+        # _save_each_data_row(input_data['user_id'],
+        #                     decision_id=input_data['decision_id'],
+        #                     proximal_outcome_timestamp=input_data['proximal_outcome_timestamp'],
+        #                     proximal_outcome=input_data['proximal_outcome'],
+        #                     data=validated_input_data,
+        #                     algo_uuid=uuid)
+        user_id = input_data['user_id']
+        proj_uuid = uuid
+        timestamp = input_data['timestamp']
+        proximal_outcome = input_data['proximal_outcome']
+        proximal_outcome_timestamp = input_data['proximal_outcome_timestamp']
+        decision_id = input_data['decision_id']
+
+        data = _save_each_data_row(user_id=user_id,
+                            proj_uuid=proj_uuid,
+                            timestamp=timestamp,
+                            proximal_outcome=proximal_outcome,
+                            proximal_outcome_timestamp=proximal_outcome_timestamp,
+                            decision_id=decision_id)
+
         result = {
             "status_code": StatusCode.SUCCESS.value,
-            "status_message": f"Data uploaded fo model {uuid}"
+            "status_message": f"Data uploaded to model {uuid}",
+            "upload_result": data.as_dict(),
         }
         _add_log(algo_uuid=uuid,
-                 log_detail={'input_data': validated_input_data, 'response': result, 'http_status_code': 200})
+                 log_detail={'input_data': data.as_dict(), 'response': result, 'http_status_code': 200})
         return result, 200
     except Exception as e:
         traceback.print_exc()
         result = {
             'status_code': StatusCode.ERROR.value,
-            'status_message': f'A decision was unable to be made for: {uuid} with input data: {input_data}'
+            'status_message': f'Upload was unable to be made for: {uuid} with input data: {input_data}'
         }
         _add_log(algo_uuid=uuid,
                  log_detail={'input_data': input_data, 'response': None, 'error': result, 'http_status_code': 400})
@@ -196,21 +209,44 @@ def upload(uuid: str) -> dict:
 
 
 @blueprint.route('<uuid>/update', methods=['POST'])
-# @pJITAI_token_required
+@pJITAI_token_required
 def update(uuid: str) -> dict:
-    input_data = request.json
+    update_data = request.json
     try:
-        '''
-        Call the alogrithm update method
+        user_id = update_data['user_id']
 
-        '''
-        _do_update(algo_uuid=uuid)
+        df_update_data = get_merged_data(uuid, user_id)
 
+        proj = Projects.query.filter(Projects.uuid == uuid).first() # retrieve project data
+        proj_type = proj.general_settings.get("personalization_method")
+        class_obj = get_class_object(f"apps.learning_methods.{proj_type}.{proj_type}")
+        obj = class_obj(proj.as_dict())
+
+        update_result = obj.update(df_update_data)
+        
+        theta_mu = update_result.iloc[0]['theta_mu']
+        theta_Sigma = update_result.iloc[0]['theta_Sigma']
+        degree = update_result.iloc[0]['degree']
+        scale = update_result.iloc[0]['scale']
+        timestamp = str(datetime.now())
+
+        algo_tuned_params = store_tuned_params(user_id=user_id,  # save to AlgoTunedParams
+                           proj_uuid=uuid,
+                           timestamp=timestamp,
+                           theta_mu=theta_mu,
+                           theta_Sigma=theta_Sigma,
+                           degree=degree,
+                           scale=scale)
+        # print('-------algo tuned params--------------')
+        # print(algo_tuned_params.as_dict())
+        # print('---------------------')
+        ##########################################
         result = {
             "status_code": StatusCode.SUCCESS.value,
-            "status_message": "Background update proceedure has been started.",
+            "status_message": "Update has been made successfully.",
+            "update_result": algo_tuned_params.as_dict(),
         }
-        _add_log(algo_uuid=uuid, log_detail={'input_data': input_data, 'response': result, 'http_status_code': 200})
+        _add_log(algo_uuid=uuid, log_detail={'response': result, 'http_status_code': 200})
         return result, 200
 
     except Exception as e:
@@ -220,7 +256,7 @@ def update(uuid: str) -> dict:
             "status_message": str(e),
         }
         _add_log(algo_uuid=uuid,
-                 log_detail={'input_data': input_data, 'response': None, 'error': result, 'http_status_code': 400})
+                 log_detail={'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 
 
@@ -307,7 +343,7 @@ def proj(uuid):
         return {"status": "error",
                 "message": "Project ID does not exist or project has not been finalized yet."}, 400
     segment = 'main_project_page_finalized'
-    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment, time=time, base_url=base_url)
+    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment, time=time, base_url=base_url, token=proj.auth_token)
 
 def get_algo_name(uuid):
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()

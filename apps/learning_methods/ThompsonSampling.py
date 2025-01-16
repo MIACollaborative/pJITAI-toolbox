@@ -38,7 +38,6 @@ from scipy.linalg import block_diag
 
 from apps.api.codes import StatusCode
 from apps.api.models import Decision
-from apps.api.sql_helper import get_merged_data
 from apps.api.util import time_8601
 from apps.learning_methods.LearningMethodBase import LearningMethodBase
 
@@ -55,6 +54,7 @@ class ThompsonSampling(LearningMethodBase):
         super().__init__()
         self.type = "ThompsonSampling"  # this should be same as class name
         self.description = 'This is the thomson sampling algorithm definition.'
+        self.project_uuid = config["uuid"]
         # TODO: for all sigma range (0 to +inf) and for all mu, (-inf, +inf), Noise is same like sigma
         # technical section: param section for behav scitn.
         # help /FAQ
@@ -243,18 +243,7 @@ class ThompsonSampling(LearningMethodBase):
 
         # These need to be read from the web user interface
         # I added "value" to represent what each option means in the linear regression. It's super important.
-        ### Jane: The below isn't used at all... It shouldn't be set up here.
-        # decision_options = [
-        #     {  # Index 0
-        #         'name': 'Do Nothing',
-        #         'value': 0.7,
-        #     },
-        #     {  # Index 1
-        #         'name': 'Send an Intervention',
-        #         'value': 0.3,
-        #     }
-        # ]
-
+    
         # Initialize all the global parameters appropriately
         # Jane: IMPORTANT: I assume that the initialization is done in the __init__ function
         # self.initialize_from_defaults()
@@ -317,6 +306,8 @@ class ThompsonSampling(LearningMethodBase):
             pi = 1 - t.cdf(0, degree, loc=mu_t[0,0], scale=scale_t)
             pi = max(self._lower_clip, pi)
             pi = min(self._upper_clip, pi)
+        print('-----')
+        print('pi: ', pi)
 
         random_number = random.uniform(0, 1)
         if (pi > random_number):
@@ -326,16 +317,7 @@ class ThompsonSampling(LearningMethodBase):
 
         status=StatusCode.SUCCESS.value
 
-        # Jane: IMPORTANT: We need to record pi as well
-
-        # decision = Decision(user_id=user_id,
-        #                     algo_uuid=self.uuid,
-        #                     decision=my_decision,
-        #                     decision_options=decision_options,
-        #                     status_code=StatusCode.SUCCESS.value,
-        #                     status_message="Decision made successfully")
-
-        return my_decision, pi, status
+        return my_decision, pi, status, random_number
 
     def update(self, data) -> dict: # Jane: IMPORTANT: previously, data isn't part of the input
         #data = get_merged_data(algo_id=self.uuid)
@@ -350,9 +332,6 @@ class ThompsonSampling(LearningMethodBase):
         columns.append('scale')
 
         result = pd.DataFrame([], columns=columns)
-
-        # I move the initialization out because it only needs to be done once for everyone
-        # self.initialize_from_defaults()
 
         for u in data.user_id.unique():
             result_data = [time_8601(), u]
@@ -378,7 +357,7 @@ class ThompsonSampling(LearningMethodBase):
         # state_list=[]
         Phi_all = np.array([], dtype=float).reshape(len(self._theta_mu_ini), 0)
         reward_all = []
-        for row in data.itertuples():
+        for idx, row in data.iterrows():
             state = []
             i = 0
             for feature_name in self._feature_name_list:
@@ -399,7 +378,7 @@ class ThompsonSampling(LearningMethodBase):
                 # we will need to grab the intervention probability as well
                 # Jane: I edited the below because I don't think we need the exact same format as the original code
                 # pi = getattr(row, 'decision__decision_options')[getattr(row, 'decision__decision')]['value']
-                pi = getattr(row, 'decision_probability')
+                pi = getattr(row, 'pi')
 
                 Phi = self.reward_model(state, action, pi)
                 Phi_all = np.hstack((Phi_all, Phi))
@@ -424,7 +403,7 @@ class ThompsonSampling(LearningMethodBase):
             np.matmul(np.matmul(np.transpose(Phi_all), self._theta_Sigma_ini), Phi_all) + np.identity(len(reward_all)),
             tmp0)
         noise = 1 / degree * (len(reward_all) * self._noise_ini + np.matmul(np.transpose(tmp0), tmp))
-
+        
         return theta_mu, theta_Sigma, degree, noise
 
     # The follows are helper functions for Thompson sampling

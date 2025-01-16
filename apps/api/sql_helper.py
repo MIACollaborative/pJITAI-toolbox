@@ -31,9 +31,13 @@ import traceback
 
 import pandas as pd
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import desc
 
 from apps import db
 from apps.api.models import Data, AlgorithmTunedParams, Decision
+from apps.algorithms.models import Projects
+from apps.learning_methods.ThompsonSampling import ThompsonSampling
+import json
 
 
 def save_decision(decision: Decision):
@@ -49,73 +53,100 @@ def save_decision(decision: Decision):
         print(traceback.format_exc())
 
 
-def get_decision_data(algo_id: str, user_id: str = None):
+def get_decision_data(proj_uuid: str, user_id: str = None):
     '''
     Get data from data table, created pandas DF (parse all the dict and convert them into columns)
-    :param algo_id:
+    :param proj_uuid:
     :param user_id:
     :return: pandas DF
     '''
-    if user_id:
-        data = Decision.query.filter(Decision.algo_uuid == algo_id).filter(Decision.user_id == user_id).order_by(
-            Decision.timestamp.desc())
-    else:
-        data = Decision.query.filter(Decision.algo_uuid == algo_id).order_by(Decision.timestamp.desc())
+    data = (Decision.query.filter(Decision.proj_uuid == proj_uuid)
+                        .filter(Decision.user_id == user_id)
+                        .order_by(Decision.timestamp.desc()))
+    # else:
+    #     data = Decision.query.filter(Decision.proj_uuid == proj_uuid).order_by(Decision.timestamp.desc())
     if data:
         df_from_records = pd.read_sql(data.statement, db.session().bind)
         return df_from_records
     return pd.DataFrame()
 
 
-def get_merged_data(algo_id: str, user_id: str = None):
+def get_merged_data(proj_uuid: str, user_id: str):
     '''
     Get data from data table, created pandas DF (parse all the dict and convert them into columns)
-    :param algo_id:
+    :param proj_uuid:
     :param user_id:
     :return: pandas DF
     '''
-    if user_id:
-        data = Data.query.outerjoin(Decision, Decision.decision_id == Data.decision_id).add_entity(Decision).filter(
-            Data.user_id == user_id).order_by(Data.timestamp.desc())
-    else:
-        data = Data.query.outerjoin(Decision, Decision.decision_id == Data.decision_id).add_entity(Decision).order_by(
-            Data.timestamp.desc())
+    decision_data = (Decision.query.filter(Decision.proj_uuid == proj_uuid)
+                                .filter(Decision.user_id == user_id)
+                                .order_by(Decision.timestamp.desc())
+                                .all())
+                                
+    # print(decision_data)
+    if not decision_data:
+        raise Exception(f'No decision data for the project.')
+
+    merged_data = []
+    for dec in decision_data:
+        merged_dict = {}
+        id = dec.id
+        decision_timestamp = dec.timestamp
+        decision = dec.decision
+        pi = dec.pi
+        state_data = json.loads(dec.state_data)
+
+        data = (Data.query.filter(Data.proj_uuid == proj_uuid)
+                                .filter(Data.user_id == user_id)
+                                .filter(Data.decision_id == id)  # Choose Data with the same decision_id
+                                .order_by(Data.timestamp.desc())
+                                .first())  # Choose only the first one
+        if data == None:  # If Data doesn't exist (no upload)
+            continue
+        else:
+            proximal_outcome = data.proximal_outcome
+
+            merged_dict['id'] = id
+            merged_dict['user_id'] = user_id
+            merged_dict['proj_uuid'] = proj_uuid
+            merged_dict['decision_timestamp'] = decision_timestamp
+            merged_dict['decision'] = decision
+            merged_dict['pi'] = pi
+            for key, value in state_data.items():
+                merged_dict[key] = value
+            merged_dict['proximal_outcome'] = proximal_outcome
+
+            merged_data.append(merged_dict)
+
+    if not merged_data:
+        raise Exception(f'No uploaded data for the project.')
+    
+    df_merged_data = pd.DataFrame(merged_data)
+    print('-------df_merged_data--------------')
+    print(df_merged_data)
+    print('---------------------')
+    return df_merged_data
+
+
+def get_data(proj_uuid: str, user_id: str = None):
+    '''
+    Get data from data table, created pandas DF (parse all the dict and convert them into columns)
+    :param proj_uuid:
+    :param user_id:
+    :return: pandas DF
+    '''
+    data = (Data.query.filter(Data.proj_uuid == proj_uuid)
+                    .filter(Data.user_id == user_id)
+                    .order_by(Data.timestamp.desc()))
+    # else:
+    #     data = Data.query.filter(Data.proj_uuid == proj_uuid).order_by(Data.timestamp.desc())
     if data:
         df_from_records = pd.read_sql(data.statement, db.session().bind)
 
         result = pd.concat([df_from_records, df_from_records['values'].apply(json_to_series)], axis=1)
         result.drop('values', axis=1, inplace=True)
-        result.drop('id_1', axis=1, inplace=True)
-        result.drop('user_id_1', axis=1, inplace=True)
-        result.drop('algo_uuid_1', axis=1, inplace=True)
-        result.drop('decision_id_1', axis=1, inplace=True)
-        result.rename(columns={"timestamp_1": "decision__timestamp",
-                               "decision": "decision__decision",
-                               "decision_options": "decision__decision_options",
-                               "status_code": "decision__status_code",
-                               "status_message": "decision__status_message"}, inplace=True)
         return result
-    return pd.DataFrame()
-
-
-def get_data(algo_id: str, user_id: str = None):
-    '''
-    Get data from data table, created pandas DF (parse all the dict and convert them into columns)
-    :param algo_id:
-    :param user_id:
-    :return: pandas DF
-    '''
-    if user_id:
-        data = Data.query.filter(Data.algo_uuid == algo_id).filter(Data.user_id == user_id).order_by(
-            Data.timestamp.desc())
-    else:
-        data = Data.query.filter(Data.algo_uuid == algo_id).order_by(Data.timestamp.desc())
-    if data:
-        df_from_records = pd.read_sql(data.statement, db.session().bind)
-
-        result = pd.concat([df_from_records, df_from_records['values'].apply(json_to_series)], axis=1)
-        result.drop('values', axis=1, inplace=True)
-        return result
+    
     return pd.DataFrame()
 
 
@@ -133,32 +164,48 @@ def json_to_series(variable_list):
     return pd.Series(values, index=keys)
 
 
-def get_tuned_params(user_id: str = None):
+def get_tuned_params(proj_uuid: str):
     '''
-    Get data from data table, created pandas DF (parse all the dict and convert them into columns)
-    :param algo_id:
-    :param user_id:
-    :return: pandas DF
+    Get data from AlgorithmsTunedParams table
     '''
-    if user_id:
-        tuned_params = AlgorithmTunedParams.query.filter(
-            AlgorithmTunedParams.user_id == user_id).order_by(
-            AlgorithmTunedParams.timestamp.desc())
-
+    alg_params = (AlgorithmTunedParams.query
+                    .filter(AlgorithmTunedParams.proj_uuid == proj_uuid)
+                    .order_by(desc(AlgorithmTunedParams.timestamp))  # YS: Retrieve newest timestamp
+                    .first())
+    
+    if alg_params != None:
+        print("get_tuned_params: AlgoTunedParams exists!")
+        tuned_params = {
+            'theta_mu': [alg_params.theta_mu],
+            'theta_Sigma': [alg_params.theta_Sigma],
+            'degree': [alg_params.degree],
+            'scale': [alg_params.scale],
+        }
+        return tuned_params
     else:
-        tuned_params = AlgorithmTunedParams.query.order_by(AlgorithmTunedParams.timestamp.desc())
-    # print('tuned params: ', tuned_params.all())
-    if tuned_params.all():  # YS: tuned_parmas returns SQL query, not the result. using .all() allows whether real data is queried.
-        df_from_records = pd.read_sql(tuned_params.statement, db.session().bind)
-        return df_from_records
-    return pd.DataFrame()
+        print("get_tuned_params: AlgoTunedParams doesn't exist!")
+        proj = Projects.query.filter(Projects.uuid == proj_uuid).first().as_dict()
+        ts = ThompsonSampling(proj)
+        tuned_params = {
+            'theta_mu': [ts._theta_mu_ini],
+            'theta_Sigma': [ts._theta_Sigma_ini],
+            'degree': [ts._L_ini], 
+            'scale': [ts._noise_ini]
+        }
+        return tuned_params
 
-
-def store_tuned_params(user_id, configuration):
+def store_tuned_params(user_id, proj_uuid, timestamp, theta_mu, theta_Sigma, degree, scale):
     try:
-        algo_params = AlgorithmTunedParams(user_id=user_id, configuration=configuration)
-        db.session.add(algo_params)
+        algo_obj = AlgorithmTunedParams(user_id=user_id,
+                                        proj_uuid=proj_uuid,
+                                        timestamp=timestamp,
+                                        theta_mu=theta_mu,
+                                        theta_Sigma=theta_Sigma,
+                                        degree=degree,
+                                        scale=scale)
+        db.session.add(algo_obj)
         db.session.commit()
+        return algo_obj
     except SQLAlchemyError as e:
         resp = str(e.__dict__['orig'])
         db.session.rollback()

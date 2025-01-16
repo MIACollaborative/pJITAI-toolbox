@@ -125,6 +125,7 @@ class Projects(db.Model):
     algo_type = db.Column(db.String(100))
     modified_on = db.Column(db.DateTime, default=datetime.now())
     created_on = db.Column(db.DateTime, default=datetime.now())
+    auth_token = db.Column(db.String(36)) # used for pJITAI_token_required
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
