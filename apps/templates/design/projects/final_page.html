@@ -47,7 +47,7 @@
                                 <h5>1. Decision</h5>
                                 <p>The decision call from a client allows the RL algorithm to make a decision for the intervention.</p>
                                 <h6>Endpoint</h6>
-                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/decision</code></pre>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/{{proj.get("uuid")}}/decision</code></pre>
                                 <h6>Method</h6>
                                 <pre><code class="language-python">POST</code></pre>
                                 <h6>Request Body</h6>
@@ -83,7 +83,7 @@
                                 <h5>2. Upload</h5>
                                 <p>The upload call from a client allows the RL algorithm to upload data after making a decision.</p>
                                 <h6>Endpoint</h6>
-                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/upload</code></pre>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/{{proj.get("uuid")}}/upload</code></pre>
                                 <h6>Method</h6>
                                 <pre><code class="language-python">POST</code></pre>
                                 <h6>Request Body</h6>
@@ -112,7 +112,7 @@
                                 <h5>3. Update</h5>
                                 <p>The update call from a client allows the RL algorithm to update data after making a decision.</p>
                                 <h6>Endpoint</h6>
-                                <pre><code class="language-python">&lt;base_url&gt;/api/projects/{{proj.get("uuid")}}/update</code></pre>
+                                <pre><code class="language-python">&lt;base_url&gt;/api/{{proj.get("uuid")}}/update</code></pre>
                                 <h6>Method</h6>
                                 <pre><code class="language-python">POST</code></pre>
                                 <h6>Request Body</h6>
