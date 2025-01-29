@@ -15,12 +15,25 @@ else
   conda activate pJITAI
 fi
 
+# Check OS
+OS_TYPE=$(uname)
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+  echo "OS is Mac."
+elif [[ "$OS_TYPE" == "Linux" ]]; then
+  echo "OS is Linux."
+fi
+
 # print Python version
 python --version
 
-# update & install cron (Linux)
-sudo apt-get update
-sudo apt-get install cron
+# update & install cron
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+  brew update
+  brew install cron
+elif [[ "$OS_TYPE" == "Linux" ]]; then
+  sudo apt-get update
+  sudo apt-get install cron
+fi
 
 # set cron
 (crontab -l 2>/dev/null; echo "* * * * * /crontab/scheduler.sh") | crontab -
@@ -33,9 +46,11 @@ pip install -r requirements.txt
 sudo service cron start
 
 # run mysql
-#brewdd services start mysql
-sudo systemctl start mysql
-
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+  brew services start mysql
+elif [[ "$OS_TYPE" == "Linux" ]]; then 
+  sudo systemctl start mysql
+fi 
 
 MYSQL="root"
 MYSQL_HOST="localhost"
@@ -61,8 +76,13 @@ EOF
 echo "mysql is running, privileges flushed and db pjitai created."
 
 # run nginx
-sudo apt-get install nginx
-sudo systemctl start nginx
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+  brew install nginx
+  brew services start nginx
+elif [[ "$OS_TYPE" == "Linux" ]]; then
+  sudo apt-get install nginx
+  sudo systemctl start nginx
+fi
 
 NGINX_PATH=$(which nginx)
 
