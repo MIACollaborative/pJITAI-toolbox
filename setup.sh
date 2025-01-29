@@ -18,9 +18,9 @@ fi
 # print Python version
 python --version
 
-# update & install cron (macOS)
-brew update
-brew install cron
+# update & install cron (Linux)
+sudo apt-get update
+sudo apt-get install cron
 
 # set cron
 (crontab -l 2>/dev/null; echo "* * * * * /crontab/scheduler.sh") | crontab -
@@ -33,7 +33,9 @@ pip install -r requirements.txt
 sudo service cron start
 
 # run mysql
-brew services start mysql
+#brewdd services start mysql
+sudo systemctl start mysql
+
 
 MYSQL="root"
 MYSQL_HOST="localhost"
@@ -59,8 +61,8 @@ EOF
 echo "mysql is running, privileges flushed and db pjitai created."
 
 # run nginx
-brew install nginx
-brew services start nginx
+sudo apt-get install nginx
+sudo systemctl start nginx
 
 NGINX_PATH=$(which nginx)
 
