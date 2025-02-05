@@ -131,26 +131,104 @@
 }</code></pre>
                                 <!-- script for JSON download start -->
                                 <script>
+                                  let proj = JSON.parse('{{ proj | tojson | safe }}');
+                                  let timestamp_ = JSON.parse('{{ time | tojson | safe }}');
+                                  let covariateList = JSON.parse('{{ covariate_names | tojson | safe }}');
+                                  let maxDecId = JSON.parse('{{ max_id | tojson | safe }}');
+                                  // console.log('maxDecId: ', maxDecId);
+
+                                  let minProxOut = parseFloat(proj.model_settings.min_proximal_outcome);
+                                  let maxProxOut = parseFloat(proj.model_settings.max_proximal_outcome);
+                                  
+                                  let i = 0;
+                                  let state_data_dict = {};
+                                  while(i < covariateList.length) {
+                                    state_data_dict[`${covariateList[i]}_validation_status_code`] = ['SUCCESS'];
+                                    state_data_dict[`${covariateList[i]}`] = 1;
+                                    i++;
+                                  }
+
+                                  // console.log(proj);
+
                                   function download_json(){
-                                      let jsonData = {
-                                        name: "test",
-                                      };
-                                      const jsonString = JSON.stringify(jsonData, null, 2); // 들여쓰기 포함
+                                      let numDecCalls = document.getElementById("num-dec-calls").value;
+                                      let missingRatio = document.getElementById("missing-ratio").value;
 
-                                      // Blob 객체 생성 (MIME 타입: application/json)
+                                      numDecCalls = numDecCalls ? parseInt(numDecCalls) : 0;
+                                      missingRatio = missingRatio ? parseFloat(missingRatio) : 0;
+                                      let numUploads = parseInt(numDecCalls * (1 - missingRatio));
+
+                                      let jsonData = [];
+
+                                      for(let i=0; i<numDecCalls; i+=1) {  // Create Fake Decision calls
+                                        timestamp_ = new Date(timestamp_);
+                                        timestamp_.setHours(timestamp_.getHours() + 2);
+                                        timestamp_.toISOString().replace("T", " ").substring(0, 19);
+
+                                        let newDec = {};
+                                        newDec['type'] = 'decision';
+                                        newDec['content'] = {
+                                          'user_id': proj.created_by,
+                                          'timestamp': timestamp_,
+                                          'state_data': state_data_dict,
+                                        };
+                                        jsonData.push(newDec);
+                                      }
+
+                                      console.log('Dec: ', jsonData);
+
+                                      // Create Fake Upload calls
+                                      let jsonDataCopy = [ ...jsonData ];
+
+                                      let numbers = new Set();
+                                      while (numbers.size < numUploads) {
+                                        let num = Math.floor(Math.random() * (numDecCalls - 1)) + 1;
+                                        numbers.add(num);
+                                      }
+                                      let numbers_list = Array.from(numbers);
+                                      numbers_list.sort(function(a, b) { return (a - b); });
+
+                                      let j = 0;  // since index change
+                                      for(let i=0; i<numbers_list.length; i++) {
+                                        let n = numbers_list[i];
+
+                                        let d = jsonDataCopy[n-1];  // choose nearest decision
+                                        let timestampUpload = d['content']['timestamp'];
+                                        timestampUpload = new Date(timestampUpload);
+                                        let timestampProximal = new Date();
+                                        timestampProximal.setHours(timestampUpload.getHours() + 0.5);
+                                        timestampProximal.toISOString().replace("T", " ").substring(0, 19);
+                                        timestampUpload.setHours(timestampUpload.getHours() + 1);  // TODO
+                                        timestampUpload.toISOString().replace("T", " ").substring(0, 19);
+
+                                        let randomProxOut = (Math.random() * (maxProxOut - minProxOut)) + minProxOut;
+                                        
+                                        let newDec = {};
+                                        newDec['type'] = 'upload';
+                                        newDec['content'] = {
+                                          'user_id': proj.created_by,
+                                          'timestamp': timestampUpload,
+                                          "proximal_outcome": randomProxOut,
+                                          "proximal_outcome_timestamp": timestampProximal,
+                                          "decision_id": maxDecId + n,
+                                        };
+                                        jsonData.splice(numbers_list[i]+j, 0, newDec);
+                                        j++;
+                                      }
+
+                                      // Create Fake Update calls
+
+                                      console.log('Upl:', jsonData);
+
+                                      const jsonString = JSON.stringify(jsonData, null, 2); 
                                       const blob = new Blob([jsonString], { type: "application/json" });
-
-                                      // Blob을 가리키는 URL 생성
                                       const url = URL.createObjectURL(blob);
-
-                                      // 다운로드 링크 생성
                                       const a = document.createElement('a');
                                       a.href = url;
-                                      a.download = "data.json"; // 다운로드할 파일명
+                                      a.download = "data.json";
                                       document.body.appendChild(a);
                                       a.click();
 
-                                      // 사용 후 정리
                                       document.body.removeChild(a);
                                       URL.revokeObjectURL(url);
                                   }
@@ -165,14 +243,14 @@
                                 <h5>1. Set Parameters</h5>
                                 <h6>Number of Decision Calls</h6>
                                 <p>This will be the number of decision calls created for test-training (range: 0 - 30).</p>
-                                <input placeholder="0" min="0" max="30" step="1"
+                                <input id="num-dec-calls" placeholder="0" min="0" max="30" step="1"
                                     type="number" id="intervention_probability_upper_bound"
                                     name="intervention_probability_upper_bound"
                                     class="form-control" required>
                                 <br />
                                 <h6>Ratio of Missing Upload Calls</h6>
                                 <p>This will be the ratio of missing upload calls based on the number of decision calls you set above.</p>
-                                <input placeholder="0" min="0" max="1" step="0.01"
+                                <input id="missing-ratio" placeholder="0" min="0" max="1" step="0.01"
                                     type="number" id="intervention_probability_upper_bound"
                                     name="intervention_probability_upper_bound"
                                     class="form-control" required>
