@@ -36,11 +36,6 @@
                               <h5>3. Token: {{token}}</h5>
                               <p>This should be included as a header for your HTTP requests. It will be used for authentication.</p>
                               <pre><code class="language-python">{'TOKEN': {{token}}}</code></pre>
-                              <!-- <div class="main_call">
-                                <h5>The main call to the server</h5>
-                                <p>When you run the command below in the terminal, it will connect to the server. From the main function, you can call decision, upload, and update.</p>
-                                <pre><code class="language-python">python simulator.py --service_id '{{proj.get("uuid")}}' --server 'http://localhost:5005/api' --service_token 'e6e74d36-a3e4-4631-b077-4fdd703636f2'</code></pre>
-                              </div> -->
                               <br />
                               <h4 style="margin-top: 20px;"><b>HTTP Requests</b></h4>
                               <div class="decision">
@@ -134,6 +129,56 @@
     'user_id': {{proj.get("created_by")}}
   }
 }</code></pre>
+                                <!-- script for JSON download start -->
+                                <script>
+                                  function download_json(){
+                                      let jsonData = {
+                                        name: "test",
+                                      };
+                                      const jsonString = JSON.stringify(jsonData, null, 2); // 들여쓰기 포함
+
+                                      // Blob 객체 생성 (MIME 타입: application/json)
+                                      const blob = new Blob([jsonString], { type: "application/json" });
+
+                                      // Blob을 가리키는 URL 생성
+                                      const url = URL.createObjectURL(blob);
+
+                                      // 다운로드 링크 생성
+                                      const a = document.createElement('a');
+                                      a.href = url;
+                                      a.download = "data.json"; // 다운로드할 파일명
+                                      document.body.appendChild(a);
+                                      a.click();
+
+                                      // 사용 후 정리
+                                      document.body.removeChild(a);
+                                      URL.revokeObjectURL(url);
+                                  }
+                                  $(document).ready(function(){
+                                      $("#download-btn").on("click", download_json);
+                                  });
+                                </script>
+                                <!-- script end -->
+                                <br />
+                                <h4><b>Try it out with pJITAI-Client!</b></h4>
+                                <p>Using our pJITAI-Client, you can test-train your model.</p>
+                                <h5>1. Set Parameters</h5>
+                                <h6>Number of Decision Calls</h6>
+                                <p>This will be the number of decision calls created for test-training (range: 0 - 30).</p>
+                                <input placeholder="0" min="0" max="30" step="1"
+                                    type="number" id="intervention_probability_upper_bound"
+                                    name="intervention_probability_upper_bound"
+                                    class="form-control" required>
+                                <br />
+                                <h6>Ratio of Missing Upload Calls</h6>
+                                <p>This will be the ratio of missing upload calls based on the number of decision calls you set above.</p>
+                                <input placeholder="0" min="0" max="1" step="0.01"
+                                    type="number" id="intervention_probability_upper_bound"
+                                    name="intervention_probability_upper_bound"
+                                    class="form-control" required>
+                                <h5>2. Download</h5>
+                                <p>Click on the below button to download the randomly created JSON file which will be used in pJITAI-Client.</p>
+                                <button id="download-btn" type="button" class="btn btn-primary">Download</button>
                                 <!-- <h6>How to Make a Call</h6>
                                 <p>The following data should be attached by the client to make an upload call.</p>
                                 <ul>
