@@ -133,7 +133,7 @@
                                 <script>
                                   let proj = JSON.parse('{{ proj | tojson | safe }}');
                                   let timestamp_ = JSON.parse('{{ time | tojson | safe }}');
-                                  let covariateList = JSON.parse('{{ covariate_names | tojson | safe }}');
+                                  // let covariateList = JSON.parse('{{ covariate_names | tojson | safe }}');
                                   let maxDecId = JSON.parse('{{ max_id | tojson | safe }}');
                                   // console.log('maxDecId: ', maxDecId);
 
@@ -142,27 +142,71 @@
                                   
                                   let i = 0;
                                   let state_data_dict = {};
-                                  while(i < covariateList.length) {
-                                    state_data_dict[`${covariateList[i]}_validation_status_code`] = ['SUCCESS'];
-                                    state_data_dict[`${covariateList[i]}`] = 1;
-                                    i++;
+                                  let covariateList = proj.covariates;
+                                  // console.log(covariateList[0])
+
+                                  // while(i < covariateList.length) {  // TODO
+                                  // for (key, value in covariateList.items()) {
+                                  for (const [key, value] of Object.entries(covariateList)) {
+                                    // let value = covariateList[i];
+                                    // console.log(value)
+                                    const cov = value["covariate_name"];
+                                    const covType = value["covariate_type"];
+                                    const covMinVal = value["covariate_min_val"];
+                                    const covMaxVal = value["covariate_max_val"];
+
+                                    let stateValue = 0;
+
+                                    if (covType == "Binary") {
+                                      stateValue = parseInt(Math.round(Math.random())); // either 0 or 1
+                                    } else if (covType == "Continuous") {
+                                      stateValue = (Math.random() * (covMaxVal - covMinVal)) + covMinVal;
+                                    } else {  // Int
+                                      stateValue = parseInt(Math.round((Math.random() * (covMaxVal - covMinVal)) + covMaxVal));
+                                    }
+
+                                    state_data_dict[`${cov}_validation_status_code`] = ['SUCCESS'];
+                                    state_data_dict[`${cov}`] = stateValue;
+                                    // i++;
                                   }
 
-                                  // console.log(proj);
+                                  // console.log(state_data_dict);
 
                                   function download_json(){
-                                      let numDecCalls = document.getElementById("num-dec-calls").value;
+                                      let numDecDays = document.getElementById("num-dec-calls").value;
                                       let missingRatio = document.getElementById("missing-ratio").value;
+                                      let numDecCalls = 0;
+                                      
+                                      let decisionPointFrequency = parseInt(proj.intervention_settings.decision_point_frequency); // 5
+                                      let decisionPointFrequencyTime = proj.intervention_settings.decision_point_frequency_time; // Day
+                                      console.log('decisionPointFreqTime: ', decisionPointFrequencyTime)
 
-                                      numDecCalls = numDecCalls ? parseInt(numDecCalls) : 0;
-                                      missingRatio = missingRatio ? parseFloat(missingRatio) : 0;
+                                      if (numDecDays) {
+                                        if (decisionPointFrequencyTime == "Hour") {
+                                          numDecCalls = 24 * decisionPointFrequency * numDecDays; // 24 hours = 1 Day
+                                        } else if (decisionPointFrequencyTime == "Day") {
+                                          numDecCalls = decisionPointFrequency * numDecDays; 
+                                        } else if (decisionPointFrequencyTime == "Week") {
+                                          numDecCalls = parseInt((1/7) * decisionPointFrequency * numDecDays);
+                                        } else {
+                                          numDecCalls = parseInt((1/30) * decisionPointFrequency * numDecDays);
+                                        }
+                                      } else {
+                                        numDecCalls = 0;
+                                      }
+                                      console.log(numDecCalls)
+
+                                      // numDecCalls = numDecCalls ? parseInt(numDecCalls) : 0;
+                                      // missingRatio = missingRatio ? parseFloat(missingRatio) : 0;
                                       let numUploads = parseInt(numDecCalls * (1 - missingRatio));
 
                                       let jsonData = [];
 
                                       for(let i=0; i<numDecCalls; i+=1) {  // Create Fake Decision calls
+                                        // console.log('here')
                                         timestamp_ = new Date(timestamp_);
-                                        timestamp_.setHours(timestamp_.getHours() + 2);
+                                        let measure = (24 * numDecDays) / numDecCalls;  // Average time between calls
+                                        timestamp_.setHours(timestamp_.getHours() + measure);
                                         timestamp_.toISOString().replace("T", " ").substring(0, 19);
 
                                         let newDec = {};
@@ -193,12 +237,16 @@
                                         let n = numbers_list[i];
 
                                         let d = jsonDataCopy[n-1];  // choose nearest decision
-                                        let timestampUpload = d['content']['timestamp'];
-                                        timestampUpload = new Date(timestampUpload);
+                                        let nd = jsonDataCopy[n];
+
+                                        let timestampUpload = new Date(d['content']['timestamp']);
+                                        let timestampUploadNext = new Date(nd['content']['timestamp']);
+                                        let timeDifference = (timestampUploadNext.getHours() - timestampUpload.getHours());
                                         let timestampProximal = new Date();
-                                        timestampProximal.setHours(timestampUpload.getHours() + 0.5);
+
+                                        timestampProximal.setHours(timestampUpload.getHours() + (timeDifference / 3));  // Arbitrarily set to /3
                                         timestampProximal.toISOString().replace("T", " ").substring(0, 19);
-                                        timestampUpload.setHours(timestampUpload.getHours() + 1);  // TODO
+                                        timestampUpload.setHours(timestampUpload.getHours() + (timeDifference / 2));  // Arbitrarily set to /2
                                         timestampUpload.toISOString().replace("T", " ").substring(0, 19);
 
                                         let randomProxOut = (Math.random() * (maxProxOut - minProxOut)) + minProxOut;
@@ -215,10 +263,37 @@
                                         jsonData.splice(numbers_list[i]+j, 0, newDec);
                                         j++;
                                       }
+                                      console.log('Upl: ', jsonData);
 
                                       // Create Fake Update calls
+                                      let updateDay = proj.intervention_settings["update_day"];
+                                      let updatePoint = 0;
+                                      let updateIdx = [];
 
-                                      console.log('Upl:', jsonData);
+                                      for (let i = 1; i < jsonData.length; i ++) {
+                                        let current = jsonData[i];
+                                        let prev = jsonData[i-1];
+
+                                        if (updateDay == "Daily") {  // TODO (WILL NOT BE GETDAY()!!!)
+                                          if (new Date(current['content']['timestamp']).getDay() != new Date(prev['content']['timestamp'].getDay())) updateIdx.push(i);
+                                        } else if (updateDay == "Weekly") {
+                                          if (new Date(current['content']['timestamp']).getDay() - new Date(prev['content']['timestamp'].getDay()) == 7) updateIdx.push(i);
+                                        } else {  // Monthly 
+                                          if (new Date(current['content']['timestamp']).getDay() - new Date(prev['content']['timestamp'].getDay()) == 30) updateIdx.push(i);
+                                        }
+                                      }
+                                      
+                                      for (let j = 0; j < updateIdx.length; j++) {
+                                        let newDec = {};
+                                        newDec['type'] = 'update';
+                                        newDec['content'] = {
+                                          'user_id': proj.created_by
+                                        }
+                                        let u = updateIdx[j];
+                                        jsonData.splice(u, 0, newDec);
+                                      }
+
+                                      console.log('Upd:', jsonData);
 
                                       const jsonString = JSON.stringify(jsonData, null, 2); 
                                       const blob = new Blob([jsonString], { type: "application/json" });
@@ -241,17 +316,17 @@
                                 <h4><b>Try it out with pJITAI-Client!</b></h4>
                                 <p>Using our pJITAI-Client, you can test-train your model.</p>
                                 <h5>1. Set Parameters</h5>
-                                <h6>Number of Decision Calls</h6>
-                                <p>This will be the number of decision calls created for test-training (range: 0 - 30).</p>
-                                <input id="num-dec-calls" placeholder="0" min="0" max="30" step="1"
-                                    type="number" id="intervention_probability_upper_bound"
+                                <h6>Number of Days to Create Decision Calls</h6>
+                                <p>This is the number of days decision calls will be created for test-training (e.g., if you put 3 and you set your decision point frequency to 5, 15 decision calls will be created in total).</p>
+                                <input id="num-dec-calls" placeholder="0" step="1"
+                                    type="number"
                                     name="intervention_probability_upper_bound"
                                     class="form-control" required>
                                 <br />
                                 <h6>Ratio of Missing Upload Calls</h6>
                                 <p>This will be the ratio of missing upload calls based on the number of decision calls you set above.</p>
                                 <input id="missing-ratio" placeholder="0" min="0" max="1" step="0.01"
-                                    type="number" id="intervention_probability_upper_bound"
+                                    type="number"
                                     name="intervention_probability_upper_bound"
                                     class="form-control" required>
                                 <h5>2. Download</h5>
