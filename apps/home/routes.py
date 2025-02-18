@@ -112,7 +112,8 @@ def duplicate_project(project_uuid):
                  project_status=0,
                  algo_type="algorithm_type",
                  modified_on=datetime.now(),
-                 created_on=datetime.now()).save()
+                 created_on=datetime.now(),
+                 auth_token=uuid4()).save()
     return redirect("/projects/in_progress")
 
 @blueprint.route('/projects/finalize/<project_uuid>', methods=['GET'])

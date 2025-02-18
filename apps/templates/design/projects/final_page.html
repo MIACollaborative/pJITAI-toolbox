@@ -163,7 +163,7 @@
                                       } else {
                                         numDecCalls = 0;
                                       }
-                                      console.log(numDecCalls);
+                                      console.log('numDecCalls:', decisionPointFrequency );
 
                                       let numUploads = parseInt(numDecCalls * (1 - missingRatio));
 
@@ -171,17 +171,28 @@
                                       timestamp_ = new Date(timestamp_);           
 
                                       for(let i=0; i<numDecCalls; i+=1) {  // Create Fake Decision calls
+                                        // let measure = 0;
+                                        // if (decisionPointFrequencyTime == "Hour" || decisionPointFrequencyTime == "Day") {
+                                        //   measure = (24 * numDecDays) / numDecCalls;
+                                        // } else if (decisionPointFrequencyTime == "Week") {
+                                        //   measure = 
+                                        // }
+
+                                        // 
                                         let measure = (24 * numDecDays) / numDecCalls;  // Average time between calls
+                                        // console.log('measure: ', measure)
                                         timestamp_.setHours(timestamp_.getHours() + measure);
                                         let timestampStr = timestamp_.toLocaleString();
+                                        // console.log('timestamp_:', timestamp_.toLocaleString())
+                                        // console.log('timestampStr: ', timestampStr)
 
                                         // Create Random state data
                                         let state_data_dict = {};
                                         for (const [key, value] of Object.entries(covariateList)) {
                                           const cov = value["covariate_name"];
                                           const covType = value["covariate_type"];
-                                          const covMinVal = value["covariate_min_val"];
-                                          const covMaxVal = value["covariate_max_val"];
+                                          const covMinVal = parseFloat(value["covariate_min_val"]);
+                                          const covMaxVal = parseFloat(value["covariate_max_val"]);
 
                                           let stateValue = 0;
 
@@ -190,7 +201,7 @@
                                           } else if (covType == "Continuous") {
                                             stateValue = (Math.random() * (covMaxVal - covMinVal)) + covMinVal;
                                           } else {  // Int
-                                            stateValue = parseInt(Math.round((Math.random() * (covMaxVal - covMinVal)) + covMaxVal));
+                                            stateValue = parseInt(Math.round((Math.random() * (covMaxVal - covMinVal)) + covMinVal));
                                           }
 
                                           state_data_dict[`${cov}_validation_status_code`] = ['SUCCESS'];
@@ -211,7 +222,7 @@
                                       //   console.log("timestampStr (UTC):", jsonData[a]['content']['timestamp'])
                                       // }
 
-                                      console.log('Dec: ', jsonData);
+                                      // console.log('Dec: ', jsonData);
 
                                       // Create Fake Upload calls
                                       let jsonDataCopy = [ ...jsonData ];
@@ -227,30 +238,40 @@
                                       let j = 0;  // since index change
                                       for(let i=0; i<numbers_list.length; i++) {
                                         let n = numbers_list[i];
+                                        // console.log('n:', n)
 
                                         let d = jsonDataCopy[n-1];  // choose nearest decision
                                         let nd = jsonDataCopy[n];
+                                        // console.log('d: ', d)
+                                        // console.log('nd: ', nd)
                                         
                                         let timestampNow = new Date(d['content']['timestamp']);
                                         let timestampNext = new Date(nd['content']['timestamp']);
 
-                                        // console.log("timestampUpload: ", timestampUpload.getHours())
-                                        // console.log("timestampUploadNext: ", timestampUploadNext)
-                                        let timeDifference = (timestampNext.getHours() - timestampNow.getHours());
+                                        // console.log("timestampNow: ", timestampNow)
+                                        // console.log("timestampNext: ", timestampNext)
+                                        let timeDifference = (timestampNext.getHours() - timestampNow.getHours());  // Used .getHours() so that uploads are done on that day regardless of decision point, update point (e.g., Weekly or Monthly)
                                         if (timeDifference < 0) timeDifference = (24 + timeDifference);
                                         // console.log("timeDifference: ", timeDifference)
+                                        let timeToAddProximal = (timeDifference / 3) * 60 * 60 * 1000; // transform to miliseconds
+                                        let timeToAddUpload = (timeDifference / 2) * 60 * 60 * 1000; 
+
                                         let timestampProximal = new Date(timestampNow);
                                         let timestampUpload = new Date(timestampNow);
-
-                                        timestampProximal.setHours(timestampNow.getHours() + (timeDifference / 3));  // Arbitrarily set to /3
+                                        
+                                        timestampProximal.setTime(timestampNow.getTime() + timeToAddProximal);  // Arbitrarily set to /3
                                         let timestampProximalStr = timestampProximal.toLocaleString();
-                                        timestampUpload.setHours(timestampNow.getHours() + (timeDifference / 2));  // Arbitrarily set to /2
+                                        timestampUpload.setTime(timestampNow.getTime() + timeToAddUpload);  // Arbitrarily set to /2
                                         let timestampUploadStr = timestampUpload.toLocaleString();
-                                        // console.log('timestampNow:', timestampNow.toISOString())
+                                        // console.log('timestampProximalStr:', timestampProximalStr)
+                                        // console.log('timestampUploadStr: ', timestampUploadStr)
                                         // console.log('timestampProximal:', timestampProximalStr) 
                                         // console.log('timestampUpload:', timestampUploadStr)
 
                                         let randomProxOut = (Math.random() * (maxProxOut - minProxOut)) + minProxOut;  // Randomly select any number between max and min
+                                        // console.log('minproxout:', minProxOut)
+                                        // console.log('maxproxout: ', maxProxOut)
+                                        console.log(randomProxOut)
                                         
                                         let newUpl = {};
                                         newUpl['type'] = 'upload';
@@ -275,7 +296,7 @@
                                       let i = 0;
                                       while (i < jsonData.length - 1) {
                                         let current = jsonData[i];
-                                        console.log('current: ', current)
+                                        // console.log('current: ', current)
                                         let currentDate = new Date(current['content']['timestamp']).getDate();
 
                                         let found = false;
@@ -284,9 +305,10 @@
                                           let nextDate = new Date(next['content']['timestamp']).getDate();
                                           let diff = (nextDate - currentDate);
                                           if (diff < 0) diff = 30 + diff;
+                                          console.log('diff:', diff)
 
                                           if (updateDay == "Daily") {
-                                            if (diff == 1) {
+                                            if (diff >= 1) {
                                               console.log('currentDate: ', currentDate)
                                               console.log('nextDate: ', nextDate)
                                               updateIdx.push(j+1);
@@ -295,14 +317,14 @@
                                               break;
                                             }
                                           } else if (updateDay == "Weekly") {
-                                            if (diff == 7) {
+                                            if (diff >= 7) {
                                               updateIdx.push(j+1);
                                               i = j + 1;
                                               found = true;
                                               break;
                                             }
                                           } else {
-                                            if (diff == 30) {
+                                            if (diff >= 30) {  // TODO!!! 4/28 - 5/28 이면 이 조건에 걸리지 않음. 30일 간격으로 decision, upload data 생성되도록 변경할것
                                               updateIdx.push(j+1);
                                               i = j + 1;
                                               found = true;
@@ -328,12 +350,14 @@
 
                                       console.log('Upd:', jsonData);
 
+                                      const fileName = `${proj.general_settings.study_name}_${timestamp_.getMonth()+1}_${timestamp_.getDate()}`;
+
                                       const jsonString = JSON.stringify(jsonData, null, 2); 
                                       const blob = new Blob([jsonString], { type: "application/json" });
                                       const url = URL.createObjectURL(blob);
                                       const a = document.createElement('a');
                                       a.href = url;
-                                      a.download = "data.json";
+                                      a.download = `${fileName}.json`;
                                       document.body.appendChild(a);
                                       a.click();
 
