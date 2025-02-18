@@ -133,6 +133,7 @@
                                 <script>
                                   let proj = JSON.parse('{{ proj | tojson | safe }}');
                                   let timestamp_ = JSON.parse('{{ time | tojson | safe }}');
+                                  let timestamp_original = new Date(timestamp_).toLocaleString();
                                   // let covariateList = JSON.parse('{{ covariate_names | tojson | safe }}');
                                   let maxDecId = JSON.parse('{{ max_id | tojson | safe }}');
                                   // console.log('maxDecId: ', maxDecId);
@@ -163,7 +164,7 @@
                                       } else {
                                         numDecCalls = 0;
                                       }
-                                      console.log('numDecCalls:', decisionPointFrequency );
+                                      // console.log('numDecCalls:', decisionPointFrequency );
 
                                       let numUploads = parseInt(numDecCalls * (1 - missingRatio));
 
@@ -305,7 +306,7 @@
                                           let nextDate = new Date(next['content']['timestamp']).getDate();
                                           let diff = (nextDate - currentDate);
                                           if (diff < 0) diff = 30 + diff;
-                                          console.log('diff:', diff)
+                                          // console.log('diff:', diff)
 
                                           if (updateDay == "Daily") {
                                             if (diff >= 1) {
@@ -350,9 +351,16 @@
 
                                       console.log('Upd:', jsonData);
 
-                                      const fileName = `${proj.general_settings.study_name}_${timestamp_.getMonth()+1}_${timestamp_.getDate()}`;
+                                      const fileName = `${proj.general_settings.study_name}_${new Date(timestamp_original).getMonth()+1}_${new Date(timestamp_original).getDate()}`;
 
-                                      const jsonString = JSON.stringify(jsonData, null, 2); 
+                                      const finalData = {
+                                        'created_date': timestamp_original,
+                                        'number_of_days': numDecDays,
+                                        'missing_upload_ratio': missingRatio,
+                                        'simulation_data': jsonData,
+                                      };
+
+                                      const jsonString = JSON.stringify(finalData, null, 2); 
                                       const blob = new Blob([jsonString], { type: "application/json" });
                                       const url = URL.createObjectURL(blob);
                                       const a = document.createElement('a');
@@ -365,7 +373,7 @@
                                       URL.revokeObjectURL(url);
                                   }
                                   $(document).ready(function(){
-                                      $("#download-btn").on("click", download_json);
+                                      $("#download-btn").on("submit", download_json);
                                   });
                                 </script>
                                 <!-- script end -->
@@ -375,20 +383,20 @@
                                 <h5>1. Set Parameters</h5>
                                 <h6>Number of Days to Create Decision Calls</h6>
                                 <p>This is the number of days decision calls will be created for test-training (e.g., if you put 3 and you set your decision point frequency to 5, 15 decision calls will be created in total).</p>
-                                <input id="num-dec-calls" placeholder="0" step="1"
-                                    type="number"
-                                    name="intervention_probability_upper_bound"
-                                    class="form-control" required>
-                                <br />
-                                <h6>Ratio of Missing Upload Calls</h6>
-                                <p>This will be the ratio of missing upload calls based on the number of decision calls you set above.</p>
-                                <input id="missing-ratio" placeholder="0" min="0" max="1" step="0.01"
-                                    type="number"
-                                    name="intervention_probability_upper_bound"
-                                    class="form-control" required>
-                                <h5>2. Download</h5>
-                                <p>Click on the below button to download the randomly created JSON file which will be used in pJITAI-Client.</p>
-                                <button id="download-btn" type="button" class="btn btn-primary">Download</button>
+                                <form id="download-form">
+                                  <input id="num-dec-calls" placeholder="1" step="1" min="1" max="100"
+                                      type="number"
+                                      class="form-control" required>
+                                  <br />
+                                  <h6>Ratio of Missing Upload Calls</h6>
+                                  <p>This will be the ratio of missing upload calls based on the number of decision calls you set above.</p>
+                                  <input id="missing-ratio" placeholder="0" min="0" max="1" step="0.01"
+                                      type="number"
+                                      class="form-control" required>
+                                  <h5>2. Download</h5>
+                                  <p>Click on the below button to download the randomly created JSON file which will be used in pJITAI-Client.</p>
+                                  <button id="download-btn" type="submit" class="btn btn-primary">Download</button>
+                                </form>
                                 <!-- <h6>How to Make a Call</h6>
                                 <p>The following data should be attached by the client to make an upload call.</p>
                                 <ul>
