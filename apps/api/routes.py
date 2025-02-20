@@ -342,8 +342,8 @@ def proj(uuid):
     base_url = request.host
 
     max_id = db.session.query(func.max(Decision.id)).scalar()
-    max_proximal = proj.model_settings.get("max_proximal_outcome")
-    min_proximal = proj.model_settings.get("min_proximal_outcome")
+    max_proximal = float(proj.model_settings.get("max_proximal_outcome"))
+    min_proximal = float(proj.model_settings.get("min_proximal_outcome"))
     random_proximal = (random.random() * (max_proximal - min_proximal)) + min_proximal
 
     if not proj:

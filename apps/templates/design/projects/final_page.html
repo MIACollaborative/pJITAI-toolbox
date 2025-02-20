@@ -172,17 +172,10 @@
                                       timestamp_ = new Date(timestamp_);           
 
                                       for(let i=0; i<numDecCalls; i+=1) {  // Create Fake Decision calls
-                                        // let measure = 0;
-                                        // if (decisionPointFrequencyTime == "Hour" || decisionPointFrequencyTime == "Day") {
-                                        //   measure = (24 * numDecDays) / numDecCalls;
-                                        // } else if (decisionPointFrequencyTime == "Week") {
-                                        //   measure = 
-                                        // }
-
-                                        // 
                                         let measure = (24 * numDecDays) / numDecCalls;  // Average time between calls
-                                        // console.log('measure: ', measure)
-                                        timestamp_.setHours(timestamp_.getHours() + measure);
+                                        // console.log('measure: ', measure/24)
+                                        if (i != 0) timestamp_.setHours(timestamp_.getHours() + measure);
+                                        
                                         let timestampStr = timestamp_.toLocaleString();
                                         // console.log('timestamp_:', timestamp_.toLocaleString())
                                         // console.log('timestampStr: ', timestampStr)
@@ -296,20 +289,23 @@
 
                                       let i = 0;
                                       while (i < jsonData.length - 1) {
+                                        if (jsonData[i]['type'] == 'upload') continue;
+
+                                        const ONE_DAY_MS = 1000 * 60 * 60 * 24;
                                         let current = jsonData[i];
-                                        // console.log('current: ', current)
-                                        let currentDate = new Date(current['content']['timestamp']).getDate();
+                                        let currentDate = new Date(current['content']['timestamp']);
 
                                         let found = false;
                                         for (let j = i+1; j < jsonData.length; j++) {
                                           let next = jsonData[j];
-                                          let nextDate = new Date(next['content']['timestamp']).getDate();
-                                          let diff = (nextDate - currentDate);
-                                          if (diff < 0) diff = 30 + diff;
+                                          let nextDate = new Date(next['content']['timestamp']);
+                                          let diff = Math.abs(currentDate.getTime() - nextDate.getTime());
+                                          // let diff = (nextDate - currentDate);
+                                          // if (diff < 0) diff = 30 + diff;
                                           // console.log('diff:', diff)
 
                                           if (updateDay == "Daily") {
-                                            if (diff >= 1) {
+                                            if (diff >= 1 * ONE_DAY_MS) {
                                               console.log('currentDate: ', currentDate)
                                               console.log('nextDate: ', nextDate)
                                               updateIdx.push(j+1);
@@ -318,14 +314,14 @@
                                               break;
                                             }
                                           } else if (updateDay == "Weekly") {
-                                            if (diff >= 7) {
+                                            if (diff >= 7 * ONE_DAY_MS) {
                                               updateIdx.push(j+1);
                                               i = j + 1;
                                               found = true;
                                               break;
                                             }
                                           } else {
-                                            if (diff >= 30) {  // TODO!!! 4/28 - 5/28 이면 이 조건에 걸리지 않음. 30일 간격으로 decision, upload data 생성되도록 변경할것
+                                            if (diff >= 30 * ONE_DAY_MS) {
                                               updateIdx.push(j+1);
                                               i = j + 1;
                                               found = true;
