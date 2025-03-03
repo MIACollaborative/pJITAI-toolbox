@@ -167,6 +167,7 @@
                                       // console.log('numDecCalls:', decisionPointFrequency );
 
                                       let numUploads = parseInt(numDecCalls * (1 - missingRatio));
+                                      console.log('numUploads:', numUploads)
 
                                       let jsonData = [];
                                       timestamp_ = new Date(timestamp_);           
@@ -232,9 +233,12 @@
                                       let j = 0;  // since index change
                                       for(let i=0; i<numbers_list.length; i++) {
                                         let n = numbers_list[i];
-                                        // console.log('n:', n)
+                                        console.log('n:', n)
 
                                         let d = jsonDataCopy[n-1];  // choose nearest decision
+                                        // if (jsonDataCopy.length == n) {
+
+                                        // } 
                                         let nd = jsonDataCopy[n];
                                         // console.log('d: ', d)
                                         // console.log('nd: ', nd)
@@ -283,13 +287,15 @@
 
                                       // Create Fake Update calls
                                       let updateDay = proj.intervention_settings["update_day"];
-                                      // console.log('updateDay:', updateDay)
-                                      // let updatePoint = 0;
                                       let updateIdx = [];
 
                                       let i = 0;
                                       while (i < jsonData.length - 1) {
-                                        if (jsonData[i]['type'] == 'upload') continue;
+                                        // console.log('i and jsonData.length: ', i, jsonData.length)
+                                        if (jsonData[i]['type'] == 'upload') {
+                                          i++;
+                                          continue;
+                                        }
 
                                         const ONE_DAY_MS = 1000 * 60 * 60 * 24;
                                         let current = jsonData[i];
@@ -300,14 +306,11 @@
                                           let next = jsonData[j];
                                           let nextDate = new Date(next['content']['timestamp']);
                                           let diff = Math.abs(currentDate.getTime() - nextDate.getTime());
-                                          // let diff = (nextDate - currentDate);
-                                          // if (diff < 0) diff = 30 + diff;
-                                          // console.log('diff:', diff)
 
                                           if (updateDay == "Daily") {
                                             if (diff >= 1 * ONE_DAY_MS) {
-                                              console.log('currentDate: ', currentDate)
-                                              console.log('nextDate: ', nextDate)
+                                              // console.log('currentDate: ', currentDate)
+                                              // console.log('nextDate: ', nextDate)
                                               updateIdx.push(j+1);
                                               i = j + 1;
                                               found = true;
@@ -331,6 +334,7 @@
                                         }
                                         if (!found) {
                                           i++;  // To avoid inf loop
+                                          console.log('!found i: ', i)
                                         }
                                       }
                                       let n = 0;  // bc index changes
