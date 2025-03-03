@@ -46,6 +46,7 @@ from .util import get_class_object, pJITAI_token_required, _validate_algo_data, 
 from uuid import uuid4
 from datetime import datetime
 import json
+import random
 
 
 def _save_each_data_row(user_id: int,
@@ -341,12 +342,15 @@ def proj(uuid):
     base_url = request.host
 
     max_id = db.session.query(func.max(Decision.id)).scalar()
+    max_proximal = float(proj.model_settings.get("max_proximal_outcome"))
+    min_proximal = float(proj.model_settings.get("min_proximal_outcome"))
+    random_proximal = (random.random() * (max_proximal - min_proximal)) + min_proximal
 
     if not proj:
         return {"status": "error",
                 "message": "Project ID does not exist or project has not been finalized yet."}, 400
     segment = 'main_project_page_finalized'
-    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment, time=time, base_url=base_url, token=proj.auth_token, max_id=max_id)
+    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment, time=time, base_url=base_url, token=proj.auth_token, max_id=max_id, random_proximal=random_proximal)
 
 def get_algo_name(uuid):
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()

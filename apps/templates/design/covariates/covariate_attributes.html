@@ -40,9 +40,12 @@
                                                        settings.covariate_type=="Binary" %} min="0" max="0" {% endif %}
                                                        step="0.01" id="covariate_min_val" name="covariate_min_val"
                                                        class="form-control" placeholder=""> -->
-                                                <input value="{{settings.covariate_min_val}}" type="number"
-                                                step="0.01" id="covariate_min_val" name="covariate_min_val"
-                                                class="form-control" placeholder="" required>
+
+                                                      
+                                                <input value="{{settings.covariate_min_val}}" step="0.01"
+                                                type="number"
+                                                id="covariate_min_val" name="covariate_min_val"
+                                                class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-control-label" for="covariate_max_val">Maximum value
@@ -51,29 +54,50 @@
                                                        settings.covariate_type=="Binary" %} min="1" max="1" {% endif %}
                                                        step="0.01" id="covariate_max_val" name="covariate_max_val"
                                                        class="form-control" placeholder=""> -->
-                                                <input value="{{settings.covariate_max_val}}" type="number"
-                                                step="0.01" id="covariate_max_val" name="covariate_max_val"
+
+                                                
+                                                <input value="{{settings.covariate_max_val}}" step="0.01"
+                                                type="number"
+                                                id="covariate_max_val" name="covariate_max_val"
                                                 class="form-control" placeholder="" required>
                                             </div>
                                             <script>
                                                 function remove_binary_div(){
-                                                    covariate_type = document.getElementById("covariate_type").value;
+                                                    let covariate_type = document.getElementById("covariate_type").value;
                                                     if(covariate_type=="Continuous"){
                                                         $('#binary_covariates_div').hide();
                                                         $("#covariate_min_val").removeAttr('min');
                                                         $("#covariate_min_val").removeAttr("max");
                                                         $("#covariate_max_val").removeAttr("min");
                                                         $("#covariate_max_val").removeAttr("max");
-                                                        $("#covariate_min_val").attr("step",0.01);
-                                                        $("#covariate_max_val").attr("step",0.01);
+                                                        // $("#covariate_min_val").attr("step",0.01);
+                                                        // $("#covariate_max_val").attr("step",0.01);
                                                     } else if (covariate_type=="Integer"){
                                                         $('#binary_covariates_div').hide();
                                                         $("#covariate_min_val").removeAttr('min');
                                                         $("#covariate_min_val").removeAttr("max");
                                                         $("#covariate_max_val").removeAttr("min");
                                                         $("#covariate_max_val").removeAttr("max");
-                                                        $("#covariate_min_val").attr("step",1);
-                                                        $("#covariate_max_val").attr("step",1);
+                                                        let minVal = $("#covariate_min_val").val();
+                                                        if (minVal !== "") {
+                                                            let intMinVal = parseInt(minVal, 10);
+                                                            $("#covariate_min_val").val(intMinVal).attr("step",1);
+                                                            console.log($("#covariate_min_val").val())
+                                                            // $("#covariate_min_val").attr("step",1);
+                                                            // $("#covariate_max_val").attr("step",1);
+                                                        }
+
+                                                        let maxVal = $("#covariate_max_val").val();
+                                                        if (maxVal !== "") {
+                                                            $("#covariate_max_val").val(parseInt(maxVal, 10)).attr("step",1);
+                                                            console.log($("#covariate_max_val").val())
+                                                            // $("#covariate_min_val").attr("step",1);
+                                                            // $("#covariate_max_val").attr("step",1);
+                                                        }
+                                                        // $("#covariate_min_val").attr("step",1);
+                                                        // $("#covariate_max_val").attr("step",1);
+
+                                                        
                                                     } else{
                                                         $('#binary_covariates_div').show();
                                                         $("#covariate_min_val").attr('min', 0);
@@ -82,7 +106,7 @@
 
                                                         $("#covariate_max_val").attr("min",1);
                                                         $("#covariate_max_val").attr("max",1);
-                                                        $("#covariate_max_val").attr("step",1);
+                                                        // $("#covariate_max_val").attr("step",1);
                                                     }
                                                 }
                                                 $(document).ready(function(){

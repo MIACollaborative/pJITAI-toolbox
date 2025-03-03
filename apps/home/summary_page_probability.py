@@ -247,6 +247,9 @@ def decision(stand_action_state, stand_beta_mu, stand_beta_Sigma, L, stand_noise
 
         
     # mu_t and Sigma_t are associated with the f(S)*beta
+    if len(stand_action_state) == 0:  # Added by YS
+        stand_action_state = np.array(stand_action_state)  # Added by YS
+        stand_action_state = stand_action_state[:, np.newaxis]  # Added by YS
     stand_action_state=np.concatenate((stand_action_state, np.ones((1,1))),axis=0)
     mu_t=np.matmul(np.transpose(stand_action_state),stand_beta_mu)
     Sigma_t=np.matmul(np.transpose(stand_action_state),stand_beta_Sigma)

@@ -85,7 +85,7 @@
                                 <pre><code class="language-python">{ 
   'user_id': {{proj.get("created_by")}},
   'timestamp': '{{time}}',
-  'proximal_outcome': 0.5,
+  'proximal_outcome': {{random_proximal}},
   'proximal_outcome_timestamp': '2024-10-23T16:57:39Z',
   'decision_id': 39,
 }</code></pre>
@@ -97,7 +97,7 @@
     'decision_id': 39, 
     'id': 16, 
     'proj_uuid': '{{proj.get("uuid")}}', 
-    'proximal_outcome': 0.5, 
+    'proximal_outcome': {{random_proximal}}, 
     'proximal_outcome_timestamp': '2024-10-23T16:57:39Z', 
     'timestamp': '{{time}}', 
     'user_id': {{proj.get("created_by")}}
@@ -133,6 +133,7 @@
                                 <script>
                                   let proj = JSON.parse('{{ proj | tojson | safe }}');
                                   let timestamp_ = JSON.parse('{{ time | tojson | safe }}');
+                                  let timestamp_original = new Date(timestamp_).toLocaleString();
                                   // let covariateList = JSON.parse('{{ covariate_names | tojson | safe }}');
                                   let maxDecId = JSON.parse('{{ max_id | tojson | safe }}');
                                   // console.log('maxDecId: ', maxDecId);
@@ -163,25 +164,30 @@
                                       } else {
                                         numDecCalls = 0;
                                       }
-                                      console.log(numDecCalls);
+                                      // console.log('numDecCalls:', decisionPointFrequency );
 
                                       let numUploads = parseInt(numDecCalls * (1 - missingRatio));
+                                      console.log('numUploads:', numUploads)
 
                                       let jsonData = [];
                                       timestamp_ = new Date(timestamp_);           
 
                                       for(let i=0; i<numDecCalls; i+=1) {  // Create Fake Decision calls
                                         let measure = (24 * numDecDays) / numDecCalls;  // Average time between calls
-                                        timestamp_.setHours(timestamp_.getHours() + measure);
+                                        // console.log('measure: ', measure/24)
+                                        if (i != 0) timestamp_.setHours(timestamp_.getHours() + measure);
+                                        
                                         let timestampStr = timestamp_.toLocaleString();
+                                        // console.log('timestamp_:', timestamp_.toLocaleString())
+                                        // console.log('timestampStr: ', timestampStr)
 
                                         // Create Random state data
                                         let state_data_dict = {};
                                         for (const [key, value] of Object.entries(covariateList)) {
                                           const cov = value["covariate_name"];
                                           const covType = value["covariate_type"];
-                                          const covMinVal = value["covariate_min_val"];
-                                          const covMaxVal = value["covariate_max_val"];
+                                          const covMinVal = parseFloat(value["covariate_min_val"]);
+                                          const covMaxVal = parseFloat(value["covariate_max_val"]);
 
                                           let stateValue = 0;
 
@@ -190,7 +196,7 @@
                                           } else if (covType == "Continuous") {
                                             stateValue = (Math.random() * (covMaxVal - covMinVal)) + covMinVal;
                                           } else {  // Int
-                                            stateValue = parseInt(Math.round((Math.random() * (covMaxVal - covMinVal)) + covMaxVal));
+                                            stateValue = parseInt(Math.round((Math.random() * (covMaxVal - covMinVal)) + covMinVal));
                                           }
 
                                           state_data_dict[`${cov}_validation_status_code`] = ['SUCCESS'];
@@ -218,39 +224,61 @@
 
                                       let numbers = new Set();
                                       while (numbers.size < numUploads) {
-                                        let num = Math.floor(Math.random() * (numDecCalls - 1)) + 1;
+                                        let num = Math.floor(Math.random() * numDecCalls) + 1;
+                                        // console.log('num: ', num)
                                         numbers.add(num);
                                       }
                                       let numbers_list = Array.from(numbers);
                                       numbers_list.sort(function(a, b) { return (a - b); });
+                                      // console.log('numbers list: ', numbers_list)
 
                                       let j = 0;  // since index change
+                                      let timeDifferenceSave = 0;
                                       for(let i=0; i<numbers_list.length; i++) {
                                         let n = numbers_list[i];
+                                        let timeDifference = 0;
 
                                         let d = jsonDataCopy[n-1];  // choose nearest decision
-                                        let nd = jsonDataCopy[n];
-                                        
                                         let timestampNow = new Date(d['content']['timestamp']);
-                                        let timestampNext = new Date(nd['content']['timestamp']);
 
-                                        // console.log("timestampUpload: ", timestampUpload.getHours())
-                                        // console.log("timestampUploadNext: ", timestampUploadNext)
-                                        let timeDifference = (timestampNext.getHours() - timestampNow.getHours());
-                                        if (timeDifference < 0) timeDifference = (24 + timeDifference);
-                                        // console.log("timeDifference: ", timeDifference)
+                                        if (jsonDataCopy.length == n) {
+                                          timeDifference = timeDifferenceSave;
+                                        } else {
+                                          let nd = jsonDataCopy[n];
+                                          // console.log('d: ', d)
+                                          // console.log('nd: ', nd)
+                                          let timestampNext = new Date(nd['content']['timestamp']);
+                                          timeDifference = (timestampNext.getHours() - timestampNow.getHours());  // Used .getHours() so that uploads are done on that day regardless of decision point, update point (e.g., Weekly or Monthly)
+                                          if (timeDifference < 0) timeDifference = (24 + timeDifference);
+                                          timeDifferenceSave = timeDifference;
+                                        }
+                                        
+
+                                        // console.log("timestampNow: ", timestampNow)
+                                        // console.log("timestampNext: ", timestampNext)
+                                        // let timeDifference = (timestampNext.getHours() - timestampNow.getHours());  // Used .getHours() so that uploads are done on that day regardless of decision point, update point (e.g., Weekly or Monthly)
+                                        // if (timeDifference < 0) timeDifference = (24 + timeDifference);
+                                        // timeDifferenceSave = timeDifference;
+
+                                        let timeToAddProximal = (timeDifference / 3) * 60 * 60 * 1000; // transform to miliseconds
+                                        let timeToAddUpload = (timeDifference / 2) * 60 * 60 * 1000; 
+
                                         let timestampProximal = new Date(timestampNow);
                                         let timestampUpload = new Date(timestampNow);
-
-                                        timestampProximal.setHours(timestampNow.getHours() + (timeDifference / 3));  // Arbitrarily set to /3
+                                        
+                                        timestampProximal.setTime(timestampNow.getTime() + timeToAddProximal);  // Arbitrarily set to /3
                                         let timestampProximalStr = timestampProximal.toLocaleString();
-                                        timestampUpload.setHours(timestampNow.getHours() + (timeDifference / 2));  // Arbitrarily set to /2
+                                        timestampUpload.setTime(timestampNow.getTime() + timeToAddUpload);  // Arbitrarily set to /2
                                         let timestampUploadStr = timestampUpload.toLocaleString();
-                                        // console.log('timestampNow:', timestampNow.toISOString())
+                                        // console.log('timestampProximalStr:', timestampProximalStr)
+                                        // console.log('timestampUploadStr: ', timestampUploadStr)
                                         // console.log('timestampProximal:', timestampProximalStr) 
                                         // console.log('timestampUpload:', timestampUploadStr)
 
                                         let randomProxOut = (Math.random() * (maxProxOut - minProxOut)) + minProxOut;  // Randomly select any number between max and min
+                                        // console.log('minproxout:', minProxOut)
+                                        // console.log('maxproxout: ', maxProxOut)
+                                        console.log(randomProxOut)
                                         
                                         let newUpl = {};
                                         newUpl['type'] = 'upload';
@@ -268,41 +296,44 @@
 
                                       // Create Fake Update calls
                                       let updateDay = proj.intervention_settings["update_day"];
-                                      // console.log('updateDay:', updateDay)
-                                      // let updatePoint = 0;
                                       let updateIdx = [];
 
                                       let i = 0;
                                       while (i < jsonData.length - 1) {
+                                        // console.log('i and jsonData.length: ', i, jsonData.length)
+                                        if (jsonData[i]['type'] == 'upload') {
+                                          i++;
+                                          continue;
+                                        }
+
+                                        const ONE_DAY_MS = 1000 * 60 * 60 * 24;
                                         let current = jsonData[i];
-                                        console.log('current: ', current)
-                                        let currentDate = new Date(current['content']['timestamp']).getDate();
+                                        let currentDate = new Date(current['content']['timestamp']);
 
                                         let found = false;
                                         for (let j = i+1; j < jsonData.length; j++) {
                                           let next = jsonData[j];
-                                          let nextDate = new Date(next['content']['timestamp']).getDate();
-                                          let diff = (nextDate - currentDate);
-                                          if (diff < 0) diff = 30 + diff;
+                                          let nextDate = new Date(next['content']['timestamp']);
+                                          let diff = Math.abs(currentDate.getTime() - nextDate.getTime());
 
                                           if (updateDay == "Daily") {
-                                            if (diff == 1) {
-                                              console.log('currentDate: ', currentDate)
-                                              console.log('nextDate: ', nextDate)
+                                            if (diff >= 1 * ONE_DAY_MS) {
+                                              // console.log('currentDate: ', currentDate)
+                                              // console.log('nextDate: ', nextDate)
                                               updateIdx.push(j+1);
                                               i = j + 1;
                                               found = true;
                                               break;
                                             }
                                           } else if (updateDay == "Weekly") {
-                                            if (diff == 7) {
+                                            if (diff >= 7 * ONE_DAY_MS) {
                                               updateIdx.push(j+1);
                                               i = j + 1;
                                               found = true;
                                               break;
                                             }
                                           } else {
-                                            if (diff == 30) {
+                                            if (diff >= 30 * ONE_DAY_MS) {
                                               updateIdx.push(j+1);
                                               i = j + 1;
                                               found = true;
@@ -312,6 +343,7 @@
                                         }
                                         if (!found) {
                                           i++;  // To avoid inf loop
+                                          // console.log('!found i: ', i)
                                         }
                                       }
                                       let n = 0;  // bc index changes
@@ -328,12 +360,21 @@
 
                                       console.log('Upd:', jsonData);
 
-                                      const jsonString = JSON.stringify(jsonData, null, 2); 
+                                      const fileName = `${proj.general_settings.study_name}_${new Date(timestamp_original).getMonth()+1}_${new Date(timestamp_original).getDate()}`;
+
+                                      const finalData = {
+                                        'created_date': timestamp_original,
+                                        'number_of_days': numDecDays,
+                                        'missing_upload_ratio': missingRatio,
+                                        'simulation_data': jsonData,
+                                      };
+
+                                      const jsonString = JSON.stringify(finalData, null, 2); 
                                       const blob = new Blob([jsonString], { type: "application/json" });
                                       const url = URL.createObjectURL(blob);
                                       const a = document.createElement('a');
                                       a.href = url;
-                                      a.download = "data.json";
+                                      a.download = `${fileName}.json`;
                                       document.body.appendChild(a);
                                       a.click();
 
@@ -351,62 +392,20 @@
                                 <h5>1. Set Parameters</h5>
                                 <h6>Number of Days to Create Decision Calls</h6>
                                 <p>This is the number of days decision calls will be created for test-training (e.g., if you put 3 and you set your decision point frequency to 5, 15 decision calls will be created in total).</p>
-                                <input id="num-dec-calls" placeholder="0" step="1"
-                                    type="number"
-                                    name="intervention_probability_upper_bound"
-                                    class="form-control" required>
-                                <br />
-                                <h6>Ratio of Missing Upload Calls</h6>
-                                <p>This will be the ratio of missing upload calls based on the number of decision calls you set above.</p>
-                                <input id="missing-ratio" placeholder="0" min="0" max="1" step="0.01"
-                                    type="number"
-                                    name="intervention_probability_upper_bound"
-                                    class="form-control" required>
-                                <h5>2. Download</h5>
-                                <p>Click on the below button to download the randomly created JSON file which will be used in pJITAI-Client.</p>
-                                <button id="download-btn" type="button" class="btn btn-primary">Download</button>
-                                <!-- <h6>How to Make a Call</h6>
-                                <p>The following data should be attached by the client to make an upload call.</p>
-                                <ul>
-                                  <li>user id</li>
-                                  <li>timestamp (use the current time)</li>
-                                  <li>proximal outcome</li>
-                                  <li>proximal outcome timestamp</li>
-                                  <li>decision id (the id of the Decision data, which the upload is referring to)</li>
-                                </ul>
-                                <p>Your call should look like:</p>
-                                <pre><code class="language-python">def process_upload():
-  upload_data = {
-    "user_id": {{proj.get("created_by")}},
-    "timestamp": str(datetime.now()),
-    "proximal_outcome": 0.5,  # mock data
-    "proximal_outcome_timestamp": "2024-10-23T16:57:39Z",  # mock data
-    "decision_id": 39,  # mock data
-  }
-
-  allevents.append(('upload', upload_data))</code></pre>
-                                <p>The response will look like (includes mock data):</p>
-                                <pre><code class="language-python">UploadResponse(status_code='SUCCESS', status_message='Data uploaded to model '{{proj.get("uuid")}}'', data={'decision_id': 39, 'id': 16, 'proj_uuid': '{{proj.get("uuid")}}', 'proximal_outcome': 0.5, 'proximal_outcome_timestamp': '2024-10-23T16:57:39Z', 'timestamp': '2025-01-07 11:23:36.675213', 'user_id': {{proj.get("created_by")}}})</code></pre>
-                              </div> -->
-                              <!-- <div class="update">
-                                <h5>3. Update</h5>
-                                <p>The update call from a client allows the RL algorithm to update its parameters.</p>
-                                <h6>How to Make a Call</h6>
-                                <p>The following data should be attached by the client to make an update call.</p>
-                                <ul>
-                                  <li>user id</li>
-                                </ul>
-                                <p>Your call should look like:</p>
-                                <pre><code class="language-python">def process_update():
-  user_id = {{proj.get("created_by")}}
-
-  row = {}
-  row['user_id'] = user_id
-
-  allevents.append(('update', row))</code></pre>
-                                <p>The response will look like (includes mock data):</p>
-                                <pre><code class="language-python">UpdateResponse(status_code='SUCCESS', status_message='Update has been made successfully.', update_result={'degree': 5.0, 'id': 5, 'proj_uuid': '{{proj.get("uuid")}}', 'scale': [[0.0]], 'theta_Sigma': [[0.15, 0.14999999999999997, 0.0, 0.0, 0.0, 0.0], [0.15, 0.7499999999999999, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.028607194359878133, 0.028607194359878133, 0.0, 0.0], [0.0, 0.0, 0.028607194359878133, 0.02890161833039568, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.028607194359878133, 0.028607194359878133], [0.0, 0.0, 0.0, 0.0, 0.028607194359878133, 0.02890161833039568]], 'theta_mu': [[-6.162975822039155e-33], [1.1102230246251563e-16], [-0.03797468354430311], [-0.021864211737628647], [-0.03797468354430304], [-0.021864211737628692]], 'timestamp': '2025-01-07 11:23:36.759070', 'user_id': {{proj.get("created_by")}}})</code></pre>
-                              </div> -->
+                                <!-- <form id="download-form"> -->
+                                  <input id="num-dec-calls" placeholder="1" step="1" min="1" max="100"
+                                      type="number"
+                                      class="form-control" required>
+                                  <br />
+                                  <h6>Ratio of Missing Upload Calls</h6>
+                                  <p>This will be the ratio of missing upload calls based on the number of decision calls you set above.</p>
+                                  <input id="missing-ratio" placeholder="0" min="0" max="1" step="0.01"
+                                      type="number"
+                                      class="form-control" required>
+                                  <h5>2. Download</h5>
+                                  <p>Click on the below button to download the randomly created JSON file which will be used in pJITAI-Client.</p>
+                                  <button id="download-btn" type="submit" class="btn btn-primary">Download</button>
+                                <!-- </form> -->
                             </div>
                           </div>
                         </div>
