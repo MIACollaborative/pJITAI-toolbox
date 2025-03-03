@@ -217,40 +217,49 @@
                                       //   console.log("timestampStr (UTC):", jsonData[a]['content']['timestamp'])
                                       // }
 
-                                      // console.log('Dec: ', jsonData);
+                                      console.log('Dec: ', jsonData);
 
                                       // Create Fake Upload calls
                                       let jsonDataCopy = [ ...jsonData ];
 
                                       let numbers = new Set();
                                       while (numbers.size < numUploads) {
-                                        let num = Math.floor(Math.random() * (numDecCalls - 1)) + 1;
+                                        let num = Math.floor(Math.random() * numDecCalls) + 1;
+                                        // console.log('num: ', num)
                                         numbers.add(num);
                                       }
                                       let numbers_list = Array.from(numbers);
                                       numbers_list.sort(function(a, b) { return (a - b); });
+                                      // console.log('numbers list: ', numbers_list)
 
                                       let j = 0;  // since index change
+                                      let timeDifferenceSave = 0;
                                       for(let i=0; i<numbers_list.length; i++) {
                                         let n = numbers_list[i];
-                                        console.log('n:', n)
+                                        let timeDifference = 0;
 
                                         let d = jsonDataCopy[n-1];  // choose nearest decision
-                                        // if (jsonDataCopy.length == n) {
-
-                                        // } 
-                                        let nd = jsonDataCopy[n];
-                                        // console.log('d: ', d)
-                                        // console.log('nd: ', nd)
-                                        
                                         let timestampNow = new Date(d['content']['timestamp']);
-                                        let timestampNext = new Date(nd['content']['timestamp']);
+
+                                        if (jsonDataCopy.length == n) {
+                                          timeDifference = timeDifferenceSave;
+                                        } else {
+                                          let nd = jsonDataCopy[n];
+                                          // console.log('d: ', d)
+                                          // console.log('nd: ', nd)
+                                          let timestampNext = new Date(nd['content']['timestamp']);
+                                          timeDifference = (timestampNext.getHours() - timestampNow.getHours());  // Used .getHours() so that uploads are done on that day regardless of decision point, update point (e.g., Weekly or Monthly)
+                                          if (timeDifference < 0) timeDifference = (24 + timeDifference);
+                                          timeDifferenceSave = timeDifference;
+                                        }
+                                        
 
                                         // console.log("timestampNow: ", timestampNow)
                                         // console.log("timestampNext: ", timestampNext)
-                                        let timeDifference = (timestampNext.getHours() - timestampNow.getHours());  // Used .getHours() so that uploads are done on that day regardless of decision point, update point (e.g., Weekly or Monthly)
-                                        if (timeDifference < 0) timeDifference = (24 + timeDifference);
-                                        // console.log("timeDifference: ", timeDifference)
+                                        // let timeDifference = (timestampNext.getHours() - timestampNow.getHours());  // Used .getHours() so that uploads are done on that day regardless of decision point, update point (e.g., Weekly or Monthly)
+                                        // if (timeDifference < 0) timeDifference = (24 + timeDifference);
+                                        // timeDifferenceSave = timeDifference;
+
                                         let timeToAddProximal = (timeDifference / 3) * 60 * 60 * 1000; // transform to miliseconds
                                         let timeToAddUpload = (timeDifference / 2) * 60 * 60 * 1000; 
 
@@ -334,7 +343,7 @@
                                         }
                                         if (!found) {
                                           i++;  // To avoid inf loop
-                                          console.log('!found i: ', i)
+                                          // console.log('!found i: ', i)
                                         }
                                       }
                                       let n = 0;  // bc index changes
