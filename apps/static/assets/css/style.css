@@ -5429,6 +5429,11 @@ body.layout-6 .pcoded-content .pcoded-inner-content {
   margin-top: -200px;
   min-height: calc(100vh + 150px);
 }
+.general-setting-grid-container {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 3.5fr 1fr;
+}
 body.layout-6 .card {
   border-radius: 5px;
 }
@@ -7671,7 +7676,7 @@ a.btn-theme.active {
   border-radius: 0.25rem;
   font-size: 14px;
   margin-bottom: 5px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
@@ -7735,6 +7740,24 @@ a.btn-theme.active {
 .shadow-5 {
   -webkit-box-shadow: 0 20px 24px 0 rgba(62, 57, 107, 0.36);
           box-shadow: 0 20px 24px 0 rgba(62, 57, 107, 0.36);
+}
+/* Comments buttons */
+.btn-comment {
+  color: #fff;
+  background-color: #04a9f5;
+  border-color: #04a9f5;
+  margin-top: 5px;
+  float: right;
+}
+.btn-comment:hover {
+  color: #fff;
+  background-color: #038fcf;
+  border-color: #0386c3;
+}
+.btn-comment.disabled, .btn-comment:disabled {
+  color: #fff;
+  background-color: #04a9f5;
+  border-color: #04a9f5;
 }
 
 /* Alternate buttons */
