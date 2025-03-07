@@ -178,7 +178,14 @@
                 <div class="card-header">
                     <h3>Comments</h3>
                     <!-- <div class="chat-container"> -->
+                        {% for c in comments %}
                         <div class="chat-message">
+                            <p style="margin: 0; padding: 0;"><b>{{c.created_by}}</b></p>
+                            <p style="font-size: 12px;">{{c.timestamp}}</p>
+                            {{c.content['comment-input']}}
+                        </div>
+                        {% endfor %}
+                        <!-- <div class="chat-message">
                             <p style="margin: 0; padding: 0;"><b>Young Suh Hong</b></p>
                             <p style="font-size: 12px;">{{modified_on.strftime('%b %d %Y %I:%M %p')}}</p>
                             Description of the study should include...
@@ -187,7 +194,7 @@
                             <p style="margin: 0; padding: 0;"><b>Young Suh Hong</b></p>
                             <p style="font-size: 12px;">{{modified_on.strftime('%b %d %Y %I:%M %p')}}</p>
                             The name of the intervention component should be corrected.
-                        </div>
+                        </div> -->
                     <!-- </div> -->
                     <form>
                         <div class="comment-box">

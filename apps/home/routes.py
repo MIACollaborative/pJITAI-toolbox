@@ -158,7 +158,13 @@ def project_settings(setting_type, project_uuid=None):
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("study_name", "")
 
-    # comments_details = get_comments(project_uuid, setting_type)
+    if setting_type == "general":
+        setting_type_full = "general_settings"
+    else:
+        setting_type_full = setting_type
+        
+    comments_for_that_page = get_comments(project_uuid, setting_type_full)
+    print('comments_for_that_page:', comments_for_that_page)
 
     if project_details.get("general_settings"):
         general_settings = project_details.get("general_settings", {})
@@ -196,7 +202,7 @@ def project_settings(setting_type, project_uuid=None):
     if setting_type == "general":
         return render_template("design/projects/general_settings.html", segment="general_settings", all_menus=all_menus,
                                menu_number=1, project_name=project_name, modified_on=modified_on,
-                               general_settings=general_settings, project_uuid=project_uuid)
+                               general_settings=general_settings, project_uuid=project_uuid, comments=comments_for_that_page)
     elif setting_type == "personalized_method":
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",
                                all_menus=all_menus, menu_number=2, project_name=project_name, modified_on=modified_on,
