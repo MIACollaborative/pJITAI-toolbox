@@ -41,6 +41,26 @@ from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
     update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages
 from apps.home.summary_page_probability import compute_probability
+from apps.api.models import Comment
+from apps.api.sql_helper import get_comments
+
+@blueprint.route('/comment/<project_uuid>/<page_name>', methods=['POST'])
+@login_required
+def add_comment(project_uuid, page_name):
+    user_id = current_user.get_id()
+    timestamp = datetime.now()
+    content = request.form.to_dict()
+    print('content: ', content)
+
+    comment = Comment(created_by=user_id,
+                      proj_uuid=project_uuid,
+                      timestamp=timestamp,
+                      content=content,
+                      page_name=page_name)
+    db.session.add(comment)
+    db.session.commit()
+
+    return redirect(request.referrer)
 
 
 @blueprint.route('/projects/<project_type>')
@@ -138,11 +158,14 @@ def project_settings(setting_type, project_uuid=None):
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("study_name", "")
 
+    # comments_details = get_comments(project_uuid, setting_type)
+
     if project_details.get("general_settings"):
         general_settings = project_details.get("general_settings", {})
         modified_on = project_details.get("modified_on", "")
 
     if request.method == 'POST':
+        # print('here: ', request.form.to_dict())
         add_menu(user_id, project_uuid, request.path)
         if project_details_obj:
             update_general_settings(request.form.to_dict(), project_details_obj)

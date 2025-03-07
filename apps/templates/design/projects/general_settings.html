@@ -177,14 +177,28 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Comments</h3>
-                    <div class="comment-box">
-                        <textarea name="study_description" id="study_description" required
-                            rows="4" class="form-control"
-                            placeholder="Put your comment here..."></textarea>
-                        <button type="submit" formmethod="post"
-                        class="btn btn-comment">Submit
-                        </button>
-                    </div>
+                    <!-- <div class="chat-container"> -->
+                        <div class="chat-message">
+                            <p style="margin: 0; padding: 0;"><b>Young Suh Hong</b></p>
+                            <p style="font-size: 12px;">{{modified_on.strftime('%b %d %Y %I:%M %p')}}</p>
+                            Description of the study should include...
+                        </div>
+                        <div class="chat-message">
+                            <p style="margin: 0; padding: 0;"><b>Young Suh Hong</b></p>
+                            <p style="font-size: 12px;">{{modified_on.strftime('%b %d %Y %I:%M %p')}}</p>
+                            The name of the intervention component should be corrected.
+                        </div>
+                    <!-- </div> -->
+                    <form>
+                        <div class="comment-box">
+                            <textarea name="comment-input" id="comment-input" required
+                                rows="4" class="form-control"
+                                placeholder="Put your comment here..."></textarea>
+                            <button type="submit" formmethod="post" formaction="/comment/{{project_uuid}}/general_settings"
+                            class="btn btn-comment">Submit
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -7741,6 +7741,23 @@ a.btn-theme.active {
   -webkit-box-shadow: 0 20px 24px 0 rgba(62, 57, 107, 0.36);
           box-shadow: 0 20px 24px 0 rgba(62, 57, 107, 0.36);
 }
+/* Comment box*/
+.chat-message {
+  /* max-width: 80%; */
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #e2eaf9;
+  color: black;
+}
 /* Comments buttons */
 .btn-comment {
   color: #fff;

@@ -34,11 +34,20 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import desc
 
 from apps import db
-from apps.api.models import Data, AlgorithmTunedParams, Decision
+from apps.api.models import Data, AlgorithmTunedParams, Decision, Comment
 from apps.algorithms.models import Projects
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
 import json
 
+def get_comments(project_uuid, page_name):
+    if project_uuid:
+        comments_obj = db.session.query(Comment).filter(Comment.page_name == page_name).all()
+        if comments_obj:
+            comments_details = comments_obj.as_dict()
+        else:
+            comments_details = {}
+        
+        return comments_details
 
 def save_decision(decision: Decision):
     try:

@@ -188,3 +188,24 @@ class Cron(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+@dataclass
+class Comment(db.Model):
+    __tablename__ = 'comment'
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    proj_uuid = db.Column('proj_uuid', db.String(36))
+    timestamp = db.Column('timestamp',
+                          db.String(100),
+                          default=time_8601)
+    created_by = db.Column(db.Integer, 
+                           db.ForeignKey('users.id'),
+                           nullable=False)
+    content = db.Column(db.JSON, default={})
+    page_name = db.Column('page_name', db.String(100))
+
+    def __init__(self, **kwargs):
+        for property, value in kwargs.items():
+            setattr(self, property, value)
+    
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
