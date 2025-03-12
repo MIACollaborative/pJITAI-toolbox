@@ -44,13 +44,32 @@ from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
 from apps.api.sql_helper import get_comments
 
+@blueprint.route('/comment/delete/<comment_id>', methods=['GET'])
+@login_required
+def delete_comment(comment_id):
+    Comment.query.filter(Comment.id == comment_id).delete()
+    db.session.commit()
+    return redirect(request.referrer)
+
+
+@blueprint.route('/comment/edit/<comment_id>', methods=['POST'])
+@login_required
+def edit_comment(comment_id):
+    comment = db.session.query(Comment).filter(Comment.id == comment_id).first()
+    comment.content = request.form.to_dict()
+    comment.timestamp = datetime.now()
+    db.session.commit()
+
+    return redirect(request.referrer)
+
+
+
 @blueprint.route('/comment/<project_uuid>/<page_name>', methods=['POST'])
 @login_required
 def add_comment(project_uuid, page_name):
     user_id = current_user.get_id()
     timestamp = datetime.now()
     content = request.form.to_dict()
-    print('content: ', content)
 
     comment = Comment(created_by=user_id,
                       proj_uuid=project_uuid,
@@ -162,9 +181,8 @@ def project_settings(setting_type, project_uuid=None):
         setting_type_full = "general_settings"
     else:
         setting_type_full = setting_type
-        
+
     comments_for_that_page = get_comments(project_uuid, setting_type_full)
-    print('comments_for_that_page:', comments_for_that_page)
 
     if project_details.get("general_settings"):
         general_settings = project_details.get("general_settings", {})
@@ -195,6 +213,7 @@ def project_settings(setting_type, project_uuid=None):
                      auth_token=auth_token).save()
 
     all_menus = get_project_menu_pages(user_id, project_uuid)
+    user = user_id
 
     if not modified_on:
         modified_on = datetime.now()
@@ -202,7 +221,7 @@ def project_settings(setting_type, project_uuid=None):
     if setting_type == "general":
         return render_template("design/projects/general_settings.html", segment="general_settings", all_menus=all_menus,
                                menu_number=1, project_name=project_name, modified_on=modified_on,
-                               general_settings=general_settings, project_uuid=project_uuid, comments=comments_for_that_page)
+                               general_settings=general_settings, project_uuid=project_uuid, comments=comments_for_that_page, user=user)
     elif setting_type == "personalized_method":
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",
                                all_menus=all_menus, menu_number=2, project_name=project_name, modified_on=modified_on,

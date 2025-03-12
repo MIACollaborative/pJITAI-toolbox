@@ -41,8 +41,7 @@ import json
 
 def get_comments(project_uuid, page_name):
     if project_uuid:
-        print('page_name:', page_name)
-        comments_obj = db.session.query(Comment).filter(Comment.page_name == page_name).all()
+        comments_obj = db.session.query(Comment).filter(Comment.proj_uuid == project_uuid).filter(Comment.page_name == page_name).all()
         comments_details = []
         if comments_obj:            
             for c in comments_obj:
