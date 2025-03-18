@@ -193,11 +193,15 @@ class Cron(db.Model):
 class Comment(db.Model):
     __tablename__ = 'comment'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    proj_uuid = db.Column('proj_uuid', db.String(36))
+    proj_uuid = db.Column('proj_uuid', db.String(36), 
+                          db.ForeignKey('projects.uuid'))
     timestamp = db.Column('timestamp',
                           db.String(100),
                           default=time_8601)
-    created_by = db.Column(db.Integer, 
+    created_by = db.Column(db.String(64),  # YS: This is to show the displayname
+                           db.ForeignKey('users.displayname'),
+                           nullable=False)
+    user_id = db.Column(db.Integer,  # YS: This is to check authentication for edit/delete comment
                            db.ForeignKey('users.id'),
                            nullable=False)
     content = db.Column(db.JSON, default={})

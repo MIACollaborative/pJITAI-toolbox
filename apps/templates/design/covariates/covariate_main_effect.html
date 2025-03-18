@@ -8,171 +8,174 @@
 {% block content %}
 
 <!-- [ Main Content ] start -->
-<div class="pcoded-main-container">
-    <div class="pcoded-wrapper">
-        <div class="pcoded-content">
-            <div class="pcoded-inner-content">
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3>Model Settings / {{cov_name}} / Main Effect</h3>
-                                        </div>
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Model Settings / {{cov_name}} / Main Effect</h3>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label class="form-control-label" for="main_effect_prior_mean">Prior
-                                                            mean of the main effect of the covariate <span data-toggle='tooltip'
-                                                                                          data-bs-placement="right"
-                                                                                          title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior mean is the mean of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
-                                                                    class=" align-text-top questionmark far fa-question-circle"></i></span></label>
-                                                        <input value="{{settings.main_effect_prior_mean}}" type="number"
-                                                               step="0.01" name="main_effect_prior_mean"
-                                                               class="form-control" placeholder="" required>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label class="form-control-label" for="main_effect_prior_mean">Prior
+                                                                mean of the main effect of the covariate <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior mean is the mean of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
+                                                                        class=" align-text-top questionmark far fa-question-circle"></i></span></label>
+                                                            <input value="{{settings.main_effect_prior_mean}}" type="number"
+                                                                step="0.01" name="main_effect_prior_mean"
+                                                                class="form-control" placeholder="" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label"
+                                                                for="main_effect_prior_standard_deviation">Prior standard
+                                                                deviation of the main effect of the covariate <span data-toggle='tooltip'
+                                                                                                data-bs-placement="right"
+                                                                                                title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior standard deviation is the standard deviation of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
+                                                                        class=" align-text-top questionmark far fa-question-circle"></i></span></label><br>
+                                                            <input value="{{settings.main_effect_prior_standard_deviation}}"
+                                                                type="number" min="0" step="0.01"
+                                                                name="main_effect_prior_standard_deviation"
+                                                                oninput="check(this)"
+                                                                class="form-control" placeholder="">
+
+                                                        </div>
+                                                        <script>
+                                                            function check(input) {
+                                                            if (input.value == 0) {
+                                                                input.setCustomValidity('The number must not be zero.');
+                                                            } else {
+                                                                // input is fine -- reset the error message
+                                                                input.setCustomValidity('');
+                                                            }
+                                                            }
+                                                        </script>
+
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="form-control-label"
-                                                               for="main_effect_prior_standard_deviation">Prior standard
-                                                            deviation of the main effect of the covariate <span data-toggle='tooltip'
-                                                                                               data-bs-placement="right"
-                                                                                               title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior standard deviation is the standard deviation of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
-                                                                    class=" align-text-top questionmark far fa-question-circle"></i></span></label><br>
-                                                        <input value="{{settings.main_effect_prior_standard_deviation}}"
-                                                               type="number" min="0" step="0.01"
-                                                               name="main_effect_prior_standard_deviation"
-                                                               oninput="check(this)"
-                                                               class="form-control" placeholder="">
 
+                                                    <div class="col">
+                                                        {{formula|safe}}
                                                     </div>
-                                                    <script>
-                                                        function check(input) {
-                                                          if (input.value == 0) {
-                                                            input.setCustomValidity('The number must not be zero.');
-                                                          } else {
-                                                            // input is fine -- reset the error message
-                                                            input.setCustomValidity('');
-                                                          }
-                                                        }
-                                                    </script>
-
-                                                </div>
-
-                                                <div class="col">
-                                                    {{formula|safe}}
                                                 </div>
                                             </div>
+
                                         </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <!-- [ tabs ] start -->
-                                <div class="col-sm-12">
-
-                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                               href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                Explanation</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                               href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                Example</a>
-                                        </li>
-                                    </ul> -->
-                                    <div class="tab-content" id="myTabContent">
-                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>Explanation</h5>
-                                            <p>We are asking about the main effect of the covariate in the Bayesian
-                                                linear regression. This coefficient corresponds to the amount of change
-                                                in the proximal outcome per unit change of the covariate when
-                                                intervention option B is provided (i.e., “do nothing” in the HeartSteps
-                                                example) and all the other covariates are fixed.</p>
-
-                                            <p>Many papers may not provide the prior mean and the prior standard
-                                                deviation of the main effect. If you don’t have good information 
-                                                about the prior mean, then we suggest you set the prior mean to 0. 
-                                                If you don’t have good information about the prior standard deviation, 
-                                                then we suggest you set the prior standard deviation to 3.16.</p> 
-                                                
-                                            <p>If you have access to data from an MRT, please read [tutorial] to see how
-                                                 to run an analysis to find these values.</p>
-
-                                            <p>Please read [tutorial] for more details.</p>
-                                        </div>
-                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>HeartSteps Example</h5>
-                                            <h6>Prior Mean</h6>
-                                            <p>0</p>
-                                            <h6>Prior Standard Deviation</h6>
-                                            <p>3.16</p>
-                                            <p class="mb-0">This information is not reported in the HeartSteps V1 paper.
-                                                Thus, we demonstrate using the default values here, i.e., prior mean = 0
-                                                and prior standard deviation = 3.16.</p>
-                                        </div>
-
                                     </div>
                                 </div>
 
 
-                                <!-- [ tabs ] end -->
-                            </div>
-                            <!-- [ Main Content ] end -->
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <a href="/covariates/settings/covariate_attributes/{{project_uuid}}/{{cov_id}}"
-                                                   class="btn btn-outline-primary" role="button">Back</a>
-                                                {% if is_tailoring=="yes" %}
-                                                <button type="submit" type="button"
-                                                        formaction="/covariates/settings/covariate_tailored_effect/{{project_uuid}}/{{cov_id}}"
-                                                        formmethod="post" class="btn btn-primary">Next
-                                                </button>
-                                                {% else %}
-                                                <button type="submit" type="button"
-                                                        formaction="/covariates/settings/covariate_summary/{{project_uuid}}/{{cov_id}}"
-                                                        formmethod="post" class="btn btn-primary">Next
-                                                </button>
-                                                {% endif %}
+                                <div class="row">
+                                    <!-- [ tabs ] start -->
+                                    <div class="col-sm-12">
+
+                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                    Explanation</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
+                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
+                                                    Example</a>
+                                            </li>
+                                        </ul> -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab"> -->
+                                            <div class="tab-item">
+                                                <h5>Explanation</h5>
+                                                <p>We are asking about the main effect of the covariate in the Bayesian
+                                                    linear regression. This coefficient corresponds to the amount of change
+                                                    in the proximal outcome per unit change of the covariate when
+                                                    intervention option B is provided (i.e., “do nothing” in the HeartSteps
+                                                    example) and all the other covariates are fixed.</p>
+
+                                                <p>Many papers may not provide the prior mean and the prior standard
+                                                    deviation of the main effect. If you don’t have good information 
+                                                    about the prior mean, then we suggest you set the prior mean to 0. 
+                                                    If you don’t have good information about the prior standard deviation, 
+                                                    then we suggest you set the prior standard deviation to 3.16.</p> 
+                                                    
+                                                <p>If you have access to data from an MRT, please read [tutorial] to see how
+                                                    to run an analysis to find these values.</p>
+
+                                                <p>Please read [tutorial] for more details.</p>
                                             </div>
-                                            <div class="form-group">
-                                                Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                                aria-labelledby="profile-tab"> -->
+                                            <div class="tab-item">
+                                                <h5>HeartSteps Example</h5>
+                                                <h6>Prior Mean</h6>
+                                                <p>0</p>
+                                                <h6>Prior Standard Deviation</h6>
+                                                <p>3.16</p>
+                                                <p class="mb-0">This information is not reported in the HeartSteps V1 paper.
+                                                    Thus, we demonstrate using the default values here, i.e., prior mean = 0
+                                                    and prior standard deviation = 3.16.</p>
                                             </div>
-                                        </div>
 
+                                        </div>
+                                    </div>
+
+
+                                    <!-- [ tabs ] end -->
+                                </div>
+                                <!-- [ Main Content ] end -->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <a href="/covariates/settings/covariate_attributes/{{project_uuid}}/{{cov_id}}"
+                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    {% if is_tailoring=="yes" %}
+                                                    <button type="submit" type="button"
+                                                            formaction="/covariates/settings/covariate_tailored_effect/{{project_uuid}}/{{cov_id}}"
+                                                            formmethod="post" class="btn btn-primary">Next
+                                                    </button>
+                                                    {% else %}
+                                                    <button type="submit" type="button"
+                                                            formaction="/covariates/settings/covariate_summary/{{project_uuid}}/{{cov_id}}"
+                                                            formmethod="post" class="btn btn-primary">Next
+                                                    </button>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% include 'includes/comments.html' %}
 </div>
 <!-- [ Main Content ] end -->
 

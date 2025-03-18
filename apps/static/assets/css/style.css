@@ -2822,8 +2822,7 @@ pre, code {
 
 .pcoded-main-container {
   position: relative;
-  margin: 0 auto;
-  display: block;
+  /* margin: 0 auto; */
   clear: both;
   float: unset;
   right: 0;
@@ -5429,7 +5428,7 @@ body.layout-6 .pcoded-content .pcoded-inner-content {
   margin-top: -200px;
   min-height: calc(100vh + 150px);
 }
-.general-setting-grid-container {
+.grid-container {
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: 3.5fr 1fr;

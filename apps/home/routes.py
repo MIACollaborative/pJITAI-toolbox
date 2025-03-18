@@ -68,10 +68,12 @@ def edit_comment(comment_id):
 @login_required
 def add_comment(project_uuid, page_name):
     user_id = current_user.get_id()
+    displayname = current_user.displayname
     timestamp = datetime.now()
     content = request.form.to_dict()
 
-    comment = Comment(created_by=user_id,
+    comment = Comment(created_by=displayname,
+                      user_id=user_id,
                       proj_uuid=project_uuid,
                       timestamp=timestamp,
                       content=content,
@@ -225,15 +227,15 @@ def project_settings(setting_type, project_uuid=None):
     elif setting_type == "personalized_method":
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",
                                all_menus=all_menus, menu_number=2, project_name=project_name, modified_on=modified_on,
-                               general_settings=general_settings, project_uuid=project_uuid)
+                               general_settings=general_settings, project_uuid=project_uuid, comments=comments_for_that_page, user=user)
     elif setting_type == "scenario":
         return render_template("design/projects/scenario.html", segment="general_scenario", modified_on=modified_on,
                                all_menus=all_menus, menu_number=3, project_name=project_name,
-                               general_settings=general_settings, project_uuid=project_uuid)
+                               general_settings=general_settings, project_uuid=project_uuid, comments=comments_for_that_page, user=user)
     elif setting_type == "summary":
         return render_template("design/projects/summary.html", segment="general_summary", modified_on=modified_on,
                                all_menus=all_menus, menu_number=4, project_name=project_name,
-                               general_settings=general_settings, project_uuid=project_uuid)
+                               general_settings=general_settings, project_uuid=project_uuid, comments=comments_for_that_page, user=user)
 
 
 @blueprint.route('/intervention/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])

@@ -8,193 +8,196 @@
 {% block content %}
 
 <!-- [ Main Content ] start -->
-<div class="pcoded-main-container">
-    <div class="pcoded-wrapper">
-        <div class="pcoded-content">
-            <div class="pcoded-inner-content">
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3>Model Settings / {{cov_name}} / Tailored Effect</h3>
-                                        </div>
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Model Settings / {{cov_name}} / Tailored Effect</h3>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label class="form-control-label"
-                                                               for="interaction_coefficient_prior_mean">Prior mean of
-                                                            the interaction coefficient <span data-toggle='tooltip'
-                                                                                              data-bs-placement="right"
-                                                                                              title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior mean is the mean of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
-                                                                    class=" align-text-top questionmark far fa-question-circle"></i></span></label>
-                                                        <input value="{{settings.interaction_coefficient_prior_mean}}"
-                                                               type="number" step="0.01"
-                                                               name="interaction_coefficient_prior_mean"
-                                                               class="form-control" placeholder="" required>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label class="form-control-label"
+                                                                for="interaction_coefficient_prior_mean">Prior mean of
+                                                                the interaction coefficient <span data-toggle='tooltip'
+                                                                                                data-bs-placement="right"
+                                                                                                title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior mean is the mean of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
+                                                                        class=" align-text-top questionmark far fa-question-circle"></i></span></label>
+                                                            <input value="{{settings.interaction_coefficient_prior_mean}}"
+                                                                type="number" step="0.01"
+                                                                name="interaction_coefficient_prior_mean"
+                                                                class="form-control" placeholder="" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label"
+                                                                for="interaction_coefficient_prior_standard_deviation">Prior
+                                                                standard deviation of the interaction coefficient <span
+                                                                        data-toggle='tooltip' data-bs-placement="right"
+                                                                        title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior standard deviation is the standard deviation of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
+                                                                        class=" align-text-top questionmark far fa-question-circle"></i></span></label><br>
+                                                            <input value="{{settings.interaction_coefficient_prior_standard_deviation}}"
+                                                                type="number" min="0" step="0.01"
+                                                                name="interaction_coefficient_prior_standard_deviation"
+                                                                oninput="check(this)"
+                                                                class="form-control" placeholder="">
+
+                                                        </div>
+                                                        <script>
+                                                            function check(input) {
+                                                            if (input.value == 0) {
+                                                                input.setCustomValidity('The number must not be zero.');
+                                                            } else {
+                                                                // input is fine -- reset the error message
+                                                                input.setCustomValidity('');
+                                                            }
+                                                            }
+                                                        </script>
+
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="form-control-label"
-                                                               for="interaction_coefficient_prior_standard_deviation">Prior
-                                                            standard deviation of the interaction coefficient <span
-                                                                    data-toggle='tooltip' data-bs-placement="right"
-                                                                    title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior standard deviation is the standard deviation of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
-                                                                    class=" align-text-top questionmark far fa-question-circle"></i></span></label><br>
-                                                        <input value="{{settings.interaction_coefficient_prior_standard_deviation}}"
-                                                               type="number" min="0" step="0.01"
-                                                               name="interaction_coefficient_prior_standard_deviation"
-                                                               oninput="check(this)"
-                                                               class="form-control" placeholder="">
+
+                                                    <div class="col">
+                                                        {{formula|safe}}
+                                                        <!--<p style="
+                                        background-color: #deeaff;
+                                        color: black;
+                                        padding: 10px;
+                                        font-size:18px;
+                                        border-radius: 10px;
+                                    ">
+                                                            <span style="background:#f2f2f2; font-size:14px;">{{settings.proximal_outcome_name}}</span> ~ <br>
+                                                            α<sub>0</sub> + α<sub>1</sub> * <span id="cov_name_span1" style="background:#f2f2f2; font-size:14px;">{{settings.covariate_name}}</span><br>
+                                                            + β<sub>0</sub>* <span style="background:#f2f2f2; font-size:14px;"> {{settings.intervention_component_name}} </span><br>
+                                                            <span id="beta_1">+ β<sub>1</sub>* <span id="cov_name_span2" style="background:#f2f2f2; font-size:14px;">{{settings.covariate_name}}</span> * <span style="background:#f2f2f2; font-size:14px;"> {{settings.intervention_component_name}} </span> <br></span>
+                                                            + ϵ <br>
+                                                            β<sub>1</sub>~N(<span style="color:red;">μ<sub>{β<sub>1</sub>}</sub>, σ<sub>{β<sub>1</sub>}<sup>2</sup></sub></span>) <br>
+                                                            <span style="color:red;"> We're asking for the red values.</span>
+                                                        </p>-->
 
                                                     </div>
-                                                    <script>
-                                                        function check(input) {
-                                                          if (input.value == 0) {
-                                                            input.setCustomValidity('The number must not be zero.');
-                                                          } else {
-                                                            // input is fine -- reset the error message
-                                                            input.setCustomValidity('');
-                                                          }
-                                                        }
-                                                    </script>
-
-                                                </div>
-
-                                                <div class="col">
-                                                    {{formula|safe}}
-                                                    <!--<p style="
-                                    background-color: #deeaff;
-                                    color: black;
-                                    padding: 10px;
-                                    font-size:18px;
-                                    border-radius: 10px;
-                                ">
-                                                        <span style="background:#f2f2f2; font-size:14px;">{{settings.proximal_outcome_name}}</span> ~ <br>
-                                                        α<sub>0</sub> + α<sub>1</sub> * <span id="cov_name_span1" style="background:#f2f2f2; font-size:14px;">{{settings.covariate_name}}</span><br>
-                                                        + β<sub>0</sub>* <span style="background:#f2f2f2; font-size:14px;"> {{settings.intervention_component_name}} </span><br>
-                                                        <span id="beta_1">+ β<sub>1</sub>* <span id="cov_name_span2" style="background:#f2f2f2; font-size:14px;">{{settings.covariate_name}}</span> * <span style="background:#f2f2f2; font-size:14px;"> {{settings.intervention_component_name}} </span> <br></span>
-                                                        + ϵ <br>
-                                                        β<sub>1</sub>~N(<span style="color:red;">μ<sub>{β<sub>1</sub>}</sub>, σ<sub>{β<sub>1</sub>}<sup>2</sup></sub></span>) <br>
-                                                        <span style="color:red;"> We're asking for the red values.</span>
-                                                    </p>-->
-
                                                 </div>
                                             </div>
+
                                         </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <!-- [ tabs ] start -->
-                                <div class="col-sm-12">
-
-                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                               href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                Explanation</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                               href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                Example</a>
-                                        </li>
-                                    </ul> -->
-                                    <div class="tab-content" id="myTabContent">
-                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>Explanation</h5>
-                                            <p>The interaction coefficient is how much the treatment effect changes when
-                                                the covariate changes by one unit.</p>
-
-                                            <p>Many papers may not provide the prior mean and the prior standard
-                                                deviation of the interaction coefficient. If you don’t have good information 
-                                                about the prior mean, then we suggest you set the prior mean to 0. 
-                                                If you don’t have good information about the prior standard deviation, 
-                                                then we suggest you set the prior standard deviation to 3.16.</p> 
-                                                    
-                                            <p>If you have access to data from an MRT, please read [tutorial] to see how
-                                                     to run an analysis to find these values.</p>
-    
-                                            <p>Please read [tutorial] for more details.</p>
-                                        </div>
-                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>HeartSteps Example</h5>
-                                            <h6>Prior mean of the interaction coefficient</h6>
-                                            <p>-0.33    </p>
-                                            <h6>Prior standard deviation of the interaction coefficient</h6>
-                                            <p>1.38</p>
-                                            <p>HeartSteps V1 shows that Location is a promising tailoring variable.
-                                                However, the V1 paper does not provide us with an estimate of the interaction
-                                                coefficient. Thus, we demonstrate using the default values here, i.e.,
-                                                prior mean = 0 and prior standard deviation = 3.16. Since some papers may
-                                                provide this information, we create a mark-up example below based on
-                                                HeartSteps V2 to help you understand and find these values if
-                                                reported.</p>
-
-                                            <p>Say we find that the treatment effect is diminished by 28% if a subject
-                                                is neither at home nor at work (e<sup>b</sup> = .72, 95% CI = 0.05 to
-                                                11.36) when compared to being either at home or at work.</p>
-
-                                            <p>In this case, the prior mean of the interaction coefficient is
-                                                approximately log<sub>e</sub>(0.72)=-0.33. The prior standard deviation
-                                                is approximately (log<sub>e</sub>(11.36)-log<sub>e</sub>(0.05))/4=1.38.
-                                                (Note that all these values were log-transformed because the proximal
-                                                outcome is log-transformed.)</p>
-                                        </div>
-
                                     </div>
                                 </div>
 
 
-                                <!-- [ tabs ] end -->
-                            </div>
-                            <!-- [ Main Content ] end -->
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <a href="/covariates/settings/covariate_main_effect/{{project_uuid}}/{{cov_id}}"
-                                                   class="btn btn-outline-primary" role="button">Back</a>
-                                                <button type="submit" type="button"
-                                                        formaction="/covariates/settings/covariate_summary/{{project_uuid}}/{{cov_id}}"
-                                                        formmethod="post" class="btn btn-primary">Next
-                                                </button>
+                                <div class="row">
+                                    <!-- [ tabs ] start -->
+                                    <div class="col-sm-12">
+
+                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                    Explanation</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
+                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
+                                                    Example</a>
+                                            </li>
+                                        </ul> -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab"> -->
+                                            <div class="tab-item">
+                                                <h5>Explanation</h5>
+                                                <p>The interaction coefficient is how much the treatment effect changes when
+                                                    the covariate changes by one unit.</p>
+
+                                                <p>Many papers may not provide the prior mean and the prior standard
+                                                    deviation of the interaction coefficient. If you don’t have good information 
+                                                    about the prior mean, then we suggest you set the prior mean to 0. 
+                                                    If you don’t have good information about the prior standard deviation, 
+                                                    then we suggest you set the prior standard deviation to 3.16.</p> 
+                                                        
+                                                <p>If you have access to data from an MRT, please read [tutorial] to see how
+                                                        to run an analysis to find these values.</p>
+        
+                                                <p>Please read [tutorial] for more details.</p>
                                             </div>
-                                            <div class="form-group">
-                                                Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                            </div>
-                                        </div>
+                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                                aria-labelledby="profile-tab"> -->
+                                            <div class="tab-item">
+                                                <h5>HeartSteps Example</h5>
+                                                <h6>Prior mean of the interaction coefficient</h6>
+                                                <p>-0.33    </p>
+                                                <h6>Prior standard deviation of the interaction coefficient</h6>
+                                                <p>1.38</p>
+                                                <p>HeartSteps V1 shows that Location is a promising tailoring variable.
+                                                    However, the V1 paper does not provide us with an estimate of the interaction
+                                                    coefficient. Thus, we demonstrate using the default values here, i.e.,
+                                                    prior mean = 0 and prior standard deviation = 3.16. Since some papers may
+                                                    provide this information, we create a mark-up example below based on
+                                                    HeartSteps V2 to help you understand and find these values if
+                                                    reported.</p>
 
+                                                <p>Say we find that the treatment effect is diminished by 28% if a subject
+                                                    is neither at home nor at work (e<sup>b</sup> = .72, 95% CI = 0.05 to
+                                                    11.36) when compared to being either at home or at work.</p>
+
+                                                <p>In this case, the prior mean of the interaction coefficient is
+                                                    approximately log<sub>e</sub>(0.72)=-0.33. The prior standard deviation
+                                                    is approximately (log<sub>e</sub>(11.36)-log<sub>e</sub>(0.05))/4=1.38.
+                                                    (Note that all these values were log-transformed because the proximal
+                                                    outcome is log-transformed.)</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <!-- [ tabs ] end -->
+                                </div>
+                                <!-- [ Main Content ] end -->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <a href="/covariates/settings/covariate_main_effect/{{project_uuid}}/{{cov_id}}"
+                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    <button type="submit" type="button"
+                                                            formaction="/covariates/settings/covariate_summary/{{project_uuid}}/{{cov_id}}"
+                                                            formmethod="post" class="btn btn-primary">Next
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% include 'includes/comments.html' %}
 </div>
 <!-- [ Main Content ] end -->
 

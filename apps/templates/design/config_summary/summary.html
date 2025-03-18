@@ -68,167 +68,168 @@ function get_prob(abc){
         </script>
 
 <!-- [ Main Content ] start -->
-<div class="pcoded-main-container">
-    <div class="pcoded-wrapper">
-        <div class="pcoded-content">
-            <div class="pcoded-inner-content">
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3>Configuration Summary/ Configuration Summary</h3>
-                                        </div>
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Configuration Summary/ Configuration Summary</h3>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-12">
 
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5>Intervention probability</h5>
-                                                    <div class="rightsidebluetextbox" style="margin-top:0px;">
-                                                        <h6>
-                                                            Based on the information you entered on the previous screens,<br>
-                                                            the probability of providing <span
-                                                                style="background-color: #eeece9; color:#f85e5e;"> {{intervention_option_a}}</span> (Intervention Option A)
-                                                            given <span
-                                                            style="background-color: #eeece9; color:#f85e5e;">the tailoring variable values in the box below</span>  is:
-                                                        </h6>
-                                                        <h1 class="text-center"><span id="probability_field">{{probability}}</span></h1>
-                                                        <!-- <div class="text-center" style="color:red;"><b>NOTE:</b><small> 53% is a demo value. This value be computed by an algorithm once backend algorithm is complete. </small></div> -->
-                                                    </div>
-
-
-                                                    <div style="margin-top: 2%;">
-                                                        <h5>Tailoring variable values (play with the values!)</h5>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h5>Intervention probability</h5>
                                                         <div class="rightsidebluetextbox" style="margin-top:0px;">
-                                                            <!-- <h6><i class="fas fa-sliders-h"></i> Tailoring Variables Values </h6> -->
-                                                            <h6> Input different possible tailoring variable values to see how the intervention probability would 
-                                                                change with different tailoring-variable values.</h6>
-                                                            <hr>
-                                                            {% for i in range(tailoring_covs_num) %}
-                                                            <div class="form-group">
-                                                                <label class="form-control-label" for="personalization_method{{i}}">{{ tailoring_covs_names[i] }}
-                                                                    <span data-toggle='tooltip'
-                                                                          title='This value should satisfy your configuration of the value of the covariate'> <i
-                                                                            class=" align-text-top questionmark far fa-question-circle"></i></span></label>
-                                                                <input type="text" onchange="get_prob(this)" 
-                                                                           value="{{project_details.location_location}}"
-                                                                           id="personalization_method{{i}}" name="personalization_method"
-                                                                           class="form-control" required>
-                                                            </div>
-                                                            <p>{{ tailoring_covs_description[i] }}</p>
-                                                            <hr>
-                                                            {% endfor %}
-            
-            
+                                                            <h6>
+                                                                Based on the information you entered on the previous screens,<br>
+                                                                the probability of providing <span
+                                                                    style="background-color: #eeece9; color:#f85e5e;"> {{intervention_option_a}}</span> (Intervention Option A)
+                                                                given <span
+                                                                style="background-color: #eeece9; color:#f85e5e;">the tailoring variable values in the box below</span>  is:
+                                                            </h6>
+                                                            <h1 class="text-center"><span id="probability_field">{{probability}}</span></h1>
+                                                            <!-- <div class="text-center" style="color:red;"><b>NOTE:</b><small> 53% is a demo value. This value be computed by an algorithm once backend algorithm is complete. </small></div> -->
                                                         </div>
+
+
+                                                        <div style="margin-top: 2%;">
+                                                            <h5>Tailoring variable values (play with the values!)</h5>
+                                                            <div class="rightsidebluetextbox" style="margin-top:0px;">
+                                                                <!-- <h6><i class="fas fa-sliders-h"></i> Tailoring Variables Values </h6> -->
+                                                                <h6> Input different possible tailoring variable values to see how the intervention probability would 
+                                                                    change with different tailoring-variable values.</h6>
+                                                                <hr>
+                                                                {% for i in range(tailoring_covs_num) %}
+                                                                <div class="form-group">
+                                                                    <label class="form-control-label" for="personalization_method{{i}}">{{ tailoring_covs_names[i] }}
+                                                                        <span data-toggle='tooltip'
+                                                                            title='This value should satisfy your configuration of the value of the covariate'> <i
+                                                                                class=" align-text-top questionmark far fa-question-circle"></i></span></label>
+                                                                    <input type="text" onchange="get_prob(this)" 
+                                                                            value="{{project_details.location_location}}"
+                                                                            id="personalization_method{{i}}" name="personalization_method"
+                                                                            class="form-control" required>
+                                                                </div>
+                                                                <p>{{ tailoring_covs_description[i] }}</p>
+                                                                <hr>
+                                                                {% endfor %}
+                
+                
+                                                            </div>
+                                                        </div>
+
+                                                        <p>
+                                                        <ul>
+                                                            <li><b>Note 1</b>:This is the initial probability of delivering Intervention Option A.
+                                                                The intervention probability will change (be personalized) as data accrues during the study but will
+                                                                never go
+                                                                below
+                                                                <span id="configuration_note_low_bound">{{settings.get("intervention_probability_lower_bound")|float}}</span>
+                                                                or above
+                                                                <span id="configuration_note_high_bound">{{settings.get("intervention_probability_upper_bound")|float}}</span>
+                                                                given the lower and upper bounds you set to the probability of sending Intervention Option A.
+
+                                                            </li>
+                                                            <li><b>Note 2</b>: This page is just a test environment for you to check the effect of your design choices. 
+                                                                Your inputs here do not change the actual
+                                                                design of your pJITAI.
+                                                            </li>
+    <!--                                                         <li><b>Note 3</b>: If the prior mean of the interaction
+                                                                coefficient of a tailoring variable is zero, then this
+                                                                probability will not change when you change the values of
+                                                                that tailoring variable. However, once data accrues and
+                                                                indicates that the interaction coefficient is nonzero, the
+                                                                probability of providing Intervention Option A will change
+                                                                according to the values of the tailoring variable.
+                                                            </li> -->
+                                                        </ul>
+                                                        </p>
                                                     </div>
 
-                                                    <p>
-                                                    <ul>
-                                                        <li><b>Note 1</b>:This is the initial probability of delivering Intervention Option A.
-                                                            The intervention probability will change (be personalized) as data accrues during the study but will
-                                                            never go
-                                                            below
-                                                            <span id="configuration_note_low_bound">{{settings.get("intervention_probability_lower_bound")|float}}</span>
-                                                            or above
-                                                            <span id="configuration_note_high_bound">{{settings.get("intervention_probability_upper_bound")|float}}</span>
-                                                            given the lower and upper bounds you set to the probability of sending Intervention Option A.
-
-                                                        </li>
-                                                        <li><b>Note 2</b>: This page is just a test environment for you to check the effect of your design choices. 
-                                                            Your inputs here do not change the actual
-                                                            design of your pJITAI.
-                                                        </li>
-<!--                                                         <li><b>Note 3</b>: If the prior mean of the interaction
-                                                            coefficient of a tailoring variable is zero, then this
-                                                            probability will not change when you change the values of
-                                                            that tailoring variable. However, once data accrues and
-                                                            indicates that the interaction coefficient is nonzero, the
-                                                            probability of providing Intervention Option A will change
-                                                            according to the values of the tailoring variable.
-                                                        </li> -->
-                                                    </ul>
-                                                    </p>
                                                 </div>
-
                                             </div>
                                         </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <!-- [ tabs ] start -->
-                                <div class="col-sm-12">
-
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                               href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                Explanation</a>
-                                        </li>
-
-                                    </ul>
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab">
-                                            <p class="mb-0">In “Configuration Summary,” we show you the summary of your
-                                                pJITAI configuration.
-                                                Thompson Sampling adjusts the intervention probability based on the
-                                                values of the tailoring variables. Please input a value for each
-                                                tailoring variable.
-                                                From your configuration and inputs, we calculate the initial probability
-                                                of delivering intervention option A. The individual-specific probability
-                                                of delivering intervention option A will change (be personalized) as
-                                                data accrues on the individual.
-                                            </p>
-                                        </div>
-
                                     </div>
                                 </div>
 
 
-                                <!-- [ tabs ] end -->
-                            </div>
-                            <!-- [ Main Content ] end -->
-                            <!-- <div id="add_sensor">callingAjax</div> -->
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <a href="/model/settings/summary/{{project_uuid}}"
-                                                   class="btn btn-outline-primary" role="button">Back</a>
-                                                <a href="/configuration/final/{{project_uuid}}" class="btn btn-primary"
-                                                   role="button">Next</a>
-                                            </div>
-                                            <div class="form-group">
-                                                Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                            </div>
-                                        </div>
+                                <div class="row">
+                                    <!-- [ tabs ] start -->
+                                    <div class="col-sm-12">
 
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                    Explanation</a>
+                                            </li>
+
+                                        </ul>
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab">
+                                                <p class="mb-0">In “Configuration Summary,” we show you the summary of your
+                                                    pJITAI configuration.
+                                                    Thompson Sampling adjusts the intervention probability based on the
+                                                    values of the tailoring variables. Please input a value for each
+                                                    tailoring variable.
+                                                    From your configuration and inputs, we calculate the initial probability
+                                                    of delivering intervention option A. The individual-specific probability
+                                                    of delivering intervention option A will change (be personalized) as
+                                                    data accrues on the individual.
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <!-- [ tabs ] end -->
+                                </div>
+                                <!-- [ Main Content ] end -->
+                                <!-- <div id="add_sensor">callingAjax</div> -->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <a href="/model/settings/summary/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    <a href="/configuration/final/{{project_uuid}}" class="btn btn-primary"
+                                                    role="button">Next</a>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% include 'includes/comments.html' %}
 </div>
 <!-- [ Main Content ] end -->
 

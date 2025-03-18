@@ -8,7 +8,7 @@
 {% block content %}
 
 <!-- [ Main Content ] start -->
-<div class="general-setting-grid-container">
+<div class="grid-container">
     <div class="pcoded-main-container">
         <div class="pcoded-wrapper">
             <div class="pcoded-content">
@@ -172,89 +172,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Comments</h3>
-                    <!-- <div class="chat-container"> -->
-                        {% for c in comments %}
-                        <form>
-                            <div class="chat-message">
-                                <p style="margin: 0; padding: 0;"><b>{{c.created_by}}</b></p>
-                                <p style="font-size: 12px;">{{c.timestamp}}</p>
-                                <span id="comment-text-{{ c.id }}">{{ c.content['comment-input'] }}</span>
-                                <textarea name="comment-input" id="comment-edit-{{ c.id }}" class="form-control" style="display: none;">{{ c.content['comment-input'] }}</textarea>
-                                {% if c.created_by|string == user|string %}
-                                    <ul class="navbar-nav ml-lg-auto float-right" data-id="{{ c.id }}">
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link nav-link-icon" href="#"
-                                            id="navbar-default_dropdown_1" role="button"
-                                            data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-default_dropdown_1">
-                                                <a class="dropdown-item edit-comment" data-id="{{ c.id }}">
-                                                    <i class="fas fa-edit"></i> Edit the comment</a>
-                                                <!-- <a class="dropdown-item save-comment" data-id="{{ c.id }}" style="display: none;">
-                                                    <i class="fas fa-save"></i> Save</a> -->
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" style="color:#f65959"
-                                                    href="/comment/delete/{{c.id}}"
-                                                    onclick="return confirm('Are you sure you want to delete the comment?');"><i class="fa fa-trash" aria-hidden="true"></i> Delete the comment</a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <button type="submit" style="display: none;" 
-                                        class="btn btn-comment save-comment" data-id="{{ c.id }}"
-                                        formmethod="post" formaction="/comment/edit/{{c.id}}">Save</button>
-                                {% endif %}
-                            </div>
-                        </form>
-                        {% endfor %}
-                        <!-- <div class="chat-message">
-                            <p style="margin: 0; padding: 0;"><b>Young Suh Hong</b></p>
-                            <p style="font-size: 12px;">{{modified_on.strftime('%b %d %Y %I:%M %p')}}</p>
-                            Description of the study should include...
-                        </div>
-                        <div class="chat-message">
-                            <p style="margin: 0; padding: 0;"><b>Young Suh Hong</b></p>
-                            <p style="font-size: 12px;">{{modified_on.strftime('%b %d %Y %I:%M %p')}}</p>
-                            The name of the intervention component should be corrected.
-                        </div> -->
-                    <!-- </div> -->
-                    <form>
-                        <div class="comment-box">
-                            <textarea name="comment-input" id="comment-input" required
-                                rows="4" class="form-control"
-                                placeholder="Put your comment here..."></textarea>
-                            <button type="submit" formmethod="post" formaction="/comment/{{project_uuid}}/general_settings"
-                            class="btn btn-comment">Submit
-                            </button>
-                        </div>
-                    </form>
-                    <script>
-                        function display_edit() {
-                            document.querySelectorAll(".edit-comment").forEach(button => {
-                                button.addEventListener("click", function () {
-                                    let commentId = this.getAttribute("data-id");
-                                    document.getElementById(`comment-text-${commentId}`).style.display = "none";
-                                    document.getElementById(`comment-edit-${commentId}`).style.display = "block";
-                                    this.style.display = "none"; // Don't show edit button anymore
-                                    document.querySelector(`.navbar-nav[data-id="${commentId}"]`).style.display = "none";
-                                    document.querySelector(`.save-comment[data-id="${commentId}"]`).style.display = "block"; // Show save button
-                                });
-                            });
-                        }
-                        $(document).ready(function(){
-                            $(".edit-comment").on("click", display_edit);
-                        });
-                    </script>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include 'includes/comments.html' %}
 </div>
 <!-- [ Main Content ] end -->
 
