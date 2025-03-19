@@ -39,14 +39,30 @@ from apps.algorithms.models import Projects
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
 import json
 
+def get_all_comments(project_uuid, page_name):
+    comments_obj = (db.session.query(Comment)
+                    .filter(Comment.proj_uuid == project_uuid)
+                    .order_by(Comment.timestamp.asc())
+                    .all())
+    comments_details = []
+    if comments_obj:
+        for c in comments_obj:
+            if c.page_name != page_name:
+                comments_details.append(c.as_dict())
+    return comments_details
+
 def get_comments(project_uuid, page_name):
     if project_uuid:
-        comments_obj = db.session.query(Comment).filter(Comment.proj_uuid == project_uuid).filter(Comment.page_name == page_name).all()
+        comments_obj = (db.session.query(Comment)
+                        .filter(Comment.proj_uuid == project_uuid)
+                        .filter(Comment.page_name == page_name)
+                        .order_by(Comment.timestamp.asc())
+                        .all())
         comments_details = []
         if comments_obj:            
             for c in comments_obj:
                 comments_details.append(c.as_dict())
-        print(comments_details)
+        # print(comments_details)
         return comments_details
 
 def save_decision(decision: Decision):
