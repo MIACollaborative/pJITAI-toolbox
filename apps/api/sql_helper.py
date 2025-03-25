@@ -47,8 +47,7 @@ def get_all_comments(project_uuid, page_name):
     comments_details = []
     if comments_obj:
         for c in comments_obj:
-            if c.page_name != page_name:
-                comments_details.append(c.as_dict())
+            comments_details.append(c.as_dict())
     return comments_details
 
 def get_comments(project_uuid, page_name):

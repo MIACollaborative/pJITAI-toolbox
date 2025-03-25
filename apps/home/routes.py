@@ -191,6 +191,8 @@ def project_settings(setting_type, project_uuid=None):
     comments_for_that_page = get_comments(project_uuid, page_name)
     all_comments = get_all_comments(project_uuid, page_name)
 
+    print('all_comments: ', all_comments)
+
     if project_details.get("general_settings"):
         general_settings = project_details.get("general_settings", {})
         modified_on = project_details.get("modified_on", "")

@@ -7775,6 +7775,18 @@ a.btn-theme.active {
   background-color: #04a9f5;
   border-color: #04a9f5;
 }
+/* Comment Container */
+.comment-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
 
 /* Alternate buttons */
 .btn-primary {
