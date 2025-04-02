@@ -42,7 +42,7 @@ from apps.home.helper import get_project_details, update_general_settings, updat
     update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages
 from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
-from apps.api.sql_helper import get_comments, get_all_comments
+from apps.api.sql_helper import get_comments, get_all_comments, save_survey, get_survey
 
 @blueprint.route('/comment/delete/<comment_id>', methods=['GET'])
 @login_required
@@ -56,7 +56,7 @@ def delete_comment(comment_id):
 @login_required
 def edit_comment(comment_id):
     comment = db.session.query(Comment).filter(Comment.id == comment_id).first()
-    comment.content = request.form.to_dict()
+    comment.content = request.form.get("comment-input")
     comment.timestamp = datetime.now()
     db.session.commit()
 
@@ -70,14 +70,16 @@ def add_comment(project_uuid, page_name):
     user_id = current_user.get_id()
     displayname = current_user.displayname
     timestamp = datetime.now()
-    content = request.form.to_dict()
+    content = request.form.get("comment-input")
+    type = request.form.get("comment-type")
 
     comment = Comment(created_by=displayname,
                       user_id=user_id,
                       proj_uuid=project_uuid,
                       timestamp=timestamp,
                       content=content,
-                      page_name=page_name)
+                      page_name=page_name,
+                      type=type)
     db.session.add(comment)
     db.session.commit()
 
@@ -172,6 +174,7 @@ def mark_project_finalized(project_uuid):
 @blueprint.route('/projects/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])
 @login_required
 def project_settings(setting_type, project_uuid=None):
+    print('setting type: ', setting_type)
     user_id = current_user.get_id()
     general_settings = {}
     modified_on = ""
@@ -191,7 +194,7 @@ def project_settings(setting_type, project_uuid=None):
     comments_for_that_page = get_comments(project_uuid, page_name)
     all_comments = get_all_comments(project_uuid, page_name)
 
-    print('all_comments: ', all_comments)
+    # print('all_comments: ', all_comments)
 
     if project_details.get("general_settings"):
         general_settings = project_details.get("general_settings", {})
@@ -230,6 +233,10 @@ def project_settings(setting_type, project_uuid=None):
     if setting_type == "general":
         return render_template("design/projects/general_settings.html", segment="general_settings", all_menus=all_menus,
                                menu_number=1, project_name=project_name, modified_on=modified_on,
+                               general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
+    elif setting_type == "collaborators":
+        return render_template("design/projects/collaborators.html", segment="general_settings", all_menus=all_menus,
+                               menu_number=0, project_name=project_name, modified_on=modified_on,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
     elif setting_type == "personalized_method":
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",
@@ -594,12 +601,20 @@ def configuration_summary(config_type, project_uuid):
 
     if config_type == "summary":
         page_name = "configuration_summary"
+    elif config_type == "final_survey":
+        survey_details = get_survey(project_uuid=project_uuid)
+        # print(survey_details)
+        page_name = "configuration_final_survey"
     else:
         page_name = "configuration_final"
 
     all_comments = get_all_comments(project_uuid, page_name)
     comments_for_that_page = get_comments(project_uuid, page_name)
     user = user_id
+
+    if request.method == 'POST':
+        survey = request.form.to_dict()
+        save_survey(project_uuid=project_uuid, survey=survey)
 
     #test
     project_details['location_location'] = 0
@@ -649,9 +664,13 @@ def configuration_summary(config_type, project_uuid):
                                tailoring_covs_description = tailoring_covs_description,
                                all_menus=all_menus, menu_number=16, modified_on=modified_on, project_uuid=project_uuid, 
                                probability=prob_str, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
+    elif config_type == "final_survey":
+        return render_template("design/config_summary/final_survey.html", segment="configuration_survey", settings=settings,
+                               all_menus=all_menus, menu_number=17, modified_on=modified_on, project_uuid=project_uuid, survey=survey_details,
+                               comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
     elif config_type == "final":
         return render_template("design/config_summary/final.html", segment="configuration_final", settings=settings,
-                               all_menus=all_menus, menu_number=17, modified_on=modified_on, project_uuid=project_uuid,
+                               all_menus=all_menus, menu_number=18, modified_on=modified_on, project_uuid=project_uuid,
                                comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
 
 

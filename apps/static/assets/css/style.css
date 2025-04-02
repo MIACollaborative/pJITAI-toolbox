@@ -5431,7 +5431,7 @@ body.layout-6 .pcoded-content .pcoded-inner-content {
 .grid-container {
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 3.5fr 1fr;
+  grid-template-columns: 3.5fr 1.1fr;
 }
 body.layout-6 .card {
   border-radius: 5px;
@@ -7755,6 +7755,21 @@ a.btn-theme.active {
   flex-direction: column;
   gap: 10px;
   background-color: #e2eaf9;
+  color: black;
+}
+.chat-message-feedback {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #FFFF8A;
   color: black;
 }
 /* Comments buttons */

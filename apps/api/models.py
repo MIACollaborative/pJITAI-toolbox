@@ -206,6 +206,24 @@ class Comment(db.Model):
                            nullable=False)
     content = db.Column(db.JSON, default={})
     page_name = db.Column('page_name', db.String(100))
+    type = db.Column('type', db.String(100))
+
+    def __init__(self, **kwargs):
+        for property, value in kwargs.items():
+            setattr(self, property, value)
+    
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+
+@dataclass
+class Survey(db.Model):
+    __tablename__ = 'survey'
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    proj_uuid = db.Column(db.String(36),
+                          db.ForeignKey('projects.uuid'),
+                          nullable=False)
+    survey_questions = db.Column('survey_questions', db.JSON)
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
