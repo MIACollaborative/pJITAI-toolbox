@@ -181,6 +181,7 @@ def project_settings(setting_type, project_uuid=None):
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("study_name", "")
+    collaborators = project_details.get("general_settings", {}).get("collaborators", {})
 
     if setting_type == "general":
         page_name = "general_settings"
@@ -222,7 +223,8 @@ def project_settings(setting_type, project_uuid=None):
                      algo_type="algorithm_type",
                      modified_on=datetime.now(),
                      created_on=datetime.now(),
-                     auth_token=auth_token).save()
+                     auth_token=auth_token,
+                     collaborators={}).save()
 
     all_menus = get_project_menu_pages(user_id, project_uuid)
     user = user_id
@@ -235,8 +237,8 @@ def project_settings(setting_type, project_uuid=None):
                                menu_number=1, project_name=project_name, modified_on=modified_on,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
     elif setting_type == "collaborators":
-        return render_template("design/projects/collaborators.html", segment="general_settings", all_menus=all_menus,
-                               menu_number=0, project_name=project_name, modified_on=modified_on,
+        return render_template("design/projects/collaborators.html", segment="general_collaborators", all_menus=all_menus,
+                               menu_number=0, project_name=project_name, modified_on=modified_on, collaborators=collaborators, all_users=[{'displayname': 'Young Suh Hong', 'email': 'test@gmail.com'}],
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
     elif setting_type == "personalized_method":
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",
@@ -602,8 +604,8 @@ def configuration_summary(config_type, project_uuid):
     if config_type == "summary":
         page_name = "configuration_summary"
     elif config_type == "final_survey":
-        survey_details = get_survey(project_uuid=project_uuid)
-        # print(survey_details)
+        survey_details = get_survey(project_uuid=project_uuid)['survey_questions']
+        print(survey_details)
         page_name = "configuration_final_survey"
     else:
         page_name = "configuration_final"
