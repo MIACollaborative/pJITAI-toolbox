@@ -5,6 +5,7 @@ from flask import request
 
 from apps import db
 from apps.algorithms.models import Projects, ProjectMenu
+from apps.authentication.models import Users
 
 
 def get_project_details(project_uuid, user_id):
@@ -75,4 +76,14 @@ def get_project_menu_pages(user_id, project_uuid):
         ProjectMenu.project_uuid == project_uuid).all()
     for ap in all_pages:
         result.append(ap.page_url)
+    return result
+
+def get_all_users(user_id):
+    result = []
+    all_users = db.session.query(Users).filter(Users.id != user_id).all()
+    for u in all_users:
+        user = {}
+        user['displayname'] = u.displayname
+        user['email'] = u.email
+        result.append(user)
     return result

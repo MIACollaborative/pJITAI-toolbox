@@ -39,7 +39,7 @@ from apps import db
 from apps.algorithms.models import Projects
 from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
-    update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages
+    update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users
 from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
 from apps.api.sql_helper import get_comments, get_all_comments, save_survey, get_survey
@@ -229,6 +229,9 @@ def project_settings(setting_type, project_uuid=None):
     all_menus = get_project_menu_pages(user_id, project_uuid)
     user = user_id
 
+    all_users = get_all_users(user_id)
+    this_user = current_user.email
+
     if not modified_on:
         modified_on = datetime.now()
 
@@ -238,7 +241,7 @@ def project_settings(setting_type, project_uuid=None):
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
     elif setting_type == "collaborators":
         return render_template("design/projects/collaborators.html", segment="general_collaborators", all_menus=all_menus,
-                               menu_number=0, project_name=project_name, modified_on=modified_on, collaborators=collaborators, all_users=[{'displayname': 'Young Suh Hong', 'email': 'test@gmail.com'}],
+                               menu_number=0, project_name=project_name, modified_on=modified_on, collaborators=collaborators, all_users=all_users, this_user=this_user,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
     elif setting_type == "personalized_method":
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",

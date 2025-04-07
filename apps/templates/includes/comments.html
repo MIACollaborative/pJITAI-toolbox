@@ -8,10 +8,10 @@
                     <a class="nav-link active" id="page-comments-tab" data-toggle="tab" href="#page-comments" role="tab" aria-controls="page-comments" aria-selected="true">Comments</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="all-comments-tab" data-toggle="tab" href="#all-comments" role="tab" aria-controls="all-comments" aria-selected="false">Feedback</a>
+                    <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Feedback</a>
                 </li>
                 <!-- <li class="nav-item">
-                    <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="all-comments" aria-selected="false">Feedback</a>
+                    <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Feedback</a>
                 </li> -->
               </ul>
               <!-- Tab 1: Comments for that page -->
@@ -55,7 +55,7 @@
                 </div>
                 <!-- Tab 1 end -->
                 <!-- Tab 2: All Comments -->
-                <!-- <div id="all-comments" class="tab-pane" aria-labelledby="all-comments-tab">
+                <!-- <div id="feedback" class="tab-pane" aria-labelledby="feedback-tab">
                   {% for c in all_comments %}
                   {% if c.type == "comment" %}
                   <form>
@@ -95,7 +95,7 @@
                 </div> -->
               <!-- Tab 2 end -->
                <!-- Tab 2: Feedback -->
-               <div id="all-comments" class="tab-pane" aria-labelledby="all-comments-tab">
+               <div id="feedback" class="tab-pane" aria-labelledby="feedback-tab">
                 {% for c in comments_for_that_page %}
                 {% if c.type == "feedback" %}
                 <form>
@@ -166,6 +166,32 @@
                   $(document).ready(function(){
                       $(".edit-comment").on("click", display_edit);
                   });
+
+                  function set_option(type) {  // set <option> automatically
+                    const commentType = document.querySelector('#comment-type');
+                    commentType.value = type;
+                  }
+                  $(document).ready(function() {
+                    $("#page-comments-tab").on("click", function() {
+                        set_option("comment")
+                    });
+                    $("#feedback-tab").on("click", function() {
+                        set_option("feedback")
+                    });
+                  });
+
+                  function set_tab(type) {
+                    if (type == "feedback") {
+                        $('#feedback-tab').tab('show');
+                    } else {
+                        $('#page-comments-tab').tab('show');
+                    }
+                  }
+                  $(document).ready(function(){
+                    $("#comment-type").on("change", function() {
+                        set_tab(this.value);
+                    })
+                  }) 
               </script>
           </div>
       </div>
