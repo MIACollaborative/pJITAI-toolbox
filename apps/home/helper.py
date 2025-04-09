@@ -30,6 +30,26 @@ def update_general_settings(data, project_details_obj):
         project_details_obj.modified_on = datetime.now()
         db.session.commit()
 
+def update_general_settings_collaborators(data, project_details_obj):  # data: email
+    if project_details_obj:
+        gen_settings = copy.deepcopy(project_details_obj.general_settings)
+        print('gen_settings:', gen_settings)
+
+        user = db.session.query(Users).filter(Users.email == data).first()
+        new_collaborator = {'email': data, 'displayname': user.displayname}
+
+        if gen_settings.get('collaborators'):
+            existing_collabs = gen_settings['collaborators']
+            if not any(c['email'] == data for c in existing_collabs):
+                existing_collabs.append(new_collaborator)
+            gen_settings['collaborators'] = existing_collabs
+        else:
+            # TODO: add the current user as a collaborator
+            gen_settings['collaborators'] = [new_collaborator]
+        print('after: ', gen_settings)
+        project_details_obj.general_settings = gen_settings
+        project_details_obj.modified_on = datetime.now()
+        db.session.commit()
 
 def update_intervention_settings(data, project_details_obj):
     if project_details_obj:

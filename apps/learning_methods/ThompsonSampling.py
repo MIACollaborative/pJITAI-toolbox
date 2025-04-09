@@ -362,7 +362,7 @@ class ThompsonSampling(LearningMethodBase):
             i = 0
             for feature_name in self._feature_name_list:
                 # We will need to check the eligibility as well!
-                if (getattr(row, feature_name + '_validation_status_code') == 'SUCCESS'):
+                if (getattr(row, feature_name + '_validation_status_code') == ['SUCCESS']):
                     ### Jane2: We need to stanadardize the state
                     unstand_state = getattr(row, feature_name)
                     state.append((unstand_state - self._state_med[i,0]) / self._state_half_range[i,0])

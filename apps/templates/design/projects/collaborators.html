@@ -31,11 +31,11 @@
                       <div class="form-group" style="margin-bottom: 30px;">
                         <label class="form-control-label" for="study_name">Current Collaborators</label>
                         {% if collaborators %}
-                        {% for c in collaborators %}
-                        <ul>
-                          <li>{{c.displayname}} ({{c.email}})</li>
-                        </ul>
-                        {% endfor %}
+                          {% for c in collaborators %}
+                          <ul>
+                            <li>{{c.displayname}} ({{c.email}})</li>
+                          </ul>
+                          {% endfor %}
                         {% else %}
                         <p>There are no collaborators at this moment.</p>
                         {% endif %}
@@ -43,15 +43,16 @@
                       <div class="form-group">
                         <label class="form-control-label" for="search-group">Search Users by Email</label>
                         <div style="display: grid; grid-auto-flow: column; grid-template-columns: 1fr auto; grid-column-gap: 5px" id="search-group">
-                          <input type="text" name="search-collaborators" class="form-control" placeholder="Email of the user" id="user-email">
+                          <input type="text" name="collaborators" class="form-control" placeholder="Email of the user" id="user-email">
                           <button type="button" class="btn btn-warning" style="margin-bottom: 0px;" id="search-btn"><i class="fa fa-search"></i>Search</button>
                         </div>
                       </div>
                       <div>
                         <p style="display: none;" id="user-match"></p>
-                        <button type="button" style="display: none;" 
+                        <button type="submit" style="display: none;" 
                           id="invite-btn" class="btn btn-outline-warning"
-                          onclick="return confirm('The user has been added as a collaborator!');"><i class="fa fa-paper-plane"></i>Add</button>
+                          onclick="return confirm('The user has been added as a collaborator!');"
+                          formmethod="post" formaction="/projects/settings/collaborators/{{project_uuid}}"><i class="fa fa-paper-plane"></i>Add</button>
                       </div>
                       <p id="no-match-user" style="display: none;">There are no matching user with this email.</p>
                       <p id="use-other-user" style="display: none;">You are already added as a collaborator.</p>
@@ -70,8 +71,9 @@
                       // console.log('checking email: ', email);
                       const allUsers = JSON.parse('{{ all_users | tojson | safe }}');
                       const thisUser = JSON.parse('{{ this_user | tojson | safe }}');
+                      let found = false;
 
-                      document.getElementById('user-email').value = '';
+                      // document.getElementById('user-email').value = '';
 
                       if (email == thisUser) {
                         document.getElementById('use-other-user').style.display = 'block';
@@ -81,9 +83,12 @@
                             document.getElementById('user-match').innerText = u.displayname + ' (' + u.email + ')';
                             document.getElementById('user-match').style.display = 'block';
                             document.getElementById('invite-btn').style.display = 'block';
-                          } else {
-                            document.getElementById('no-match-user').style.display = 'block';
-                          }
+                            document.getElementById('no-match-user').style.display = 'none';
+                            found = true;
+                          }                           
+                        }
+                        if (!found) {
+                          document.getElementById('no-match-user').style.display = 'block';
                         }
                       } 
                     }

@@ -39,7 +39,7 @@ from apps import db
 from apps.algorithms.models import Projects
 from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
-    update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users
+    update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users, update_general_settings_collaborators
 from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
 from apps.api.sql_helper import get_comments, get_all_comments, save_survey, get_survey
@@ -182,6 +182,7 @@ def project_settings(setting_type, project_uuid=None):
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("study_name", "")
     collaborators = project_details.get("general_settings", {}).get("collaborators", {})
+    print('saved_collaborators: ', collaborators)
 
     if setting_type == "general":
         page_name = "general_settings"
@@ -202,10 +203,13 @@ def project_settings(setting_type, project_uuid=None):
         modified_on = project_details.get("modified_on", "")
 
     if request.method == 'POST':
-        # print('here: ', request.form.to_dict())
         add_menu(user_id, project_uuid, request.path)
         if project_details_obj:
-            update_general_settings(request.form.to_dict(), project_details_obj)
+            if 'collaborators' in request.form.to_dict() and setting_type == 'collaborators':
+                print('collabs!')
+                update_general_settings_collaborators(request.form.to_dict()['collaborators'], project_details_obj)
+            else:
+                update_general_settings(request.form.to_dict(), project_details_obj)
             project_details, project_details_obj = get_project_details(project_uuid, user_id) #TWH Update after write
             project_name = project_details.get("general_settings", {}).get("study_name", "") #TWH Update after write
             general_settings = project_details.get("general_settings", {}) #TWH Update after write
