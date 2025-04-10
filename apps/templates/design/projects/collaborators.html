@@ -32,9 +32,13 @@
                         <label class="form-control-label" for="study_name">Current Collaborators</label>
                         {% if collaborators %}
                           {% for c in collaborators %}
-                          <ul>
-                            <li>{{c.displayname}} ({{c.email}})</li>
-                          </ul>
+                            <ul>
+                              {% if c.email == this_user %}
+                                <li>You</li>
+                              {% else %}
+                                <li>{{c.displayname}} ({{c.email}})</li>
+                              {% endif %}
+                            </ul>
                           {% endfor %}
                         {% else %}
                         <p>There are no collaborators at this moment.</p>
@@ -101,7 +105,7 @@
                   <div class="tab-content" id="myTabContent">
                     <div class="tab-item">
                       <h4>Explanation</h4>
-                      <p>In this page, you can add collaborators for this project by sending invitation to the user. The user must have a pJITAI Toolbox account in order to be a collaborator.</p>
+                      <p>In this page, you can add collaborators for this project by searching via user's email. The user must have a pJITAI Toolbox account in order to be a collaborator.</p>
                     </div>
                   </div>
                 </div>

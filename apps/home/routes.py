@@ -57,7 +57,7 @@ def delete_comment(comment_id):
 def edit_comment(comment_id):
     comment = db.session.query(Comment).filter(Comment.id == comment_id).first()
     comment.content = request.form.get("comment-input")
-    comment.timestamp = datetime.now()
+    # comment.timestamp = datetime.now()
     db.session.commit()
 
     return redirect(request.referrer)
@@ -98,8 +98,22 @@ def projects(project_type):
             desc(Projects.created_on)).all()
     elif project_type == "in_progress":
         segment += "in_progress"
-        all_projects = db.session.query(Projects).filter(Projects.created_by == user_id).order_by(
-            desc(Projects.created_on)).filter(Projects.project_status == 0).all()
+        all_projects_raw = db.session.query(Projects).filter(Projects.project_status == 0).order_by(
+            desc(Projects.created_on)).all()
+        print('raw: ', all_projects_raw)
+        print('user_id:', user_id)
+        # all_projects = db.session.query(Projects).filter(Projects.created_by == user_id).order_by(
+        #     desc(Projects.created_on)).filter(Projects.project_status == 0).all()
+        all_projects = [
+            p for p in all_projects_raw 
+            if (int(p.created_by) == int(user_id)) 
+            or (
+                p.general_settings and
+                isinstance(p.general_settings.get("collaborators"), list) and
+                any(int(c.get("id")) == int(user_id) for c in p.general_settings["collaborators"])
+            )
+        ]
+        print('all_projects: ', all_projects)
     elif project_type == "finalized":
         segment += "finalized"
         all_projects = db.session.query(Projects).filter(Projects.created_by == user_id).order_by(
@@ -181,8 +195,6 @@ def project_settings(setting_type, project_uuid=None):
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("study_name", "")
-    collaborators = project_details.get("general_settings", {}).get("collaborators", {})
-    print('saved_collaborators: ', collaborators)
 
     if setting_type == "general":
         page_name = "general_settings"
@@ -205,9 +217,11 @@ def project_settings(setting_type, project_uuid=None):
     if request.method == 'POST':
         add_menu(user_id, project_uuid, request.path)
         if project_details_obj:
-            if 'collaborators' in request.form.to_dict() and setting_type == 'collaborators':
-                print('collabs!')
-                update_general_settings_collaborators(request.form.to_dict()['collaborators'], project_details_obj)
+            if setting_type == 'collaborators':
+                if 'collaborators' not in request.form.to_dict():  # When calling collaborators for the first time
+                    update_general_settings_collaborators(current_user.email, project_details_obj)
+                else:  # Update collaborators 
+                    update_general_settings_collaborators(request.form.to_dict()['collaborators'], project_details_obj)
             else:
                 update_general_settings(request.form.to_dict(), project_details_obj)
             project_details, project_details_obj = get_project_details(project_uuid, user_id) #TWH Update after write
@@ -235,6 +249,7 @@ def project_settings(setting_type, project_uuid=None):
 
     all_users = get_all_users(user_id)
     this_user = current_user.email
+    collaborators = project_details.get("general_settings", {}).get("collaborators", {})
 
     if not modified_on:
         modified_on = datetime.now()
