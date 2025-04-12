@@ -31,7 +31,7 @@ import traceback
 
 import pandas as pd
 from flask import jsonify, request, render_template
-from flask_login import login_required
+from flask_login import login_required, current_user
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -346,11 +346,19 @@ def proj(uuid):
     min_proximal = float(proj.model_settings.get("min_proximal_outcome"))
     random_proximal = (random.random() * (max_proximal - min_proximal)) + min_proximal
 
+    modified_on = ""
+    modified_on = proj.as_dict().get("modified_on", "")
+    if not modified_on:
+        modified_on = datetime.now()
+
+    user_id = current_user.get_id()
+
     if not proj:
         return {"status": "error",
                 "message": "Project ID does not exist or project has not been finalized yet."}, 400
     segment = 'main_project_page_finalized'
-    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, segment=segment, time=time, base_url=base_url, token=proj.auth_token, max_id=max_id, random_proximal=random_proximal)
+    return render_template("design/projects/final_page.html", project_uuid=uuid, proj=proj.as_dict(), covariate_names=covariate_names, user_id=user_id,
+                           segment=segment, time=time, base_url=base_url, token=proj.auth_token, max_id=max_id, random_proximal=random_proximal, modified_on=modified_on)
 
 def get_algo_name(uuid):
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()

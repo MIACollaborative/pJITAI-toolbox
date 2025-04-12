@@ -100,8 +100,6 @@ def projects(project_type):
         segment += "in_progress"
         all_projects_raw = db.session.query(Projects).filter(Projects.project_status == 0).order_by(
             desc(Projects.created_on)).all()
-        print('raw: ', all_projects_raw)
-        print('user_id:', user_id)
         # all_projects = db.session.query(Projects).filter(Projects.created_by == user_id).order_by(
         #     desc(Projects.created_on)).filter(Projects.project_status == 0).all()
         all_projects = [
@@ -113,11 +111,19 @@ def projects(project_type):
                 any(int(c.get("id")) == int(user_id) for c in p.general_settings["collaborators"])
             )
         ]
-        print('all_projects: ', all_projects)
     elif project_type == "finalized":
         segment += "finalized"
-        all_projects = db.session.query(Projects).filter(Projects.created_by == user_id).order_by(
+        all_projects_raw = db.session.query(Projects).order_by(
             desc(Projects.created_on)).filter(Projects.project_status == 1).all()
+        all_projects = [
+            p for p in all_projects_raw
+            if (int(p.created_by) == int(user_id))
+            or (
+                p.general_settings and
+                isinstance(p.general_settings.get("collaborators"), list) and
+                any(int(c.get("id")) == int(user_id) for c in p.general_settings["collaborators"])
+            )
+        ]
 
     for aproj in all_projects:
         aproj.general_settings["project_uuid"] = aproj.uuid
@@ -217,11 +223,11 @@ def project_settings(setting_type, project_uuid=None):
     if request.method == 'POST':
         add_menu(user_id, project_uuid, request.path)
         if project_details_obj:
-            if setting_type == 'collaborators':
-                if 'collaborators' not in request.form.to_dict():  # When calling collaborators for the first time
-                    update_general_settings_collaborators(current_user.email, project_details_obj)
-                else:  # Update collaborators 
-                    update_general_settings_collaborators(request.form.to_dict()['collaborators'], project_details_obj)
+            if setting_type == 'collaborators' and 'collaborators' in request.form.to_dict():
+                # if 'collaborators' not in request.form.to_dict():  # When calling collaborators for the first time
+                #     update_general_settings_collaborators(current_user.email, project_details_obj)
+                # else:  # Update collaborators 
+                update_general_settings_collaborators(request.form.to_dict()['collaborators'], project_details_obj)
             else:
                 update_general_settings(request.form.to_dict(), project_details_obj)
             project_details, project_details_obj = get_project_details(project_uuid, user_id) #TWH Update after write
@@ -689,7 +695,7 @@ def configuration_summary(config_type, project_uuid):
                                all_menus=all_menus, menu_number=16, modified_on=modified_on, project_uuid=project_uuid, 
                                probability=prob_str, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
     elif config_type == "final_survey":
-        return render_template("design/config_summary/final_survey.html", segment="configuration_survey", settings=settings,
+        return render_template("design/config_summary/final_survey.html", segment="static_pages_survey", settings=settings,
                                all_menus=all_menus, menu_number=17, modified_on=modified_on, project_uuid=project_uuid, survey=survey_details,
                                comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
     elif config_type == "final":

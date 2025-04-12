@@ -33,11 +33,11 @@
                         {% if collaborators %}
                           {% for c in collaborators %}
                             <ul>
-                              {% if c.email == this_user %}
+                              <!-- {% if c.email == this_user %}
                                 <li>You</li>
-                              {% else %}
+                              {% else %} -->
                                 <li>{{c.displayname}} ({{c.email}})</li>
-                              {% endif %}
+                              <!-- {% endif %} -->
                             </ul>
                           {% endfor %}
                         {% else %}
@@ -59,7 +59,7 @@
                           formmethod="post" formaction="/projects/settings/collaborators/{{project_uuid}}"><i class="fa fa-paper-plane"></i>Add</button>
                       </div>
                       <p id="no-match-user" style="display: none;">There are no matching user with this email.</p>
-                      <p id="use-other-user" style="display: none;">You are already added as a collaborator.</p>
+                      <p id="use-other-user" style="display: none;">You cannot add yourself as a collaborator.</p>
                     </div>
                   </div>
                   <script>
