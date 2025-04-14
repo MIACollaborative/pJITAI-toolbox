@@ -227,7 +227,7 @@ def project_settings(setting_type, project_uuid=None):
                 # if 'collaborators' not in request.form.to_dict():  # When calling collaborators for the first time
                 #     update_general_settings_collaborators(current_user.email, project_details_obj)
                 # else:  # Update collaborators 
-                update_general_settings_collaborators(request.form.to_dict()['collaborators'], project_details_obj)
+                update_general_settings_collaborators(request.form.to_dict()['collaborators'], project_details_obj, current_user.email)
             else:
                 update_general_settings(request.form.to_dict(), project_details_obj)
             project_details, project_details_obj = get_project_details(project_uuid, user_id) #TWH Update after write
