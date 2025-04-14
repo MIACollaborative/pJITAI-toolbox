@@ -39,10 +39,10 @@ from apps import db
 from apps.algorithms.models import Projects
 from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
-    update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users, update_general_settings_collaborators
+    update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users, update_general_settings_collaborators, get_survey_details
 from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
-from apps.api.sql_helper import get_comments, get_all_comments, save_survey, get_survey
+from apps.api.sql_helper import get_comments, get_all_comments, save_survey, update_survey
 
 @blueprint.route('/comment/delete/<comment_id>', methods=['GET'])
 @login_required
@@ -632,8 +632,8 @@ def configuration_summary(config_type, project_uuid):
     if config_type == "summary":
         page_name = "configuration_summary"
     elif config_type == "final_survey":
-        survey_details = get_survey(project_uuid=project_uuid)['survey_questions']
-        print(survey_details)
+        survey_details, survey_details_obj = get_survey_details(project_uuid=project_uuid)
+        survey_details = survey_details.get("survey_questions", {})
         page_name = "configuration_final_survey"
     else:
         page_name = "configuration_final"
@@ -641,10 +641,6 @@ def configuration_summary(config_type, project_uuid):
     all_comments = get_all_comments(project_uuid, page_name)
     comments_for_that_page = get_comments(project_uuid, page_name)
     user = user_id
-
-    if request.method == 'POST':
-        survey = request.form.to_dict()
-        save_survey(project_uuid=project_uuid, survey=survey)
 
     #test
     project_details['location_location'] = 0
@@ -698,6 +694,15 @@ def configuration_summary(config_type, project_uuid):
         return render_template("design/config_summary/final_survey.html", segment="static_pages_survey", settings=settings,
                                all_menus=all_menus, menu_number=17, modified_on=modified_on, project_uuid=project_uuid, survey=survey_details,
                                comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name)
+    elif config_type == "add_edit_survey":
+        survey_details, survey_details_obj = get_survey_details(project_uuid=project_uuid)
+        if request.method == 'POST':
+            survey = request.form.to_dict()
+            if not survey_details_obj:
+                save_survey(project_uuid=project_uuid, survey=survey)
+            else:
+                update_survey(data=survey, survey_details_obj=survey_details_obj)
+        return redirect("/projects/in_progress")
     elif config_type == "final":
         return render_template("design/config_summary/final.html", segment="configuration_final", settings=settings,
                                all_menus=all_menus, menu_number=18, modified_on=modified_on, project_uuid=project_uuid,

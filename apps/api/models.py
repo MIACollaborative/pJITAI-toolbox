@@ -133,9 +133,7 @@ class Data(db.Model):  # YS: Used in update(), upload()
     proximal_outcome_timestamp = db.Column('proximal_outcome_timestamp',
                                            db.String(64))
 
-    decision_id = db.Column(db.Integer,
-                            db.ForeignKey('decision.id'),
-                            nullable=False)  # YS: Need this
+    decision_id = db.Column('decision_id', db.Integer)  # YS: Need this
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():

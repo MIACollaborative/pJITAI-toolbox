@@ -6,7 +6,17 @@ from flask import request
 from apps import db
 from apps.algorithms.models import Projects, ProjectMenu
 from apps.authentication.models import Users
+from apps.api.models import Survey
 
+
+def get_survey_details(project_uuid):
+    if project_uuid:
+        survey_details_obj = db.session.query(Survey).filter(Survey.proj_uuid == project_uuid).first()
+        if survey_details_obj:
+            survey_details = survey_details_obj.as_dict()
+        else:
+            survey_details = {}
+        return survey_details, survey_details_obj
 
 def get_project_details(project_uuid, user_id):
     if project_uuid:

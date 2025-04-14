@@ -38,14 +38,8 @@ from apps.api.models import Data, AlgorithmTunedParams, Decision, Comment, Surve
 from apps.algorithms.models import Projects
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
 import json
+import copy
 
-def get_survey(project_uuid):
-    survey_obj = (db.session.query(Survey)
-                  .filter(Survey.proj_uuid == project_uuid)
-                  .first())
-    if survey_obj:
-        # print(survey_obj.as_dict())
-        return survey_obj.as_dict()
 
 def save_survey(project_uuid, survey):
     survey_obj = Survey(proj_uuid=project_uuid, 
@@ -58,6 +52,13 @@ def save_survey(project_uuid, survey):
         db.session.rollback()
         print(traceback.format_exc())
         return {"ERROR": resp}
+    
+def update_survey(data, survey_details_obj):
+    if survey_details_obj:
+        survey = copy.deepcopy(survey_details_obj.survey_questions)
+        survey.update(data)
+        survey_details_obj.survey_questions = survey
+        db.session.commit()
 
 def get_all_comments(project_uuid, page_name):
     comments_obj = (db.session.query(Comment)

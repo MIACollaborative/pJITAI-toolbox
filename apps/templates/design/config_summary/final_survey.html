@@ -43,8 +43,9 @@
                   <div class="form-group" style="margin-top: 40px;">
                     <a href="/api/projects/{{project_uuid}}"
                       class="btn btn-outline-primary" role="button">Back</a>
-                    <a href="/projects/in_progress"
-                      class="btn btn-primary" role="button">Exit</a>
+                    <!-- <a href="/projects/in_progress"
+                      class="btn btn-primary" role="button">Exit</a> -->
+                    <button class="btn btn-primary" formmethod="post" type="submit" formaction="/configuration/add_edit_survey/{{project_uuid}}">Save</button>
                   </div>
                   <div class="form-group">
                     Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
