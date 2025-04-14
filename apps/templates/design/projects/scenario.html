@@ -8,112 +8,115 @@
 {% block content %}
 
 <!-- [ Main Content ] start -->
-<div class="pcoded-main-container">
-    <div class="pcoded-wrapper">
-        <div class="pcoded-content">
-            <div class="pcoded-inner-content">
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3>General Settings / Scenario</h3>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="personalized_scenario">How will
-                                                    you configure your personalized JITAI</label>
-                                                <select id="personalized_scenario" name="personalized_scenario"
-                                                        class="form-control">
-                                                    <option value="I am using results from an MRT"
-                                                            selected>I am using results from an MRT
-                                                    </option>
-                                                </select>
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>General Settings / Scenario</h3>
                                             </div>
+
                                         </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <!-- [ tabs ] start -->
-                                <div class="col-sm-12">
-
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                               href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                Explanation</a>
-                                        </li>
-
-                                    </ul>
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab">
-                                            <p>
-                                                You can design use this toolbox to design a pJITAI if 
-                                                <ol>
-                                                    <li>You have a paper 
-                                                        that includes the results of a trial in which the intervention options were 
-                                                        micro-randomized, or</li>
-                                                    <li>You have direct access to data from a trial in which 
-                                                        the intervention options were micro-randomized</li>
-                                                </ol>
-                                                In other words, in this current 
-                                                version of pJITAI, you need results from a <a href="http://people.seas.harvard.edu/~samurphy/JITAI_MRT/mrts4.html"
-                                                target="_blank">micro-randomized trial</a> to design a pJITAI. 
-                                            </p>
-                                        </div>
-
-
                                     </div>
                                 </div>
 
 
-                                <!-- [ tabs ] end -->
-                            </div>
-                            <!-- [ Main Content ] end -->
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <a href="/projects/settings/personalized_method/{{project_uuid}}"
-                                                   class="btn btn-outline-primary" role="button">Back</a>
-                                                <!--                                                <button type="submit" formmethod="post" formaction="/projects/settings/personalized_method/{{project_uuid}}" type="button" class="btn btn-outline-primary">Back</button>-->
-                                                <button type="submit" formmethod="post"
-                                                        formaction="/projects/settings/summary/{{project_uuid}}"
-                                                        type="button" class="btn btn-primary">Next
-                                                </button>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="personalized_scenario">How will
+                                                        you configure your personalized JITAI</label>
+                                                    <select id="personalized_scenario" name="personalized_scenario"
+                                                            class="form-control">
+                                                        <option value="I am using results from an MRT"
+                                                                selected>I am using results from an MRT
+                                                        </option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                            </div>
-                                        </div>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+
+
+                                <div class="row">
+                                    <!-- [ tabs ] start -->
+                                    <div class="col-sm-12">
+
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                    Explanation</a>
+                                            </li>
+
+                                        </ul>
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab">
+                                                <p>
+                                                    You can design use this toolbox to design a pJITAI if 
+                                                    <ol>
+                                                        <li>You have a paper 
+                                                            that includes the results of a trial in which the intervention options were 
+                                                            micro-randomized, or</li>
+                                                        <li>You have direct access to data from a trial in which 
+                                                            the intervention options were micro-randomized</li>
+                                                    </ol>
+                                                    In other words, in this current 
+                                                    version of pJITAI, you need results from a <a href="http://people.seas.harvard.edu/~samurphy/JITAI_MRT/mrts4.html"
+                                                    target="_blank">micro-randomized trial</a> to design a pJITAI. 
+                                                </p>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <!-- [ tabs ] end -->
+                                </div>
+                                <!-- [ Main Content ] end -->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <a href="/projects/settings/personalized_method/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    <!--                                                <button type="submit" formmethod="post" formaction="/projects/settings/personalized_method/{{project_uuid}}" type="button" class="btn btn-outline-primary">Back</button>-->
+                                                    <button type="submit" formmethod="post"
+                                                            formaction="/projects/settings/summary/{{project_uuid}}"
+                                                            type="button" class="btn btn-primary">Next
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% include 'includes/comments.html' %}
 </div>
 <!-- [ Main Content ] end -->
 

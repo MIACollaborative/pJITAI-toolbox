@@ -37,7 +37,7 @@ class Users(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True)
+    displayname = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.LargeBinary)
 
@@ -56,7 +56,7 @@ class Users(db.Model, UserMixin):
             setattr(self, property, value)
 
     def __repr__(self):
-        return str(self.username)
+        return str(self.displayname)
 
 
 @login_manager.user_loader
@@ -66,6 +66,6 @@ def user_loader(id):
 
 @login_manager.request_loader
 def request_loader(request):
-    username = request.form.get('username')
-    user = Users.query.filter_by(username=username).first()
+    displayname = request.form.get('displayname')
+    user = Users.query.filter_by(displayname=displayname).first()
     return user if user else None

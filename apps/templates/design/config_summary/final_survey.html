@@ -1,0 +1,63 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Final Survey {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="pcoded-main-container">
+  <div class="pcoded-wrapper">
+    <div class="pcoded-content">
+      <div class="pcoded-inner-content">
+        <form>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Final Survey</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5>1. Could you share your overall experience in using pJITAI Toolbox?</h5>
+                  <div>
+                    <textarea class="form-control" placeholder="Put your feedback here..." name="feedback-q1-input" id="feedback-q1-input">{{survey['feedback-q1-input']}}</textarea>
+                  </div>
+                  <h5>2. What functionalities did you find helpful and why?</h5>
+                  <div>
+                    <textarea class="form-control" required placeholder="Put your feedback here..." name="feedback-q2-input" id="feedback-q1-input">{{survey['feedback-q2-input']}}</textarea>
+                  </div>
+                  <h5>3. Based on your experience, what functionalities could be added or modified for better user experience?</h5>
+                  <div>
+                    <textarea class="form-control" required placeholder="Put your feedback here..." name="feedback-q3-input" id="feedback-q3-input">{{survey['feedback-q3-input']}}</textarea>
+                  </div>
+                  <h5>4. Please put anything else that you would like to say to the developers of the pJITAI Toolbox.</h5>
+                  <div>
+                    <textarea class="form-control" placeholder="Put your feedback here..." name="feedback-q4-input" id="feedback-q3-input">{{survey['feedback-q4-input']}}</textarea>
+                  </div>
+                  <div class="form-group" style="margin-top: 40px;">
+                    <a href="/api/projects/{{project_uuid}}"
+                      class="btn btn-outline-primary" role="button">Back</a>
+                    <!-- <a href="/projects/in_progress"
+                      class="btn btn-primary" role="button">Exit</a> -->
+                    <button class="btn btn-primary" formmethod="post" type="submit" formaction="/configuration/add_edit_survey/{{project_uuid}}">Save</button>
+                  </div>
+                  <div class="form-group">
+                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

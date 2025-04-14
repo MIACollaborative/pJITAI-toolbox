@@ -50,177 +50,180 @@ $(document).ready(function(){
 
 </script>
 <!-- [ Main Content ] start -->
-<div class="pcoded-main-container">
-    <div class="pcoded-wrapper">
-        <div class="pcoded-content">
-            <div class="pcoded-inner-content">
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3>Intervention Settings / Intervention Probability</h3>
-                                        </div>
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Intervention Settings / Intervention Probability</h3>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-label"
-                                                           for="intervention_probability_lower_bound">Intervention
-                                                        probability lower bound (when eligible)</label>
-                                                    <div class="input-group mb-3">
-                                                        <input min="0" max="1" step="0.01"
-                                                               value="{{settings.intervention_probability_lower_bound}}"
-                                                               type="number" id="intervention_probability_lower_bound"
-                                                               name="intervention_probability_lower_bound"
-                                                               class="form-control" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text"
-                                                                  style="border: dotted;"> <span id="interven_lower"> {{settings.intervention_probability_lower_bound}} </span> &nbsp; x &nbsp;  <span
-                                                                    id="dp_freq"> {{settings.decision_point_frequency}}</span>  &nbsp;&nbsp;<span
-                                                                    style="background-color: #a8a2a2;border-radius: 5px;padding: 2px;"> decision points / {{settings.decision_point_frequency_time}} </span>&nbsp;&nbsp; = &nbsp;&nbsp; <span
-                                                                    id="result_1"></span> &nbsp;&nbsp; <span
-                                                                    style="background-color: #a8a2a2;border-radius: 5px;padding: 2px;">{{settings.intervention_option_a}} / {{settings.decision_point_frequency_time}}</span></span>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="form-control-label"
+                                                            for="intervention_probability_lower_bound">Intervention
+                                                            probability lower bound (when eligible)</label>
+                                                        <div class="input-group mb-3">
+                                                            <input min="0" max="1" step="0.01"
+                                                                value="{{settings.intervention_probability_lower_bound}}"
+                                                                type="number" id="intervention_probability_lower_bound"
+                                                                name="intervention_probability_lower_bound"
+                                                                class="form-control" required>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"
+                                                                    style="border: dotted;"> <span id="interven_lower"> {{settings.intervention_probability_lower_bound}} </span> &nbsp; x &nbsp;  <span
+                                                                        id="dp_freq"> {{settings.decision_point_frequency}}</span>  &nbsp;&nbsp;<span
+                                                                        style="background-color: #a8a2a2;border-radius: 5px;padding: 2px;"> decision points / {{settings.decision_point_frequency_time}} </span>&nbsp;&nbsp; = &nbsp;&nbsp; <span
+                                                                        id="result_1"></span> &nbsp;&nbsp; <span
+                                                                        style="background-color: #a8a2a2;border-radius: 5px;padding: 2px;">{{settings.intervention_option_a}} / {{settings.decision_point_frequency_time}}</span></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-control-label"
+                                                            for="intervention_probability_upper_bound">Intervention
+                                                            probability upper bound (when eligible)</label>
+                                                        <div class="input-group mb-3">
+                                                            <input min="0" max="1" step="0.01"
+                                                                value="{{settings.intervention_probability_upper_bound}}"
+                                                                type="number" id="intervention_probability_upper_bound"
+                                                                name="intervention_probability_upper_bound"
+                                                                class="form-control" required>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" style="border: dotted;"><span
+                                                                        id="interven_upper"> {{settings.intervention_probability_upper_bound}} </span> &nbsp; x &nbsp; {{settings.decision_point_frequency}} &nbsp;&nbsp;<span
+                                                                        style="background-color: #a8a2a2;border-radius: 5px;padding: 2px;"> decision points / {{settings.decision_point_frequency_time}} </span>&nbsp;&nbsp; = &nbsp;&nbsp; <span
+                                                                        id="result_2"></span> &nbsp;&nbsp; <span
+                                                                        style="background-color: #a8a2a2;border-radius: 5px;padding: 2px;">{{settings.intervention_option_a}} / {{settings.decision_point_frequency_time}}</span></span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <!-- [ tabs ] start -->
+                                    <div class="col-sm-12">
+
+                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                    Explanation</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
+                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
+                                                    Example</a>
+                                            </li>
+                                        </ul> -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab"> -->
+                                            <div class="tab-item">
+                                                <h5>Explanation</h5>
+                                                <p>
+                                                <p>Before your study begins, you need to set the lower and upper bounds of 
+                                                    the probability of sending Intervention Option A.
+                                                    Over the course of the study, the probability of sending Intervention Option A (when
+                                                    Intervention Option A is eligible) will change as the algorithm
+                                                    learns from accruing data but will never go below
+                                                    or above the bounds you have set.</p>
+                                                <p>We include a calculator to help you understand the lower and upper bounds of 
+                                                    the intervention probability. This calculator shows given the lower/upper bound you have set,
+                                                    the minimum/maximum number of Intervention Option A per period.
+                                                </p>
+
+                                                <p>For each study, you choose the ideal lower and upper bounds of the intervention probability
+                                                    based on how many Intervention Option A to send per period.
+                                                    To ensure a continual update of personalization, you cannot choose the
+                                                    intervention probability lower/upper bound during personalization to be
+                                                    0 or 1. If you are concerned about burden or habituation, we suggest
+                                                    that you choose a smaller upper bound.</p>
+                                                </p>
+                                            </div>
+                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                                aria-labelledby="profile-tab"> -->
+                                            <div class="tab-item">
+                                                <h5>HeartSteps Example</h5>
+                                                <h6>Intervention Probability Lowerbound</h6>
+                                                <p>0.1</p>
+                                                <h6>Intervention Probability Upperbound</h6>
+                                                <p>0.8</p>
+                                                <p>For the HeartSteps study, the behavioral scientists determined that
+                                                the intervention probability should be between <b>0.1 and 0.8.</b>
+                                                    Note that with 5 decision
+                                                    points/day, an intervention probability of 0.1 yields an average
+                                                    of 0.1 x 5 = <u>0.5 activity suggestion messages</u> (Intervention Option A) per day. 
+                                                    Similarly, an intervention probability of 0.8 yields an average
+                                                    of 0.8 x 5 = <u>4 activity suggestion messages</u> (Intervention Option A) per day. </p>
+                                                <p>
+                                                    In other words, on average, between <u>0.5 and 4 
+                                                    activity suggestions</u> will be sent per day.</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <!-- [ tabs ] end -->
+                                </div>
+                                <!-- [ Main Content ] end -->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <a href="/intervention/settings/ineligibility/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    <!--                                                <button type="submit" type="button" formaction="/intervention/settings/ineligibility/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
+                                                    <button type="submit" type="button"
+                                                            formaction="/intervention/settings/update_point/{{project_uuid}}"
+                                                            formmethod="post" class="btn btn-primary">Next
+                                                    </button>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-control-label"
-                                                           for="intervention_probability_upper_bound">Intervention
-                                                        probability upper bound (when eligible)</label>
-                                                    <div class="input-group mb-3">
-                                                        <input min="0" max="1" step="0.01"
-                                                               value="{{settings.intervention_probability_upper_bound}}"
-                                                               type="number" id="intervention_probability_upper_bound"
-                                                               name="intervention_probability_upper_bound"
-                                                               class="form-control" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text" style="border: dotted;"><span
-                                                                    id="interven_upper"> {{settings.intervention_probability_upper_bound}} </span> &nbsp; x &nbsp; {{settings.decision_point_frequency}} &nbsp;&nbsp;<span
-                                                                    style="background-color: #a8a2a2;border-radius: 5px;padding: 2px;"> decision points / {{settings.decision_point_frequency_time}} </span>&nbsp;&nbsp; = &nbsp;&nbsp; <span
-                                                                    id="result_2"></span> &nbsp;&nbsp; <span
-                                                                    style="background-color: #a8a2a2;border-radius: 5px;padding: 2px;">{{settings.intervention_option_a}} / {{settings.decision_point_frequency_time}}</span></span>
-                                                        </div>
-                                                    </div>
-
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
                                                 </div>
                                             </div>
 
-
                                         </div>
-
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div class="row">
-                                <!-- [ tabs ] start -->
-                                <div class="col-sm-12">
-
-                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                               href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                Explanation</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                               href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                Example</a>
-                                        </li>
-                                    </ul> -->
-                                    <div class="tab-content" id="myTabContent">
-                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>Explanation</h5>
-                                            <p>
-                                            <p>Before your study begins, you need to set the lower and upper bounds of 
-                                                the probability of sending Intervention Option A.
-                                                Over the course of the study, the probability of sending Intervention Option A (when
-                                                Intervention Option A is eligible) will change as the algorithm
-                                                learns from accruing data but will never go below
-                                                or above the bounds you have set.</p>
-                                            <p>We include a calculator to help you understand the lower and upper bounds of 
-                                                the intervention probability. This calculator shows given the lower/upper bound you have set,
-                                                the minimum/maximum number of Intervention Option A per period.
-                                            </p>
-
-                                            <p>For each study, you choose the ideal lower and upper bounds of the intervention probability
-                                                based on how many Intervention Option A to send per period.
-                                                To ensure a continual update of personalization, you cannot choose the
-                                                intervention probability lower/upper bound during personalization to be
-                                                0 or 1. If you are concerned about burden or habituation, we suggest
-                                                that you choose a smaller upper bound.</p>
-                                            </p>
-                                        </div>
-                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>HeartSteps Example</h5>
-                                            <h6>Intervention Probability Lowerbound</h6>
-                                            <p>0.1</p>
-                                            <h6>Intervention Probability Upperbound</h6>
-                                            <p>0.8</p>
-                                            <p>For the HeartSteps study, the behavioral scientists determined that
-                                               the intervention probability should be between <b>0.1 and 0.8.</b>
-                                                Note that with 5 decision
-                                                points/day, an intervention probability of 0.1 yields an average
-                                                of 0.1 x 5 = <u>0.5 activity suggestion messages</u> (Intervention Option A) per day. 
-                                                Similarly, an intervention probability of 0.8 yields an average
-                                                of 0.8 x 5 = <u>4 activity suggestion messages</u> (Intervention Option A) per day. </p>
-                                            <p>
-                                                In other words, on average, between <u>0.5 and 4 
-                                                activity suggestions</u> will be sent per day.</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                                <!-- [ tabs ] end -->
-                            </div>
-                            <!-- [ Main Content ] end -->
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <a href="/intervention/settings/ineligibility/{{project_uuid}}"
-                                                   class="btn btn-outline-primary" role="button">Back</a>
-                                                <!--                                                <button type="submit" type="button" formaction="/intervention/settings/ineligibility/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
-                                                <button type="submit" type="button"
-                                                        formaction="/intervention/settings/update_point/{{project_uuid}}"
-                                                        formmethod="post" class="btn btn-primary">Next
-                                                </button>
-                                            </div>
-                                            <div class="form-group">
-                                                Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% include 'includes/comments.html' %}
 </div>
 <!-- [ Main Content ] end -->
 

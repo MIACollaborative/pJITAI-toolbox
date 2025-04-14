@@ -34,11 +34,56 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import desc
 
 from apps import db
-from apps.api.models import Data, AlgorithmTunedParams, Decision
+from apps.api.models import Data, AlgorithmTunedParams, Decision, Comment, Survey
 from apps.algorithms.models import Projects
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
 import json
+import copy
 
+
+def save_survey(project_uuid, survey):
+    survey_obj = Survey(proj_uuid=project_uuid, 
+                        survey_questions=survey)
+    try:
+        db.session.add(survey_obj)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        resp = str(e.__dict__['orig'])
+        db.session.rollback()
+        print(traceback.format_exc())
+        return {"ERROR": resp}
+    
+def update_survey(data, survey_details_obj):
+    if survey_details_obj:
+        survey = copy.deepcopy(survey_details_obj.survey_questions)
+        survey.update(data)
+        survey_details_obj.survey_questions = survey
+        db.session.commit()
+
+def get_all_comments(project_uuid, page_name):
+    comments_obj = (db.session.query(Comment)
+                    .filter(Comment.proj_uuid == project_uuid)
+                    .order_by(Comment.timestamp.asc())
+                    .all())
+    comments_details = []
+    if comments_obj:
+        for c in comments_obj:
+            comments_details.append(c.as_dict())
+    return comments_details
+
+def get_comments(project_uuid, page_name):
+    if project_uuid:
+        comments_obj = (db.session.query(Comment)
+                        .filter(Comment.proj_uuid == project_uuid)
+                        .filter(Comment.page_name == page_name)
+                        .order_by(Comment.timestamp.asc())
+                        .all())
+        comments_details = []
+        if comments_obj:            
+            for c in comments_obj:
+                comments_details.append(c.as_dict())
+        # print(comments_details)
+        return comments_details
 
 def save_decision(decision: Decision):
     try:

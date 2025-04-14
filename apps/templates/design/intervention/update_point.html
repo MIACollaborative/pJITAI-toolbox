@@ -8,146 +8,149 @@
 {% block content %}
 
 <!-- [ Main Content ] start -->
-<div class="pcoded-main-container">
-    <div class="pcoded-wrapper">
-        <div class="pcoded-content">
-            <div class="pcoded-inner-content">
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3>Intervention Settings / Update Point</h3>
-                                        </div>
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Intervention Settings / Update Point</h3>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="update_time">When should the
-                                                    pJITAI update?</label>
-                                                <div class="input-group">
-                                                    <select id="update_day" name="update_day" class="form-control">
-                                                        {% for udur in update_duration%}
-                                                        <option id="update_day_option" {% if settings.update_day==udur %} selected{% endif %}
-                                                                value="{{udur}}">{{udur}}
-                                                        </option>
-                                                        {%endfor%}
-
-                                                    </select>
-                                                    <div class="input-group-append">
-                                                        <select id="update_hour" name="update_hour"
-                                                                class="form-control">
-                                                            {% for n in range(1,13) %}
-                                                            <option {% if settings.update_hour==n|string+':00am' %}
-                                                                    selected{% endif %} value="{{n}}:00am">AT {{n}}:00
-                                                                AM
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="update_time">When should the
+                                                        pJITAI update?</label>
+                                                    <div class="input-group">
+                                                        <select id="update_day" name="update_day" class="form-control">
+                                                            {% for udur in update_duration%}
+                                                            <option id="update_day_option" {% if settings.update_day==udur %} selected{% endif %}
+                                                                    value="{{udur}}">{{udur}}
                                                             </option>
-                                                            {% endfor %}
-                                                            {% for n in range(1,13) %}
-                                                            <option {% if settings.update_hour==n|string+':00pm' %}
-                                                                    selected{% endif %} value="{{n}}:00pm">AT {{n}}:00
-                                                                PM
-                                                            </option>
-                                                            {% endfor %}
+                                                            {%endfor%}
+
                                                         </select>
+                                                        <div class="input-group-append">
+                                                            <select id="update_hour" name="update_hour"
+                                                                    class="form-control">
+                                                                {% for n in range(1,13) %}
+                                                                <option {% if settings.update_hour==n|string+':00am' %}
+                                                                        selected{% endif %} value="{{n}}:00am">AT {{n}}:00
+                                                                    AM
+                                                                </option>
+                                                                {% endfor %}
+                                                                {% for n in range(1,13) %}
+                                                                <option {% if settings.update_hour==n|string+':00pm' %}
+                                                                        selected{% endif %} value="{{n}}:00pm">AT {{n}}:00
+                                                                    PM
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
                                                     </div>
+
                                                 </div>
 
+
                                             </div>
 
-
                                         </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <!-- [ tabs ] start -->
-                                <div class="col-sm-12">
-
-                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                               href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                Explanation</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                               href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                Example</a>
-                                        </li>
-                                    </ul> -->
-                                    <div class="tab-content" id="myTabContent">
-                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>Explanation</h5>
-                                            <p>At each update point, for each individual, the personalization method is
-                                                updated (i.e., the decision rule for each individual is updated).
-                                                (In other words, the parameters in the Bayesian linear regression model
-                                                for the proximal outcome are updated.)
-                                            </p>
-                                            <p>To choose the update point, you can consider choosing it to be different
-                                                from the decision points so that by the update point, all the data from
-                                                the previous decision points have been uploaded to the cloud.</p>
-                                        </div>
-                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>HeartSteps Example</h5>
-                                            <p>In HeartSteps, the personalizing JITAI updated the parameters each day at
-                                                midnight because midnight is not close to any of the five decision
-                                                points. If a temporary wifi issue occurs when data is uploaded to the
-                                                cloud from a mobile device, it provides enough time for the data to be
-                                                re-uploaded if needed.</p>
-                                        </div>
-
                                     </div>
                                 </div>
 
 
-                                <!-- [ tabs ] end -->
-                            </div>
-                            <!-- [ Main Content ] end -->
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <a href="/intervention/settings/intervention_probability/{{project_uuid}}"
-                                                   class="btn btn-outline-primary" role="button">Back</a>
-                                                <!--                                                <button type="submit" type="button" formaction="/intervention/settings/intervention_probability/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
-                                                <button type="submit" type="button"
-                                                        formaction="/intervention/settings/summary/{{project_uuid}}"
-                                                        formmethod="post" class="btn btn-primary">Next
-                                                </button>
-                                            </div>
-                                            <div class="form-group">
-                                                Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                            </div>
-                                        </div>
+                                <div class="row">
+                                    <!-- [ tabs ] start -->
+                                    <div class="col-sm-12">
 
+                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                    Explanation</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
+                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
+                                                    Example</a>
+                                            </li>
+                                        </ul> -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab"> -->
+                                            <div class="tab-item">
+                                                <h5>Explanation</h5>
+                                                <p>At each update point, for each individual, the personalization method is
+                                                    updated (i.e., the decision rule for each individual is updated).
+                                                    (In other words, the parameters in the Bayesian linear regression model
+                                                    for the proximal outcome are updated.)
+                                                </p>
+                                                <p>To choose the update point, you can consider choosing it to be different
+                                                    from the decision points so that by the update point, all the data from
+                                                    the previous decision points have been uploaded to the cloud.</p>
+                                            </div>
+                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                                aria-labelledby="profile-tab"> -->
+                                            <div class="tab-item">
+                                                <h5>HeartSteps Example</h5>
+                                                <p>In HeartSteps, the personalizing JITAI updated the parameters each day at
+                                                    midnight because midnight is not close to any of the five decision
+                                                    points. If a temporary wifi issue occurs when data is uploaded to the
+                                                    cloud from a mobile device, it provides enough time for the data to be
+                                                    re-uploaded if needed.</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <!-- [ tabs ] end -->
+                                </div>
+                                <!-- [ Main Content ] end -->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <a href="/intervention/settings/intervention_probability/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    <!--                                                <button type="submit" type="button" formaction="/intervention/settings/intervention_probability/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
+                                                    <button type="submit" type="button"
+                                                            formaction="/intervention/settings/summary/{{project_uuid}}"
+                                                            formmethod="post" class="btn btn-primary">Next
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% include 'includes/comments.html' %}
 </div>
 <!-- [ Main Content ] end -->
 

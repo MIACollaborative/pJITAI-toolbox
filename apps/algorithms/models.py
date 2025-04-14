@@ -116,7 +116,7 @@ class Projects(db.Model):
     created_by = db.Column(db.Integer,
                            db.ForeignKey('users.id'),
                            nullable=False)
-    uuid = db.Column(db.String(36))
+    uuid = db.Column(db.String(36), unique=True, nullable=False)
     general_settings = db.Column(db.JSON, default={})
     intervention_settings = db.Column(db.JSON, default={})
     model_settings = db.Column(db.JSON, default={})

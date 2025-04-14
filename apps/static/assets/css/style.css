@@ -2822,8 +2822,7 @@ pre, code {
 
 .pcoded-main-container {
   position: relative;
-  margin: 0 auto;
-  display: block;
+  /* margin: 0 auto; */
   clear: both;
   float: unset;
   right: 0;
@@ -5429,6 +5428,11 @@ body.layout-6 .pcoded-content .pcoded-inner-content {
   margin-top: -200px;
   min-height: calc(100vh + 150px);
 }
+.grid-container {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 3.5fr 1.1fr;
+}
 body.layout-6 .card {
   border-radius: 5px;
 }
@@ -7671,7 +7675,7 @@ a.btn-theme.active {
   border-radius: 0.25rem;
   font-size: 14px;
   margin-bottom: 5px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
@@ -7735,6 +7739,68 @@ a.btn-theme.active {
 .shadow-5 {
   -webkit-box-shadow: 0 20px 24px 0 rgba(62, 57, 107, 0.36);
           box-shadow: 0 20px 24px 0 rgba(62, 57, 107, 0.36);
+}
+/* Comment box*/
+.chat-message {
+  /* max-width: 80%; */
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #e2eaf9;
+  color: black;
+}
+.chat-message-feedback {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #FFFF8A;
+  color: black;
+}
+/* Comments buttons */
+.btn-comment {
+  color: #fff;
+  background-color: #04a9f5;
+  border-color: #04a9f5;
+  margin-top: 5px;
+  float: right;
+}
+.btn-comment:hover {
+  color: #fff;
+  background-color: #038fcf;
+  border-color: #0386c3;
+}
+.btn-comment.disabled, .btn-comment:disabled {
+  color: #fff;
+  background-color: #04a9f5;
+  border-color: #04a9f5;
+}
+/* Comment Container */
+.comment-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
 }
 
 /* Alternate buttons */
@@ -8566,7 +8632,7 @@ a.btn-theme.active {
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
   border: none;
-  color: #111;
+  color: #007bff;
   -webkit-box-shadow: 0 -3px 10px 0 rgba(0, 0, 0, 0.05);
           box-shadow: 0 -3px 10px 0 rgba(0, 0, 0, 0.05);
 }

@@ -25,6 +25,8 @@
                     'general' not in segment %} style="display: none;" {% endif %}>
                 <li class="{% if 'general_settings' in segment %} active {% endif %}"><a
                         href="/projects/settings/general/{{project_uuid}}" class="">General Info</a></li>
+                <li class="{% if 'collaborators' in segment %} active {% endif %}"><a
+                        href="/projects/settings/collaborators/{{project_uuid}}">Collaborators</a></li>
                 <li class="{% if 'personalized_method' in segment %} active {% endif %}"><a {% if
                     "/projects/settings/personalized_method/"+project_uuid in all_menus %}
                     href="/projects/settings/personalized_method/{{project_uuid}}" {% endif %} class="">Personalization
@@ -104,6 +106,9 @@
             <li class="{% if 'configuration_summary' in segment %} active {% endif %}"><a {% if
                 "/configuration/summary/"+project_uuid in all_menus %} href="/configuration/summary/{{project_uuid}}" {%
                 endif %} class="">Summary</a></li>
+            <!-- <li class="{% if 'configuration_survey' in segment %} active {% endif %}"><a {% if
+                "/configuration/final_survey/"+project_uuid in all_menus %} href="/configuration/final_survey/{{project_uuid}}" {%
+                endif %} class="">Survey</a></li> -->
             <li class="{% if 'configuration_final' in segment %} active {% endif %}"><a {% if
                 "/configuration/final/"+project_uuid in all_menus %} href="/configuration/final/{{project_uuid}}" {%
                 endif %} class="">Finalize</a></li>

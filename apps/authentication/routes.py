@@ -54,11 +54,11 @@ def login():
     if 'login' in request.form:
 
         # read form data
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
 
         # Locate user
-        user = Users.query.filter_by(username=username).first()
+        user = Users.query.filter_by(email=email).first()
 
         # Check the password
         if user and verify_pass(password, user.password):
@@ -81,16 +81,16 @@ def register():
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:
 
-        username = request.form['username']
+        # displayname = request.form['displayname']
         email = request.form['email']
 
         # Check usename exists
-        user = Users.query.filter_by(username=username).first()
-        if user:
-            return render_template('accounts/register.html',
-                                   msg='Username already registered',
-                                   success=False,
-                                   form=create_account_form)
+        # user = Users.query.filter_by(displayname=displayname).first()
+        # if user:
+        #     return render_template('accounts/register.html',
+        #                            msg='Display already registered',
+        #                            success=False,
+        #                            form=create_account_form)
 
         # Check email exists
         user = Users.query.filter_by(email=email).first()

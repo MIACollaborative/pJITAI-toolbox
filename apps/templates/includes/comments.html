@@ -1,0 +1,199 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+          <div class="card-header">
+              <h3 style="font-size: 22px; margin-bottom: 20px;">Comments & Feedback</h3>
+              <ul class="nav nav-tabs" id="commentTabs" role="tablist" style="display: flex; flex-direction: row; margin-bottom: 10px;">
+                <li class="nav-item">
+                    <a class="nav-link active" id="page-comments-tab" data-toggle="tab" href="#page-comments" role="tab" aria-controls="page-comments" aria-selected="true">Comments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Feedback</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Feedback</a>
+                </li> -->
+              </ul>
+              <!-- Tab 1: Comments for that page -->
+              <div class="comment-container">
+                <div id="page-comments" class="tab-pane active" aria-labelledby="page-comments-tab">
+                    {% for c in comments_for_that_page %}
+                    {% if c.type == "comment" %}
+                    <form>
+                      <div class={{ 'chat-message' if c.type == 'comment' else 'chat-message-feedback' }}>
+                        <p style="margin: 0; padding: 0;"><b>{{c.created_by}}</b></p>
+                        <p style="font-size: 12px;">{{c.timestamp}}</p>
+                        <span id="comment-text-{{ c.id }}">{{ c.content }}</span>
+                        <textarea name="comment-input" id="comment-edit-{{ c.id }}" class="form-control" style="display: none;">{{ c.content }}</textarea>
+                        {% if c.user_id|int == user|int %}
+                            <ul class="navbar-nav ml-lg-auto float-right" data-id="{{ c.id }}">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link nav-link-icon" href="#"
+                                    id="navbar-default_dropdown_1" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-default_dropdown_1">
+                                        <a class="dropdown-item edit-comment" data-id="{{ c.id }}">
+                                            <i class="fas fa-edit"></i> Edit the comment</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" style="color:#f65959"
+                                            href="/comment/delete/{{c.id}}"
+                                            onclick="return confirm('Are you sure you want to delete the comment?');"><i class="fa fa-trash" aria-hidden="true"></i> Delete the comment</a>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button type="submit" style="display: none;" 
+                                class="btn btn-comment save-comment" data-id="{{ c.id }}"
+                                formmethod="post" formaction="/comment/edit/{{c.id}}">Save</button>
+                        {% endif %}
+                      </div>
+                    </form>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <!-- Tab 1 end -->
+                <!-- Tab 2: All Comments -->
+                <!-- <div id="feedback" class="tab-pane" aria-labelledby="feedback-tab">
+                  {% for c in all_comments %}
+                  {% if c.type == "comment" %}
+                  <form>
+                      <div class={{'chat-message' if c.type == 'comment' else 'chat-message-feedback'}}>
+                          <p style="margin: 0; padding: 0;"><b>{{c.created_by}}</b></p>
+                          <p style="font-size: 12px;">{{c.timestamp}}</p>
+                          <span id="comment-text-{{ c.id }}">{{ c.content }}</span>
+                          <textarea name="comment-input" id="comment-edit-{{ c.id }}" class="form-control" style="display: none;">{{ c.content }}</textarea>
+                          {% if c.user_id|int == user|int %}
+                              <ul class="navbar-nav ml-lg-auto float-right" data-id="{{ c.id }}">
+                                  <li class="nav-item dropdown">
+                                      <a class="nav-link nav-link-icon" href="#"
+                                      id="navbar-default_dropdown_1" role="button"
+                                      data-toggle="dropdown" aria-haspopup="true"
+                                      aria-expanded="false">
+                                          <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                      </a>
+                                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-default_dropdown_1">
+                                          <a class="dropdown-item edit-comment" data-id="{{ c.id }}">
+                                              <i class="fas fa-edit"></i> Edit the comment</a>
+                                          <div class="dropdown-divider"></div>
+                                          <a class="dropdown-item" style="color:#f65959"
+                                              href="/comment/delete/{{c.id}}"
+                                              onclick="return confirm('Are you sure you want to delete the comment?');"><i class="fa fa-trash" aria-hidden="true"></i> Delete the comment</a>
+                                      </div>
+                                  </li>
+                              </ul>
+                              <button type="submit" style="display: none;" 
+                                  class="btn btn-comment save-comment" data-id="{{ c.id }}"
+                                  formmethod="post" formaction="/comment/edit/{{c.id}}">Save</button>
+                          {% endif %}
+                      </div>
+                  </form>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+                </div> -->
+              <!-- Tab 2 end -->
+               <!-- Tab 2: Feedback -->
+               <div id="feedback" class="tab-pane" aria-labelledby="feedback-tab">
+                {% for c in comments_for_that_page %}
+                {% if c.type == "feedback" %}
+                <form>
+                    <div class='chat-message-feedback'>
+                        <p style="margin: 0; padding: 0;"><b>{{c.created_by}}</b></p>
+                        <p style="font-size: 12px;">{{c.timestamp}}</p>
+                        <span id="comment-text-{{ c.id }}">{{ c.content }}</span>
+                        <textarea name="comment-input" id="comment-edit-{{ c.id }}" class="form-control" style="display: none;">{{ c.content }}</textarea>
+                        {% if c.user_id|int == user|int %}
+                            <ul class="navbar-nav ml-lg-auto float-right" data-id="{{ c.id }}">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link nav-link-icon" href="#"
+                                    id="navbar-default_dropdown_1" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar-default_dropdown_1">
+                                        <a class="dropdown-item edit-comment" data-id="{{ c.id }}">
+                                            <i class="fas fa-edit"></i> Edit the comment</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" style="color:#f65959"
+                                            href="/comment/delete/{{c.id}}"
+                                            onclick="return confirm('Are you sure you want to delete the comment?');"><i class="fa fa-trash" aria-hidden="true"></i> Delete the comment</a>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button type="submit" style="display: none;" 
+                                class="btn btn-comment save-comment" data-id="{{ c.id }}"
+                                formmethod="post" formaction="/comment/edit/{{c.id}}">Save</button>
+                        {% endif %}
+                    </div>
+                </form>
+                {% endif %}
+                {% endfor %}
+              </div>
+              <!-- </div> -->
+              </div>
+            <!-- Tab 2 end -->
+              <form>
+                <label for="comment-type" style="margin-top: 10px;">Choose Type</label>
+                              <select name="comment-type" id="comment-type">
+                                <option value="comment">comment</option>
+                                <option value="feedback">feedback</option>
+                              </select>
+                  <div class="comment-box">
+                      <textarea name="comment-input" id="comment-input" required
+                          rows="4" class="form-control"
+                          placeholder="Put your comment here..."></textarea>
+                      <button type="submit" formmethod="post" formaction="/comment/{{project_uuid}}/{{page_name}}"
+                      class="btn btn-comment">Submit
+                      </button>
+                  </div>
+              </form>
+              <script>
+                  function display_edit() {
+                      document.querySelectorAll(".edit-comment").forEach(button => {
+                          button.addEventListener("click", function () {
+                              let commentId = this.getAttribute("data-id");
+                              document.getElementById(`comment-text-${commentId}`).style.display = "none";
+                              document.getElementById(`comment-edit-${commentId}`).style.display = "block";
+                              this.style.display = "none"; // Don't show edit button anymore
+                              document.querySelector(`.navbar-nav[data-id="${commentId}"]`).style.display = "none";
+                              document.querySelector(`.save-comment[data-id="${commentId}"]`).style.display = "block"; // Show save button
+                          });
+                      });
+                  }
+                  $(document).ready(function(){
+                      $(".edit-comment").on("click", display_edit);
+                  });
+
+                  function set_option(type) {  // set <option> automatically
+                    const commentType = document.querySelector('#comment-type');
+                    commentType.value = type;
+                  }
+                  $(document).ready(function() {
+                    $("#page-comments-tab").on("click", function() {
+                        set_option("comment")
+                    });
+                    $("#feedback-tab").on("click", function() {
+                        set_option("feedback")
+                    });
+                  });
+
+                  function set_tab(type) {
+                    if (type == "feedback") {
+                        $('#feedback-tab').tab('show');
+                    } else {
+                        $('#page-comments-tab').tab('show');
+                    }
+                  }
+                  $(document).ready(function(){
+                    $("#comment-type").on("change", function() {
+                        set_tab(this.value);
+                    })
+                  }) 
+              </script>
+          </div>
+      </div>
+  </div>
+</div>

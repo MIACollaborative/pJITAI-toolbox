@@ -8,129 +8,130 @@
 {% block content %}
 
 <!-- [ Main Content ] start -->
-<div class="pcoded-main-container">
-    <div class="pcoded-wrapper">
-        <div class="pcoded-content">
-            <div class="pcoded-inner-content">
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3>Intervention Settings / Decision Point</h3>
-                                        </div>
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                                <form>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3>Intervention Settings / Decision Point</h3>
+                                                </div>
 
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <label class="form-control-label" for="decision_point_frequency">Decision
-                                                Point</label>
-                                            <div class="form-group">
-
-                                                <select id="decision_point_frequency" name="decision_point_frequency"
-                                                        class="form-select" aria-label="Default select example">
-                                                    {% for n in range(1,61) %}
-                                                    <option {% if settings.decision_point_frequency==n|string %}
-                                                            selected{% endif %} value="{{n}}">{{n}}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select> times per
-                                                <select id="decision_point_frequency_time"
-                                                        name="decision_point_frequency_time" class="form-select"
-                                                        aria-label="Default select example">
-                                                    {% for tm in decision_point_frequency_time %}
-                                                    <option {% if settings.decision_point_frequency_time==tm %}
-                                                            selected{% endif %} value="{{tm}}">{{tm}}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <!-- [ tabs ] start -->
-                                <div class="col-sm-12">
-
-                                    <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                               href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                Explanation</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                               href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                Example</a>
-                                        </li>
-                                    </ul> -->
-                                    <div class="tab-content" id="myTabContent">
-                                        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>Explanation</h5>
-                                            <p>Decision points are times at which a JITAI chooses an intervention
-                                                option. Please specify the frequency of decision points.
-                                            </p>
-                                        </div>
-                                        <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                             aria-labelledby="profile-tab"> -->
-                                        <div class="tab-item">
-                                            <h5>HeartSteps Example</h5>
-                                            <p>In HeartSteps, the five decision points correspond approximately to
-                                                the individual’s morning commute, lunchtime, mid afternoon, the evening
-                                                commute, and after dinner times. Thus, in this case, there are five
-                                                decision points per day.</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                                <!-- [ tabs ] end -->
-                            </div>
-                            <!-- [ Main Content ] end -->
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="form-group">
-                                                <a href="/intervention/settings/intervention_option/{{project_uuid}}"
-                                                   class="btn btn-outline-primary" role="button">Back</a>
-                                                <!--                                                <button type="submit" type="button" formaction="/intervention/settings/intervention_option/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
-                                                <button type="submit" type="button"
-                                                        formaction="/intervention/settings/ineligibility/{{project_uuid}}"
-                                                        formmethod="post" class="btn btn-primary">Next
-                                                </button>
-                                            </div>
-                                            <div class="form-group">
-                                                Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
                                             </div>
                                         </div>
                                     </div>
 
-                                </div>
-                            </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <label class="form-control-label" for="decision_point_frequency">Decision
+                                                        Point</label>
+                                                    <div class="form-group">
+
+                                                        <select id="decision_point_frequency" name="decision_point_frequency"
+                                                                class="form-select" aria-label="Default select example">
+                                                            {% for n in range(1,61) %}
+                                                            <option {% if settings.decision_point_frequency==n|string %}
+                                                                    selected{% endif %} value="{{n}}">{{n}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select> times per
+                                                        <select id="decision_point_frequency_time"
+                                                                name="decision_point_frequency_time" class="form-select"
+                                                                aria-label="Default select example">
+                                                            {% for tm in decision_point_frequency_time %}
+                                                            <option {% if settings.decision_point_frequency_time==tm %}
+                                                                    selected{% endif %} value="{{tm}}">{{tm}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <!-- [ tabs ] start -->
+                                        <div class="col-sm-12">
+
+                                            <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                    href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                        Explanation</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="profile-tab" data-toggle="tab"
+                                                    href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
+                                                        Example</a>
+                                                </li>
+                                            </ul> -->
+                                            <div class="tab-content" id="myTabContent">
+                                                <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                    aria-labelledby="home-tab"> -->
+                                                <div class="tab-item">
+                                                    <h5>Explanation</h5>
+                                                    <p>Decision points are times at which a JITAI chooses an intervention
+                                                        option. Please specify the frequency of decision points.
+                                                    </p>
+                                                </div>
+                                                <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                                    aria-labelledby="profile-tab"> -->
+                                                <div class="tab-item">
+                                                    <h5>HeartSteps Example</h5>
+                                                    <p>In HeartSteps, the five decision points correspond approximately to
+                                                        the individual’s morning commute, lunchtime, mid afternoon, the evening
+                                                        commute, and after dinner times. Thus, in this case, there are five
+                                                        decision points per day.</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <!-- [ tabs ] end -->
+                                    </div>
+                                    <!-- [ Main Content ] end -->
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <div class="form-group">
+                                                        <a href="/intervention/settings/intervention_option/{{project_uuid}}"
+                                                        class="btn btn-outline-primary" role="button">Back</a>
+                                                        <!--                                                <button type="submit" type="button" formaction="/intervention/settings/intervention_option/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
+                                                        <button type="submit" type="button"
+                                                                formaction="/intervention/settings/ineligibility/{{project_uuid}}"
+                                                                formmethod="post" class="btn btn-primary">Next
+                                                        </button>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                        </div>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    {% include 'includes/comments.html' %}
 </div>
 <!-- [ Main Content ] end -->
 
