@@ -56,16 +56,16 @@ MYSQL="root"
 MYSQL_HOST="localhost"
 MYSQL_PASSWORD="passpass"   # May need to change password from current to 'pass' manually, if this doesn't work
 
-# Check mysql DB pjitai exists
-DB_EXISTS=$(mysql -u $MYSQL -p$MYSQL_PASSWORD -h $MYSQL_HOST -e "SHOW DATABASES LIKE 'pjitai';" | grep "pjitai" > /dev/null; echo "$?")
+# Check mysql DB pJITAI exists
+DB_EXISTS=$(mysql -u $MYSQL -p$MYSQL_PASSWORD -h $MYSQL_HOST -e "SHOW DATABASES LIKE 'pJITAI';" | grep "pJITAI" > /dev/null; echo "$?")
 
 if [ $DB_EXISTS -eq 1 ]; then
-  echo "Database pjitai does not exist. Creating now..."
+  echo "Database pJITAI does not exist. Creating now..."
   mysql -u $MYSQL -p$MYSQL_PASSWORD -h $MYSQL_HOST <<EOF
-  CREATE DATABASE pjitai;
+  CREATE DATABASE pJITAI;
 EOF
 else
-  echo "Database pjitai already exists. Using the existing database."
+  echo "Database pJITAI already exists. Using the existing database."
 fi
 
 mysql -u $MYSQL -p$MYSQL_PASSWORD -h $MYSQL_HOST <<EOF
@@ -73,7 +73,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 EOF
 
-echo "mysql is running, privileges flushed and db pjitai created."
+echo "mysql is running, privileges flushed and db pJITAI created."
 
 # run nginx
 if [[ "$OS_TYPE" == "Darwin" ]]; then
