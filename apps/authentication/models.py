@@ -37,7 +37,7 @@ class Users(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    displayname = db.Column(db.String(64), unique=True)
+    displayname = db.Column(db.String(64))
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.LargeBinary)
 
@@ -64,8 +64,8 @@ def user_loader(id):
     return Users.query.filter_by(id=id).first()
 
 
-@login_manager.request_loader
-def request_loader(request):
-    displayname = request.form.get('displayname')
-    user = Users.query.filter_by(displayname=displayname).first()
-    return user if user else None
+#@login_manager.request_loader
+#def request_loader(request):
+#    displayname = request.form.get('displayname')
+#    user = Users.query.filter_by(displayname=displayname).first()
+#    return user if user else None
