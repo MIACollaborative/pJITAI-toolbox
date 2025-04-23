@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import request
 
 from apps import db
-from apps.algorithms.models import Projects, ProjectMenu
+from apps.algorithms.models import Projects, ProjectMenu, ProjectLogs
 from apps.authentication.models import Users
 from apps.api.models import Survey
 
@@ -117,3 +117,10 @@ def get_all_users(user_id):
         user['email'] = u.email
         result.append(user)
     return result
+
+def add_project_logs(project_uuid, details, page_name, timestamp, created_by):
+    ProjectLogs(project_uuid=project_uuid, 
+                details=details,
+                page_name=page_name,
+                timestamp=timestamp,
+                created_by=created_by).save()

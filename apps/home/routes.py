@@ -39,7 +39,8 @@ from apps import db
 from apps.algorithms.models import Projects
 from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
-    update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users, update_general_settings_collaborators, get_survey_details
+    update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users, \
+    update_general_settings_collaborators, get_survey_details, add_project_logs
 from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
 from apps.api.sql_helper import get_comments, get_all_comments, save_survey, update_survey
@@ -194,7 +195,6 @@ def mark_project_finalized(project_uuid):
 @blueprint.route('/projects/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])
 @login_required
 def project_settings(setting_type, project_uuid=None):
-    print('setting type: ', setting_type)
     user_id = current_user.get_id()
     general_settings = {}
     modified_on = ""
@@ -202,19 +202,27 @@ def project_settings(setting_type, project_uuid=None):
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("study_name", "")
 
+    print('settingtype: ', setting_type)
+
     if setting_type == "general":
         page_name = "general_settings"
+    elif setting_type == "collaborators":
+        page_name = setting_type
+        page_name_logs = "general_settings"
     elif setting_type == "scenario":
         page_name = "general_scenario"
+        page_name_logs = "personalization_method"
     elif setting_type == "summary":
         page_name = "general_summary"
+        page_name_logs = "general_scenario"
     else:
         page_name = setting_type
+        page_name_logs = setting_type
+
+    print('page name:', page_name)
 
     comments_for_that_page = get_comments(project_uuid, page_name)
     all_comments = get_all_comments(project_uuid, page_name)
-
-    # print('all_comments: ', all_comments)
 
     if project_details.get("general_settings"):
         general_settings = project_details.get("general_settings", {})
@@ -222,6 +230,8 @@ def project_settings(setting_type, project_uuid=None):
 
     if request.method == 'POST':
         add_menu(user_id, project_uuid, request.path)
+        add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_logs, timestamp=datetime.now())
+
         if project_details_obj:
             if setting_type == 'collaborators' and 'collaborators' in request.form.to_dict():
                 # if 'collaborators' not in request.form.to_dict():  # When calling collaborators for the first time
@@ -304,8 +314,32 @@ def intervention_settings(setting_type, project_uuid):
     if not modified_on:
         modified_on = datetime.now()
 
+    if setting_type == "intervention_option":
+        page_name = setting_type
+        page_name_log = "general_summary"
+    elif setting_type == "decision_point":
+        page_name = "intervention_decision_point"
+        page_name_log = "intervention_option"
+    elif setting_type == "ineligibility":
+        page_name = "intervention_ineligibility"
+        page_name_log = "intervention_decision_point"
+    elif setting_type == "intervention_probability":
+        page_name = setting_type
+        page_name_log = "intervention_ineligibility"
+    elif setting_type == "update_point":
+        page_name = "intervention_update_point"
+        page_name_log = "intervention_probability"
+    elif setting_type == "summary":
+        page_name = "intervention_summary"
+        page_name_log = "intervention_update_point"
+    else:
+        page_name = setting_type
+        page_name_log = setting_type
+
     if request.method == 'POST':
         add_menu(user_id, project_uuid, request.path)
+        if not setting_type == "intervention_option":  # In general summry, details is always empty
+            add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=datetime.now())
         update_intervention_settings(request.form.to_dict(), project_details_obj) # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
         project_details, project_details_obj = get_project_details(project_uuid, user_id) # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
         intervention_settings = project_details.get("intervention_settings")  # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
@@ -315,17 +349,6 @@ def intervention_settings(setting_type, project_uuid):
                     intervention_settings.pop(k)
 
     all_menus = get_project_menu_pages(user_id, project_uuid)
-
-    if setting_type == "decision_point":
-        page_name = "intervention_decision_point"
-    elif setting_type == "ineligibility":
-        page_name = "intervention_ineligibility"
-    elif setting_type == "update_point":
-        page_name = "intervention_update_point"
-    elif setting_type == "summary":
-        page_name = "intervention_summary"
-    else:
-        page_name = setting_type
 
     all_comments = get_all_comments(project_uuid, page_name)
     comments_for_that_page = get_comments(project_uuid, page_name)
@@ -378,10 +401,36 @@ def model_settings(setting_type, project_uuid):
     project_name = project_details.get("general_settings", {}).get("study_name", "")
     #print(f'XXXXXXXXXX {project_details}')
 
+
+    if setting_type == "proximal_outcome_attribute":
+        page_name = "model_proximal_outcome_attribute"
+        page_name_log = "intervention_summary"
+    elif setting_type == "intercept":
+        page_name = "model_intercept"
+        page_name_log = "covariates_all"
+    elif setting_type == "main_treatment_effect":
+        page_name = "model_main_treatment_effect"
+        page_name_log = "model_intercept"
+    elif setting_type == "main_noise":
+        page_name = "model_main_noise"
+        page_name_log = "model_main_treatment_effect"
+    elif setting_type == "summary":
+        page_name = "model_summary"
+        page_name_log = "model_main_noise"
+    else:
+        page_name = setting_type
+
     # proximal_outcome_name (general settings)
     # intervention_component_name (general settings)
     if request.method == 'POST':
         add_menu(user_id, project_uuid, request.path)
+        if not setting_type == "proximal_outcome_attribute":
+            if not setting_type == "intercept":
+                add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=datetime.now())
+            else:  # intercept
+                if project_details.get("covariates"):
+                    all_covariates = project_details.get("covariates")
+                    add_project_logs(project_uuid=project_uuid, created_by=user_id, details=all_covariates, page_name=page_name_log, timestamp=datetime.now())
         update_model_settings(request.form.to_dict(), project_details_obj)
         project_details, project_details_obj = get_project_details(project_uuid, user_id)
 
@@ -406,20 +455,6 @@ def model_settings(setting_type, project_uuid):
         modified_on = datetime.now()
 
     all_menus = get_project_menu_pages(user_id, project_uuid)#@Anand - add new menu here
-    
-    if setting_type == "proximal_outcome_attribute":
-        page_name = "model_proximal_outcome_attribute"
-    elif setting_type == "intercept":
-        page_name = "model_intercept"
-    elif setting_type == "main_treatment_effect":
-        page_name = "model_main_treatment_effect"
-    elif setting_type == "main_noise":
-        page_name = "model_main_noise"
-    elif setting_type == "summary":
-        page_name = "model_summary"
-    else:
-        page_name = setting_type
-
     all_comments = get_all_comments(project_uuid, page_name)
     comments_for_that_page = get_comments(project_uuid, page_name)
     user = user_id
@@ -493,11 +528,34 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
             settings["intervention_component_name"] = project_details.get("general_settings", {}).get(
                 "intervention_component_name")
 
+    if setting_type == "all":
+        page_name = "covariates_all"
+        page_name_log = "model_proximal_outcome_attribute"
+    elif setting_type == "covariate_name":
+        page_name = setting_type
+        page_name_log = "covariates_all"
+    elif setting_type == "covariate_attributes":
+        page_name = setting_type
+        page_name_log = "covariate_name"
+    elif setting_type == "covariate_main_effect":
+        page_name = setting_type
+        page_name_log = "covariate_attributes"
+    elif setting_type == "covariate_tailored_effect":
+        page_name = setting_type
+        page_name_log = "covariate_main_effect"
+    elif setting_type == "covariate_summary":
+        page_name = setting_type
+        page_name_log = "covariate_tailored_effect"
+    else:
+        page_name = setting_type
+        page_name_log = setting_type
+
     if not modified_on:
         modified_on = datetime.now()
 
     if request.method == 'POST':
         add_menu(user_id, project_uuid, request.path)
+        add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=datetime.now())
         if "covariate_attributes" in request.referrer:
             form_data = request.form.to_dict()
             if form_data.get("covariate_type") != "Binary":
@@ -529,12 +587,6 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
             settings = project_details.get("covariates").get(cov_id)
 
     all_menus = get_project_menu_pages(user_id, project_uuid)
-
-    if setting_type == "all":
-        page_name = "covariates_all"
-    else:
-        page_name = setting_type
-
     all_comments = get_all_comments(project_uuid, page_name)
     comments_for_that_page = get_comments(project_uuid, page_name)
     user = user_id
