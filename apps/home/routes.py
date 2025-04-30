@@ -33,9 +33,10 @@ from uuid import uuid4
 
 from flask import render_template, redirect, request
 from flask_login import login_required, current_user
+from flask_mail import Message
 from sqlalchemy import desc
 
-from apps import db
+from apps import db, mail
 from apps.algorithms.models import Projects
 from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
@@ -83,6 +84,15 @@ def add_comment(project_uuid, page_name):
                       type=type)
     db.session.add(comment)
     db.session.commit()
+
+    if type == 'comment':
+        # Send email notification
+        msg = Message("pJITAI: comment added by your collaborator",
+                    recipients=["hngchris@umich.edu"])
+        email_msg = f"Your collaborator left a comment on {page_name} page:" + request.form.get("comment-input")
+        msg.body = email_msg
+        
+        mail.send(msg)
 
     return redirect(request.referrer)
 
@@ -202,7 +212,7 @@ def project_settings(setting_type, project_uuid=None):
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("study_name", "")
 
-    print('settingtype: ', setting_type)
+    # print('settingtype: ', setting_type)
 
     if setting_type == "general":
         page_name = "general_settings"
@@ -219,7 +229,7 @@ def project_settings(setting_type, project_uuid=None):
         page_name = setting_type
         page_name_logs = setting_type
 
-    print('page name:', page_name)
+    # print('page name:', page_name)
 
     comments_for_that_page = get_comments(project_uuid, page_name)
     all_comments = get_all_comments(project_uuid, page_name)
