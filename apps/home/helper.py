@@ -36,11 +36,18 @@ def update_general_settings(data, project_details_obj):
     if project_details_obj:
         gen_settings = copy.deepcopy(project_details_obj.general_settings)
         gen_settings.update(data)
+
+        if not project_details_obj.general_settings.get('collaborators'):  # Add owner as collaborator for the first time
+            user_id = int(project_details_obj.created_by)
+            u = db.session.query(Users).filter(Users.id == user_id).first()
+            current_user = {'id': u.id, 'displayname': u.displayname, 'email': u.email}
+            gen_settings['collaborators'] = [current_user]
+
         project_details_obj.general_settings = gen_settings
         project_details_obj.modified_on = datetime.now()
         db.session.commit()
 
-def update_general_settings_collaborators(data, project_details_obj, current_user):  # data: email
+def update_general_settings_collaborators(data, project_details_obj):  # data: email
     if project_details_obj:
         gen_settings = copy.deepcopy(project_details_obj.general_settings)
 
@@ -52,10 +59,6 @@ def update_general_settings_collaborators(data, project_details_obj, current_use
             if not any(c['email'] == data for c in existing_collabs):
                 existing_collabs.append(new_collaborator)
             gen_settings['collaborators'] = existing_collabs
-        else:  # First time adding a collaborator
-            c = db.session.query(Users).filter(Users.email == current_user).first()
-            current_user = {'email': current_user, 'displayname': c.displayname, 'id': c.id}
-            gen_settings['collaborators'] = [current_user, new_collaborator]
         print('after: ', gen_settings)
         project_details_obj.general_settings = gen_settings
         project_details_obj.modified_on = datetime.now()

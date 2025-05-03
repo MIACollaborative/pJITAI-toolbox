@@ -206,7 +206,10 @@ class ProjectLogs(db.Model):  # This saves each page as screenshots
     project_uuid = db.Column('proj_uuid', db.String(36))
     details = db.Column('details', db.JSON, default={})  
     page_name = db.Column('page_name', db.String(100))
-    timestamp = db.Column(db.DateTime, default=datetime.now())
+    # timestamp = db.Column(db.DateTime, default=datetime.now())
+    timestamp = db.Column('timestamp',
+                          db.String(100),
+                          default=time_8601)
     created_by = db.Column(db.Integer,
                            db.ForeignKey('users.id'),
                            nullable=False)

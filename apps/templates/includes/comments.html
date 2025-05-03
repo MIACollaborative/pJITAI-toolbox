@@ -102,6 +102,7 @@
                       <textarea name="comment-input" id="comment-input" required
                           rows="4" class="form-control"
                           placeholder="Put your comment here..."></textarea>
+                      <input type="hidden" value={{full_url}} name="full_url" />
                       <button type="submit" formmethod="post" formaction="/comment/{{project_uuid}}/{{page_name}}"
                       class="btn btn-comment">Submit
                       </button>
