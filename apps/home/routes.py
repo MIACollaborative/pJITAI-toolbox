@@ -705,7 +705,7 @@ def configuration_summary(config_type, project_uuid):
     if config_type == "summary":
         page_name = "configuration_summary"
     elif config_type == "final_survey":
-        survey_details, survey_details_obj = get_survey_details(project_uuid=project_uuid)
+        survey_details, survey_details_obj = get_survey_details(project_uuid=project_uuid, user_id=user_id)
         survey_details = survey_details.get("survey_questions", {})
         page_name = "configuration_final_survey"
     else:
@@ -768,11 +768,11 @@ def configuration_summary(config_type, project_uuid):
                                all_menus=all_menus, menu_number=17, modified_on=modified_on, project_uuid=project_uuid, survey=survey_details,
                                comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif config_type == "add_edit_survey":
-        survey_details, survey_details_obj = get_survey_details(project_uuid=project_uuid)
+        survey_details, survey_details_obj = get_survey_details(project_uuid=project_uuid, user_id=user_id)
         if request.method == 'POST':
             survey = request.form.to_dict()
             if not survey_details_obj:
-                save_survey(project_uuid=project_uuid, survey=survey)
+                save_survey(project_uuid=project_uuid, survey=survey, user_id=user_id)
             else:
                 update_survey(data=survey, survey_details_obj=survey_details_obj)
         return redirect("/projects/in_progress")

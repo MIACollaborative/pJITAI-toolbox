@@ -9,9 +9,9 @@ from apps.authentication.models import Users
 from apps.api.models import Survey
 
 
-def get_survey_details(project_uuid):
+def get_survey_details(project_uuid, user_id):
     if project_uuid:
-        survey_details_obj = db.session.query(Survey).filter(Survey.proj_uuid == project_uuid).first()
+        survey_details_obj = db.session.query(Survey).filter(Survey.proj_uuid == project_uuid).filter(Survey.created_by == user_id).first()
         if survey_details_obj:
             survey_details = survey_details_obj.as_dict()
         else:
