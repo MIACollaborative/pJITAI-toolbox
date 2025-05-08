@@ -169,14 +169,6 @@ def decision(uuid: str) -> dict:
 def upload(uuid: str) -> dict:
     input_data = request.json
     try:
-        # validated_input_data = _validate_algo_data(uuid, input_data['values'])
-        # validated_input_data = input_data['values']
-        # _save_each_data_row(input_data['user_id'],
-        #                     decision_id=input_data['decision_id'],
-        #                     proximal_outcome_timestamp=input_data['proximal_outcome_timestamp'],
-        #                     proximal_outcome=input_data['proximal_outcome'],
-        #                     data=validated_input_data,
-        #                     algo_uuid=uuid)
         user_id = input_data['user_id']
         proj_uuid = uuid
         timestamp = input_data['timestamp']

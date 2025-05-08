@@ -35,6 +35,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from apps import db
 from apps.authentication.util import hash_pass
 
+from apps.api.models import time_8601
+
 
 def save(obj) -> None:
     try:
@@ -186,6 +188,37 @@ class ProjectMenu(db.Model):
     def __repr__(self):
         return str(self.name)
     '''
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def save(self):
+        save(self)
+
+    def delete(self):
+        delete_from_db(self)
+
+@dataclass
+class ProjectLogs(db.Model):  # This saves each page as screenshots
+    __tablename__ = 'project_logs'
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   nullable=False)
+    project_uuid = db.Column('proj_uuid', db.String(36))
+    details = db.Column('details', db.JSON, default={})  
+    page_name = db.Column('page_name', db.String(100))
+    # timestamp = db.Column(db.DateTime, default=datetime.now())
+    timestamp = db.Column('timestamp',
+                          db.String(100),
+                          default=time_8601)
+    created_by = db.Column(db.Integer,
+                           db.ForeignKey('users.id'),
+                           nullable=False)
+    
+    
+    def __init__(self, **kwargs):
+        for property, value in kwargs.items():
+            setattr(self, property, value)
+
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
