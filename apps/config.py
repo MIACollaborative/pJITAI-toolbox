@@ -55,9 +55,9 @@ class Config(object):
     MAIL_PORT = config('MAIL_PORT', default=587, cast=int)
     MAIL_USE_TLS = config('MAIL_USE_TLS', default=True, cast=bool)
     MAIL_USE_SSL = config('MAIL_USE_SSL', default=False, cast=bool)
-    MAIL_USERNAME = config('MAIL_USERNAME', default='pjtdmn@gmail.com')
-    MAIL_PASSWORD = config('MAIL_PASSWORD', default='xxqk kmfm rgkv dymw')
-    MAIL_DEFAULT_SENDER = config('MAIL_DEFAULT_SENDER', default='pjtdmn@gmail.com')
+    MAIL_USERNAME = config('MAIL_USERNAME')
+    MAIL_PASSWORD = config('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = config('MAIL_DEFAULT_SENDER')
 
     # Assets Management
     ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
