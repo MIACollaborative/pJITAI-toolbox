@@ -54,14 +54,13 @@
                 <!-- Tab 2: Feedback -->
                <div id="feedback" class="tab-pane" aria-labelledby="feedback-tab">
                 {% for c in comments_for_that_page %}
-                {% if c.type == "feedback" %}
+                {% if c.type == "feedback" and c.user_id|int == user|int %}
                 <form>
                     <div class='chat-message-feedback'>
                         <p style="margin: 0; padding: 0;"><b>{{c.created_by}}</b></p>
                         <p style="font-size: 12px;">{{c.timestamp}}</p>
                         <span id="comment-text-{{ c.id }}">{{ c.content }}</span>
                         <textarea name="comment-input" id="comment-edit-{{ c.id }}" class="form-control" style="display: none;">{{ c.content }}</textarea>
-                        {% if c.user_id|int == user|int %}
                             <ul class="navbar-nav ml-lg-auto float-right" data-id="{{ c.id }}">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link nav-link-icon" href="#"
@@ -83,7 +82,6 @@
                             <button type="submit" style="display: none;" 
                                 class="btn btn-comment save-comment" data-id="{{ c.id }}"
                                 formmethod="post" formaction="/comment/edit/{{c.id}}">Save</button>
-                        {% endif %}
                     </div>
                 </form>
                 {% endif %}
