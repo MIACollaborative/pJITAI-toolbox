@@ -41,9 +41,9 @@ import json
 import copy
 
 
-def save_survey(project_uuid, survey):
+def save_survey(project_uuid, survey, user_id):
     survey_obj = Survey(proj_uuid=project_uuid, 
-                        survey_questions=survey)
+                        survey_questions=survey, created_by=user_id)
     try:
         db.session.add(survey_obj)
         db.session.commit()

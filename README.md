@@ -9,6 +9,10 @@ Initial development of the pJITAI Toolbox started at the [mDOT center](https://m
 ## See Also
 [The pJITAI Toolbox Test Client](https://github.com/MIACollaborative/pJITAI-test-client)
 
+## Before running the Toolbox
+### Make sure to add .env
+`.env` must have `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_DEFAULT_SENDER`. Make sure all data is uploaded - without the information, it will give an error.
+
 ## How to run the pJITAI Toolbox
 ### Important note
 The `setup.sh` script is Mac specific, using `homebrew` to setup the environment.

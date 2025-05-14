@@ -217,6 +217,9 @@ class Survey(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     proj_uuid = db.Column(db.String(36), nullable=False)
     survey_questions = db.Column('survey_questions', db.JSON)
+    created_by = db.Column(db.Integer,
+                           db.ForeignKey('users.id'),
+                           nullable=False)
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
