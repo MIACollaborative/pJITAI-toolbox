@@ -65,3 +65,4 @@ Werkzeug==2.3.6
 WTForms==2.3.3
 zope.event==4.6
 zope.interface==5.5.2
+flask_mail==0.10.0

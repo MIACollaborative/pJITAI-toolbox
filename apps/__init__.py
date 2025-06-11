@@ -32,9 +32,11 @@ from importlib import import_module
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+mail = Mail()
 
 
 def register_extensions(app):
@@ -65,4 +67,5 @@ def create_app(config):
     register_blueprints(app)
     configure_database(app)
     app.jinja_env.policies["json.dumps_kwargs"] = {"sort_keys": False}
+    mail.init_app(app)
     return app
