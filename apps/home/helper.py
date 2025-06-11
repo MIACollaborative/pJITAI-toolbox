@@ -42,7 +42,6 @@ def update_general_settings(data, project_details_obj):
             u = db.session.query(Users).filter(Users.id == user_id).first()
             current_user = {'id': u.id, 'displayname': u.displayname, 'email': u.email}
             gen_settings['collaborators'] = [current_user]
-
         project_details_obj.general_settings = gen_settings
         project_details_obj.modified_on = datetime.now()
         db.session.commit()

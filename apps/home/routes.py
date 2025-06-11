@@ -261,7 +261,7 @@ def project_settings(setting_type, project_uuid=None):
         else:
             gdata = request.form.to_dict()
             auth_token = uuid4()
-
+            gdata['collaborators'] = [{'id': user_id, 'displayname': current_user.displayname, 'email': current_user.email}]
             Projects(created_by=user_id,
                      uuid=project_uuid,
                      general_settings=gdata,
