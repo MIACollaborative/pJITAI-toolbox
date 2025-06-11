@@ -419,8 +419,8 @@ def model_settings(setting_type, project_uuid):
     #print(f'XXXXXXXXXX {project_details}')
     full_url = request.url
 
-    if setting_type == "proximal_outcome_attribute":
-        page_name = "model_proximal_outcome_attribute"
+    if setting_type == "proximal_outcome":
+        page_name = "model_proximal_outcome"
         page_name_log = "intervention_summary"
     elif setting_type == "intercept":
         page_name = "model_intercept"
@@ -442,7 +442,7 @@ def model_settings(setting_type, project_uuid):
     if request.method == 'POST':
         timestamp = datetime.now(get_localzone()).isoformat()
         add_menu(user_id, project_uuid, request.path)
-        if not setting_type == "proximal_outcome_attribute":
+        if not setting_type == "proximal_outcome":
             if not setting_type == "intercept":
                 add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=timestamp)
             else:  # intercept
@@ -477,9 +477,9 @@ def model_settings(setting_type, project_uuid):
     comments_for_that_page = get_comments(project_uuid, page_name)
     user = user_id
 
-    if setting_type == "proximal_outcome_attribute":
-        return render_template("design/model/proximal_outcome_attribute.html",
-                               segment="model_proximal_outcome_attribute", all_menus=all_menus, menu_number=11,
+    if setting_type == "proximal_outcome":
+        return render_template("design/model/proximal_outcome.html",
+                               segment="model_proximal_outcome", all_menus=all_menus, menu_number=11,
                                project_name=project_name, modified_on=modified_on, settings=model_settings,
                                project_uuid=project_uuid,
                                all_covariates=all_covs, 
@@ -549,7 +549,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
 
     if setting_type == "all":
         page_name = "covariates_all"
-        page_name_log = "model_proximal_outcome_attribute"
+        page_name_log = "model_proximal_outcome"
     elif setting_type == "covariate_name":
         page_name = setting_type
         page_name_log = "covariates_all"
