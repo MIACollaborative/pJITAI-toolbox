@@ -276,18 +276,19 @@ function showControl() {
         <div class="navbar-content scroll-div">
 
             <ul class="nav pcoded-inner-navbar">
-                <li class="nav-item pcoded-hasmenu {% if 'general' in segment %} active pcoded-trigger {% endif %}">
-                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
+                <!-- <li class="nav-item pcoded-hasmenu {% if 'general' in segment %} active pcoded-trigger {% endif %}"> -->
+                <li class="nav-item {% if 'general' in segment %} active pcoded-trigger {% endif %}">
+                    <a href="/projects/settings/general/{{project_uuid}}" class="nav-link "><span class="pcoded-micon"><i
                             class="fas fa-plus"></i></span><span class="pcoded-mtext">Add New Project</span></a>
-                    <ul class="pcoded-submenu" {% if
-                    'general' not in segment %} style="display: none;" {% endif %}>
-                <li class="{% if 'general_settings' in segment %} active {% endif %}"><a
+                    <!-- <ul class="pcoded-submenu" {% if
+                    'general' not in segment %} style="display: none;" {% endif %}> -->
+                <!-- <li class="{% if 'general_settings' in segment %} active {% endif %}"><a
                         href="/projects/settings/general/{{project_uuid}}" class=""><i class="fas fa-plus-circle"></i>
-                    Add a new intervention component</a></li>
-                <li class="{% if 'personalized_method' in segment %} active {% endif %}"><a
+                    Add a new intervention component</a></li> -->
+                <!-- <li class="{% if 'personalized_method' in segment %} active {% endif %}"><a
                         href="/projects/duplicate/demo-0001" class=""><i
-                        class="fas fa-clone"></i> Add HeartSteps Demo</a></li>
-            </ul>
+                        class="fas fa-clone"></i> Add HeartSteps Demo</a></li> -->
+            <!-- </ul> -->
             </li>
             <li class="nav-item {% if 'in_progress' in segment %} active{% endif %}">
                 <a href="/projects/in_progress" class="nav-link "><span class="pcoded-micon"><i
