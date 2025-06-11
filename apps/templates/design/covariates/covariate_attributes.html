@@ -43,7 +43,7 @@
                                                         class="form-control" placeholder=""> -->
 
                                                         
-                                                    <input value="{{settings.covariate_min_val}}" step="0.01"
+                                                    <input value="{{settings.covariate_min_val}}" step="any"
                                                     type="number"
                                                     id="covariate_min_val" name="covariate_min_val"
                                                     class="form-control" required>
@@ -57,7 +57,7 @@
                                                         class="form-control" placeholder=""> -->
 
                                                     
-                                                    <input value="{{settings.covariate_max_val}}" step="0.01"
+                                                    <input value="{{settings.covariate_max_val}}" step="any"
                                                     type="number"
                                                     id="covariate_max_val" name="covariate_max_val"
                                                     class="form-control" placeholder="" required>
@@ -71,8 +71,8 @@
                                                             $("#covariate_min_val").removeAttr("max");
                                                             $("#covariate_max_val").removeAttr("min");
                                                             $("#covariate_max_val").removeAttr("max");
-                                                            // $("#covariate_min_val").attr("step",0.01);
-                                                            // $("#covariate_max_val").attr("step",0.01);
+                                                            $("#covariate_min_val").attr("step",0.01);
+                                                            $("#covariate_max_val").attr("step",0.01);
                                                         } else if (covariate_type=="Integer"){
                                                             $('#binary_covariates_div').hide();
                                                             $("#covariate_min_val").removeAttr('min');
