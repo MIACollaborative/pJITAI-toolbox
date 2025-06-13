@@ -22,7 +22,7 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3>Model Settings / {{cov_name}} / Attributes</h3>
+                                                <h3>Covariates / {{cov_name}} / Attributes</h3>
                                             </div>
 
                                         </div>
@@ -35,32 +35,34 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="covariate_min_val">Minimum value
-                                                        of the covariate</label>
-                                                    <!-- <input value="{{settings.covariate_min_val}}" type="number" {% if
-                                                        settings.covariate_type=="Binary" %} min="0" max="0" {% endif %}
-                                                        step="0.01" id="covariate_min_val" name="covariate_min_val"
-                                                        class="form-control" placeholder=""> -->
-
-                                                        
+                                                    <label class="form-control-label" for="covariate_type">Covariate Data Type</label><br>
+                                                    <select id="covariate_type" name="covariate_type" id="covariate_type"
+                                                            onchange="remove_binary_div()" class="form-control">
+                                                        {% for ct in covariates_types%}
+                                                        <option value="{{ct}}" {{
+                                                        "selected" if settings.covariate_type == ct }}>{{ct}}</option>
+                                                        {%endfor%}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="covariate_min_val">Minimum Allowed Value</label>   
                                                     <input value="{{settings.covariate_min_val}}" step="any"
                                                     type="number"
                                                     id="covariate_min_val" name="covariate_min_val"
                                                     class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="covariate_max_val">Maximum value
-                                                        of the covariate</label>
-                                                    <!-- <input value="{{settings.covariate_max_val}}" type="number" {% if
-                                                        settings.covariate_type=="Binary" %} min="1" max="1" {% endif %}
-                                                        step="0.01" id="covariate_max_val" name="covariate_max_val"
-                                                        class="form-control" placeholder=""> -->
-
-                                                    
+                                                    <label class="form-control-label" for="covariate_max_val">Maximum Allowed Value</label>
                                                     <input value="{{settings.covariate_max_val}}" step="any"
                                                     type="number"
                                                     id="covariate_max_val" name="covariate_max_val"
                                                     class="form-control" placeholder="" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="notes">Notes</label><br>
+                                                    <input value="{{settings.notes}}" type="text"
+                                                        name="notes" class="form-control"
+                                                        placeholder="">
                                                 </div>
                                                 <script>
                                                     function remove_binary_div(){
@@ -115,18 +117,7 @@
                                                     });
 
                                                 </script>
-                                                <div class="form-group">
-                                                    <label class="form-control-label" for="covariate_type">Type of the
-                                                        covariate</label><br>
-                                                    <select id="covariate_type" name="covariate_type" id="covariate_type"
-                                                            onchange="remove_binary_div()" class="form-control">
-                                                        {% for ct in covariates_types%}
-                                                        <option value="{{ct}}" {{
-                                                        "selected" if settings.covariate_type == ct }}>{{ct}}</option>
-                                                        {%endfor%}
-                                                    </select>
-                                                </div>
-                                                <div id="binary_covariates_div">
+                                                <!-- <div id="binary_covariates_div">
                                                     <div class="form-group">
                                                         <label class="form-control-label" for="covariate_meaning_0">Meaning
                                                             of the "Covariate=0"</label><br>
@@ -142,7 +133,7 @@
                                                             name="covariate_meaning_1" class="form-control"
                                                             placeholder="">
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div>
 
                                         </div>
