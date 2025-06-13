@@ -31,9 +31,9 @@
                     "/projects/settings/personalized_method/"+project_uuid in all_menus %}
                     href="/projects/settings/personalized_method/{{project_uuid}}" {% endif %} class="">Personalization
                     Method</a></li>
-                <li class="{% if 'scenario' in segment %} active {% endif %}"><a {% if
+                <!-- <li class="{% if 'scenario' in segment %} active {% endif %}"><a {% if
                     "/projects/settings/scenario/"+project_uuid in all_menus %}
-                    href="/projects/settings/scenario/{{project_uuid}}" {% endif %} class="">Scenario</a></li>
+                    href="/projects/settings/scenario/{{project_uuid}}" {% endif %} class="">Scenario</a></li> -->
                 <li class="{% if 'general_summary' in segment %} active {% endif %}"><a {% if
                     "/projects/settings/summary/"+project_uuid in all_menus %}
                     href="/projects/settings/summary/{{project_uuid}}" {% endif %} class="">Summary</a></li>
@@ -52,11 +52,11 @@
                 Options</a></li>
             <li class="{% if 'intervention_decision_point' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/decision_point/"+project_uuid in all_menus %}
-                href="/intervention/settings/decision_point/{{project_uuid}}" {% endif %} class="">Decision Point</a>
+                href="/intervention/settings/decision_point/{{project_uuid}}" {% endif %} class="">Decision Points</a>
             </li>
-            <li class="{% if 'intervention_ineligibility' in segment %} active {% endif %}"><a {% if
+            <!-- <li class="{% if 'intervention_ineligibility' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/ineligibility/"+project_uuid in all_menus %}
-                href="/intervention/settings/ineligibility/{{project_uuid}}" {% endif %} class="">Ineligibility</a></li>
+                href="/intervention/settings/ineligibility/{{project_uuid}}" {% endif %} class="">Ineligibility</a></li> -->
             <li class="{% if 'intervention_probability' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/intervention_probability/"+project_uuid in all_menus %}
                 href="/intervention/settings/intervention_probability/{{project_uuid}}" {% endif %}
@@ -75,10 +75,10 @@
                         class="pcoded-mtext">Model Settings</span></a>
                 <ul class="pcoded-submenu" {% if
                 'model' not in segment and not 'covariates' %} style="display: none;" {% endif %}>
-            <li class="{% if 'model_proximal_outcome_attribute' in segment %} active {% endif %}"><a {% if
-                "/model/settings/proximal_outcome_attribute/"+project_uuid in all_menus %}
-                href="/model/settings/proximal_outcome_attribute/{{project_uuid}}" {% endif %} class="">Proximal Outcome
-                Attributes</a></li>
+            <li class="{% if 'model_proximal_outcome' in segment %} active {% endif %}"><a {% if
+                "/model/settings/proximal_outcome/"+project_uuid in all_menus %}
+                href="/model/settings/proximal_outcome/{{project_uuid}}" {% endif %} class="">Proximal Outcome
+                </a></li>
             <li class="{% if 'covariates' in segment %} active {% endif %}"><a {% if
                 "/covariates/settings/all/"+project_uuid in all_menus %}
                 href="/covariates/settings/all/{{project_uuid}}" {% endif %} class="">Covariates</a></li>
