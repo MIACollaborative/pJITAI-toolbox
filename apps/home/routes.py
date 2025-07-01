@@ -208,6 +208,19 @@ def mark_project_finalized(project_uuid):
         proj.project_status = 1
         db.session.commit()
 
+    # Send email notification
+    project_details, project_details_obj = get_project_details(project_uuid=project_uuid, user_id=user_id)
+    collaborators = project_details.get('general_settings', {}).get('collaborators', {})
+    displayname = current_user.displayname
+    final_survey_link = 'https://docs.google.com/forms/d/e/1FAIpQLScS9CuvxoQlWsb41tMo4cvLd7fIG053h--yoE9Wu1f5VKtl_A/viewform?usp=header'
+    for c in collaborators: # Send for everyone including MP
+        msg = Message("[pJITAI] Project Finalized",
+                    recipients=[c["email"]])
+        email_msg = f"The Main Participant '{displayname}' finalized the project '{project_details.get('general_settings').get('study_name')}'." + \
+                    f"\nPlease open this link to complete the final survey: {final_survey_link}" 
+        msg.body = email_msg
+        mail.send(msg)    
+
     return redirect("/projects/finalized")
 
 @blueprint.route('/projects/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])
