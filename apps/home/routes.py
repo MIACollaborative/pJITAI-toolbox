@@ -42,7 +42,7 @@ from apps.algorithms.models import Projects
 from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
     update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users, \
-    update_general_settings_collaborators, get_survey_details, add_project_logs
+    update_general_settings_team_members, get_survey_details, add_project_logs
 from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
 from apps.api.sql_helper import get_comments, get_all_comments, save_survey, update_survey
@@ -88,16 +88,16 @@ def add_comment(project_uuid, page_name):
     db.session.commit()
 
     if type == 'comment':
-        # Find collaborators
+        # Find team_members
         project_details, project_details_obj = get_project_details(project_uuid=project_uuid, user_id=user_id)
-        collaborators = project_details.get('general_settings', {}).get('collaborators', {})
+        team_members = project_details.get('general_settings', {}).get('team_members', {})
         displayname = current_user.displayname
         # Send email notification
-        for c in collaborators:
-            if c["id"] != user_id:
-                msg = Message("[pJITAI] Comment Added by your Collaborator",
-                            recipients=[c["email"]])
-                email_msg = f"Your collaborator '{displayname}' left a comment on project '{project_details.get('general_settings').get('study_name')} / {page_name} page': " + request.form.get("comment-input") + \
+        for t in team_members:
+            if t["id"] != user_id:
+                msg = Message("[pJITAI] Comment Added by your Team Member",
+                            recipients=[t["email"]])
+                email_msg = f"Your team member '{displayname}' left a comment on project '{project_details.get('general_settings').get('project_name')} / {page_name} page': " + request.form.get("comment-input") + \
                             f"\nClick on this link to reply back: {full_url}" 
                 msg.body = email_msg
                 mail.send(msg)
@@ -126,8 +126,8 @@ def projects(project_type):
             if (int(p.created_by) == int(user_id)) 
             or (
                 p.general_settings and
-                isinstance(p.general_settings.get("collaborators"), list) and
-                any(int(c.get("id")) == int(user_id) for c in p.general_settings["collaborators"])
+                isinstance(p.general_settings.get("team_members"), list) and
+                any(int(c.get("id")) == int(user_id) for c in p.general_settings["team_members"])
             )
         ]
     elif project_type == "finalized":
@@ -139,8 +139,8 @@ def projects(project_type):
             if (int(p.created_by) == int(user_id))
             or (
                 p.general_settings and
-                isinstance(p.general_settings.get("collaborators"), list) and
-                any(int(c.get("id")) == int(user_id) for c in p.general_settings["collaborators"])
+                isinstance(p.general_settings.get("team_members"), list) and
+                any(int(c.get("id")) == int(user_id) for c in p.general_settings["team_members"])
             )
         ]
 
@@ -210,13 +210,13 @@ def mark_project_finalized(project_uuid):
 
     # Send email notification
     project_details, project_details_obj = get_project_details(project_uuid=project_uuid, user_id=user_id)
-    collaborators = project_details.get('general_settings', {}).get('collaborators', {})
+    team_members = project_details.get('general_settings', {}).get('team_members', {})
     displayname = current_user.displayname
     final_survey_link = 'https://docs.google.com/forms/d/e/1FAIpQLScS9CuvxoQlWsb41tMo4cvLd7fIG053h--yoE9Wu1f5VKtl_A/viewform?usp=header'
-    for c in collaborators: # Send for everyone including MP
+    for t in team_members: # Send for everyone intluding MP
         msg = Message("[pJITAI] Project Finalized",
-                    recipients=[c["email"]])
-        email_msg = f"The Main Participant '{displayname}' finalized the project '{project_details.get('general_settings').get('study_name')}'." + \
+                    recipients=[t["email"]])
+        email_msg = f"The Main Participant '{displayname}' finalized the project '{project_details.get('general_settings').get('project_name')}'." + \
                     f"\nPlease open this link to complete the final survey: {final_survey_link}" 
         msg.body = email_msg
         mail.send(msg)    
@@ -231,12 +231,12 @@ def project_settings(setting_type, project_uuid=None):
     modified_on = ""
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
-    project_name = project_details.get("general_settings", {}).get("study_name", "")
+    project_name = project_details.get("general_settings", {}).get("project_name", "")
     full_url = request.url
 
     if setting_type == "general":
         page_name = "general_settings"
-    elif setting_type == "collaborators":
+    elif setting_type == "team_members":
         page_name = setting_type
         page_name_logs = "general_settings"
     elif setting_type == "scenario":
@@ -258,23 +258,22 @@ def project_settings(setting_type, project_uuid=None):
 
     if request.method == 'POST':
         timestamp = datetime.now(get_localzone()).isoformat()
-        print(timestamp)
         add_menu(user_id, project_uuid, request.path)
         add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_logs, timestamp=timestamp)
 
         if project_details_obj:
-            if setting_type == 'collaborators' and 'collaborators' in request.form.to_dict():
-                update_general_settings_collaborators(request.form.to_dict()['collaborators'], project_details_obj)
+            if setting_type == 'team_members' and 'team_members' in request.form.to_dict():
+                update_general_settings_team_members(request.form.to_dict()['team_members'], project_details_obj)
             else:
                 update_general_settings(request.form.to_dict(), project_details_obj)
             project_details, project_details_obj = get_project_details(project_uuid, user_id) #TWH Update after write
-            project_name = project_details.get("general_settings", {}).get("study_name", "") #TWH Update after write
+            project_name = project_details.get("general_settings", {}).get("project_name", "") #TWH Update after write
             general_settings = project_details.get("general_settings", {}) #TWH Update after write
             modified_on = project_details.get("modified_on", "") #TWH Update after write
         else:
             gdata = request.form.to_dict()
             auth_token = uuid4()
-            gdata['collaborators'] = [{'id': user_id, 'displayname': current_user.displayname, 'email': current_user.email}]
+            gdata['team_members'] = [{'id': user_id, 'displayname': current_user.displayname, 'email': current_user.email}]
             Projects(created_by=user_id,
                      uuid=project_uuid,
                      general_settings=gdata,
@@ -284,15 +283,15 @@ def project_settings(setting_type, project_uuid=None):
                      algo_type="algorithm_type",
                      modified_on=datetime.now(),
                      created_on=datetime.now(),
-                     auth_token=auth_token,
-                     collaborators={}).save()
+                     auth_token=auth_token).save()
 
     all_menus = get_project_menu_pages(user_id, project_uuid)
     user = user_id
 
     all_users = get_all_users(user_id)
     this_user = current_user.email
-    collaborators = project_details.get("general_settings", {}).get("collaborators", {})
+    this_user_name = current_user.displayname
+    team_members = project_details.get("general_settings", {}).get("team_members", {})
 
     if not modified_on:
         modified_on = datetime.now()
@@ -301,9 +300,10 @@ def project_settings(setting_type, project_uuid=None):
         return render_template("design/projects/general_settings.html", segment="general_settings", all_menus=all_menus,
                                menu_number=1, project_name=project_name, modified_on=modified_on,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "collaborators":
-        return render_template("design/projects/collaborators.html", segment="general_collaborators", all_menus=all_menus,
-                               menu_number=0, project_name=project_name, modified_on=modified_on, collaborators=collaborators, all_users=all_users, this_user=this_user,
+    elif setting_type == "team_members":
+        print('team_members: ', team_members)
+        return render_template("design/projects/team_members.html", segment="general_team_members", all_menus=all_menus,
+                               menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "personalized_method":
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",
@@ -328,7 +328,7 @@ def intervention_settings(setting_type, project_uuid):
     decision_point_frequency_time = ['Hour', 'Day', 'Week', 'Month']
     update_duration = ['Daily', 'Weekly', 'Monthly']
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
-    project_name = project_details.get("general_settings", {}).get("study_name", "")
+    project_name = project_details.get("general_settings", {}).get("project_name", "")
 
     full_url = request.url
 
@@ -428,7 +428,7 @@ def model_settings(setting_type, project_uuid):
     tailoring_covariates = []
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
-    project_name = project_details.get("general_settings", {}).get("study_name", "")
+    project_name = project_details.get("general_settings", {}).get("project_name", "")
     #print(f'XXXXXXXXXX {project_details}')
     full_url = request.url
 
@@ -545,7 +545,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     formula = ""
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
-    project_name = project_details.get("general_settings", {}).get("study_name", "")
+    project_name = project_details.get("general_settings", {}).get("project_name", "")
     full_url = request.url
 
     if project_details.get("covariates"):

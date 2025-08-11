@@ -27,8 +27,8 @@ hs1 = {
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "HeartSteps example",
-    "study_name": "HeartSteps"
+    "project_description": "HeartSteps example",
+    "project_name": "HeartSteps"
   },
   "id": 8, # project ID?
   "intervention_settings": {
@@ -138,8 +138,8 @@ hs1_continuous_not_tailoring = { # one_cv_continuous_not_tailoring
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "One covariate, not a tailoring variable (continuous type)",
-    "study_name": "HeartSteps_covariate_not_tailoring"
+    "project_description": "One covariate, not a tailoring variable (continuous type)",
+    "project_name": "HeartSteps_covariate_not_tailoring"
   },
   "id": 12,
   "intervention_settings": {
@@ -202,8 +202,8 @@ hs2_binary_tailoring_continuous_not_tailoring = {  # two_cv_binary_tailoring_con
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "two covariates: 1 tailoring, 1 not tailoring",
-    "study_name": "HeartSteps_two_covariates"
+    "project_description": "two covariates: 1 tailoring, 1 not tailoring",
+    "project_name": "HeartSteps_two_covariates"
   },
   "id": 13,
   "intervention_settings": {
@@ -317,8 +317,8 @@ hs1_int_tailoring = {
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "covariate: tailoring, type: integer",
-    "study_name": "HeartSteps_covariate_integer"
+    "project_description": "covariate: tailoring, type: integer",
+    "project_name": "HeartSteps_covariate_integer"
   },
   "id": 14,
   "intervention_settings": {
@@ -375,8 +375,8 @@ hs1_continuous_tailoring = {
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "Covariate: tailoring, type: continuous",
-    "study_name": "HeartSteps_covariate_continuous"
+    "project_description": "Covariate: tailoring, type: continuous",
+    "project_name": "HeartSteps_covariate_continuous"
   },
   "id": 15,
   "intervention_settings": {
@@ -433,8 +433,8 @@ hs1_binary_not_tailoring = {
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "Covariate: not tailoring, type: binary",
-    "study_name": "HeartSteps_covariate_not_tailoring_binary"
+    "project_description": "Covariate: not tailoring, type: binary",
+    "project_name": "HeartSteps_covariate_not_tailoring_binary"
   },
   "id": 16,
   "intervention_settings": {
@@ -489,8 +489,8 @@ hs1_int_not_tailoring = {
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "Covariate: not tailoring, type: integer",
-    "study_name": "HeartSteps_covariate_not_tailoring_int"
+    "project_description": "Covariate: not tailoring, type: integer",
+    "project_name": "HeartSteps_covariate_not_tailoring_int"
   },
   "id": 17,
   "intervention_settings": {
@@ -552,8 +552,8 @@ hs1_update_point = {
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "Update_day: weekly, Update_hour: 1AM ",
-    "study_name": "HeartSteps_update_point"
+    "project_description": "Update_day: weekly, Update_hour: 1AM ",
+    "project_name": "HeartSteps_update_point"
   },
   "id": 11,
   "intervention_settings": {
@@ -607,8 +607,8 @@ hs1_decision_freq = {
     "personalization_method": "ThompsonSampling",
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
-    "study_description": "decision_point_frequency_time: Week, decision_point_frequency: 5",
-    "study_name": "HeartSteps_decision_freq"
+    "project_description": "decision_point_frequency_time: Week, decision_point_frequency: 5",
+    "project_name": "HeartSteps_decision_freq"
   },
   "id": 10,
   "intervention_settings": {

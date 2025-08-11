@@ -37,27 +37,27 @@ def update_general_settings(data, project_details_obj):
         gen_settings = copy.deepcopy(project_details_obj.general_settings)
         gen_settings.update(data)
 
-        if not project_details_obj.general_settings.get('collaborators'):  # Add owner as collaborator for the first time
+        if not project_details_obj.general_settings.get('team_members'):  # Add owner as team member for the first time
             user_id = int(project_details_obj.created_by)
             u = db.session.query(Users).filter(Users.id == user_id).first()
             current_user = {'id': u.id, 'displayname': u.displayname, 'email': u.email}
-            gen_settings['collaborators'] = [current_user]
+            gen_settings['team_members'] = [current_user]
         project_details_obj.general_settings = gen_settings
         project_details_obj.modified_on = datetime.now()
         db.session.commit()
 
-def update_general_settings_collaborators(data, project_details_obj):  # data: email
+def update_general_settings_team_members(data, project_details_obj):  # data: email
     if project_details_obj:
         gen_settings = copy.deepcopy(project_details_obj.general_settings)
 
         user = db.session.query(Users).filter(Users.email == data).first()
-        new_collaborator = {'email': data, 'displayname': user.displayname, 'id': user.id}
+        new_team_member = {'email': data, 'displayname': user.displayname, 'id': user.id}
 
-        if gen_settings.get('collaborators'):
-            existing_collabs = gen_settings['collaborators']
-            if not any(c['email'] == data for c in existing_collabs):
-                existing_collabs.append(new_collaborator)
-            gen_settings['collaborators'] = existing_collabs
+        if gen_settings.get('team_members'):
+            existing_team_members = gen_settings['team_members']
+            if not any(t['email'] == data for t in existing_team_members):
+                existing_team_members.append(new_team_member)
+            gen_settings['team_members'] = existing_team_members
         print('after: ', gen_settings)
         project_details_obj.general_settings = gen_settings
         project_details_obj.modified_on = datetime.now()

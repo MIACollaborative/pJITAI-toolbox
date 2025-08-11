@@ -35,23 +35,21 @@
                                             <div class="card-header">
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
-                                                        <label class="form-control-label" for="study_name">Name of the
-                                                            study</label>
-                                                        <input type="text" name="study_name" id="study_name"
-                                                            value="{{general_settings.get('study_name','')}}" required
-                                                            class="form-control" placeholder="Name of the study">
+                                                        <label class="form-control-label" for="project_name">Project Name <span style="color: red;">*</span></label>
+                                                        <input type="text" name="project_name" id="project_name"
+                                                            value="{{general_settings.get('project_name','')}}" required
+                                                            class="form-control" placeholder="Project name">
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="form-control-label" for="study_description">Description
-                                                            of the study</label>
-                                                        <textarea name="study_description" id="study_description"
+                                                        <label class="form-control-label" for="project_description">Project Description</label>
+                                                        <textarea name="project_description" id="project_description"
                                                                 rows="4" class="form-control"
-                                                                placeholder="Description of the study ...">{{general_settings.get('study_description','')}}</textarea>
+                                                                placeholder="Project description...">{{general_settings.get('project_description','')}}</textarea>
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="form-control-label" for="intervention_component_name">Intervention component name</label>
+                                                        <label class="form-control-label" for="intervention_component_name">Intervention component name <span style="color: red;">*</span></label>
                                                         <input type="text" name="intervention_component_name"
                                                             id="intervention_component_name"
                                                             value="{{general_settings.get('intervention_component_name','')}}"
@@ -59,7 +57,7 @@
                                                             placeholder="Name of the intervention component">
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <!-- <div class="form-group">
                                                         <label class="form-control-label" for="proximal_outcome_name">Name
                                                             of the proximal outcome</label>
                                                         <input type="text" name="proximal_outcome_name"
@@ -67,7 +65,7 @@
                                                             value="{{general_settings.get('proximal_outcome_name','')}}"
                                                             required class="form-control"
                                                             placeholder="Name of the proximal outcome">
-                                                    </div>
+                                                    </div> -->
 
                                                 </div>
                                             </div>
@@ -99,7 +97,7 @@
                                                 <h4>Explanation</h4>
                                                 <p> Intervention components are the elements of
                                                     your intervention. 
-                                                    You may have several intervention components in your study.
+                                                    You may have several intervention components in your project.
                                                     Please tell us the intervention component you are designing to personalize.
                                                     For example, to help increase a person’s physical
                                                     activity level, you may consider the delivery of an activity suggestion message as an
@@ -152,7 +150,7 @@
                                                     <!--                                                    Back-->
                                                     <!--                                                </button>-->
                                                     <button type="submit" formmethod="post"
-                                                            formaction="/projects/settings/collaborators/{{project_uuid}}"
+                                                            formaction="/projects/settings/team_members/{{project_uuid}}"
                                                             class="btn btn-primary">Next
                                                     </button>
                                                     <!-- <button type="submit" formmethod="post"

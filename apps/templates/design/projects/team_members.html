@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Add Collaborators {% endblock %}
+{% block title %} Add Team Members {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %} {% endblock stylesheets %}
@@ -18,7 +18,7 @@
                 <div class="col-sm-12">
                   <div class="card">
                     <div class="card-header">
-                      <h3>Add Collaborators</h3>
+                      <h3>Add Team Members</h3>
                     </div>
                   </div>
                 </div>
@@ -29,25 +29,29 @@
                   <div class="card">
                     <div class="card-header">
                       <div class="form-group" style="margin-bottom: 30px;">
-                        <label class="form-control-label" for="study_name">Current Collaborators</label>
-                        {% if collaborators %}
-                          {% for c in collaborators %}
-                            <ul>
-                              <!-- {% if c.email == this_user %}
-                                <li>You</li>
-                              {% else %} -->
-                                <li>{{c.displayname}} ({{c.email}})</li>
-                              <!-- {% endif %} -->
-                            </ul>
+                        <label class="form-control-label" for="project_name">Current Team Members</label>
+                        {% if team_members %}
+                          {% for t in team_members %}
+                            {% if t.email == this_user %}
+                              <ul>
+                                <li>{{t.displayname}} ({{this_user}}) - You</li>
+                              </ul>
+                            {% else %}
+                              <ul>
+                                  <li>{{t.displayname}} ({{t.email}})</li>
+                              </ul>
+                            {% endif %}
                           {% endfor %}
                         {% else %}
-                        <p>There are no collaborators at this moment.</p>
+                          <ul>
+                            <li>{{this_user_name}} ({{this_user}}) - You</li>
+                          </ul>
                         {% endif %}
                       </div>
                       <div class="form-group">
-                        <label class="form-control-label" for="search-group">Search Users by Email</label>
+                        <label class="form-control-label" for="search-group">Search for team members by email</label>
                         <div style="display: grid; grid-auto-flow: column; grid-template-columns: 1fr auto; grid-column-gap: 5px" id="search-group">
-                          <input type="text" name="collaborators" class="form-control" placeholder="Email of the user" id="user-email">
+                          <input type="text" name="team_members" class="form-control" placeholder="User email" id="user-email">
                           <button type="button" class="btn btn-warning" style="margin-bottom: 0px;" id="search-btn"><i class="fa fa-search"></i>Search</button>
                         </div>
                       </div>
@@ -55,11 +59,11 @@
                         <p style="display: none;" id="user-match"></p>
                         <button type="submit" style="display: none;" 
                           id="invite-btn" class="btn btn-outline-warning"
-                          onclick="return confirm('The user has been added as a collaborator!');"
-                          formmethod="post" formaction="/projects/settings/collaborators/{{project_uuid}}"><i class="fa fa-paper-plane"></i>Add</button>
+                          onclick="return confirm('The user has been added as a team member!');"
+                          formmethod="post" formaction="/projects/settings/team_members/{{project_uuid}}"><i class="fa fa-paper-plane"></i>Add</button>
                       </div>
                       <p id="no-match-user" style="display: none;">There are no matching user with this email.</p>
-                      <p id="use-other-user" style="display: none;">You cannot add yourself as a collaborator.</p>
+                      <p id="use-other-user" style="display: none;">You are already added as a team member.</p>
                     </div>
                   </div>
                   <script>
@@ -105,7 +109,7 @@
                   <div class="tab-content" id="myTabContent">
                     <div class="tab-item">
                       <h4>Explanation</h4>
-                      <p>In this page, you can add collaborators for this project by searching via user's email. The user must have a pJITAI Toolbox account in order to be a collaborator.</p>
+                      <p>In this page, you can add team members for this project by searching via user's email. The user must have a pJITAI Toolbox account in order to be a team member.</p>
                     </div>
                   </div>
                 </div>

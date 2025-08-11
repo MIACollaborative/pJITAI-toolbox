@@ -75,7 +75,7 @@ class Algorithms(db.Model):
     name = db.Column('name', db.String(256))
     auth_token = db.Column('auth_token', db.String(36))
     description = db.Column('description', db.Text)
-    study_name = db.Column('study_name', db.String(100))
+    project_name = db.Column('project_name', db.String(100))
     version = db.Column('version', db.Integer)
     type = db.Column('type', db.String(100))
     configuration = db.Column('configuration', db.JSON)
