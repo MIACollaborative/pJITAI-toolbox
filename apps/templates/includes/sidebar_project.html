@@ -16,7 +16,7 @@
         'align-items': 'center'
     }).carousel({interval: false,wrap: false});
     if(Cookies.get('donotshowagain')==1 || Cookies.get('donotshowagain')==null){
-        $("#instructionModel").modal('show');
+        $("#starterGuideModel").modal('show');
         Cookies.set('donotshowagain', Cookies.get('donotshowagain') + 1);
     }
 
@@ -71,7 +71,7 @@ function showControl() {
     if (document.cookie.indexOf('donotshowagain') > -1 && Cookies.get('donotshowagain')==2) {
       $('#donotshowagain').prop('checked', true);
     }
-    $('#instructionModel').modal('show');
+    $('#starterGuideModel').modal('show');
 }
 
 </script>
@@ -83,7 +83,7 @@ function showControl() {
 .carousel-indicators .active {
     background-color: #f00;
 }
-#instructionModel {
+#starterGuideModel {
    display: 'flex';
 	justify-content: 'center';
 	align-items: 'center';
@@ -113,7 +113,7 @@ function showControl() {
 
 </style>
 
-<div class="modal fade" id="instructionModel" tabindex="-1" role="dialog" aria-labelledby="instructionModel"
+<div class="modal fade" id="starterGuideModel" tabindex="-1" role="dialog" aria-labelledby="starterGuideModel"
      aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -136,13 +136,7 @@ function showControl() {
                             <h3>Why use the pJITAI toolbox?</h3>
                             <div class="row">
                                 <div class="col-9">
-                                    <p class="pull-left">This toolbox helps you design a personalizing Just-in-Time
-                                        Adaptive Intervention (<a
-                                                href="http://people.seas.harvard.edu/~samurphy/JITAI_MRT/jitai.html"
-                                                target="_blank">pJITAI</a>) component, i.e., the toolbox helps you
-                                        configure an algorithm that personalizes the intervention delivery of this JITAI
-                                        component.
-                                    </p>
+                                    <p class="pull-left">This toolbox helps you design a reinforcement learning algorithm for a  personalizing Just-in-Time Adaptive Intervention (pJITAI) component.</p>
                                 </div>
                                 <div class="col-3">
                                     <img src="{{ config.ASSETS_ROOT }}/images/pjitai/social-care_1.png"
@@ -171,75 +165,28 @@ function showControl() {
 
                         </div>
                         <div class="carousel-item">
-                            <h3>When can you use the pJITAI toolbox?</h3>
-                            <ul>
-                                <li><b>Scenario 1</b>: When you have access to published results from a micro-randomized
-                                    trial (<a href="http://people.seas.harvard.edu/~samurphy/JITAI_MRT/mrts4.html"
-                                              target="_blank">MRT</a>), the toolbox helps you find the information
-                                    needed to configure a personalizing JITAI.
-                                </li>
-                                <li><b>Scenario 2</b>: When you have access to the data from an MRT of an intervention
-                                    component you want to personalize, the toolbox guides you to run analyses to
-                                    configure a personalizing JITAI.
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="carousel-item">
-                            <h3>Interested in practicing?</h3>
-                            <p>You can practice using this tool with HeartSteps, an mHealth intervention for physical
-                                activity. You can find a demo pJITAI (designed for HeartSteps)
-                                in "Add New Project" in the left-hand menu.
-                            </p>
-                            <p>Some details about HeartSteps:</p>
-                            <ul>
-                                <li><b>Goal</b>: Provide an actionable message to help a person take a short walk in the
-                                    near future.
-                                </li>
-                                <li><b>Intervention options</b>: (A) Send an activity suggestion; (B) Do not send an
-                                    activity suggestion
-                                </li>
-                                <li><b>Proximal outcome</b>: The 30-minute step count after each decision point</li>
-                            </ul>
-
-                        </div>
-                        <div class="carousel-item">
-                            <h3>How to use the pJITAI toolbox?</h3>
-                            <p>We suggest that if you are not familiar with our toolbox, you start by going through our
-                                HeartSteps demo pJITAI in "Add New Project" in the left-hand menu. (If you don't see a menu on the left, 
-                                you may see a menu-like icon in the top right corner of your screen. Click it to open the menu.)</p>
-                            <p>When you’re ready to use this tool to develop personalizing JITAIs for your study, you’ll
-                                configure a personalization algorithm for each <b>intervention component</b> separately.</p>
-                            <p>For example, in the HeartSteps study, researchers were interested in personalizing a
-                                number of intervention components including “activity suggestion” and “planning.” In the
-                                demo, we show you how to design a personalization algorithm for the activity
-                                suggestion.</p>
-
-                        </div>
-                        <div class="carousel-item">
-                            <h3>Once you finish designing your personalizing JITAI... </h3>
-                            <div class="row">
-                                <div class="col-9">
-                                    <p>The toolbox will generate a URL for accessing the algorithm you just configured
-                                        via an API so your app developers (e.g., Care Evolution and Fitabase) can integrate 
-                                        the algorithm into the code for your pJITAI. The algorithm can then begin to 
-                                        personalize sending of interventions. (More information can be found in FAQs.)</p>
-
-                                    <h4>Have more questions?</h4>
-                                    <ul>
-                                        <li>Please check our <a href="/pages/faqs">FAQs</a> (You can also find it in the top-right menu.)</li>
-                                        <li>Please check our <a href=""> tutorial</a></li>
-
-                                    </ul>
-                                    <h4>Want to see these instruction cards again?</h4>
-                                    <p>Click "Instruction cards" in the left-hand menu.</p>
-                                </div>
-                                <div class="col-3">
-                                    <img src="{{ config.ASSETS_ROOT }}/images/pjitai/mobile_api.png"
-                                         class="pull-right img-responsive">
-                                </div>
+                            <h3>What is a Decision Point?</h3>
+                            <div class="col-9">
+                                <p>In a JITAI, a decision point is a point in time where an intervention component decides what type of intervention to deliver, or whether to deliver an intervention at all. For example, an intervention component that promotes walking might include a decision point in the morning before the person goes to work.</p>
                             </div>
-
-
+                        </div>
+                        <div class="carousel-item">
+                            <h3>What is Personalization (for JITAIs)?</h3>
+                            <div class="col-9">
+                                <p>Whereas some JITAI decision rules may be designed with fixed probabilities or deterministic rules (e.g., IF the user did not meet their step goal yesterday THEN deliver a walking suggestion at 9am today), a personalizing JITAI component will employ an algorithm that seeks to learn under what conditions a particular intervention option is more effective for an individual, and to adjust the likelihood of sending that option to optimize overall effectiveness. For example, if a user is more likely to take walks after receiving a reminder on weekends than on weekdays, the algorithm may choose to send a message (rather than send nothing) more often on weekends than on weekdays.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <h3>How can I use the pJITAI Toolbox?</h3>
+                            <div class="col-9">
+                                <p>The pJITAI Toolbox will walk you through the steps of configuring a personalizing reinforcement learning algorithm. Providing the information requested by the Toolbox will ensure that the algorithm is set up properly for the intervention component you plan to personalize, and that the algorithm is initialized with starting parameters that will allow it to perform reasonably well at the beginning and learn each user’s responsiveness quickly. The current version of the Toolbox assumes that you have prior data from a Micro-randomized Trial (a common way to generate initialization data for a personalizing algorithm), but if you don’t have such data you can come up with estimates from related prior work or simply take your best guess!</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <h3>How do I start? </h3>
+                            <div class="col-9">
+                                <p>Simply click “New Project” from the options on the left. On each of the screens that follow, in addition to general instructions and explanations, you will find examples drawn from the HeartSteps project. A great way to get familiar with the pJITAI toolbox is to create your own “HeartSteps Activity Suggestions” project and walk through the Toolbox entering values from the running example. After you finish that, come back here and start a new project to personalize your own Intervention Component!</p>
+                            </div>
                         </div>
                     </div>
 
@@ -301,8 +248,8 @@ function showControl() {
 
 
             <li class="nav-item {% if 'intervention' in segment %} active pcoded-trigger {% endif %}">
-                <a href="#instructionModel" onclick="showModalByLink();" class="nav-link "><span class="pcoded-micon"><i
-                        class="fas fa-chalkboard-teacher"></i></span><span class="pcoded-mtext">Instruction Cards</span></a>
+                <a href="#starterGuideModel" onclick="showModalByLink();" class="nav-link "><span class="pcoded-micon"><i
+                        class="fas fa-chalkboard-teacher"></i></span><span class="pcoded-mtext">Starter Guide</span></a>
             </li>
             </ul>
         </div>
