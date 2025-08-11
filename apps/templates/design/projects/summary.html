@@ -44,12 +44,7 @@
                                                             <p>
                                                                 Congrats! You have finished setting up the general settings.<br>
                                                                 Please review and confirm.<br>
-                                                                After you confirm, please click “Start my design.” Once you
-                                                                start designing your personalizing JITAI, you <span
-                                                                    style="color:#f65959;">cannot</span> return and edit
-                                                                your “personalization method” or “scenario”. If you need to
-                                                                change these settings later, you will need to create another
-                                                                intervention component design.
+                                                                After you confirm, please click “Start my design.”
                                                             </p>
                                                         </div>
 
@@ -59,19 +54,32 @@
                                                     <h5>General Information</h5>
                                                     <hr>
                                                     <div class="form-group">
-                                                        <label class="form-control-label" for="project_name">Name of the
-                                                            project</label>
+                                                        <label class="form-control-label" for="project_name">Project name</label>
                                                         <input disabled type="text" name="project_name" id="project_name"
                                                             value="{{general_settings.get('project_name','')}}" required
                                                             class="form-control" placeholder="Name of the project">
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="form-control-label" for="project_description">Description
-                                                            of the project (optional)</label>
+                                                        <label class="form-control-label" for="project_description">Project description</label>
                                                         <textarea disabled name="project_description" id="project_description"
                                                                 required rows="4" class="form-control"
                                                                 placeholder="Description of the project ...">{{general_settings.get('project_description','')}}</textarea>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-control-label" for="team_members">Team members</label>
+                                                        <ul>
+                                                            {% if team_members %}
+                                                                {% for t in team_members %}
+                                                                    {% if t.email == this_user %}
+                                                                        <li>{{t.displayname}} ({{this_user}}) - You</li>
+                                                                    {% else %}
+                                                                        <li>{{t.displayname}} ({{t.email}})</li>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </ul>
                                                     </div>
 
                                                     <div class="form-group">
@@ -83,36 +91,13 @@
                                                             required class="form-control"
                                                             placeholder="Name of the intervention component">
                                                     </div>
-
-                                                    <div class="form-group">
-                                                        <label class="form-control-label" for="proximal_outcome_name">Name
-                                                            of the proximal outcome</label>
-                                                        <input disabled type="text" name="proximal_outcome_name"
-                                                            id="proximal_outcome_name"
-                                                            value="{{general_settings.get('proximal_outcome_name','')}}"
-                                                            required class="form-control"
-                                                            placeholder="Name of the proximal outcome">
-                                                    </div>
-                                                    <h5>Personalization Method</h5>
-                                                    <hr>
                                                     <div class="form-group">
                                                         <label class="form-control-label" for="personalization_method">Personalization
-                                                            Method</label>
+                                                            method</label>
 
                                                         <select id="personalization_method" class="form-control" disabled>
                                                             <option selected>
                                                                 {{general_settings.get('personalization_method','Error')}}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <h5>Scenario</h5>
-                                                    <hr>
-                                                    <div class="form-group">
-                                                        <label class="form-control-label" for="personalized_scenario">How
-                                                            will you configure your personalized JITAI</label>
-                                                        <select id="personalized_scenario" class="form-control" disabled>
-                                                            <option selected>
-                                                                {{general_settings.get('personalized_scenario','Error')}}
                                                             </option>
                                                         </select>
                                                     </div>

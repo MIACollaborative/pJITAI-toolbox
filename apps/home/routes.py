@@ -315,7 +315,7 @@ def project_settings(setting_type, project_uuid=None):
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "summary":
         return render_template("design/projects/summary.html", segment="general_summary", modified_on=modified_on,
-                               all_menus=all_menus, menu_number=4, project_name=project_name,
+                               all_menus=all_menus, menu_number=4, project_name=project_name, team_members=team_members, this_user=this_user,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
 
 
