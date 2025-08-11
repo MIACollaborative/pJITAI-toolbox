@@ -264,6 +264,12 @@ p.text-muted {
           box-shadow: none;
   outline: none;
 }
+#intervention-probability-box {
+  background-color: #FCE6BB;
+  border-radius: 4px;
+  padding: 5px;
+  border: 1px solid;
+}
 .card .card-footer {
   border-top: 1px solid #f1f1f1;
   background: transparent;
