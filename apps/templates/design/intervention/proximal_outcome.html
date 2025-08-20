@@ -1,0 +1,141 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Intervention Settings - Proximal Outcome {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Intervention Settings / Proximal Outcome</h3>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label class="form-control-label" for="proximal_outcome_name">Proximal outcome name <span style="color: red;">*</span></label>
+                                                        <input type="text" name="proximal_outcome_name" id="proximal_outcome_name"
+                                                            value="{{settings.get('proximal_outcome_name','')}}" required
+                                                            class="form-control" placeholder="Proximal outcome name">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-control-label" for="proximal_outcome_type">Outcome data type <span style="color: red;">*</span></label>
+                                                        <select id="proximal_outcome_type" name="proximal_outcome_type"
+                                                                class="form-control" aria-label="Default select example">
+                                                            <option selected>Continuous</option>
+                                                            <option>Binary</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-control-label" for="proximal_outcome_description">Proximal outcome description</label>
+                                                        <textarea name="proximal_outcome_description" id="proximal_outcome_description"
+                                                                rows="4" class="form-control"
+                                                                placeholder="Proximal outcome description...">{{settings.get('proximal_outcome_description','')}}</textarea>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <!-- [ tabs ] start -->
+                                    <div class="col-sm-12">
+                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                    Explanation</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="profile-tab" data-toggle="tab"
+                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
+                                                    Example</a>
+                                            </li>
+                                        </ul> -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-item">
+                                                <h5><b>What is the proximal outcome?</b></h5>
+                                                <p>The proximal outcome is an outcome that you will collect and provide to the algorithm after each decision point. The outcome should be one that provides information about the behavior you are trying to influence with your Intervention Component. For example, for an intervention component focused on promoting physical activity, the step count (as measured by an activity tracker like a Fitbit) in some relatively small period of time after each decision point would be a good choice for a proximal outcome. In this description, describe your proximal outcome in a few words that will help you and your team remember what you decided.</p>
+                                                <!-- <h5><b>Proximal outcome name</b></h5>
+                                                <p>TODO</p>
+                                                <h5><b>Proximal outcome data type</b></h5>
+                                                <p>TODO</p>
+                                                <h5><b>Proximal outcome description (optional)</b></h5>
+                                                <p>TODO</p> -->
+                                            </div>
+                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
+                                                aria-labelledby="profile-tab"> -->
+                                            <div class="tab-item">
+                                                <h5><i>HeartSteps Example</i></h5>
+                                                <p>TODO</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <!-- [ tabs ] end -->
+                                </div>
+                                <!-- [ Main Content ] end -->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <a href="/projects/settings/summary/{{project_uuid}}"
+                                                        class="btn btn-outline-primary" role="button">Back</a>
+                                                    <button type="submit" formmethod="post"
+                                                            formaction="/intervention/settings/intervention_option/{{project_uuid}}"
+                                                            class="btn btn-primary">Next
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'includes/comments.html' %}
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

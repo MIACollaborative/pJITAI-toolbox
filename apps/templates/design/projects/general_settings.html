@@ -94,44 +94,18 @@
                                             <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
                                                 aria-labelledby="home-tab"> -->
                                             <div class="tab-item">
-                                                <h4>Explanation</h4>
-                                                <p> Intervention components are the elements of
-                                                    your intervention. 
-                                                    You may have several intervention components in your project.
-                                                    Please tell us the intervention component you are designing to personalize.
-                                                    For example, to help increase a person’s physical
-                                                    activity level, you may consider the delivery of an activity suggestion message as an
-                                                    intervention component or a prompt for the participant to set goals. Suppose you want 
-                                                    to personalize the delivery of an activity suggestion message by personalizing whether 
-                                                    to send an activity suggestion message. Then, this activity-suggestion intervention component 
-                                                    has two intervention options: to send or not to send an activity suggestion.
-                                                    </p>
-                                                <p> The proximal outcome is a short-term outcome that the intervention is intended to
-                                                    impact.</p>
-                                                <p> Need examples of how to fill in these inputs? You can go to the HeartSteps demo
-                                                    where we have filled out all the inputs for you. In addition, you can find the explanations
-                                                    for the inputs for HeartSteps by clicking the “HeartSteps Example” tab.
-                                                </p>
+                                                <h5><b>Project name</b></h5>
+                                                <p>Choose a name that will help you and your team remember which intervention component you aim to personalize with RL. For example “Activity Suggestions RL”.</p>
+                                                <h5><b>Project description (optional)</b></h5>
+                                                <p>Add any additional information that will help you and your team understand what this project is all about.</p>
+                                                <h5><b>Intervention component name</b></h5>
+                                                <p>Provide the name of the intervention component that will be personalized by the RL algorithm. An intervention component is any part of a JITAI that has its own decision rule, for example the component “Morning Motivational Message” might be the name of a component designed to send participants a motivational message at 9am.</p>
                                             </div>
                                             <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
                                                 aria-labelledby="profile-tab"> -->
                                             <div class="tab-item">
-                                                <h4>HeartSteps Example</h4>
-                                                <p>In the HeartSteps example, the intervention components are: 
-                                                    <ol>
-                                                        <li>activity suggestions</li>
-                                                        <li>planning for the next day's activity</li>
-                                                    </ol>
-                                                    <!-- 1) activity
-                                                    suggestions and 2) planning for the next day’s activity.  -->
-                                                    Here, we are
-                                                    demonstrating designing the “activity suggestion” component.</p>
-
-                                                <p>In HeartSteps, the step count in a 30-minute window is observed following
-                                                    each decision point. In addition, step counts are right skewed. Thus, we
-                                                    log transformed them so that the normal approximation used in the linear
-                                                    regression is more accurate. The proximal outcome is then “(log) Next 30
-                                                    min step count” to denote the transformation.</p>
+                                                <h5><i>HeartSteps Example</i></h5>
+                                                <p>For the running example, we will be using the “Activity Suggestions” intervention component from HeartSteps. This is a component that may send an activity suggestion via push message to each participant at any of 5 times per day (morning, midday, afternoon, evening). To follow the example, you can enter “Activity Suggestions RL” into the project name and  “Activity Suggestions” into the “Intervention component name” field.</p>
                                             </div>
 
                                         </div>

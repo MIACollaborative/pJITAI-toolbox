@@ -27,9 +27,8 @@
                         href="/projects/settings/general/{{project_uuid}}" class="">General Info</a></li>
                 <li class="{% if 'team_members' in segment %} active {% endif %}"><a
                         href="/projects/settings/team_members/{{project_uuid}}">Team Members</a></li>
-                <li class="{% if 'personalized_method' in segment %} active {% endif %}"><a {% if
-                    "/projects/settings/personalized_method/"+project_uuid in all_menus %}
-                    href="/projects/settings/personalized_method/{{project_uuid}}" {% endif %} class="">Personalization
+                <li class="{% if 'personalized_method' in segment %} active {% endif %}"><a 
+                    href="/projects/settings/personalized_method/{{project_uuid}}" class="">Personalization
                     Method</a></li>
                 <!-- <li class="{% if 'scenario' in segment %} active {% endif %}"><a {% if
                     "/projects/settings/scenario/"+project_uuid in all_menus %}
@@ -46,6 +45,10 @@
 
                 <ul class="pcoded-submenu" {% if
                 'intervention' not in segment %} style="display: none;" {% endif %}>
+            <li class="{% if 'intervention_proximal_outcome' in segment %} active {% endif %}"><a {% if
+                "/intervention/settings/proximal_outcome/"+project_uuid in all_menus %}
+                href="/intervention/settings/proximal_outcome/{{project_uuid}}" {% endif %} class="">Proximal
+                Outcome</a></li>
             <li class="{% if 'intervention_option' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/intervention_option/"+project_uuid in all_menus %}
                 href="/intervention/settings/intervention_option/{{project_uuid}}" {% endif %} class="">Intervention

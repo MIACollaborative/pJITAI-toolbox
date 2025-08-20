@@ -16,7 +16,7 @@
         'align-items': 'center'
     }).carousel({interval: false,wrap: false});
     if(Cookies.get('donotshowagain')==1 || Cookies.get('donotshowagain')==null){
-        $("#starterGuideModel").modal('show');
+        $("#gettingStartedModel").modal('show');
         Cookies.set('donotshowagain', Cookies.get('donotshowagain') + 1);
     }
 
@@ -71,7 +71,7 @@ function showControl() {
     if (document.cookie.indexOf('donotshowagain') > -1 && Cookies.get('donotshowagain')==2) {
       $('#donotshowagain').prop('checked', true);
     }
-    $('#starterGuideModel').modal('show');
+    $('#gettingStartedModel').modal('show');
 }
 
 </script>
@@ -83,7 +83,7 @@ function showControl() {
 .carousel-indicators .active {
     background-color: #f00;
 }
-#starterGuideModel {
+#gettingStartedModel {
    display: 'flex';
 	justify-content: 'center';
 	align-items: 'center';
@@ -113,7 +113,7 @@ function showControl() {
 
 </style>
 
-<div class="modal fade" id="starterGuideModel" tabindex="-1" role="dialog" aria-labelledby="starterGuideModel"
+<div class="modal fade" id="gettingStartedModel" tabindex="-1" role="dialog" aria-labelledby="gettingStartedModel"
      aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -130,6 +130,8 @@ function showControl() {
                         <li data-target="#myCarousel" data-slide-to="3"></li>
                         <li data-target="#myCarousel" data-slide-to="4"></li>
                         <li data-target="#myCarousel" data-slide-to="5"></li>
+                        <li data-target="#myCarousel" data-slide-to="6"></li>
+                        <li data-target="#myCarousel" data-slide-to="7"></li>
                     </ol>
                     <div class="carousel-inner" role="listbox">
                         <div class="carousel-item active">
@@ -146,16 +148,10 @@ function showControl() {
 
                         </div>
                         <div class="carousel-item">
-                            <h3>What is Personalization?</h3>
+                            <h3>What is an Intervention Component??</h3>
                             <div class="row">
                                 <div class="col-9">
-                                    <p>Data accruing from an individual may indicate that intervention option A is more
-                                        effective than intervention option B when the individual is in certain states. A
-                                        personalizing JITAI will increase the probability of sending intervention option
-                                        A in these states.</p>
-                                    <p>For example, if an individual is more responsive to intervention option A during
-                                        weekends, the JITAI will send intervention option A more frequently than
-                                        intervention option B during weekends.</p>
+                                    <p>An intervention component is a part of a behavioral intervention that is targeted at a particular behavior. An example is walking suggestions delivered via smartphone notifications.</p>
                                 </div>
                                 <div class="col-3">
                                     <img src="{{ config.ASSETS_ROOT }}/images/pjitai/ui_1.png"
@@ -187,6 +183,19 @@ function showControl() {
                             <div class="col-9">
                                 <p>Simply click “New Project” from the options on the left. On each of the screens that follow, in addition to general instructions and explanations, you will find examples drawn from the HeartSteps project. A great way to get familiar with the pJITAI toolbox is to create your own “HeartSteps Activity Suggestions” project and walk through the Toolbox entering values from the running example. After you finish that, come back here and start a new project to personalize your own Intervention Component!</p>
                             </div>
+                        </div>
+                        <div class="carousel-item">
+                            <h3>pJITAI Toolbox Structure (1)</h3>
+                            <img src="{{ config.ASSETS_ROOT }}/images/pjitai/pJITAI-table.png">
+                            <p>Explanation continues at the next page.</p>
+                        </div>
+                        <div class="carousel-item">
+                            <h3>pJITAI Toolbox Structure (2)</h3>
+                            <p>1. Your app client collects user data the server can use to calculate proximal outcomes and user state variables (covariates and tailoring variables).</p>
+                            <p>2. Your app server sends requests to your pJITAI algorithm at the intervention component's decision points. The server provides data needed by the algorithm as part of requests, including proximal outcomes and state variables.</p>
+                            <p>3. The pJITAI Toolbox routes app requests to your pJITAI algorithm, which consults its user-specific model to provide decisions (i.e., which intervention Option to deliver) and updates its models based on the data it receives.</p>
+                            <p>4. The app server delivers the intervention options chosen by the pJITAI Algorithm at each decision point.</p>
+                            <p>Notes: Elements in green are not provided by the pJITAI Toolbox. Work with your software development team to create these elements and integrate them with the pJITAI Toolbox. Use the pJITAI Toolbox interface to create and configure a pJITAI algorithm that is specific to one intervention component in your intervention app.</p>
                         </div>
                     </div>
 
@@ -248,8 +257,8 @@ function showControl() {
 
 
             <li class="nav-item {% if 'intervention' in segment %} active pcoded-trigger {% endif %}">
-                <a href="#starterGuideModel" onclick="showModalByLink();" class="nav-link "><span class="pcoded-micon"><i
-                        class="fas fa-chalkboard-teacher"></i></span><span class="pcoded-mtext">Starter Guide</span></a>
+                <a href="#gettingStartedModel" onclick="showModalByLink();" class="nav-link "><span class="pcoded-micon"><i
+                        class="fas fa-chalkboard-teacher"></i></span><span class="pcoded-mtext">Getting Started</span></a>
             </li>
             </ul>
         </div>

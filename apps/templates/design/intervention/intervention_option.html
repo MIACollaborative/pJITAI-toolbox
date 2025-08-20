@@ -60,55 +60,24 @@
                                 <div class="row">
                                     <!-- [ tabs ] start -->
                                     <div class="col-sm-12">
-
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                    Example</a>
-                                            </li>
-                                        </ul> -->
                                         <div class="tab-content" id="myTabContent">
-                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                                aria-labelledby="home-tab"> -->
                                             <div class="tab-item">
-                                                <h5>Explanation</h5>
-                                                <p>In the current method (Thompson sampling -- two options), there are two
-                                                    intervention options. Intervention options usually correspond to
-                                                    different buckets of messages or no message.</p>
+                                                <p>Give names to your two intervention options that will help you remember what they represent in terms of your intervention component.</p>
 
-                                                <p>Here's how we distinguish Intervention Option A from Intervention Option
-                                                    B:</p>
-                                                <ol>
-                                                    <li>The “main treatment effect” is defined as the change in the proximal
-                                                        outcome when Intervention option A is provided versus Intervention
-                                                        option B. In the Bayesian linear regression (see Eq.(3.1) in the
-                                                        tutorial), “Intervention=1” if Intervention option A is provided,
-                                                        and “Intervention=0” if Intervention option B is provided.
-                                                    </li>
-                                                    <li>In some predefined states (which you’ll define two pages from now),
-                                                        one may not wish to provide Intervention Option A. In those states,
-                                                        Intervention Option B will be provided. In other words, Intervention
-                                                        Option B is often less burdensome. In fact, it is often the “do
-                                                        nothing” option.
-                                                    </li>
-                                                </ol>
+                                                <h5><b>Intervention Option A - Higher Intensity</b></h5>
+                                                <p>The first of the two options that can be selected by your personalizing algorithm should be the one that is more “intense”--both in the sense of burden to the participant and in the sense of expected impact on the outcome. For the typical case of an intervention component that sends a message to the participant, Option A would be the “Send a Message” option.</p>
+
+                                                <h5><b>Intervention Option B - Lower Intensity</b></h5>
+                                                <p>The second of the two options should be the option that is lower in intensity, considering both burden and expected outcome. For a push messaging intervention component, this option might be the “No Message” option.</p>
+
+                                                <h5><b>Note:</b></h5> It's important not to mix up these two options. The system is built around the assumption that Option A is the more "active" or potentially burdensome option and Option B is less active or passive.
                                             </div>
                                             <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
                                                 aria-labelledby="profile-tab"> -->
                                             <div class="tab-item">
-                                                <h5>HeartSteps Example</h5>
+                                                <h5><i>HeartSteps Example</i></h5>
                                                 <p>
-                                                    In HeartSteps, the goal of the JITAI is to encourage a person to walk
-                                                    more by sending activity suggestions. The options are to send an
-                                                    activity suggestion or not to send a suggestion. The treatment effect is
-                                                    the change in (log) next 30-minute step count when a suggestion is sent
-                                                    versus not sent.
+                                                    For the HeartSteps Activity Suggestions example, Intervention Option A is “Send an activity suggestion message” and Intervention Option B is “Do not send a message.”
                                                 </p>
                                             </div>
 
@@ -124,7 +93,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <a href="/projects/settings/summary/{{project_uuid}}"
+                                                    <a href="/intervention/settings/proximal_outcome/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
                                                     <!--                                                <button type="submit" type="button" formaction="/projects/settings/summary/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
                                                     <button type="submit" type="button"

@@ -31,6 +31,27 @@ $(document).ready(function(){
     }
     calculate_on_load();
 
+    function check_lower_upper(showAlert = true) {
+        const lower = parseFloat($('#intervention_probability_lower_bound').val());
+        const upper = parseFloat($('#intervention_probability_upper_bound').val());
+
+        if (isNaN(lower) || isNaN(upper)) return true;
+
+        if (lower >= upper) {
+            if (showAlert) alert("Lower bound must be less than upper bound.");
+            // $('#intervention_probability_lower_bound').val('');
+            // $('#intervention_probability_upper_bound').val('');
+            return false;
+        }
+        return true;
+    }
+
+    $('#intervention_probability_lower_bound, #intervention_probability_upper_bound')
+        .on('input change', function () { 
+        check_lower_upper(true);
+        });
+
+    check_lower_upper(false);
 
     $("input[name=intervention_probability_lower_bound]").on('keyup', function () {
         $('#interven_lower').html($(this).val());
@@ -81,17 +102,25 @@ $(document).ready(function(){
                                                             for="intervention_probability_lower_bound">Intervention
                                                             probability lower bound (when eligible)</label>
                                                         <div class="input-group-probability" style="display: flex; flex-direction: row; width: 100%;">
-                                                            <input min="0" max="1" step="0.01"
+                                                            <input min="0.01" max="0.99" step="0.01"
                                                                 value="{{settings.intervention_probability_lower_bound}}"
                                                                 type="number" id="intervention_probability_lower_bound"
                                                                 name="intervention_probability_lower_bound"
                                                                 class="form-control" required style="flex:2;">
                                                             <div class="input-group-probability" style="flex: 8;">
                                                                 <span class="input-group-text" style="border: solid 1px;"><span id="interven_lower"> {{settings.intervention_probability_lower_bound}} </span> 
-                                                                        &nbsp; x &nbsp; <span id="dp_freq" style="background-color: #FCE6BB; border-radius: 4px; padding: 5px; border: 1px solid;">{{settings.decision_point_frequency}} </span>&nbsp;&nbsp;
-                                                                        <span> decision points per <span id="intervention-probability-box">{{settings.decision_point_frequency_time}}</span> </span>
+                                                                        &nbsp; x &nbsp; <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Decision points time' id="dp_freq" style="background-color: #FCE6BB; border-radius: 4px; padding: 5px; border: 1px solid;">{{settings.decision_point_frequency}} </span>&nbsp;&nbsp;
+                                                                        <span> decision points per <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Decision points frequency' id="intervention-probability-box">{{settings.decision_point_frequency_time}}</span> </span>
                                                                         &nbsp;&nbsp; = &nbsp;&nbsp; 
-                                                                        <span id="result_1"></span> &nbsp;&nbsp; <span id="intervention-probability-box">{{settings.intervention_option_a}}</span> <span style="padding: 5px;">per</span> <span id="intervention-probability-box">{{settings.decision_point_frequency_time}}</span></span>
+                                                                        <span id="result_1"></span> &nbsp;&nbsp; <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Intervention options: Option A' id="intervention-probability-box">{{settings.intervention_option_a}}</span> <span style="padding: 5px;">per</span> <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Decision points frequency' id="intervention-probability-box">{{settings.decision_point_frequency_time}}</span></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -100,17 +129,26 @@ $(document).ready(function(){
                                                             for="intervention_probability_upper_bound">Intervention
                                                             probability upper bound (when eligible)</label>
                                                         <div class="input-group-probability" style="display: flex; flex-direction: row; width: 100%;">
-                                                            <input min="0" max="1" step="0.01"
+                                                            <input min="0.01" max="0.99" step="0.01"
                                                                 value="{{settings.intervention_probability_upper_bound}}"
                                                                 type="number" id="intervention_probability_upper_bound"
                                                                 name="intervention_probability_upper_bound"
                                                                 class="form-control" required style="flex:2;">
                                                             <div class="input-group-probability" style="flex: 8;">
                                                                 <span class="input-group-text" style="border: solid 1px;"><span id="interven_upper"> {{settings.intervention_probability_upper_bound}} </span> 
-                                                                        &nbsp; x &nbsp; <span id="dp_freq" style="background-color: #FCE6BB; border-radius: 4px; padding: 5px; border: 1px solid;">{{settings.decision_point_frequency}} </span>&nbsp;&nbsp;
-                                                                        <span> decision points per <span id="intervention-probability-box">{{settings.decision_point_frequency_time}}</span> </span>
+                                                                        &nbsp; x &nbsp; <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Decision points time' id="dp_freq" style="background-color: #FCE6BB; border-radius: 4px; padding: 5px; border: 1px solid;">{{settings.decision_point_frequency}} </span>&nbsp;&nbsp;
+                                                                        <span> decision points per <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Decision points frequency'id="intervention-probability-box">{{settings.decision_point_frequency_time}}</span> </span>
                                                                         &nbsp;&nbsp; = &nbsp;&nbsp; 
-                                                                        <span id="result_2"></span> &nbsp;&nbsp; <span id="intervention-probability-box">{{settings.intervention_option_a}}</span> <span style="padding: 5px;">per</span> <span id="intervention-probability-box">{{settings.decision_point_frequency_time}}</span></span>
+                                                                        <span id="result_2"></span> &nbsp;&nbsp; <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Intervention options: Option A' id="intervention-probability-box">{{settings.intervention_option_a}}</span> <span style="padding: 5px;">per</span> 
+                                                                                            <span data-toggle='tooltip'
+                                                                                            data-bs-placement="right"
+                                                                                            title='Decision points frequency' id="intervention-probability-box">{{settings.decision_point_frequency_time}}</span></span>
                                                             </div>
                                                         </div>
 
@@ -188,9 +226,49 @@ $(document).ready(function(){
 
                                         </div>
                                     </div>
-
-
                                     <!-- [ tabs ] end -->
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5><b>Discussion: How do I choose?</b></h5>
+                                                <p>You will want to select the lower and upper bounds to be “reasonable,” so that participants are never exposed to excessive burden or entirely deprived of behavioral support, yet you allow the algorithm to continue to learn about the relative effectiveness of the intervention options. </p>
+                                                <p>The calculator above will show you the expected frequency of selection Option A based on your lower and upper bounds. The actual expected frequency will always lie between that for the lower and upper bounds. Try out different numbers between 0 and 1.0 to see what the minimum and maximum expected delivery of Option A would be per unit of time (i.e., day, week, month). </p>
+                                                <p>This table provides a few examples of values you might choose, depending on your population and intervention goals:</p>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>    
+                                                            <th>Goal</th>
+                                                            <th>Lower Bound</th>
+                                                            <th>Upper Bound</th>
+                                                            <th>Notes</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="word-wrap: break-word; white-space: normal;">Lowest burden, frequent decisions</td>
+                                                            <td>0.05</td>
+                                                            <td>0.20</td>
+                                                            <td style="word-wrap: break-word; white-space: normal;">A lower bound of 0.5 will result in very few selections of Option A, allowing the lowest burden for participants not benefiting from the intervention component; An upper bound of 0.2 will ensure that even the most responsive participants will only receive Option A one out of five times. For an intervention component with 5 decision points per day, this would keep the expected burden to about one delivery per day.</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="word-wrap: break-word; white-space: normal;">High support, infrequent decisions</td>
+                                                            <td>0.5</td>
+                                                            <td>0.9</td>
+                                                            <td style="word-wrap: break-word; white-space: normal;">A lower bound of 0.5 would mean that participants always have a 50% chance of receiving the high intensity option, even if they do not seem to be responsive. If the intervention may take time to show an effect, you might want to make sure the algorithm has many chances to learn. If decision points are infrequent (e.g., once per week or month), you might want to keep the upper bound high(e.g., 90%) so that responsive participants are more likely to receive support</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="word-wrap: break-word; white-space: normal;">Moderate support, moderate burden, moderate frequency, less personalization</td>
+                                                            <td>0.3</td>
+                                                            <td>0.7</td>
+                                                            <td style="word-wrap: break-word; white-space: normal;">Choosing bounds that stay close to 0.5 for decision points that are not too frequent (e.g., once per day) will ensure that participants are neither overly burdened or deprived of support. But this results in less personalization. </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- [ Main Content ] end -->
                                 <div class="row">

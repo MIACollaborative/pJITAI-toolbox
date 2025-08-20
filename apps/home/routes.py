@@ -343,18 +343,21 @@ def intervention_settings(setting_type, project_uuid):
     if not modified_on:
         modified_on = datetime.now()
 
-    if setting_type == "intervention_option":
-        page_name = setting_type
+    if setting_type == "proximal_outcome":
+        page_name = "intervention_proximal_outcome"
         page_name_log = "general_summary"
+    elif setting_type == "intervention_option":
+        page_name = setting_type
+        page_name_log = "intervention_proximal_outcome"
     elif setting_type == "decision_point":
         page_name = "intervention_decision_point"
         page_name_log = "intervention_option"
-    elif setting_type == "ineligibility":
-        page_name = "intervention_ineligibility"
-        page_name_log = "intervention_decision_point"
+    # elif setting_type == "ineligibility":
+    #     page_name = "intervention_ineligibility"
+    #     page_name_log = "intervention_decision_point"
     elif setting_type == "intervention_probability":
         page_name = setting_type
-        page_name_log = "intervention_ineligibility"
+        page_name_log = "intervention_decision_point"
     elif setting_type == "update_point":
         page_name = "intervention_update_point"
         page_name_log = "intervention_probability"
@@ -368,7 +371,7 @@ def intervention_settings(setting_type, project_uuid):
     if request.method == 'POST':
         timestamp = datetime.now(get_localzone()).isoformat()
         add_menu(user_id, project_uuid, request.path)
-        if not setting_type == "intervention_option":  # In general summry, details is always empty
+        if not setting_type == "proximal_outcome":  # In general summry, details is always empty
             add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=timestamp)
         update_intervention_settings(request.form.to_dict(), project_details_obj) # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
         project_details, project_details_obj = get_project_details(project_uuid, user_id) # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
@@ -377,26 +380,27 @@ def intervention_settings(setting_type, project_uuid):
             for k in list(intervention_settings.keys()):
                 if k.startswith("condition"):
                     intervention_settings.pop(k)
-
     all_menus = get_project_menu_pages(user_id, project_uuid)
 
     all_comments = get_all_comments(project_uuid, page_name)
     comments_for_that_page = get_comments(project_uuid, page_name)
     user = user_id
 
-    if setting_type == "intervention_option":
+    if setting_type == "proximal_outcome":
+        return render_template("design/intervention/proximal_outcome.html", segment="intervention_proximal_outcome",
+                               all_menus=all_menus, menu_number=1, project_name=project_name, modified_on=modified_on,
+                               settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
+    elif setting_type == "intervention_option":
         return render_template("design/intervention/intervention_option.html", segment="intervention_option",
                                all_menus=all_menus, menu_number=5, project_name=project_name, modified_on=modified_on,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
 
     elif setting_type == "decision_point":
-
         return render_template("design/intervention/decision_point.html", segment="intervention_decision_point",
                                all_menus=all_menus, menu_number=6, project_name=project_name, modified_on=modified_on,
                                decision_point_frequency_time=decision_point_frequency_time,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "ineligibility":
-
         return render_template("design/intervention/ineligibility.html", segment="intervention_ineligibility",
                                all_menus=all_menus, menu_number=7, project_name=project_name, modified_on=modified_on,
                                conditions=conditions, settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)

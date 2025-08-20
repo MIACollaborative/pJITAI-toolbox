@@ -38,7 +38,11 @@
                               </ul>
                             {% else %}
                               <ul>
-                                  <li>{{t.displayname}} ({{t.email}})</li>
+                                <li >{{t.displayname}} ({{t.email}})
+                                  <!-- <a class="dropdown-item" style="color:#f65959; border: 1px #f65959 solid; border-radius: 10px;"
+                                                                onclick="return confirm('Are you sure you want to delete this team member?');"><i class="fa fa-trash"
+                                    project                              aria-hidden="true"></i> Delete</a> -->
+                                </li>
                               </ul>
                             {% endif %}
                           {% endfor %}
@@ -108,8 +112,8 @@
                 <div class="col-sm-12">
                   <div class="tab-content" id="myTabContent">
                     <div class="tab-item">
-                      <h4>Explanation</h4>
-                      <p>In this page, you can add team members for this project by searching via user's email. The user must have a pJITAI Toolbox account in order to be a team member.</p>
+                      <h5><b>Team Members</b></h5>
+                      <p>On this page, you can add team members for this project by searching via user's email. The user must have a pJITAI Toolbox account in order to be a team member.</p>
                     </div>
                   </div>
                 </div>
