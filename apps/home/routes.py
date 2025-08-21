@@ -545,7 +545,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     settings = {}
     modified_on = ""
     all_covariates = {}
-    covariates_types = ['Binary', 'Integer', 'Continuous']
+    covariates_types = ['Continuous', 'Binary']
     formula = ""
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
@@ -595,11 +595,11 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
         add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=timestamp)
         if "covariate_attributes" in request.referrer:
             form_data = request.form.to_dict()
-            if form_data.get("covariate_type") != "Binary":
-                form_data.pop("covariate_meaning_0")
-                form_data.pop("covariate_meaning_1")
-                project_details_obj.covariates.get(cov_id).pop("covariate_meaning_0", None)
-                project_details_obj.covariates.get(cov_id).pop("covariate_meaning_1", None)
+            # if form_data.get("covariate_type") != "Binary":
+            #     form_data.pop("covariate_meaning_0")
+            #     form_data.pop("covariate_meaning_1")
+            #     project_details_obj.covariates.get(cov_id).pop("covariate_meaning_0", None)
+            #     project_details_obj.covariates.get(cov_id).pop("covariate_meaning_1", None)
         else:
             form_data = request.form.to_dict()
 
@@ -756,10 +756,10 @@ def configuration_summary(config_type, project_uuid):
             if covs.get(cov).get('tailoring_variable') == 'yes':
                 cov_name = covs.get(cov).get('covariate_name')
                 cov_desc = 'XXX'
-                if covs.get(cov).get('covariate_type') == 'Binary':
-                    cov_desc = f"Type: {covs.get(cov).get('covariate_type')}, 0: {covs.get(cov).get('covariate_meaning_0')}, 1: {covs.get(cov).get('covariate_meaning_1')}" 
-                else:
-                    cov_desc = f"Type: {covs.get(cov).get('covariate_type')}, Min: {covs.get(cov).get('covariate_min_val')}, Max: {covs.get(cov).get('covariate_max_val')}"
+                # if covs.get(cov).get('covariate_type') == 'Binary':
+                #     cov_desc = f"Type: {covs.get(cov).get('covariate_type')}, 0: {covs.get(cov).get('covariate_meaning_0')}, 1: {covs.get(cov).get('covariate_meaning_1')}" 
+                # else:
+                cov_desc = f"Type: {covs.get(cov).get('covariate_type')}, Min: {covs.get(cov).get('covariate_min_val')}, Max: {covs.get(cov).get('covariate_max_val')}, Notes: {covs.get(cov).get('notes')}"
                 tailoring_covs_names.append(cov_name)
                 tailoring_covs_description.append(cov_desc)
         
@@ -822,7 +822,7 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
     alpha_counter, beta_counter = 1, 1
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
 
-    proximal_outcome_name = project_details.get("general_settings", {}).get("proximal_outcome_name")
+    proximal_outcome_name = project_details.get("intervention_settings", {}).get("proximal_outcome_name")
     intervention_component_name = project_details.get("general_settings", {}).get("intervention_component_name")
 
     intercept_prior_mean = project_details.get("model_settings", {}).get("intercept_prior_mean")
@@ -842,32 +842,33 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
         cov_vars = covariates.get(acov, {})
         name = covariates.get(acov, {}).get("covariate_name")
         is_tailoring = cov_vars.get("tailoring_variable")
-        alphas += f"""<br>+ α<sub>{alpha_counter}</sub> * <span id="cov_name_span1" style="background:#888; font-size:14px;">{name}</span> """
+        bg_color = "#EBD5E9" if is_tailoring == "yes" else "#DAD5EB"
+        alphas += f"""<br><br>+ <span style="background-color: #FFF8E5; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>{alpha_counter}</sub></span> * <span id="cov_name_span1" style="background-color: {bg_color}; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{name}</span> """
         alpha_vars += f'α<sub>{alpha_counter}</sub>~N({cov_vars.get("main_effect_prior_mean")}, {cov_vars.get("main_effect_prior_standard_deviation")}<sup>2</sup>)<br>'
         alpha_counter += 1
         if is_tailoring == "yes":
-            betas += f"""<br><span id="beta_{beta_counter}">+ β<sub>{beta_counter}</sub>* <span id="cov_name_span2" style="background:#888; font-size:14px;">{name}</span>  * <span style="background:#888; font-size:14px;"> {intervention_component_name} </span></span>"""
+            betas += f"""<br><br><span id="beta_{beta_counter}">+ <span style="background-color: #FFF8E5; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>{beta_counter}</sub></span> * <span id="cov_name_span2" style="background-color: {bg_color}; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{name}</span>  * <span style="background-color: #D5EBD9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> {intervention_component_name} </span></span>"""
             beta_vars += f'β<sub>{beta_counter}</sub>~N({cov_vars.get("main_effect_prior_mean")}, {cov_vars.get("main_effect_prior_standard_deviation")}<sup>2</sup>)<br>'
             beta_counter += 1
 
-    htmll = f"""<p class="rightsidebluetextbox">
+    htmll = f"""<div class="rightsidebluetextbox">
 
-                    <span style="background:#888; font-size:14px;">{proximal_outcome_name}</span> ~ <br>
-                    α<sub>0</sub> 
+                    <span style="background-color: #E5F3FF; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{proximal_outcome_name}</span> ~
+                    <br><br><span style="background-color: #FFF8E5; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> α<sub>0</sub> </span>
                     
                     {alphas}
                     
                     <br><br>
-                    + β<sub>0</sub> * <span style="background:#888; font-size:14px;"> {intervention_component_name} </span>
+                    + <span style="background-color: #FFF8E5; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>0</sub></span> * <span style="background-color: #D5EBD9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> {intervention_component_name} </span>
                                                       
                     {betas}
                     
-                    <br>+ ϵ <br>
+                    <br><br>+ <span style="background-color: #FFF8E5; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">ϵ</span> <br><br>
                     RED_NOTE
                     <br>
                     ALPHA_VARS 
                     BETA_VARS
-                </p>"""
+                </div>"""
     if is_summary_page == "yes":
         htmll = htmll.replace("ALPHA_VARS", alpha_vars)
         htmll = htmll.replace("BETA_VARS", beta_vars)
@@ -890,10 +891,10 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
 
         if not covariate_tailored_effect: 
             htmll = htmll.replace("RED_NOTE",
-                              f'α<sub>{cov_alpha}</sub>~N(<span style="color:#f65959;">μ<sub>α<sub>{cov_alpha}</sub></sub>, σ<sub>α<sub>{cov_alpha}</sub></sub></span><sup>2</sup>) <br> <span style="color:#f65959;"> We are asking for the red values.</span>')
+                              f'α<sub>{cov_alpha}</sub>~N(<span>μ<sub>α<sub>{cov_alpha}</sub></sub>, σ<sub>α<sub>{cov_alpha}</sub></sub></span><sup>2</sup>) <span>  << Fill in these values for this page.</span>')
         else:
             htmll = htmll.replace("RED_NOTE",
-                              f'''β<sub>{cov_beta}</sub>~N(<span style="color:#f65959;">μ<sub>β<sub>{cov_beta}</sub></sub>, σ<sub>β<sub>{cov_beta}</sub></sub></span><sup>2</sup>) <br> <span style="color:#f65959;"> We are asking for the red values.</span>''')
+                              f'''β<sub>{cov_beta}</sub>~N(<span>μ<sub>β<sub>{cov_beta}</sub></sub>, σ<sub>β<sub>{cov_beta}</sub></sub></span><sup>2</sup>) <span>  << Fill in these values for this page.</span>''')
 
     else:
         htmll = htmll.replace("RED_NOTE", "")

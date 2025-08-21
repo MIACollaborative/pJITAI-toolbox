@@ -35,7 +35,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="covariate_type">Covariate Data Type</label><br>
+                                                    <label class="form-control-label" for="covariate_type">Covariate data type <span style="color: red;">*</span></label><br>
                                                     <select id="covariate_type" name="covariate_type" id="covariate_type"
                                                             onchange="remove_binary_div()" class="form-control">
                                                         {% for ct in covariates_types%}
@@ -45,14 +45,14 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="covariate_min_val">Minimum Allowed Value</label>   
+                                                    <label class="form-control-label" for="covariate_min_val">Minimum allowed value <span style="color: red;">*</span></label>   
                                                     <input value="{{settings.covariate_min_val}}" step="any"
                                                     type="number"
                                                     id="covariate_min_val" name="covariate_min_val"
                                                     class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="covariate_max_val">Maximum Allowed Value</label>
+                                                    <label class="form-control-label" for="covariate_max_val">Maximum allowed value <span style="color: red;">*</span></label>
                                                     <input value="{{settings.covariate_max_val}}" step="any"
                                                     type="number"
                                                     id="covariate_max_val" name="covariate_max_val"
@@ -62,7 +62,7 @@
                                                     <label class="form-control-label" for="notes">Notes</label><br>
                                                     <input value="{{settings.notes}}" type="text"
                                                         name="notes" class="form-control"
-                                                        placeholder="">
+                                                        placeholder="Notes...">
                                                 </div>
                                                 <script>
                                                     function remove_binary_div(){
@@ -161,18 +161,12 @@
                                             <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
                                                 aria-labelledby="home-tab"> -->
                                             <div class="tab-item">
-                                                <h5>Explanation</h5>
-                                                <p>We use the minimum value/maximum value/type of the covariates to check if the API receives
-                                                    inappropriate/missing input from your mobile app. Please note that if
-                                                    your covariate is binary, we ask you to describe what information is being captured by 
-                                                    the different values of the covariates. See the HeartSteps Example tab for an example.
-                                                </p>
-
-                                                <p>Please note that if your covariate needs to be transformed, the
-                                                    transformation must be implemented in the mobile application; the
-                                                    algorithm will not implement the transformation.</p>
-
-                                                <p>Please read [tutorial] for more details.</p>
+                                                <h5><b>Covariate data type</b></h5>
+                                                <p>Indicate whether the covariate is continuous or binary. All are acceptable. </p>
+                                                <h5><b>Mininum/Maximum allowed values</b></h5>    
+                                                <p>As you did with the proximal outcome, define the range of acceptable values for each covariate. Values outside the defined range will be rejected by the algorithm so as not to corrupt the data used by the algorithm to personalize the selection of intervention options.</p>
+                                                <h5><b>Notes</b></h5>
+                                                <p>Use this space to keep track of any decisions regarding data transformations or special meanings of particular values (e.g., 0=[Home,Work]). You will need to provide these to your software development team later!</p>
                                             </div>
                                             <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
                                                 aria-labelledby="profile-tab"> -->

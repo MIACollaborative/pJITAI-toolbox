@@ -76,13 +76,13 @@ $(document).ready(function(){
                                                                 this covariate a tailoring variable?</label><br>
 
 
-                                                            <div class="btn-group" data-toggle="buttons">
+                                                            <div class="btn-group">
                                                                 <fieldset id="tailoring_variable">
                                                                     <label class="btn btn-outline-success">
                                                                         <input type="radio" name="tailoring_variable"
                                                                             value="yes" {{ "checked" if
-                                                                        settings.tailoring_variable == "yes" }}>
-                                                                        Yes
+                                                                        settings.tailoring_variable == "yes" }}> Yes
+                                                                        </input>
                                                                     </label>
                                                                     <label class="btn btn-outline-primary">
                                                                         <input type="radio" name="tailoring_variable"
