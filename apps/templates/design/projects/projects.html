@@ -63,6 +63,7 @@
                                                             <a class="dropdown-item"
                                                                href="/projects/settings/general/{{proj.project_uuid}}"><i
                                                                     class="fas fa-edit"></i> Read/Edit the project</a>
+                                                            {% if proj.project_owner|int == user|int %}
                                                             <a class="dropdown-item"
                                                                href="/projects/duplicate/{{proj.project_uuid}}"
                                                                onclick="return confirm('Are you sure you want to duplicate the project - {{proj.get("
@@ -76,6 +77,7 @@
                                                                project_name")}}?');"><i class="fa fa-trash"
                                     project                              aria-hidden="true"></i> Delete the
                                                             project</a>
+                                                            {% endif %}
                                                         </div>
                                                     </li>
                                                 </ul>

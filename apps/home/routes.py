@@ -42,7 +42,7 @@ from apps.algorithms.models import Projects
 from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
     update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users, \
-    update_general_settings_team_members, get_survey_details, add_project_logs
+    update_general_settings_team_members, delete_general_settings_team_members, get_survey_details, add_project_logs
 from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
 from apps.api.sql_helper import get_comments, get_all_comments, save_survey, update_survey
@@ -150,6 +150,7 @@ def projects(project_type):
         aproj.general_settings["algo_type"] = aproj.algo_type
         aproj.general_settings["modified_on"] = aproj.modified_on
         aproj.general_settings["created_on"] = aproj.created_on
+        aproj.general_settings["project_owner"] = aproj.created_by
 
         data.append(aproj.general_settings)
     
@@ -157,9 +158,24 @@ def projects(project_type):
     if segment.find('finalized') > 0:
         empty_msg = 'There is no Finalized Project. Please finalize a project.' 
 
-    return render_template("design/projects/projects.html", project_uuid=uuid4(), data=data, segment=segment,
+    return render_template("design/projects/projects.html", project_uuid=uuid4(), data=data, segment=segment, user=user_id,
                            modified_on=modified_on, empty_msg = empty_msg, full_url=full_url)
 
+@blueprint.route('/team_members/delete/<project_uuid>/<member_id>', methods=['GET'])
+@login_required
+def delete_team_member(project_uuid, member_id):
+    user_id = current_user.get_id()
+    project_details, project_details_obj = get_project_details(project_uuid, user_id)
+    delete_general_settings_team_members(member_id, project_details_obj)
+    return redirect(request.referrer)
+
+@blueprint.route('/team_members/leave/<project_uuid>/<member_id>', methods=['GET'])
+@login_required
+def leave_team_member(project_uuid, member_id):
+    user_id = current_user.get_id()
+    project_details, project_details_obj = get_project_details(project_uuid, user_id)
+    delete_general_settings_team_members(member_id, project_details_obj)
+    return redirect("/projects/in_progress")
 
 @blueprint.route('/projects/delete/<project_uuid>', methods=['GET'])
 @login_required
@@ -292,6 +308,7 @@ def project_settings(setting_type, project_uuid=None):
     this_user = current_user.email
     this_user_name = current_user.displayname
     team_members = project_details.get("general_settings", {}).get("team_members", {})
+    project_owner = project_details.get("created_by", "")
 
     if not modified_on:
         modified_on = datetime.now()
@@ -303,7 +320,7 @@ def project_settings(setting_type, project_uuid=None):
     elif setting_type == "team_members":
         print('team_members: ', team_members)
         return render_template("design/projects/team_members.html", segment="general_team_members", all_menus=all_menus,
-                               menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name,
+                               menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name, project_owner=project_owner,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "personalized_method":
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",

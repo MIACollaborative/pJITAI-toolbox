@@ -34,14 +34,23 @@
                           {% for t in team_members %}
                             {% if t.email == this_user %}
                               <ul>
-                                <li>{{t.displayname}} ({{this_user}}) - You</li>
+                                <li>{{t.displayname}} ({{this_user}}) - You
+                                {% if project_owner|int != user|int %}
+                                <a style="color:#f4c22b; padding-left: 10px;" 
+                                    href="/team_members/leave/{{project_uuid}}/{{t.id}}"
+                                    onclick="return confirm('Are you sure you want to leave this team?');"><i class="fa fa-share" project aria-hidden="true"></i> Leave</a>
+                                </li>
+                                {% endif %}
                               </ul>
                             {% else %}
                               <ul>
                                 <li >{{t.displayname}} ({{t.email}})
-                                  <!-- <a class="dropdown-item" style="color:#f65959; border: 1px #f65959 solid; border-radius: 10px;"
-                                                                onclick="return confirm('Are you sure you want to delete this team member?');"><i class="fa fa-trash"
-                                    project                              aria-hidden="true"></i> Delete</a> -->
+                                  <!-- Only when you are the owner of this project -->
+                                  {% if project_owner|int == user|int %}  
+                                  <a style="color:#f65959; padding-left: 10px;" 
+                                    href="/team_members/delete/{{project_uuid}}/{{t.id}}"
+                                    onclick="return confirm('Are you sure you want to delete this team member?');"><i class="fa fa-trash" project aria-hidden="true"></i> Delete</a>
+                                  {% endif %}
                                 </li>
                               </ul>
                             {% endif %}

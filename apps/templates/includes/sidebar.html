@@ -66,7 +66,7 @@
                 class="">Intervention Probability</a></li>
             <li class="{% if 'intervention_update_point' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/update_point/"+project_uuid in all_menus %}
-                href="/intervention/settings/update_point/{{project_uuid}}" {% endif %} class="">Update Point</a></li>
+                href="/intervention/settings/update_point/{{project_uuid}}" {% endif %} class="">Algorithm Update Schedule</a></li>
             <li class="{% if 'intervention_summary' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/summary/"+project_uuid in all_menus %}
                 href="/intervention/settings/summary/{{project_uuid}}" {% endif %} class="">Summary</a></li>
@@ -80,7 +80,7 @@
                 'model' not in segment and not 'covariates' %} style="display: none;" {% endif %}>
             <li class="{% if 'model_proximal_outcome' in segment %} active {% endif %}"><a {% if
                 "/model/settings/proximal_outcome/"+project_uuid in all_menus %}
-                href="/model/settings/proximal_outcome/{{project_uuid}}" {% endif %} class="">Proximal Outcome
+                href="/model/settings/proximal_outcome/{{project_uuid}}" {% endif %} class="">Proximal Outcome Attribute
                 </a></li>
             <li class="{% if 'covariates' in segment %} active {% endif %}"><a {% if
                 "/covariates/settings/all/"+project_uuid in all_menus %}

@@ -46,6 +46,18 @@ def update_general_settings(data, project_details_obj):
         project_details_obj.modified_on = datetime.now()
         db.session.commit()
 
+def delete_general_settings_team_members(data, project_details_obj):  # data: member_id
+    if project_details_obj:
+        gen_settings = copy.deepcopy(project_details_obj.general_settings)
+
+        if gen_settings.get('team_members'):
+            existing_team_members = gen_settings['team_members']
+            updated_team_members = [t for t in existing_team_members if str(t['id']) != str(data)]
+            gen_settings['team_members'] = updated_team_members
+        project_details_obj.general_settings = gen_settings
+        project_details_obj.modified_on = datetime.now()
+        db.session.commit()
+
 def update_general_settings_team_members(data, project_details_obj):  # data: email
     if project_details_obj:
         gen_settings = copy.deepcopy(project_details_obj.general_settings)
@@ -58,7 +70,6 @@ def update_general_settings_team_members(data, project_details_obj):  # data: em
             if not any(t['email'] == data for t in existing_team_members):
                 existing_team_members.append(new_team_member)
             gen_settings['team_members'] = existing_team_members
-        print('after: ', gen_settings)
         project_details_obj.general_settings = gen_settings
         project_details_obj.modified_on = datetime.now()
         db.session.commit()
