@@ -7,6 +7,7 @@ from apps import db
 from apps.algorithms.models import Projects, ProjectMenu, ProjectLogs
 from apps.authentication.models import Users
 from apps.api.models import Survey
+import ast
 
 
 def get_survey_details(project_uuid, user_id):
@@ -92,14 +93,23 @@ def update_model_settings(data, project_details_obj):
         db.session.commit()
 
 
-def update_covariates_settings(data, project_details_obj, cov_id=None):
+def update_covariates_settings(data, project_details_obj, project_details, cov_id=None):
     cov_vars = {}
     if project_details_obj:
         settings = copy.deepcopy(project_details_obj.covariates)
         if settings.get(cov_id):
             settings.get(cov_id).update(data)
         elif data:
+            # TODO: Assign ID to each covariate
+            # if project_details['covariates']:
+            #     # Add ID to each covariate
+            #     max_id = max(int(item['id']) for item in project_details['covariates'])
+            #     next_id = max_id + 1
+            #     data['id'] = next_id
+            # else:
+            #     data['id'] = 1
             cov_vars[cov_id] = data
+            print(f'cov_vars[cov_id] {cov_vars[cov_id]}')
             settings.update(cov_vars)
         if settings:
             project_details_obj.covariates = settings

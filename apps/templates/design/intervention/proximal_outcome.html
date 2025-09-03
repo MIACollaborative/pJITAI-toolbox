@@ -44,8 +44,8 @@
                                                         <label class="form-control-label" for="proximal_outcome_type">Outcome data type <span style="color: red;">*</span></label>
                                                         <select id="proximal_outcome_type" name="proximal_outcome_type"
                                                                 class="form-control" aria-label="Default select example">
-                                                            <option selected>Continuous</option>
-                                                            <option>Binary</option>
+                                                            <option value="Continuous" {% if settings.get('proximal_outcome_type') == 'Continuous' %}selected{% endif %}>Continuous</option>
+                                                            <option value="Binary" {% if settings.get('proximal_outcome_type') == 'Binary' %}selected{% endif %}>Binary</option>
                                                         </select>
                                                     </div>
 

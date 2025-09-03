@@ -28,7 +28,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
@@ -40,6 +39,7 @@
                                                         <option selected>Continuous</option>
                                                     </select>
                                                 </div> -->
+                                                {% if proximal_outcome_type|string == 'Continuous' %}
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="min_proximal_outcome">Minimum Allowed Value</label>
                                                     <input type="number" step="0.01"
@@ -54,6 +54,22 @@
                                                         id="max_proximal_outcome" name="max_proximal_outcome"
                                                         class="form-control" placeholder="The maximum value of the proximal outcome" required>
                                                 </div>
+                                                {% else %}
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="min_proximal_outcome">Minimum Allowed Value</label>
+                                                    <input type="number" disabled
+                                                        value=0
+                                                        id="min_proximal_outcome" name="min_proximal_outcome"
+                                                        class="form-control" placeholder="The minimum value of the proximal outcome" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="max_proximal_outcome">Maximum Allowed Value</label>
+                                                    <input type="number" disabled
+                                                        value=1
+                                                        id="max_proximal_outcome" name="max_proximal_outcome"
+                                                        class="form-control" placeholder="The maximum value of the proximal outcome" required>
+                                                </div>
+                                                {% endif %}
                                             </div>
 
                                         </div>
