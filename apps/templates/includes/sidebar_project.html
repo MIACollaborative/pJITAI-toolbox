@@ -131,7 +131,7 @@ function showControl() {
                         <li data-target="#myCarousel" data-slide-to="4"></li>
                         <li data-target="#myCarousel" data-slide-to="5"></li>
                         <li data-target="#myCarousel" data-slide-to="6"></li>
-                        <!-- <li data-target="#myCarousel" data-slide-to="7"></li> -->
+                        <li data-target="#myCarousel" data-slide-to="7"></li>
                     </ol>
                     <div class="carousel-inner" role="listbox">
                         <div class="carousel-item active">
@@ -187,16 +187,14 @@ function showControl() {
                         <div class="carousel-item">
                             <h3>pJITAI Toolbox Structure</h3>
                             <img src="{{ config.ASSETS_ROOT }}/images/pjitai/pJITAI-table.png">
-                            <!-- <p>Explanation continues at the next page.</p> -->
-                        </div>
-                        <!-- <div class="carousel-item">
-                            <h3>pJITAI Toolbox Structure (2)</h3>
-                            <p>1. Your app client collects user data the server can use to calculate proximal outcomes and user state variables (covariates and tailoring variables).</p>
-                            <p>2. Your app server sends requests to your pJITAI algorithm at the intervention component's decision points. The server provides data needed by the algorithm as part of requests, including proximal outcomes and state variables.</p>
-                            <p>3. The pJITAI Toolbox routes app requests to your pJITAI algorithm, which consults its user-specific model to provide decisions (i.e., which intervention Option to deliver) and updates its models based on the data it receives.</p>
-                            <p>4. The app server delivers the intervention options chosen by the pJITAI Algorithm at each decision point.</p>
                             <p>Notes: Elements in green are not provided by the pJITAI Toolbox. Work with your software development team to create these elements and integrate them with the pJITAI Toolbox. Use the pJITAI Toolbox interface to create and configure a pJITAI algorithm that is specific to one intervention component in your intervention app.</p>
-                        </div> -->
+                        </div>
+                        <div class="carousel-item">
+                            <h3>How is the pJITAI Toolbox connected to the App Client?</h3>
+                            <p>All data and requests between the pJITAI Toolbox and your app client (e.g., mobile app) are made via API calls. 
+                                At the end of creating a project, you will be directed to a page that explains how to connect to your app client using API calls. 
+                                You can find more details about the API in the Intervention Application Guide documentation (link at #TODO).</p>
+                        </div>
                     </div>
 
                 </div>

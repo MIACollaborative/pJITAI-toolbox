@@ -61,6 +61,7 @@
                           </ul>
                         {% endif %}
                       </div>
+                      {% if project_owner|int == user|int %}
                       <div class="form-group">
                         <label class="form-control-label" for="search-group">Search for team members by email</label>
                         <div style="display: grid; grid-auto-flow: column; grid-template-columns: 1fr auto; grid-column-gap: 5px" id="search-group">
@@ -68,6 +69,7 @@
                           <button type="button" class="btn btn-warning" style="margin-bottom: 0px;" id="search-btn"><i class="fa fa-search"></i>Search</button>
                         </div>
                       </div>
+                      {% endif %}
                       <div>
                         <p style="display: none;" id="user-match"></p>
                         <button type="submit" style="display: none;" 
