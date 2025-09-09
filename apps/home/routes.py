@@ -237,7 +237,8 @@ def mark_project_finalized(project_uuid):
         msg.body = email_msg
         mail.send(msg)    
 
-    return redirect("/projects/finalized")
+    # return redirect("/projects/finalized")
+    return redirect(f"/api/projects/{project_uuid}")
 
 @blueprint.route('/projects/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])
 @login_required
@@ -764,6 +765,8 @@ def configuration_summary(config_type, project_uuid):
     # Call Hsin-Yu method here @Anand. Add a new paramenter in render summary
     if not modified_on:
         modified_on = datetime.now()
+    # Add menu
+    add_menu(user_id, project_uuid, request.path)
     if config_type == "summary":
         #print(f'CONFIGURATION SUMMARY {project_details}')
         prox_name = project_details.get('intervention_settings').get('intervention_option_a')
