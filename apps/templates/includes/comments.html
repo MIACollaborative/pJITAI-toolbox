@@ -87,7 +87,6 @@
                 {% endif %}
                 {% endfor %}
               </div>
-              <!-- </div> -->
               </div>
             <!-- Tab 2 end -->
               <form>
@@ -148,8 +147,39 @@
                         set_tab(this.value);
                     })
                   }) 
+                function togglePopup() {
+                    const overlay = document.getElementById('email-popup-overlay');
+                    overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+                }
+                $(document).on('keydown', function(e){
+                    if (e.key === 'Escape') {
+                    $('#email-popup-overlay').fadeOut(0);
+                    }
+                });
               </script>
           </div>
       </div>
   </div>
+  <div class="email-circle" onclick="togglePopup()">
+    <i class="fa fa-envelope" style="color: white; font-size: 32px;"></i>
+  </div>
+  <!-- Popup Overlay -->
+  <div id="email-popup-overlay">
+    <!-- Popup Box -->
+    <div class="email-popup-box">
+        <span onclick="togglePopup()" style="position: absolute; font-size: 26px; top: 10px; right: 15px; color: #888;" onmouseover="this.style.color='#022658'; this.style.transform='scale(1.2)';" onmouseout="this.style.color='#888'; this.style.transform='scale(1)';"><b>&times;</b></span>
+        <h3 style="margin-bottom: 15px; color: #022658;">Contact the Research Team</h3>
+        <p>If you encountered a bug or need help with using the toolbox, send us an email and we will get back to you as soon as possible. 
+            <b>Detailed description</b> of the issue is appreciated.
+            Please note that your email will be automatically included.</p>
+        <textarea class="popup-email-input" placeholder="Explain the problem..."></textarea>
+        <!-- Checkbox for screenshot -->
+        <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="include-screenshot" name="include-screenshot" checked>
+            <label for="include-screenshot"> Include screenshot of the current page</label>
+        </div>
+        <button class="popup-email-submit" type="submit" formmethod="post" formaction="/contact_rt/{{project_uuid}}/{{page_name}}">Submit</button>
+    </div>
+    </div>
+
 </div>
