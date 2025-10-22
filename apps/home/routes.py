@@ -239,6 +239,7 @@ def mark_project_finalized(project_uuid):
 
     # return redirect("/projects/finalized")
     return redirect(f"/api/projects/{project_uuid}")
+    # return redirect(f"/api/end_userstudy/{project_uuid}")
 
 @blueprint.route('/projects/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])
 @login_required

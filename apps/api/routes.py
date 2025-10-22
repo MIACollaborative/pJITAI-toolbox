@@ -320,6 +320,11 @@ def search(query):
             results.append(al.as_dict())
         return jsonify(results)
 
+@blueprint.route('/end_userstudy/<uuid>', methods=['GET'])
+@login_required
+def end_userstudy(uuid):
+    segment = 'configuration_final'
+    return render_template("design/projects/end_userstudy.html", project_uuid=uuid, segment=segment)
 
 @blueprint.route('/projects/<uuid>', methods=['GET'])  # or UUID
 @login_required

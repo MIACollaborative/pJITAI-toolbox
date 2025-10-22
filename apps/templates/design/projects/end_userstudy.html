@@ -1,0 +1,54 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} End User Study Page {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<!-- <div class="grid-container"> -->
+<div class="pcoded-main-container">
+  <div class="pcoded-wrapper">
+      <div class="pcoded-content">
+        <div class="page-wrapper">
+          <!-- [ Main Content ] start -->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="row" style="margin: 10px;display: flex; align-items: center;" >
+                    <h3 style="margin: 0;"><b>Congratulations!</b></h3>
+                    <img src="{{ config.ASSETS_ROOT }}/images/pjitai/celebration.png"
+                                                              class="img-responsive">
+                  </div>
+                  <h4 style="margin: 10px;">The user study has been completed. Please visit this <a href="https://docs.google.com/forms/d/e/1FAIpQLScS9CuvxoQlWsb41tMo4cvLd7fIG053h--yoE9Wu1f5VKtl_A/viewform?usp=header">link</a> and complete a post-session survey.</h4>
+                    <div class="form-group" style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px; margin-top: 20px;">
+                        <a href="/projects/finalized"
+                        class="btn btn-warning" role="button">Return to Main Page</a>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    <!-- <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <h4><b>Final Survey</b></h4>
+            <p>Before leaving, please take time to complete this survey about pJITAI Toolbox!</p>
+            <div class="form-group">
+                <a href="/configuration/final_survey/{{project_uuid}}"
+                class="btn btn-warning" role="button">Survey</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
