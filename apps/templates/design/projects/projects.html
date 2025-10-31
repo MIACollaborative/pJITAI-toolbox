@@ -46,7 +46,7 @@
 
                                         <div class="card-body">
 
-                                            <h3 class="card-title"> {{proj.get("study_name")}}
+                                            <h3 class="card-title"> {{proj.get("project_name")}}
                                                 {% if proj.get("project_status")==0 %}
                                                 <ul class="navbar-nav ml-lg-auto float-right">
 
@@ -63,19 +63,21 @@
                                                             <a class="dropdown-item"
                                                                href="/projects/settings/general/{{proj.project_uuid}}"><i
                                                                     class="fas fa-edit"></i> Read/Edit the project</a>
+                                                            {% if proj.project_owner|int == user|int %}
                                                             <a class="dropdown-item"
                                                                href="/projects/duplicate/{{proj.project_uuid}}"
                                                                onclick="return confirm('Are you sure you want to duplicate the project - {{proj.get("
-                                                               study_name")}}?');"><i class="fa fa-clone"
-                                                                                      aria-hidden="true"></i> Duplicate
+                                                               project_name")}}?');"><i class="fa fa-clone"
+                                    project                              aria-hidden="true"></i> Duplicate
                                                             the project</a>
                                                             <div class="dropdown-divider"></div>
                                                             <a class="dropdown-item" style="color:#f65959"
                                                                href="/projects/delete/{{proj.project_uuid}}"
                                                                onclick="return confirm('Are you sure you want to delete the project - {{proj.get("
-                                                               study_name")}}?');"><i class="fa fa-trash"
-                                                                                      aria-hidden="true"></i> Delete the
+                                                               project_name")}}?');"><i class="fa fa-trash"
+                                    project                              aria-hidden="true"></i> Delete the
                                                             project</a>
+                                                            {% endif %}
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -84,8 +86,7 @@
 
                                             <p class="card-text">Intervention:
                                                 {{proj.get("intervention_component_name")}}</p>
-                                            <!--a href="#" class="small">{{proj.get("study_description")[:70]}}</a-->
-                                            <a class="small">{{proj.get("study_description")[:70]}}</a>
+                                            <a class="small">{{proj.get("project_description")[:70]}}</a>
                                             {% if proj.get("project_status")==1 %}
                                             <p><a href="/api/projects/{{proj.get('project_uuid')}}" class="btn btn-info"><i class="fas fa-code-branch"></i> Get
                                                 your API</a></p>

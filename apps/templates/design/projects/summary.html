@@ -44,12 +44,7 @@
                                                             <p>
                                                                 Congrats! You have finished setting up the general settings.<br>
                                                                 Please review and confirm.<br>
-                                                                After you confirm, please click “Start my design.” Once you
-                                                                start designing your personalizing JITAI, you <span
-                                                                    style="color:#f65959;">cannot</span> return and edit
-                                                                your “personalization method” or “scenario”. If you need to
-                                                                change these settings later, you will need to create another
-                                                                intervention component design.
+                                                                After you confirm, please click “Start my design.”
                                                             </p>
                                                         </div>
 
@@ -59,19 +54,32 @@
                                                     <h5>General Information</h5>
                                                     <hr>
                                                     <div class="form-group">
-                                                        <label class="form-control-label" for="study_name">Name of the
-                                                            study</label>
-                                                        <input disabled type="text" name="study_name" id="study_name"
-                                                            value="{{general_settings.get('study_name','')}}" required
-                                                            class="form-control" placeholder="Name of the study">
+                                                        <label class="form-control-label" for="project_name">Project name</label>
+                                                        <input disabled type="text" name="project_name" id="project_name"
+                                                            value="{{general_settings.get('project_name','')}}" required
+                                                            class="form-control" placeholder="Name of the project">
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="form-control-label" for="study_description">Description
-                                                            of the study (optional)</label>
-                                                        <textarea disabled name="study_description" id="study_description"
+                                                        <label class="form-control-label" for="project_description">Project description</label>
+                                                        <textarea disabled name="project_description" id="project_description"
                                                                 required rows="4" class="form-control"
-                                                                placeholder="Description of the study ...">{{general_settings.get('study_description','')}}</textarea>
+                                                                placeholder="Description of the project ...">{{general_settings.get('project_description','')}}</textarea>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-control-label" for="team_members">Team members</label>
+                                                        <ul>
+                                                            {% if team_members %}
+                                                                {% for t in team_members %}
+                                                                    {% if t.email == this_user %}
+                                                                        <li>{{t.displayname}} ({{this_user}}) - You</li>
+                                                                    {% else %}
+                                                                        <li>{{t.displayname}} ({{t.email}})</li>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </ul>
                                                     </div>
 
                                                     <div class="form-group">
@@ -83,36 +91,13 @@
                                                             required class="form-control"
                                                             placeholder="Name of the intervention component">
                                                     </div>
-
-                                                    <div class="form-group">
-                                                        <label class="form-control-label" for="proximal_outcome_name">Name
-                                                            of the proximal outcome</label>
-                                                        <input disabled type="text" name="proximal_outcome_name"
-                                                            id="proximal_outcome_name"
-                                                            value="{{general_settings.get('proximal_outcome_name','')}}"
-                                                            required class="form-control"
-                                                            placeholder="Name of the proximal outcome">
-                                                    </div>
-                                                    <h5>Personalization Method</h5>
-                                                    <hr>
                                                     <div class="form-group">
                                                         <label class="form-control-label" for="personalization_method">Personalization
-                                                            Method</label>
+                                                            method</label>
 
                                                         <select id="personalization_method" class="form-control" disabled>
                                                             <option selected>
                                                                 {{general_settings.get('personalization_method','Error')}}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <h5>Scenario</h5>
-                                                    <hr>
-                                                    <div class="form-group">
-                                                        <label class="form-control-label" for="personalized_scenario">How
-                                                            will you configure your personalized JITAI</label>
-                                                        <select id="personalized_scenario" class="form-control" disabled>
-                                                            <option selected>
-                                                                {{general_settings.get('personalized_scenario','Error')}}
                                                             </option>
                                                         </select>
                                                     </div>
@@ -121,6 +106,36 @@
 
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- [ tabs ] start -->
+                                    <div class="col-sm-12">
+
+                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                                    Explanation</a>
+                                            </li>
+
+                                        </ul> -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab">
+                                                <h5><b>Here we go!</b></h5>
+                                                <p>Please review the General Settings below. If you want to change anything, now or in the future, you can use the navigation bar on the left to return to any previous step.</p>
+
+                                                <p>In the next section we will ask you to input settings related to your intervention component, such as what the intervention options are and the frequency of the decision points. Example settings from HeartSteps are provided along the way, so you can refer to those as a reference if you’re not sure yet what makes sense for your own project.</p>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <!-- [ tabs ] end -->
                                 </div>
 
 
@@ -133,7 +148,7 @@
                                                     <a href="/projects/settings/personalized_method/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
                                                     <button type="submit" formmethod="post"
-                                                            formaction="/intervention/settings/intervention_option/{{project_uuid}}"
+                                                            formaction="/intervention/settings/proximal_outcome/{{project_uuid}}"
                                                             class="btn btn-primary" role="button">Go to Intervention Settings
                                                     </button>
                                                     <!--                                                <button type="submit" type="button" formaction="/projects/settings/scenario/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->

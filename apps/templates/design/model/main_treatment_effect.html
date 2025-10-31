@@ -74,7 +74,8 @@
                                                     </div>
 
                                                     <div class="col">
-                                                        <p class="rightsidebluetextbox">
+                                                        {{formula|safe}}
+                                                        <!-- <p class="rightsidebluetextbox">
 
                                                             <span style="background:#888; font-size:14px;">{{settings.proximal_outcome_name}}</span>
                                                             ~ <br>
@@ -91,7 +92,7 @@
                                                             <br>
                                                             <span style="color:#f65959;"> We're asking for the red values.</span>
 
-                                                        </p>
+                                                        </p> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,10 +174,6 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <!--                                                <button type="submit" type="button"-->
-                                                    <!--                                                        formaction="/model/settings/intercept/{{project_uuid}}"-->
-                                                    <!--                                                        formmethod="post" class="btn btn-outline-primary">Back-->
-                                                    <!--                                                </button>-->
                                                     <a href="/model/settings/intercept/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
                                                     <button type="submit" type="button"

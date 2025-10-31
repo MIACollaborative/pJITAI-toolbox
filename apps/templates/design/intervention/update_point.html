@@ -21,7 +21,7 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3>Intervention Settings / Update Point</h3>
+                                                <h3>Intervention Settings / Algorithm Update Schedule</h3>
                                             </div>
 
                                         </div>
@@ -34,8 +34,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="update_time">When should the
-                                                        pJITAI update?</label>
+                                                    <label class="form-control-label" for="update_time">When should the pJITAI algorithm update?</label>
                                                     <div class="input-group">
                                                         <select id="update_day" name="update_day" class="form-control">
                                                             {% for udur in update_duration%}
@@ -45,7 +44,7 @@
                                                             {%endfor%}
 
                                                         </select>
-                                                        <div class="input-group-append">
+                                                        <!-- <div class="input-group-append">
                                                             <select id="update_hour" name="update_hour"
                                                                     class="form-control">
                                                                 {% for n in range(1,13) %}
@@ -61,7 +60,7 @@
                                                                 </option>
                                                                 {% endfor %}
                                                             </select>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
 
                                                 </div>
@@ -91,29 +90,19 @@
                                             </li>
                                         </ul> -->
                                         <div class="tab-content" id="myTabContent">
-                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                                aria-labelledby="home-tab"> -->
                                             <div class="tab-item">
-                                                <h5>Explanation</h5>
-                                                <p>At each update point, for each individual, the personalization method is
-                                                    updated (i.e., the decision rule for each individual is updated).
-                                                    (In other words, the parameters in the Bayesian linear regression model
-                                                    for the proximal outcome are updated.)
-                                                </p>
-                                                <p>To choose the update point, you can consider choosing it to be different
-                                                    from the decision points so that by the update point, all the data from
-                                                    the previous decision points have been uploaded to the cloud.</p>
+                                                <h5><b>Algorithm Update Schedule</b></h5>
+                                                <p>The algorithm does not learn continuously, rather it periodically updates itself based on decisions made (Option A vs B), collected participant states, and proximal outcomes recorded after each decision. From these data, the algorithm calculates the impact of each selected option on the participant’s behavior and updates its model, which in turn adjusts probabilities for future decision points.
+                                                    The update process can be time consuming, especially as more data accrues, so it’s recommended to schedule updates for times when no decision points are expected to occur. Updating too frequently is not beneficial, as the algorithm needs the results of several decision points between each update to make meaningful changes to its models.</p>
                                             </div>
-                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                aria-labelledby="profile-tab"> -->
-                                            <div class="tab-item">
+                                            <!-- <div class="tab-item">
                                                 <h5>HeartSteps Example</h5>
                                                 <p>In HeartSteps, the personalizing JITAI updated the parameters each day at
                                                     midnight because midnight is not close to any of the five decision
                                                     points. If a temporary wifi issue occurs when data is uploaded to the
                                                     cloud from a mobile device, it provides enough time for the data to be
                                                     re-uploaded if needed.</p>
-                                            </div>
+                                            </div> -->
 
                                         </div>
                                     </div>

@@ -264,6 +264,12 @@ p.text-muted {
           box-shadow: none;
   outline: none;
 }
+#intervention-probability-box {
+  background-color: #FCE6BB;
+  border-radius: 4px;
+  padding: 5px;
+  border: 1px solid;
+}
 .card .card-footer {
   border-top: 1px solid #f1f1f1;
   background: transparent;
@@ -10692,11 +10698,12 @@ div.code-toolbar > .toolbar span:hover {
 }
 
 .rightsidebluetextbox{
-        background-color: #deeaff;
+        background-color: white;
         color: #000;
         padding: 17px;
         border-radius: 10px;
         margin-top: 30px;
+        border: 1px solid #d6d6d6;
     }
 
  .text_white{

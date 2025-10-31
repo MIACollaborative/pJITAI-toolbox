@@ -38,23 +38,57 @@
                                                         <img src="{{ config.ASSETS_ROOT }}/images/pjitai/celebration.png"
                                                             class="img-responsive">
                                                     </div>
-                                                    <div class="col-11">
+                                                    <div class="col-11" style="padding-left: 30px;">
 
 
-                                                        <p>Congrats! You have completed the intervention settings.<br>
-                                                            Please review and confirm.<br>
-                                                            After you confirm, please click “Go to Model Setting.”</p>
+                                                        <p>Great work! You have completed the intervention settings. Please review the settings below. If you want to change these or any settings later, you can go Back or use the navigation on the left. 
+
+                                                        Next we will ask you to input Model Settings. These are the settings that will be used to establish initial values of the parameters in the model for the proximal outcome.  The closer the settings are to describing likely effects in your study, the more quickly the algorithm will personalize.
+
+                                                        For this section, we will assume that you have access to previous results from a Micro-Randomized Trial (MRT). You will be asked about various features of your MRT data, such as the mean and standard deviation of the proximal outcome and covariates.
+
+                                                        If you don’t have such data ready to hand, you can enter estimates for the requested values from various sources, including:</p>
+                                                        <ul>
+                                                            <li>published information about similar intervention components</li>
+                                                            <li>the HeartSteps example values, if appropriate</li>
+                                                            <li>using your expertise and clinical judgement</li>
+                                                        </ul>
+                                                        
 
                                                     </div>
 
                                                 </div>
 
 
-                                                <h5>Intervention Settings</h5>
+                                                <h5>Proximal Outcome</h5>
                                                 <hr>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="intervention_option_a">Intervention
-                                                        Option A</label>
+                                                    <label class="form-control-label" for="proximal_outcome_name">Proximal outcome name</label>
+                                                    <input disabled value="{{settings.get('proximal_outcome_name','')}}"
+                                                        type="text" id="proximal_outcome_name"
+                                                        name="proximal_outcome_name" class="form-control"
+                                                        placeholder="Proximal outcome name" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="proximal_outcome_type">Outcome data type</label>
+                                                    <select disabled id="proximal_outcome_type" name="proximal_outcome_type"
+                                                            class="form-control" aria-label="Default select example">
+                                                        <option selected>{{settings.get('proximal_outcome_type')}}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="proximal_outcome_description">Proximal outcome description</label>
+                                                    <input disabled value="{{settings.get('proximal_outcome_description','')}}"
+                                                        type="text" id="proximal_outcome_description"
+                                                        name="proximal_outcome_description" class="form-control"
+                                                        placeholder="Proximal outcome description..." required>
+                                                </div>
+
+                                                <h5>Intervention Options</h5>
+                                                <hr>
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="intervention_option_a">Intervention Option A (Higher Intensity) name</label>
                                                     <input disabled value="{{settings.get('intervention_option_a','')}}"
                                                         type="text" id="intervention_option_a"
                                                         name="intervention_option_a" class="form-control"
@@ -62,7 +96,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="intervention_option_b">Intervention
-                                                        Option B</label>
+                                                        Option B (Lower Intensity) name</label>
                                                     <input disabled value="{{settings.get('intervention_option_b','')}}"
                                                         type="text" id="intervention_option_b"
                                                         name="intervention_option_b" class="form-control"
@@ -92,7 +126,7 @@
                                                         {% endfor %}
                                                     </select>
                                                 </div>
-                                                <h5>Ineligibility</h5>
+                                                <!-- <h5>Ineligibility</h5>
                                                 <hr>
                                                 <div class="form-group">
                                                     {% for cond,v in conditions.items() %}
@@ -106,14 +140,13 @@
                                                         </div>
                                                     </div>
                                                     {%endfor%}
-                                                </div>
+                                                </div> -->
 
                                                 <h5>Intervention Probability</h5>
                                                 <hr>
                                                 <div class="form-group">
                                                     <label class="form-control-label"
-                                                        for="intervention_probability_lower_bound">Intervention
-                                                        probability lower bound (when eligible)</label>
+                                                        for="intervention_probability_lower_bound">Intervention probability lower bound (when eligible)</label>
                                                     <div class="input-group mb-3">
                                                         <input disabled
                                                             value="{{settings.intervention_probability_lower_bound}}"
@@ -126,8 +159,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-control-label"
-                                                        for="intervention_probability_upper_bound">Intervention
-                                                        probability upper bound (when eligible)</label>
+                                                        for="intervention_probability_upper_bound">Intervention probability upper bound (when eligible)</label>
                                                     <div class="input-group mb-3">
                                                         <input disabled
                                                             value="{{settings.intervention_probability_upper_bound}}"
@@ -154,7 +186,7 @@
                                                             {%endfor%}
 
                                                         </select>
-                                                        <div class="input-group-append">
+                                                        <!-- <div class="input-group-append">
                                                             <select id="update_hour" name="update_hour" class="form-control"
                                                                     disabled>
                                                                 {% for n in range(1,13) %}
@@ -170,7 +202,7 @@
                                                                 </option>
                                                                 {% endfor %}
                                                             </select>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
 
                                                 </div>

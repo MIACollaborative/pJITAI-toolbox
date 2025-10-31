@@ -50,28 +50,32 @@
                                                     </div>
 
                                                     <div class="col">
-                                                        <div class="rightsidebluetextbox">
-                                                            <p>This version of Thompson Sampling uses a Bayesian linear
-                                                                regression to model the relationship between the proximal
-                                                                outcome, states, and intervention options. 
-                                                                This method determines which
-                                                                intervention option to deliver based on the posterior
-                                                                probability that the intervention option is most effective
-                                                                in the current state. 
-                                                                To learn more, please check here [link to the tutorial].</p>
+                                                        <div class="rightsidebluetextbox" style="background-color: #e2eaf9;">
+                                                            <p>This version of Thompson Sampling uses a Bayesian linear regression to 
+                                                                model the relationship between the participant’s state as represented 
+                                                                in the RL (e.g., time of day, location, recent activity such as prior hour step count), 
+                                                                intervention options, and proximal outcome (i.e., the near-term result of the selected intervention option). 
+                                                                The algorithm selects the best intervention option to deliver based on its estimate 
+                                                                of the relative effectiveness (a.k.a. the “posterior probability” that this option will 
+                                                                lead to best proximal outcome) of the intervention options. This estimate is based on 
+                                                                how the participant has responded to each option in similar states in the past, 
+                                                                as measured by the proximal outcome.</p>
 
-                                                            <p>Key assumptions:</p>
+                                                            <p>This version of Thompson Sampling assumes:</p>
                                                             <ul class="text_white">
                                                                 <li>There are two intervention options.</li>
                                                                 <li>The proximal outcome is continuous.</li>
                                                             </ul>
-                                                            <p>In addition, in this version, the algorithm uses only data from 
-                                                                each individual to learn and update that
-                                                                individual’s coefficients. (In other words, in this version, 
-                                                                to personalize the decision rule for a participant,
-                                                                the algorithm does NOT use other participants' data.) </p>
-                                                            <p>Coming soon: a version of Thompson Sampling for categorical proximal
-                                                                outcomes.</p>
+                                                            <p>Note also that this version of Thompson Sampling learns a model for each 
+                                                                individual and does not use data from other participants’ data. This approach can 
+                                                                provide greater personalization, but takes longer to stabilize 
+                                                                (i.e., produce posterior probabilities with high confidence) than approaches that 
+                                                                pool data across participants. For more information about Thompson Sampling and 
+                                                                other approaches that use pooling (not currently included in the pJITAI Toolbox), see:</p>
+                                                            <ul class="text_white">
+                                                                <li>Trella, A. L., Zhang, K. W., Carpenter, S. M., Elashoff, D., Greer, Z. M., Nahum-Shani, I., Ruenger, D., Shetty, V., & Murphy, S. A. (2024-06). Oralytics Reinforcement Learning Algorithm. https://doi.org/10.48550/arxiv.2406.13127</li>
+                                                                <li>Ghosh, S., Guo, Y., Hung, P.-Y., Coughlin, L., Bonar, E., Nahum-Shani, I., Walton, M., & Murphy, S. (2024-08). MiWaves Reinforcement Learning Algorithm. https://doi.org/10.48550/arxiv.2408.15076</li>
+                                                            </ul>
                                                             
 
 
@@ -89,24 +93,24 @@
                                     <!-- [ tabs ] start -->
                                     <div class="col-sm-12">
 
-                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
                                                 <a class="nav-link active" id="home-tab" data-toggle="tab"
                                                 href="#home" role="tab" aria-controls="home" aria-selected="true">
                                                     Explanation</a>
                                             </li>
 
-                                        </ul>
+                                        </ul> -->
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade show active" id="home" role="tabpanel"
                                                 aria-labelledby="home-tab">
-                                                <p>Personalization method refers to the statistical/computational method
-                                                    (i.e., algorithm) that enables the personalization in a ”Personalizing
-                                                    JITAI.” This version of pJITAI implements a specific version of 
-                                                    the Thompson Sampling algorithm. Please read the blue box for more information.
-                                                    Other methods (e.g., Thompson Sampling for categorical proximal outcomes) 
-                                                    will be incorporated soon.
+                                                <h5><b>Personalization method</b></h5>
+                                                <p>Personalization method refers to the statistical/computational method (i.e., algorithm) that enables the personalization in your intervention. Currently, the pJITAI Toolbox supports the RL algorithm,  “Linear Thompson Sampling Contextual Bandit<sup style="color: red;">1</sup>” Algorithm for personalization, though we plan to add other options in the future.
                                                 </p>
+                                                <ol>
+                                                    <li>Thompson Sampling for Contextual Bandits with Linear Payoffs
+Shipra Agrawal, Navin Goyal Proceedings of the 30th International Conference on Machine Learning, PMLR 28(3):127-135, 2013.</li>
+                                                </ol>
                                             </div>
 
 
@@ -122,7 +126,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <a href="/projects/settings/collaborators/{{project_uuid}}"
+                                                    <a href="/projects/settings/team_members/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
                                                     <!--                                                <button type="submit" type="button" formaction="/projects/settings/general/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
                                                     <button type="submit" type="button"

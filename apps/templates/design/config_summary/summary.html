@@ -81,7 +81,7 @@ function get_prob(abc){
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3>Configuration Summary/ Configuration Summary</h3>
+                                                <h3>Configuration Summary</h3>
                                             </div>
 
                                         </div>
@@ -94,7 +94,7 @@ function get_prob(abc){
                                             <div class="col-sm-12">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Intervention probability</h5>
+                                                        <h5>Initial intervention probability</h5>
                                                         <div class="rightsidebluetextbox" style="margin-top:0px;">
                                                             <h6>
                                                                 Based on the information you entered on the previous screens,<br>
@@ -118,9 +118,10 @@ function get_prob(abc){
                                                                 {% for i in range(tailoring_covs_num) %}
                                                                 <div class="form-group">
                                                                     <label class="form-control-label" for="personalization_method{{i}}">{{ tailoring_covs_names[i] }}
-                                                                        <span data-toggle='tooltip'
+                                                                        <!-- <span data-toggle='tooltip'
                                                                             title='This value should satisfy your configuration of the value of the covariate'> <i
-                                                                                class=" align-text-top questionmark far fa-question-circle"></i></span></label>
+                                                                                class=" align-text-top questionmark far fa-question-circle"></i></span> -->
+                                                                    </label>
                                                                     <input type="text" onchange="get_prob(this)" 
                                                                             value="{{project_details.location_location}}"
                                                                             id="personalization_method{{i}}" name="personalization_method"
@@ -148,7 +149,7 @@ function get_prob(abc){
                                                             </li>
                                                             <li><b>Note 2</b>: This page is just a test environment for you to check the effect of your design choices. 
                                                                 Your inputs here do not change the actual
-                                                                design of your pJITAI.
+                                                                design of your pJITAI algorithm.
                                                             </li>
     <!--                                                         <li><b>Note 3</b>: If the prior mean of the interaction
                                                                 coefficient of a tailoring variable is zero, then this
@@ -184,15 +185,7 @@ function get_prob(abc){
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade show active" id="home" role="tabpanel"
                                                 aria-labelledby="home-tab">
-                                                <p class="mb-0">In “Configuration Summary,” we show you the summary of your
-                                                    pJITAI configuration.
-                                                    Thompson Sampling adjusts the intervention probability based on the
-                                                    values of the tailoring variables. Please input a value for each
-                                                    tailoring variable.
-                                                    From your configuration and inputs, we calculate the initial probability
-                                                    of delivering intervention option A. The individual-specific probability
-                                                    of delivering intervention option A will change (be personalized) as
-                                                    data accrues on the individual.
+                                                <p class="mb-0">In “Configuration Summary,” we show you the summary of your pJITAI algorithm configuration. Thompson Sampling adjusts the intervention probability based on the values of tailoring variables you have defined. If you have defined one or more tailoring variables, you can input values for each and see how the values impact the intervention delivery probability. From your configuration and inputs, we calculate the initial probability of delivering intervention option A. The individual-specific probability of delivering intervention option A will change (be personalized) as data accrues on the individual.
                                                 </p>
                                             </div>
 

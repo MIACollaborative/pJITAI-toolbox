@@ -21,25 +21,25 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3>Model Settings / Proximal Outcome</h3>
+                                                <h3>Model Settings / Proximal Outcome Attribute</h3>
                                             </div>
 
                                         </div>
                                     </div>
                                 </div>
 
-
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <div class="form-group">
+                                                <!-- <div class="form-group">
                                                     <label class="form-control-label" for="max_proximal_outcome">Outcome Data Type</label>
                                                     <select id="proximal_outcome_type" name="proximal_outcome_type"
                                                             class="form-control" aria-label="Default select example">
                                                         <option selected>Continuous</option>
                                                     </select>
-                                                </div>
+                                                </div> -->
+                                                {% if proximal_outcome_type|string == 'Continuous' %}
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="min_proximal_outcome">Minimum Allowed Value</label>
                                                     <input type="number" step="0.01"
@@ -54,6 +54,22 @@
                                                         id="max_proximal_outcome" name="max_proximal_outcome"
                                                         class="form-control" placeholder="The maximum value of the proximal outcome" required>
                                                 </div>
+                                                {% else %}
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="min_proximal_outcome">Minimum Allowed Value</label>
+                                                    <input type="number" disabled
+                                                        value=0
+                                                        id="min_proximal_outcome" name="min_proximal_outcome"
+                                                        class="form-control" placeholder="The minimum value of the proximal outcome" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="max_proximal_outcome">Maximum Allowed Value</label>
+                                                    <input type="number" disabled
+                                                        value=1
+                                                        id="max_proximal_outcome" name="max_proximal_outcome"
+                                                        class="form-control" placeholder="The maximum value of the proximal outcome" required>
+                                                </div>
+                                                {% endif %}
                                             </div>
 
                                         </div>
@@ -81,52 +97,20 @@
                                             <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
                                                 aria-labelledby="home-tab"> -->
                                             <div class="tab-item">
-                                                <h5>Explanation</h5>
-                                                <p> We use the minimum and maximum values of the proximal outcome to check if the API
-                                                    receives inappropriate values from your mobile app. Please read
-                                                    [tutorial] for more details.
-                                                </p>
-                                                <p>In this version of pJITAI, we assume the proximal outcome is continuous. In the future,
-                                                    categorical proximal outcomes will be incorporated.
-                                                </p>
-                                                <h6>Notes</h6>
-                                                <ol>
-                                                    <li>If you're reading the HeartSteps demo, the HeartSteps numbers look 
-                                                        weird because in HeartSteps the proximal outcome (the 30-minute step count
-                                                        after each decision point) is log-transformed.
-                                                        (See the HeartSteps Example tab for more explanation.)</li>
-                                                    <li>You determine whether your proximal outcome needs to be transformed. 
-                                                        If you decide to transform your proximal outcome, please read the following.
-                                                        If your proximal outcome needs to be transformed, the
-                                                        transformation needs to be implemented in the mobile application; the
-                                                        algorithm will not do the transformation. Hence, if there is transformation, we are asking 
-                                                        for the minimum and maximum values of the transformed proximal outcome. 
-                                                        (If your proximal outcome need not be transformed, we are asking for the minimum and maximum 
-                                                        values of the proximal outcome without any transformation.)</li>
-                                                </ol>                                            
+                                                <h5><b>Minimum and Maximum Allowed Values</b></h5>
+                                                <p>After determining your proximal outcome, including any transformations you will need to apply before providing them to the algorithm, consider what the allowed range of outcomes should be. Your algorithm will reject any attempts to provide a proximal outcome that falls outside this range as a way of ensuring that it does not use erroneous data for personalization. As an example, if you were to use raw 30-minute step count as your proximal outcome (see break discussion below about why you might not want to do that in practice), it would be invalid to observe an outcome less than zero (negative steps? walking backwards doesn’t count) or greater than 14,000 (equivalent to about 14 miles, which would be the distance that the world’s fastest recorded human, Usain Bolt, could cover in 30 minutes if he could maintain his top 100m speed of ~28mph--if you don’t expect Usain Bolt to be in  your population, you can reasonably set a smaller maximum).</p>
+                                                <h5><b>Notes</b></h5>
+                                                <p>Use this field to capture any decisions made about how the proximal outcome will be captured and, if applicable, transformed. This is information you will need for implementing the intervention and its communication with your pJITAI algorithm.</p>
                                             </div>
-                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                aria-labelledby="profile-tab"> -->
                                             <div class="tab-item">
-                                                <h5>HeartSteps Explanation</h5>
-                                                <h6>Minumum Value</h6>
-                                                <p>-0.69</p>
-                                                <h6>Maximum Value</h6>
-                                                <p>8.0</p>
-                                                <p>In HeartSteps, the proximal outcome, the 30-minute step count after each decision point, 
-                                                    is right-skewed. 
-                                                    Thus, the HeartSteps team decided to log-transform the
-                                                    30-minute step count after each decision point so that 
-                                                    the normal approximation used in the linear
-                                                    regression is more accurate. To avoid minus infinity
-                                                    (recall that log<sub>e</sub>(0) becomes minus infinity), we added 0.5 to
-                                                    the step count before the transformation, i.e., log<sub>e</sub>(next
-                                                    30-minute step count+0.5).</p>
-                                                <p> Our assumption was that <b>people walk between 0
-                                                    and 3000 steps in the next 30 minutes.</b> Hence, the minimum value of the
-                                                    (log) 30-minute step count is <u>log<sub>e</sub>(0+0.5)=-0.69.</u> The maximum
-                                                    value of the (log) 30-minute step count is <u>log<sub>e</sub>(3000+0.5)=8.0.</u>
-                                                    These values are continuous.</p>
+                                                <h5><i>HeartSteps Example</i></h5>
+                                                <p>The 30-minute step count used by the Activity Suggestions intervention component takes on integer values (0, 1,2,...) and is heavily left skewed with many values equal to zero and a long tail of higher step counts stretching towards the maximum expected value.  Thus to transform this proximal outcome so that its distribution is more symmetric, the raw step counts are log transformed, like so:</p>
+                                                <code>prox_outcome = log(raw_steps + 0.5)</code>
+                                                <br>
+                                                <p>The value of 0.5 is added to the raw_steps value because it avoids taking the log of 0 which is undefined.</p>
+                                                <p>If we assume 0 to be the minimum value for the raw 30-minute step count and 3000 to be the maximum value (no Usain Bolts were observed in HeartSteps pilot data), we end up with:</p>
+                                                <code>min_prox_outcome = log(0 + 0.5) = -0.69</code>
+                                                <code>max_prox_outcome = log(3000 + 0.5) = 8.0</code>
                                             </div>
 
                                         </div>
@@ -134,6 +118,18 @@
 
 
                                     <!-- [ tabs ] end -->
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <h5><b>Discussion: Transforming Outcomes</b></h5>
+                                                    <p>There are a few situations where you will want to transform the raw observation data that you can collect via your mobile app or wearable sensor before providing it to the algorithm. As noted, the currently supported Thompson Sampling algorithm personalizes more quickly when the proximal outcome has a symmetric or normal distribution. The algorithm still personalizes when proximal outcomes are binary outcomes or discrete but the speed of personalization is generally slower.   At this time the outcomes must be interval data (that is the interval between any two values of the proximal outcome should have the same meaning, see <a href="https://en.wikipedia.org/wiki/Level_of_measurement">https://en.wikipedia.org/wiki/Level_of_measurement</a>).</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- [ Main Content ] end -->
                                 <div class="row">
