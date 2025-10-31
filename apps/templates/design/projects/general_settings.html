@@ -27,8 +27,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
@@ -56,99 +54,56 @@
                                                             required class="form-control"
                                                             placeholder="Name of the intervention component">
                                                     </div>
-
-                                                    <!-- <div class="form-group">
-                                                        <label class="form-control-label" for="proximal_outcome_name">Name
-                                                            of the proximal outcome</label>
-                                                        <input type="text" name="proximal_outcome_name"
-                                                            id="proximal_outcome_name"
-                                                            value="{{general_settings.get('proximal_outcome_name','')}}"
-                                                            required class="form-control"
-                                                            placeholder="Name of the proximal outcome">
-                                                    </div> -->
-
+                                                    
+                                                    <div style="margin-top: 2rem; display: flex; justify-content: center;">
+                                                        <a href="/intervention/settings/proximal_outcome/{{project_uuid}}"
+                                                            class="btn btn-outline-primary" role="button">&lt; Main</a>
+                                                        <button style="margin-left: 3px;" type="submit" formmethod="post"
+                                                                formaction="/projects/settings/team_members/{{project_uuid}}"
+                                                                class="btn btn-primary">Next &gt;
+                                                        </button>
+                                                    </div>
+                                                    <div style="margin-top: 5px; margin-bottom: 5px;">
+                                                        Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                    </div>                                                
                                                 </div>
-                                            </div>
-
                                         </div>
                                     </div>
-                                </div>
-
-
-                                <div class="row">
-                                    <!-- [ tabs ] start -->
-                                    <div class="col-sm-12">
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="profile-tab" data-toggle="tab"
-                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                    Example</a>
-                                            </li>
-                                        </ul> -->
-                                        <div class="tab-content" id="myTabContent">
-                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                                aria-labelledby="home-tab"> -->
-                                            <div class="tab-item">
-                                                <h5><b>Project name</b></h5>
-                                                <p>Choose a name that will help you and your team remember which intervention component you aim to personalize with RL. For example “Activity Suggestions RL”.</p>
-                                                <h5><b>Project description (optional)</b></h5>
-                                                <p>Add any additional information that will help you and your team understand what this project is all about.</p>
-                                                <h5><b>Intervention component name</b></h5>
-                                                <p>Provide the name of the intervention component that will be personalized by the RL algorithm. An intervention component is any part of a JITAI that has its own decision rule, for example the component “Morning Motivational Message” might be the name of a component designed to send participants a motivational message at 9am.</p>
-                                            </div>
-                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                aria-labelledby="profile-tab"> -->
-                                            <div class="tab-item">
-                                                <h5><i>HeartSteps Example</i></h5>
-                                                <p>For the running example, we will be using the “Activity Suggestions” intervention component from HeartSteps. This is a component that may send an activity suggestion via push message to each participant at any of 5 times per day (morning, midday, afternoon, evening). To follow the example, you can enter “Activity Suggestions RL” into the project name and  “Activity Suggestions” into the “Intervention component name” field.</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <!-- [ tabs ] end -->
                                 </div>
                                 <!-- [ Main Content ] end -->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <!--                                                <button type="submit" name="back" class="btn btn btn-outline-primary">-->
-                                                    <!--                                                    Back-->
-                                                    <!--                                                </button>-->
                                                     <button type="submit" formmethod="post"
                                                             formaction="/projects/settings/team_members/{{project_uuid}}"
                                                             class="btn btn-primary">Next
                                                     </button>
-                                                    <!-- <button type="submit" formmethod="post"
+                                                    <button type="submit" formmethod="post"
                                                             formacation="/projects/settings/personalization_method/{{project_uuid}}"
                                                             class="btn btn-primary">Next
-                                                    </button> -->
+                                                    </button>
                                                 </div>
                                                 <div class="form-group">
                                                     Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+            {% set block1="Choose a name that will help you and your team remember which intervention component you aim to personalize with RL. For example “Activity Suggestions RL”." %}
+            {% set block2="For the running example, we will be using the “Activity Suggestions” intervention component from HeartSteps V1[1]. This is a component that may send an activity suggestion via push message to each participant at any of 5 times per day (morning, midday, afternoon, evening). To follow the example, you can enter “Activity Suggestions RL” into the project name and  “Activity Suggestions” into the “Intervention component name” field." %}
+            {% include 'includes/resources.html' %}
         </div>
     </div>
-    {% include 'includes/comments.html' %}
 </div>
+{% include 'includes/comments.html' %}
 <!-- [ Main Content ] end -->
 
 {% endblock content %}

@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h3 style="padding: 10px;">Resources</h3>
+    {% if block1 %}
+    <div class="card">
+      <div class="card-header">
+        <div class="col-lg-12" style="align-self: center;">
+          <div>
+            <details>
+              <summary class="resources-summary">What should I enter?</summary>
+              {{ block1 | default("Something") }}
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if block2 %}
+    <div class="card">
+      <div class="card-header">
+        <div class="col-lg-12">
+          <div>
+            <details>
+              <summary class="resources-summary">Heartsteps Example</summary>
+              {{ block2 | default("Something") }}
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if block3 %}
+    <div class="card">
+      <div class="card-header">
+        <div class="col-lg-12">
+          <div>
+            <details>
+              <summary class="resources-summary">Discussion</summary>
+              {{ block3 | default("Something") }}
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
