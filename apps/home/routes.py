@@ -66,7 +66,6 @@ def edit_comment(comment_id):
     return redirect(request.referrer)
 
 
-
 @blueprint.route('/comment/<project_uuid>/<page_name>', methods=['POST'])
 @login_required
 def add_comment(project_uuid, page_name):
@@ -104,6 +103,22 @@ def add_comment(project_uuid, page_name):
 
     return redirect(request.referrer)
 
+@blueprint.route('/contact_us/<project_uuid>/<page_name>', methods=['POST'])
+@login_required
+def contact_us(project_uuid, page_name):
+    user_id = current_user.get_id()
+    displayname = current_user.displayname
+    user_email = current_user.email
+    project_details, project_details_obj = get_project_details(project_uuid=project_uuid, user_id=user_id)
+    # Send email notification to research team
+    research_team_email = ['hngchris@umich.edu']  # TODO: Move to DB
+    for t in research_team_email:
+        msg = Message("[pJITAI] Help Needed from User",
+                            recipients=[t])
+        email_msg = f"User '{displayname} ({user_email})' requested for help on project '{project_details.get('general_settings').get('project_name')} (id: {project_uuid}) / {page_name} page': " + request.form.get("popup-email-input")
+        msg.body = email_msg
+        mail.send(msg)
+    return redirect(request.referrer)
 
 @blueprint.route('/projects/<project_type>')
 @login_required

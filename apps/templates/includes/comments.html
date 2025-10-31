@@ -169,16 +169,18 @@
     <div class="email-popup-box">
         <span onclick="togglePopup()" style="position: absolute; font-size: 26px; top: 10px; right: 15px; color: #888;" onmouseover="this.style.color='#022658'; this.style.transform='scale(1.2)';" onmouseout="this.style.color='#888'; this.style.transform='scale(1)';"><b>&times;</b></span>
         <h3 style="margin-bottom: 15px; color: #022658;">Contact the Research Team</h3>
-        <p>If you encountered a bug or need help with using the toolbox, send us an email and we will get back to you as soon as possible. 
-            <b>Detailed description</b> of the issue is appreciated.
-            Please note that your email will be automatically included.</p>
-        <textarea class="popup-email-input" placeholder="Explain the problem..."></textarea>
-        <!-- Checkbox for screenshot -->
-        <div style="margin-bottom: 10px;">
-            <input type="checkbox" id="include-screenshot" name="include-screenshot" checked>
-            <label for="include-screenshot"> Include screenshot of the current page</label>
-        </div>
-        <button class="popup-email-submit" type="submit" formmethod="post" formaction="/contact_rt/{{project_uuid}}/{{page_name}}">Submit</button>
+        <p>If you encountered a bug or need help with using the toolbox, send us an email and we will get back to you as soon as possible. <br>
+            <b>Detailed description</b> (for exmaple, copy-paste the error message) of the issue is appreciated. <br>
+            Your email and the project ID will be automatically included in the email.</p>
+        <form>
+            <textarea name="popup-email-input" class="popup-email-input" placeholder="Explain the problem..."></textarea>
+            <!-- Checkbox for screenshot -->
+            <!-- <div style="margin-bottom: 10px;">
+                <input type="checkbox" id="include-screenshot" name="include-screenshot" checked>
+                <label for="include-screenshot"> Include screenshot of the current page</label>
+            </div> -->
+            <button class="popup-email-submit" type="submit" formmethod="post" formaction="/contact_us/{{project_uuid}}/{{page_name}}">Submit</button>
+        </form>
     </div>
     </div>
 
