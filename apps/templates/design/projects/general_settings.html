@@ -97,8 +97,10 @@
                     </div>
                 </div>
             </div>
-            {% set block1="Choose a name that will help you and your team remember which intervention component you aim to personalize with RL. For example “Activity Suggestions RL”." %}
-            {% set block2="For the running example, we will be using the “Activity Suggestions” intervention component from HeartSteps V1[1]. This is a component that may send an activity suggestion via push message to each participant at any of 5 times per day (morning, midday, afternoon, evening). To follow the example, you can enter “Activity Suggestions RL” into the project name and  “Activity Suggestions” into the “Intervention component name” field." %}
+            {% set block1="Y" %}
+            {% set block1_title=["Project name", "Project description (optional)", "Intervention component name"] %}
+            {% set block1_text=["Choose a name that will help you and your team remember which intervention component you aim to personalize with RL. For example “Activity Suggestions RL”.", "Add any additional information that will help you and your team understand what this project is all about.", "Provide the name of the intervention component that will be personalized by the RL algorithm. An intervention component is any part of a JITAI that has its own decision rule, for example the component “Morning Motivational Message” might be the name of a component designed to send participants a motivational message at 9am."] %}
+            {% set block2="Y" %}
             {% include 'includes/resources.html' %}
         </div>
     </div>

@@ -8,7 +8,12 @@
           <div>
             <details>
               <summary class="resources-summary">What should I enter?</summary>
-              {{ block1 | default("Something") }}
+              {% for i in range(block1_title|length) %}
+              <div>
+                <b>{{ block1_title[i] }}</b>
+                <p>{{ block1_text[i] }}</p>
+              </div>
+              {% endfor %}
             </details>
           </div>
         </div>
