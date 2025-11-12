@@ -34,7 +34,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="col-lg-12">
-                                                    <div class="row congratstextbox" style="margin-bottom: 30px;">
+                                                    <!-- <div class="row congratstextbox" style="margin-bottom: 30px;">
                                                         <div class="col-1">
                                                             <img src="{{ config.ASSETS_ROOT }}/images/pjitai/celebration.png"
                                                                 class="img-responsive">
@@ -48,7 +48,7 @@
                                                             </p>
                                                         </div>
 
-                                                    </div>
+                                                    </div> -->
 
 
                                                     <h5>General Information</h5>
@@ -102,24 +102,25 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="center-buttons">
+                                                    <a href="/projects/settings/personalized_method/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">&lt; Back</a>
+                                                    <button style="margin-left: 3px;" type="submit" formmethod="post"
+                                                            formaction="/intervention/settings/proximal_outcome/{{project_uuid}}"
+                                                            class="btn btn-primary" role="button">Go to Intervention Settings &gt;
+                                                    </button>
+                                                </div>
+                                                <div class="modified-on">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>     
                                             </div>
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <!-- [ tabs ] start -->
+                                <!-- <div class="row">
                                     <div class="col-sm-12">
-
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-
-                                        </ul> -->
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade show active" id="home" role="tabpanel"
                                                 aria-labelledby="home-tab">
@@ -133,14 +134,11 @@
 
                                         </div>
                                     </div>
-
-
-                                    <!-- [ tabs ] end -->
-                                </div>
+                                </div> -->
 
 
                                 <!-- [ Main Content ] end -->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
@@ -151,8 +149,6 @@
                                                             formaction="/intervention/settings/proximal_outcome/{{project_uuid}}"
                                                             class="btn btn-primary" role="button">Go to Intervention Settings
                                                     </button>
-                                                    <!--                                                <button type="submit" type="button" formaction="/projects/settings/scenario/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
-                                                    <!--                                                <button type="submit" type="button" formaction="/intervention/settings/intervention_option/{{project_uuid}}" formmethod="post" class="btn btn-primary">Start My Design</button>-->
                                                 </div>
                                                 <div class="form-group">
                                                     Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
@@ -161,7 +157,7 @@
 
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                     </div>

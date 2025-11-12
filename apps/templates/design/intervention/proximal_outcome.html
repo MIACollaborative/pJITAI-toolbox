@@ -55,8 +55,19 @@
                                                                 rows="4" class="form-control"
                                                                 placeholder="Proximal outcome description...">{{settings.get('proximal_outcome_description','')}}</textarea>
                                                     </div>
-
+                                                    
                                                 </div>
+                                                <div class="center-buttons">
+                                                    <a href="/projects/settings/summary/{{project_uuid}}"
+                                                        class="btn btn-outline-primary" role="button">&lt; Back</a>
+                                                    <button style="margin-left: 3px;" type="submit" formmethod="post"
+                                                            formaction="/intervention/settings/intervention_option/{{project_uuid}}"
+                                                            class="btn btn-primary">Next &gt;
+                                                    </button>
+                                                </div>
+                                                <div class="modified-on">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>  
                                             </div>
 
                                         </div>
@@ -65,33 +76,12 @@
 
 
                                 <div class="row">
-                                    <!-- [ tabs ] start -->
                                     <div class="col-sm-12">
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="profile-tab" data-toggle="tab"
-                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                    Example</a>
-                                            </li>
-                                        </ul> -->
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-item">
                                                 <h5><b>What is the proximal outcome?</b></h5>
                                                 <p>The proximal outcome is an outcome that you will collect and provide to the algorithm after each decision point. The outcome should be one that provides information about the behavior you are trying to influence with your Intervention Component. For example, for an intervention component focused on promoting physical activity, the step count (as measured by an activity tracker like a Fitbit) in some relatively small period of time after each decision point would be a good choice for a proximal outcome. In this description, describe your proximal outcome in a few words that will help you and your team remember what you decided.</p>
-                                                <!-- <h5><b>Proximal outcome name</b></h5>
-                                                <p>TODO</p>
-                                                <h5><b>Proximal outcome data type</b></h5>
-                                                <p>TODO</p>
-                                                <h5><b>Proximal outcome description (optional)</b></h5>
-                                                <p>TODO</p> -->
                                             </div>
-                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                aria-labelledby="profile-tab"> -->
                                             <div class="tab-item">
                                                 <h5><i>HeartSteps Example</i></h5>
                                                 <p>In HeartSteps, the step count in a 30-minute window is observed following each decision point. In addition, step counts are right skewed. Thus, we log transformed them so that the normal approximation used in the linear regression is more accurate. The proximal outcome is then “(log) Next 30 min step count” to denote the transformation.</p>
@@ -104,7 +94,7 @@
                                     <!-- [ tabs ] end -->
                                 </div>
                                 <!-- [ Main Content ] end -->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
@@ -123,8 +113,8 @@
 
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </div> -->
+                            </form>         
                         </div>
                     </div>
                 </div>

@@ -55,7 +55,7 @@
                                                             placeholder="Name of the intervention component">
                                                     </div>
                                                     
-                                                    <div style="margin-top: 2rem; display: flex; justify-content: center;">
+                                                    <div class="center-buttons">
                                                         <a href="/intervention/settings/proximal_outcome/{{project_uuid}}"
                                                             class="btn btn-outline-primary" role="button">&lt; Main</a>
                                                         <button style="margin-left: 3px;" type="submit" formmethod="post"
@@ -63,11 +63,11 @@
                                                                 class="btn btn-primary">Next &gt;
                                                         </button>
                                                     </div>
-                                                    <div style="margin-top: 5px; margin-bottom: 5px;">
+                                                    <div class="modified-on">
                                                         Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
                                                     </div>                                                
                                                 </div>
-                                        </div>
+                                            </div>
                                     </div>
                                 </div>
                                 <!-- [ Main Content ] end -->
@@ -100,7 +100,6 @@
             {% set block1="Y" %}
             {% set block1_title=["Project name", "Project description (optional)", "Intervention component name"] %}
             {% set block1_text=["Choose a name that will help you and your team remember which intervention component you aim to personalize with RL. For example “Activity Suggestions RL”.", "Add any additional information that will help you and your team understand what this project is all about.", "Provide the name of the intervention component that will be personalized by the RL algorithm. An intervention component is any part of a JITAI that has its own decision rule, for example the component “Morning Motivational Message” might be the name of a component designed to send participants a motivational message at 9am."] %}
-            {% set block2="Y" %}
             {% include 'includes/resources.html' %}
         </div>
     </div>

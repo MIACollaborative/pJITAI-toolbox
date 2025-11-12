@@ -7868,6 +7868,18 @@ a.btn-theme.active {
 .tab-pane.active {
   display: block;
 }
+.center-buttons {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+.center-buttons-next {
+  margin-left: 3px;
+}
+.modified-on {
+  margin-top: 5px; 
+  margin-bottom: 5px;
+}
 
 /* Alternate buttons */
 .btn-primary {
