@@ -111,7 +111,7 @@ def contact_us(project_uuid, page_name):
     user_email = current_user.email
     project_details, project_details_obj = get_project_details(project_uuid=project_uuid, user_id=user_id)
     # Send email notification to research team
-    research_team_email = ['hngchris@umich.edu']  # TODO: Move to DB
+    research_team_email = ['']  # TODO: Add research team email addresses
     for t in research_team_email:
         msg = Message("[pJITAI] Help Needed from User",
                             recipients=[t])
@@ -253,8 +253,8 @@ def mark_project_finalized(project_uuid):
         mail.send(msg)    
 
     # return redirect("/projects/finalized")
-    return redirect(f"/api/projects/{project_uuid}")
-    # return redirect(f"/api/end_userstudy/{project_uuid}")
+    # return redirect(f"/api/projects/{project_uuid}")
+    return redirect(f"/api/end_userstudy/{project_uuid}")
 
 @blueprint.route('/projects/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])
 @login_required
@@ -335,7 +335,6 @@ def project_settings(setting_type, project_uuid=None):
                                menu_number=1, project_name=project_name, modified_on=modified_on,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "team_members":
-        print('team_members: ', team_members)
         return render_template("design/projects/team_members.html", segment="general_team_members", all_menus=all_menus,
                                menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name, project_owner=project_owner,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)

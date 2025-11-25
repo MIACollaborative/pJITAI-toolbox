@@ -160,9 +160,9 @@
           </div>
       </div>
   </div>
-  <div class="email-circle" onclick="togglePopup()">
+  <!-- <div class="email-circle" onclick="togglePopup()">
     <i class="fa fa-envelope" style="color: white; font-size: 32px;"></i>
-  </div>
+  </div> -->
   <!-- Popup Overlay -->
   <div id="email-popup-overlay">
     <!-- Popup Box -->
@@ -174,11 +174,6 @@
             Your email and the project ID will be automatically included in the email.</p>
         <form>
             <textarea name="popup-email-input" class="popup-email-input" placeholder="Explain the problem..."></textarea>
-            <!-- Checkbox for screenshot -->
-            <!-- <div style="margin-bottom: 10px;">
-                <input type="checkbox" id="include-screenshot" name="include-screenshot" checked>
-                <label for="include-screenshot"> Include screenshot of the current page</label>
-            </div> -->
             <button class="popup-email-submit" type="submit" formmethod="post" formaction="/contact_us/{{project_uuid}}/{{page_name}}">Submit</button>
         </form>
     </div>
