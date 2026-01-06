@@ -174,13 +174,13 @@ def _is_valid(feature_vector: dict, features_config: dict) -> dict:
     return feature_vector
 
 
-def _add_log(algo_uuid: str = None, log_detail: dict = None, ) -> dict:
+def _add_log(proj_uuid: str = None, log_detail: dict = None, ) -> dict:
     calling_method = inspect.stack()[1][3]  # Look at the calling stack for the parent method
     calling_file = inspect.stack()[1][1]
     try:
         log_detail['calling_method'] = calling_method
         log_detail['calling_file'] = calling_file
-        log = Log(algo_uuid=algo_uuid, details=log_detail, created_on=time_8601())
+        log = Log(proj_uuid=proj_uuid, details=log_detail, created_on=time_8601())
         db.session.add(log)
         db.session.commit()
     except SQLAlchemyError as e:

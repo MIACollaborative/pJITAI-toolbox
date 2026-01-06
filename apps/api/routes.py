@@ -142,7 +142,7 @@ def decision(uuid: str) -> dict:
                 "decision_result": decision_output,
             }
             # Only one row is currently supported.  Extract it and convert to a dictionary before returning to the calling library.
-            _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': result,
+            _add_log(proj_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': result,
                                                  'http_status_code': 200})
             return result, 200
         else:
@@ -150,7 +150,7 @@ def decision(uuid: str) -> dict:
                 'status_code': StatusCode.ERROR.value,
                 'status_message': f'A decision was unable to be made for: {uuid} with data: {input_data}'
             }
-            _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(
+            _add_log(proj_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(
             ), 'response': None, 'error': result, 'http_status_code': 400})
             return result, 400
     except Exception as e:
@@ -159,7 +159,7 @@ def decision(uuid: str) -> dict:
             "status_code": StatusCode.ERROR.value,
             "status_message": str(e),
         }
-        _add_log(algo_uuid=uuid,
+        _add_log(proj_uuid=uuid,
                  log_detail={'input_data': input_data, 'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 
@@ -188,7 +188,7 @@ def upload(uuid: str) -> dict:
             "status_message": f"Data uploaded to model {uuid}",
             "upload_result": data.as_dict(),
         }
-        _add_log(algo_uuid=uuid,
+        _add_log(proj_uuid=uuid,
                  log_detail={'input_data': data.as_dict(), 'response': result, 'http_status_code': 200})
         return result, 200
     except Exception as e:
@@ -197,7 +197,7 @@ def upload(uuid: str) -> dict:
             'status_code': StatusCode.ERROR.value,
             'status_message': f'Upload was unable to be made for: {uuid} with input data: {input_data}'
         }
-        _add_log(algo_uuid=uuid,
+        _add_log(proj_uuid=uuid,
                  log_detail={'input_data': input_data, 'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 
@@ -240,7 +240,7 @@ def update(uuid: str) -> dict:
             "status_message": "Update has been made successfully.",
             "update_result": algo_tuned_params.as_dict(),
         }
-        _add_log(algo_uuid=uuid, log_detail={'response': result, 'http_status_code': 200})
+        _add_log(proj_uuid=uuid, log_detail={'response': result, 'http_status_code': 200})
         return result, 200
 
     except Exception as e:
@@ -249,7 +249,7 @@ def update(uuid: str) -> dict:
             "status_code": StatusCode.ERROR.value,
             "status_message": str(e),
         }
-        _add_log(algo_uuid=uuid,
+        _add_log(proj_uuid=uuid,
                  log_detail={'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 

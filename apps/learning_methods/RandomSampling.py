@@ -117,7 +117,7 @@ class RandomSampling(LearningMethodBase):
                 selection = i
 
         decision = Decision(user_id=user_id,
-                            algo_uuid=self.uuid,
+                            proj_uuid=self.uuid,
                             decision=selection,
                             decision_options=decision_options,
                             status_code=StatusCode.SUCCESS.value,
