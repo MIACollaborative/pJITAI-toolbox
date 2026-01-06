@@ -402,7 +402,7 @@ class ThompsonSampling(LearningMethodBase):
         tmp = np.linalg.solve(
             np.matmul(np.matmul(np.transpose(Phi_all), self._theta_Sigma_ini), Phi_all) + np.identity(len(reward_all)),
             tmp0)
-        noise = 1 / degree * (len(reward_all) * self._noise_ini + np.matmul(np.transpose(tmp0), tmp))
+        noise = 1 / degree * (self._L_ini * self._noise_ini + np.matmul(np.transpose(tmp0), tmp))
         
         return theta_mu, theta_Sigma, degree, noise
 
