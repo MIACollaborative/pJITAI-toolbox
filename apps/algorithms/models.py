@@ -112,7 +112,7 @@ class Projects(db.Model):
 
 @dataclass
 class ProjectMenu(db.Model):
-    __tablename__ = 'projectsMenu'
+    __tablename__ = 'projects_menu'
     id = db.Column(db.Integer,
                    primary_key=True,
                    nullable=False)

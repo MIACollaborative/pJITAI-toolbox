@@ -219,7 +219,6 @@ def get_tuned_params(proj_uuid: str):
                     .first())
     
     if alg_params != None:
-        print("get_tuned_params: AlgoTunedParams exists!")
         tuned_params = {
             'theta_mu': [alg_params.theta_mu],
             'theta_Sigma': [alg_params.theta_Sigma],
@@ -228,7 +227,6 @@ def get_tuned_params(proj_uuid: str):
         }
         return tuned_params
     else:
-        print("get_tuned_params: AlgoTunedParams doesn't exist!")
         proj = Projects.query.filter(Projects.uuid == proj_uuid).first().as_dict()
         ts = ThompsonSampling(proj)
         tuned_params = {

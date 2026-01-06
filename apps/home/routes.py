@@ -60,7 +60,6 @@ def delete_comment(comment_id):
 def edit_comment(comment_id):
     comment = db.session.query(Comment).filter(Comment.id == comment_id).first()
     comment.content = request.form.get("comment-input")
-    # comment.timestamp = datetime.now()
     db.session.commit()
 
     return redirect(request.referrer)
