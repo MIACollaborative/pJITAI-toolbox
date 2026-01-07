@@ -32,7 +32,7 @@ from datetime import datetime
 from tzlocal import get_localzone
 from uuid import uuid4
 
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, url_for
 from flask_login import login_required, current_user
 from flask_mail import Message
 from sqlalchemy import desc
@@ -165,6 +165,7 @@ def projects(project_type):
         aproj.general_settings["modified_on"] = aproj.modified_on
         aproj.general_settings["created_on"] = aproj.created_on
         aproj.general_settings["project_owner"] = aproj.created_by
+        aproj.general_settings["project_name"] = aproj.general_settings.get("project_name", "")
 
         data.append(aproj.general_settings)
     
@@ -316,6 +317,11 @@ def project_settings(setting_type, project_uuid=None):
                      modified_on=datetime.now(),
                      created_on=datetime.now(),
                      auth_token=auth_token).save()
+            return redirect(url_for('home_blueprint.project_settings',
+                    setting_type='team_members',
+                    project_uuid=project_uuid
+                ))
+
 
     all_menus = get_project_menu_pages(user_id, project_uuid)
     user = user_id
@@ -465,7 +471,6 @@ def model_settings(setting_type, project_uuid):
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("project_name", "")
-    #print(f'XXXXXXXXXX {project_details}')
     full_url = request.url
 
     if setting_type == "proximal_outcome":
@@ -725,7 +730,7 @@ def delete_covariate(project_uuid, cov_id=None):
 
 
 @blueprint.route('/get_probability/<project_uuid>', methods=['GET'])
-#@login_required
+@login_required
 def get_probability(project_uuid):
     user_id = current_user.get_id()
     project_details, project_details_obj = get_project_details(project_uuid, user_id)

@@ -66,15 +66,13 @@
                                                             {% if proj.project_owner|int == user|int %}
                                                             <a class="dropdown-item"
                                                                href="/projects/duplicate/{{proj.project_uuid}}"
-                                                               onclick="return confirm('Are you sure you want to duplicate the project - {{proj.get("
-                                                               project_name")}}?');"><i class="fa fa-clone"
+                                                               onclick="return confirm('Are you sure you want to duplicate the project - {{proj.project_name}}?');"><i class="fa fa-clone"
                                     project                              aria-hidden="true"></i> Duplicate
                                                             the project</a>
                                                             <div class="dropdown-divider"></div>
                                                             <a class="dropdown-item" style="color:#f65959"
                                                                href="/projects/delete/{{proj.project_uuid}}"
-                                                               onclick="return confirm('Are you sure you want to delete the project - {{proj.get("
-                                                               project_name")}}?');"><i class="fa fa-trash"
+                                                               onclick="return confirm('Are you sure you want to delete the project - {{proj.project_name}}?');"><i class="fa fa-trash"
                                     project                              aria-hidden="true"></i> Delete the
                                                             project</a>
                                                             {% endif %}

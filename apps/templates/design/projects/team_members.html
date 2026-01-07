@@ -91,6 +91,8 @@
                     </div>
                   </div>
                   <script>
+                    console.log('user:', '{{ user }}' );
+                    console.log('project_owner:', {{project_owner}} );
                     document.getElementById('search-btn').addEventListener('click', function(){
                       const emailInput = document.getElementById('user-email').value;
                       checkUsers(emailInput);
