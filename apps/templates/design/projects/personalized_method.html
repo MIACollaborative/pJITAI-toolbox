@@ -82,6 +82,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="center-buttons">
+                                                    <a href="/projects/settings/team_members/{{project_uuid}}"
+                                                                    class="btn btn-outline-primary" role="button">&lt; Back</a>
+                                                    <button style="margin-left: 3px;" type="submit" type="button"
+                                                            formaction="/projects/settings/summary/{{project_uuid}}"
+                                                            formmethod="post" class="btn btn-primary">Next &gt;
+                                                    </button>
+                                                </div>
+                                                <div class="modified-on">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
                                             </div>
 
                                         </div>
@@ -89,18 +100,8 @@
                                 </div>
 
 
-                                <div class="row">
-                                    <!-- [ tabs ] start -->
+                                <!-- <div class="row">
                                     <div class="col-sm-12">
-
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-
-                                        </ul> -->
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade show active" id="home" role="tabpanel"
                                                 aria-labelledby="home-tab">
@@ -116,19 +117,36 @@ Shipra Agrawal, Navin Goyal Proceedings of the 30th International Conference on 
 
                                         </div>
                                     </div>
-
-
-                                    <!-- [ tabs ] end -->
+                                </div> -->
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h3 style="padding: 10px;">Resources</h3>
+                                        <div class="card">
+                                        <div class="card-header">
+                                            <div class="col-lg-12" style="align-self: center;">
+                                            <div>
+                                                <details>
+                                                    <summary class="resources-summary">What should I enter?</summary>
+                                                    <div>
+                                                        <p><b>Personalization Method</b></p>
+                                                        <p style="margin-top: 3px">Personalization method refers to the statistical or computational method (i.e., algorithm) that enables personalization in your intervention. Currently, the pJITAI Toolbox supports one  RL algorithm, namely the <i>Linear Thompson Sampling Contextual Bandit</i> Algorithm, for personalization. We plan to add other methods  in the future.
+</p>
+                                                    </div>
+                                                </details>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- [ Main Content ] end -->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
                                                     <a href="/projects/settings/team_members/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
-                                                    <!--                                                <button type="submit" type="button" formaction="/projects/settings/general/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
                                                     <button type="submit" type="button"
                                                             formaction="/projects/settings/summary/{{project_uuid}}"
                                                             formmethod="post" class="btn btn-primary">Next
@@ -141,7 +159,7 @@ Shipra Agrawal, Navin Goyal Proceedings of the 30th International Conference on 
 
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                     </div>

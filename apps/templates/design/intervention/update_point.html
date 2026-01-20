@@ -64,8 +64,18 @@
                                                     </div>
 
                                                 </div>
-
-
+                                                <div class="center-buttons">
+                                                    <a href="/intervention/settings/intervention_probability/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    
+                                                    <button style="margin-left: 3px;" type="submit" type="button"
+                                                            formaction="/intervention/settings/summary/{{project_uuid}}"
+                                                            formmethod="post" class="btn btn-primary">Next
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
                                             </div>
 
                                         </div>
@@ -95,15 +105,6 @@
                                                 <p>The algorithm does not learn continuously, rather it periodically updates itself based on decisions made (Option A vs B), collected participant states, and proximal outcomes recorded after each decision. From these data, the algorithm calculates the impact of each selected option on the participant’s behavior and updates its model, which in turn adjusts probabilities for future decision points.
                                                     The update process can be time consuming, especially as more data accrues, so it’s recommended to schedule updates for times when no decision points are expected to occur. Updating too frequently is not beneficial, as the algorithm needs the results of several decision points between each update to make meaningful changes to its models.</p>
                                             </div>
-                                            <!-- <div class="tab-item">
-                                                <h5>HeartSteps Example</h5>
-                                                <p>In HeartSteps, the personalizing JITAI updated the parameters each day at
-                                                    midnight because midnight is not close to any of the five decision
-                                                    points. If a temporary wifi issue occurs when data is uploaded to the
-                                                    cloud from a mobile device, it provides enough time for the data to be
-                                                    re-uploaded if needed.</p>
-                                            </div> -->
-
                                         </div>
                                     </div>
 
@@ -111,14 +112,14 @@
                                     <!-- [ tabs ] end -->
                                 </div>
                                 <!-- [ Main Content ] end -->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
                                                     <a href="/intervention/settings/intervention_probability/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
-                                                    <!--                                                <button type="submit" type="button" formaction="/intervention/settings/intervention_probability/{{project_uuid}}" formmethod="post" class="btn btn-outline-primary">Back</button>-->
+                                                    
                                                     <button type="submit" type="button"
                                                             formaction="/intervention/settings/summary/{{project_uuid}}"
                                                             formmethod="post" class="btn btn-primary">Next
@@ -131,7 +132,7 @@
 
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                     </div>

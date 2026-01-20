@@ -75,7 +75,6 @@ class Decision(db.Model):  # YS: saved in decision()
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'),
                         nullable=False)
-    # algo_uuid = db.Column('algo_uuid', db.String(36))  # YS: changed to project id
     proj_uuid = db.Column('proj_uuid', db.String(36))
 
     state_data = db.Column('state_data', db.JSON)   # YS: 👇 example of state_data
@@ -123,7 +122,6 @@ class Data(db.Model):  # YS: Used in update(), upload()
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'),
                         nullable=False)
-    # algo_uuid = db.Column('algo_uuid', db.String(36))
     proj_uuid = db.Column('proj_uuid', db.String(36))  # YS: Changed to project id
     timestamp = db.Column('timestamp',
                           db.String(100),
@@ -150,7 +148,7 @@ class Data(db.Model):  # YS: Used in update(), upload()
 class Log(db.Model):
     __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    algo_uuid = db.Column('algo_uuid', db.String(36))
+    proj_uuid = db.Column('proj_uuid', db.String(36))
     details = db.Column('details', db.JSON)
     timestamp = db.Column('timestamp',
                           db.String(100),
@@ -171,7 +169,7 @@ class Log(db.Model):
 class Cron(db.Model):
     __tablename__ = 'cron'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    algo_uuid = db.Column('algo_uuid', db.String(36))
+    proj_uuid = db.Column('proj_uuid', db.String(36))
     details = db.Column('details', db.JSON)
     timestamp = db.Column('timestamp',
                           db.String(100),

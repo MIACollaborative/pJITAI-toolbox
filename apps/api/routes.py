@@ -42,7 +42,7 @@ from apps.api.codes import StatusCode
 from apps.api.sql_helper import get_tuned_params, json_to_series, save_decision, store_tuned_params, get_merged_data
 from apps.learning_methods.learning_method_service import get_all_available_methods
 from .models import Data, Decision, AlgorithmTunedParams
-from .util import get_class_object, pJITAI_token_required, _validate_algo_data, _add_log
+from .util import get_class_object, pJITAI_token_required, _add_log
 from uuid import uuid4
 from datetime import datetime
 import json
@@ -90,7 +90,7 @@ def _save_each_data_row(user_id: int,
 # @pJITAI_token_required
 def model(uuid: str) -> dict:
     proj = db.session.query(Projects).filter(Projects.uuid == uuid).filter(Projects.project_status == 1).first()
-    result = {"status": "ERROR: Algorithm not found"}
+    result = {"status": "ERROR: Project not found"}
     if proj:
         result = proj.as_dict()
     return result
@@ -142,7 +142,7 @@ def decision(uuid: str) -> dict:
                 "decision_result": decision_output,
             }
             # Only one row is currently supported.  Extract it and convert to a dictionary before returning to the calling library.
-            _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': result,
+            _add_log(proj_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(), 'response': result,
                                                  'http_status_code': 200})
             return result, 200
         else:
@@ -150,7 +150,7 @@ def decision(uuid: str) -> dict:
                 'status_code': StatusCode.ERROR.value,
                 'status_message': f'A decision was unable to be made for: {uuid} with data: {input_data}'
             }
-            _add_log(algo_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(
+            _add_log(proj_uuid=uuid, log_detail={'input_data': input_data.iloc[0].to_dict(
             ), 'response': None, 'error': result, 'http_status_code': 400})
             return result, 400
     except Exception as e:
@@ -159,7 +159,7 @@ def decision(uuid: str) -> dict:
             "status_code": StatusCode.ERROR.value,
             "status_message": str(e),
         }
-        _add_log(algo_uuid=uuid,
+        _add_log(proj_uuid=uuid,
                  log_detail={'input_data': input_data, 'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 
@@ -188,7 +188,7 @@ def upload(uuid: str) -> dict:
             "status_message": f"Data uploaded to model {uuid}",
             "upload_result": data.as_dict(),
         }
-        _add_log(algo_uuid=uuid,
+        _add_log(proj_uuid=uuid,
                  log_detail={'input_data': data.as_dict(), 'response': result, 'http_status_code': 200})
         return result, 200
     except Exception as e:
@@ -197,7 +197,7 @@ def upload(uuid: str) -> dict:
             'status_code': StatusCode.ERROR.value,
             'status_message': f'Upload was unable to be made for: {uuid} with input data: {input_data}'
         }
-        _add_log(algo_uuid=uuid,
+        _add_log(proj_uuid=uuid,
                  log_detail={'input_data': input_data, 'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
 
@@ -231,16 +231,13 @@ def update(uuid: str) -> dict:
                            theta_Sigma=theta_Sigma,
                            degree=degree,
                            scale=scale)
-        # print('-------algo tuned params--------------')
-        # print(algo_tuned_params.as_dict())
-        # print('---------------------')
         ##########################################
         result = {
             "status_code": StatusCode.SUCCESS.value,
             "status_message": "Update has been made successfully.",
             "update_result": algo_tuned_params.as_dict(),
         }
-        _add_log(algo_uuid=uuid, log_detail={'response': result, 'http_status_code': 200})
+        _add_log(proj_uuid=uuid, log_detail={'response': result, 'http_status_code': 200})
         return result, 200
 
     except Exception as e:
@@ -249,62 +246,9 @@ def update(uuid: str) -> dict:
             "status_code": StatusCode.ERROR.value,
             "status_message": str(e),
         }
-        _add_log(algo_uuid=uuid,
+        _add_log(proj_uuid=uuid,
                  log_detail={'response': None, 'error': result, 'http_status_code': 400})
         return result, 400
-
-
-# Web UI related APIs below here #TODO: Move these to a separate file? #NOTE (YS): <algo_type> is never being updated in Projects. run_algo is not being called anywhere. 
-@blueprint.route('/run_algo/<algo_type>', methods=['POST'])  # or UUID
-@login_required
-def run_algo(algo_type):
-    # all finalized algorithms could be accessed using this api point
-    algo_definitions = get_all_available_methods()
-    algo_info = {}
-    form_type = request.form.get("form_type")
-    if algo_type not in algo_definitions:
-        return {"status": "error", "message": algo_type + " does not exist."}, 400
-    if not request.form:
-        return {"status": "error", "message": "Form cannot be empty."}, 400
-
-    if form_type == "add" or form_type == "new":
-        if not request.form.get("algorithm_name"):
-            return {"status": "error", "message": "Algorithm name cannot be empty."}, 400
-
-        algo_info["name"] = request.form.get("algorithm_name")
-        algo_info["description"] = request.form.get("algorithm_description")
-        algo_info["type"] = request.form.get("algorithm_type")
-        configuration = {}
-
-        features = {}
-        standalone_parameter = {}
-        other_parameter = {}
-
-        for param in request.form:
-            arr = param.split("__")
-            if param.startswith("feature"):
-                if not features.get(arr[-1]):
-                    features[arr[-1]] = {}
-                features[arr[-1]].update({arr[0]: request.form[param]})
-            elif param.startswith("standalone_parameter"):
-                standalone_parameter.update({arr[1]: request.form[param]})
-            elif param.startswith("other_parameter"):
-                other_parameter.update({arr[1]: request.form[param]})
-
-        configuration["features"] = features
-        configuration["standalone_parameters"] = standalone_parameter
-        configuration["other_parameters"] = other_parameter
-        configuration["tuning_scheduler"] = {}
-        if request.form.get("availability"):
-            configuration["availability"] = {"availability": request.form.get("availability")}
-
-        algo_info["features"] = features
-        algo_info["standalone_parameter"] = standalone_parameter
-        algo_info["other_parameter"] = other_parameter
-
-        # return algo_info
-        return {"status": "success", "message": "Algorithm ran successfully. Output is TODO"}
-    return {"status": "error", "message": "Some error occurred. Check the logs."}, 400
 
 
 @blueprint.route('/search/<query>', methods=['POST', 'GET'])  # or UUID

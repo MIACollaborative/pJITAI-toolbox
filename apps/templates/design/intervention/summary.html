@@ -33,7 +33,7 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <div class="row congratstextbox" style="margin-bottom: 30px;">
+                                                <!-- <div class="row congratstextbox" style="margin-bottom: 30px;">
                                                     <div class="col-1">
                                                         <img src="{{ config.ASSETS_ROOT }}/images/pjitai/celebration.png"
                                                             class="img-responsive">
@@ -57,7 +57,7 @@
 
                                                     </div>
 
-                                                </div>
+                                                </div> -->
 
 
                                                 <h5>Proximal Outcome</h5>
@@ -186,25 +186,19 @@
                                                             {%endfor%}
 
                                                         </select>
-                                                        <!-- <div class="input-group-append">
-                                                            <select id="update_hour" name="update_hour" class="form-control"
-                                                                    disabled>
-                                                                {% for n in range(1,13) %}
-                                                                <option {% if settings.update_hour==n|string+':00am' %}
-                                                                        selected{% endif %} value="{{n}}:00am">AT {{n}}:00
-                                                                    AM
-                                                                </option>
-                                                                {% endfor %}
-                                                                {% for n in range(1,13) %}
-                                                                <option {% if settings.update_hour==n|string+':00pm' %}
-                                                                        selected{% endif %} value="{{n}}:00pm">AT {{n}}:00
-                                                                    PM
-                                                                </option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div> -->
                                                     </div>
 
+                                                </div>
+                                                <div class="center-buttons">                                                    
+                                                    <a href="/intervention/settings/update_point/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">&lt; Back</a>
+                                                    <button style="margin-left: 3px;" type="submit" formmethod="post"
+                                                            formaction="/model/settings/proximal_outcome/{{project_uuid}}"
+                                                            class="btn btn-primary" role="button">Go to Model Settings &gt;
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
                                                 </div>
                                             </div>
 
@@ -214,7 +208,7 @@
 
 
                                 <!-- [ Main Content ] end -->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
@@ -232,7 +226,7 @@
 
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                     </div>

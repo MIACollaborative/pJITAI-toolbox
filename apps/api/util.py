@@ -36,7 +36,7 @@ from flask import request
 from sqlalchemy.exc import SQLAlchemyError
 
 from apps import db
-from apps.algorithms.models import Algorithms, Projects
+from apps.algorithms.models import Projects
 from apps.api.codes import StatusCode
 from .models import Log
 
@@ -79,28 +79,6 @@ def get_class_object(class_path: str):
     module = import_module(module_path)
 
     return getattr(module, class_name)
-
-
-def _validate_algo_data(uuid: str, feature_values: list) -> list:
-    # algo = Algorithms.query.filter(Algorithms.uuid.like(uuid)).first()
-    algo = Projects.query.filter(Projects.uuid.like(uuid)).first()  # YS: Changed to Projects
-    if not algo:
-        raise Exception(f'ERROR: Invalid algorithm ID.')
-    algorithm_features_ = algo.configuration.get('features', [])
-    feature_map = {}
-    for ft in algorithm_features_:
-        feature_map[algorithm_features_[ft]
-        ['feature_name']] = algorithm_features_[ft]
-
-    # Check input_request to ensure that the number of items matches what is expected
-    if len(feature_values) == len(feature_map):
-        # iterate over input_request and validate against the algorithm's specification
-        _is_valid(feature_values, feature_map)
-    else:
-        raise Exception(
-            f"Array out of bounds: input: {len(feature_values)}, expected: {len(feature_map)}")
-
-    return feature_values
 
 
 def _is_valid(feature_vector: dict, features_config: dict) -> dict:
@@ -174,13 +152,13 @@ def _is_valid(feature_vector: dict, features_config: dict) -> dict:
     return feature_vector
 
 
-def _add_log(algo_uuid: str = None, log_detail: dict = None, ) -> dict:
+def _add_log(proj_uuid: str = None, log_detail: dict = None, ) -> dict:
     calling_method = inspect.stack()[1][3]  # Look at the calling stack for the parent method
     calling_file = inspect.stack()[1][1]
     try:
         log_detail['calling_method'] = calling_method
         log_detail['calling_file'] = calling_file
-        log = Log(algo_uuid=algo_uuid, details=log_detail, created_on=time_8601())
+        log = Log(proj_uuid=proj_uuid, details=log_detail, created_on=time_8601())
         db.session.add(log)
         db.session.commit()
     except SQLAlchemyError as e:

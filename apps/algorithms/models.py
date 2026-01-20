@@ -63,53 +63,6 @@ def delete_from_db(obj) -> None:
 
 
 @dataclass
-class Algorithms(db.Model):
-    __tablename__ = 'algorithms'
-    id = db.Column(db.Integer,
-                   primary_key=True,
-                   nullable=False)
-    created_by = db.Column(db.Integer,
-                           db.ForeignKey('users.id'),
-                           nullable=False)
-    uuid = db.Column('uuid', db.String(36))
-    name = db.Column('name', db.String(256))
-    auth_token = db.Column('auth_token', db.String(36))
-    description = db.Column('description', db.Text)
-    project_name = db.Column('project_name', db.String(100))
-    version = db.Column('version', db.Integer)
-    type = db.Column('type', db.String(100))
-    configuration = db.Column('configuration', db.JSON)
-    finalized = db.Column('finalized', db.Integer, default=0)
-    modified_on = db.Column('modified_on', db.DateTime, default=datetime.now())
-    created_on = db.Column('created_on', db.DateTime, default=datetime.now())
-    __table_args__ = (db.UniqueConstraint(
-        'name', 'type', name='unique_name_type'),)
-
-    def __init__(self, **kwargs):
-        for property, value in kwargs.items():
-            # depending on whether value is an iterable or not, we must
-            # unpack it's value (when **kwargs is request.form, some values
-            # will be a 1-element list)
-            # if hasattr(value, '__iter__') and not isinstance(value, str):
-            #     # the ,= unpack of a singleton fails PEP8 (travis flake8 test)
-            #     value = value[0]
-
-            setattr(self, property, value)
-
-    def __repr__(self):
-        return str(self.name)
-
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-    def save(self):
-        save(self)
-
-    def delete(self):
-        delete_from_db(self)
-
-
-@dataclass
 class Projects(db.Model):
     __tablename__ = 'projects'
     id = db.Column(db.Integer,
@@ -159,7 +112,7 @@ class Projects(db.Model):
 
 @dataclass
 class ProjectMenu(db.Model):
-    __tablename__ = 'projectsMenu'
+    __tablename__ = 'projects_menu'
     id = db.Column(db.Integer,
                    primary_key=True,
                    nullable=False)

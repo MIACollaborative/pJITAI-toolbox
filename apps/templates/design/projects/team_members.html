@@ -79,9 +79,20 @@
                       </div>
                       <p id="no-match-user" style="display: none;">There are no matching user with this email.</p>
                       <p id="use-other-user" style="display: none;">You are already added as a team member.</p>
+                      <!-- Back/Next Buttons -->
+                      <div class="center-buttons">
+                        <a href="/projects/settings/general/{{project_uuid}}" class="btn btn-outline-primary" role="button">&lt; Back</a>
+                        <a style="margin-left: 3px;" href="/projects/settings/personalized_method/{{project_uuid}}" class="btn btn-primary" role="button">Next &gt;</a>
+                      </div>
+                      <div class="modified-on">
+                        Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                      </div>
+                      <!-- Back/Next Buttons End -->
                     </div>
                   </div>
                   <script>
+                    console.log('user:', '{{ user }}' );
+                    console.log('project_owner:', {{project_owner}} );
                     document.getElementById('search-btn').addEventListener('click', function(){
                       const emailInput = document.getElementById('user-email').value;
                       checkUsers(emailInput);
@@ -119,7 +130,7 @@
                 </div>
               </div>
 
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-sm-12">
                   <div class="tab-content" id="myTabContent">
                     <div class="tab-item">
@@ -128,30 +139,17 @@
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="card">
-                    <div class="card-header">
-                      <div class="form-group">
-                        <a href="/projects/settings/general/{{project_uuid}}" class="btn btn-outline-primary" role="button">Back</a>
-                        <!-- <button formmethod="post" formaction="/projects/settings/personalized_method/{{project_uuid}}" class="btn btn-primary" type="submit">Next</button> -->
-                        <a href="/projects/settings/personalized_method/{{project_uuid}}" class="btn btn-primary" role="button">Next</a>
-                      </div>
-                      <div class="form-group">
-                        Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </div> -->
            </form>           
         </div>
+      {% set block1="Y" %}
+      {% set block1_title=[""] %}
+      {% set block1_text=["On this page, you can add team members to your  project by searching for their  email address. Each person you add  must have a pJITAI Toolbox account in order to be added as a team member."]%}
+      {% include 'includes/resources.html' %}
       </div>
     </div>
   </div>
-  {% include 'includes/comments.html' %}
+{% include 'includes/comments.html' %}
 </div>
 
 {% endblock content %}

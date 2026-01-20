@@ -32,7 +32,7 @@ from datetime import datetime
 from tzlocal import get_localzone
 from uuid import uuid4
 
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, url_for
 from flask_login import login_required, current_user
 from flask_mail import Message
 from sqlalchemy import desc
@@ -60,11 +60,9 @@ def delete_comment(comment_id):
 def edit_comment(comment_id):
     comment = db.session.query(Comment).filter(Comment.id == comment_id).first()
     comment.content = request.form.get("comment-input")
-    # comment.timestamp = datetime.now()
     db.session.commit()
 
     return redirect(request.referrer)
-
 
 
 @blueprint.route('/comment/<project_uuid>/<page_name>', methods=['POST'])
@@ -104,6 +102,22 @@ def add_comment(project_uuid, page_name):
 
     return redirect(request.referrer)
 
+@blueprint.route('/contact_us/<project_uuid>/<page_name>', methods=['POST'])
+@login_required
+def contact_us(project_uuid, page_name):
+    user_id = current_user.get_id()
+    displayname = current_user.displayname
+    user_email = current_user.email
+    project_details, project_details_obj = get_project_details(project_uuid=project_uuid, user_id=user_id)
+    # Send email notification to research team
+    research_team_email = ['']  # TODO: Add research team email addresses
+    for t in research_team_email:
+        msg = Message("[pJITAI] Help Needed from User",
+                            recipients=[t])
+        email_msg = f"User '{displayname} ({user_email})' requested for help on project '{project_details.get('general_settings').get('project_name')} (id: {project_uuid}) / {page_name} page': " + request.form.get("popup-email-input")
+        msg.body = email_msg
+        mail.send(msg)
+    return redirect(request.referrer)
 
 @blueprint.route('/projects/<project_type>')
 @login_required
@@ -151,6 +165,7 @@ def projects(project_type):
         aproj.general_settings["modified_on"] = aproj.modified_on
         aproj.general_settings["created_on"] = aproj.created_on
         aproj.general_settings["project_owner"] = aproj.created_by
+        aproj.general_settings["project_name"] = aproj.general_settings.get("project_name", "")
 
         data.append(aproj.general_settings)
     
@@ -238,8 +253,8 @@ def mark_project_finalized(project_uuid):
         mail.send(msg)    
 
     # return redirect("/projects/finalized")
-    return redirect(f"/api/projects/{project_uuid}")
-    # return redirect(f"/api/end_userstudy/{project_uuid}")
+    # return redirect(f"/api/projects/{project_uuid}")
+    return redirect(f"/api/end_userstudy/{project_uuid}")
 
 @blueprint.route('/projects/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])
 @login_required
@@ -302,6 +317,11 @@ def project_settings(setting_type, project_uuid=None):
                      modified_on=datetime.now(),
                      created_on=datetime.now(),
                      auth_token=auth_token).save()
+            return redirect(url_for('home_blueprint.project_settings',
+                    setting_type='team_members',
+                    project_uuid=project_uuid
+                ))
+
 
     all_menus = get_project_menu_pages(user_id, project_uuid)
     user = user_id
@@ -320,7 +340,6 @@ def project_settings(setting_type, project_uuid=None):
                                menu_number=1, project_name=project_name, modified_on=modified_on,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "team_members":
-        print('team_members: ', team_members)
         return render_template("design/projects/team_members.html", segment="general_team_members", all_menus=all_menus,
                                menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name, project_owner=project_owner,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
@@ -452,7 +471,6 @@ def model_settings(setting_type, project_uuid):
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
     project_name = project_details.get("general_settings", {}).get("project_name", "")
-    #print(f'XXXXXXXXXX {project_details}')
     full_url = request.url
 
     if setting_type == "proximal_outcome":
@@ -712,7 +730,7 @@ def delete_covariate(project_uuid, cov_id=None):
 
 
 @blueprint.route('/get_probability/<project_uuid>', methods=['GET'])
-#@login_required
+@login_required
 def get_probability(project_uuid):
     user_id = current_user.get_id()
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
