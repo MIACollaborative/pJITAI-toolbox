@@ -877,8 +877,7 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
     treatment_prior_standard_deviation = project_details.get("model_settings", {}).get(
         "treatment_prior_standard_deviation")
 
-    covariates = project_details.get("covariates")
-
+    covariates = dict(reversed((project_details.get("covariates")).items()))
     alpha_vars = f'α<sub>0</sub>~N({intercept_prior_mean}, {intercept_prior_standard_deviation}<sup>2</sup>)<br>'
     beta_vars = f'β<sub>0</sub>~N({treatment_prior_mean}, {treatment_prior_standard_deviation}<sup>2</sup>)<br>'
     
