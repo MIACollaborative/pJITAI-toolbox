@@ -73,51 +73,16 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="tab-content" id="myTabContent">
-                                            <div class="tab-item">
-                                                <h5><b>What is the proximal outcome?</b></h5>
-                                                <p>The proximal outcome is an outcome that you will collect and provide to the algorithm after each decision point. The outcome should be one that provides information about the behavior you are trying to influence with your Intervention Component. For example, for an intervention component focused on promoting physical activity, the step count (as measured by an activity tracker like a Fitbit) in some relatively small period of time after each decision point would be a good choice for a proximal outcome. In this description, describe your proximal outcome in a few words that will help you and your team remember what you decided.</p>
-                                            </div>
-                                            <div class="tab-item">
-                                                <h5><i>HeartSteps Example</i></h5>
-                                                <p>In HeartSteps, the step count in a 30-minute window is observed following each decision point. In addition, step counts are right skewed. Thus, we log transformed them so that the normal approximation used in the linear regression is more accurate. The proximal outcome is then “(log) Next 30 min step count” to denote the transformation.</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <!-- [ tabs ] end -->
-                                </div>
                                 <!-- [ Main Content ] end -->
-                                <!-- <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="form-group">
-                                                    <a href="/projects/settings/summary/{{project_uuid}}"
-                                                        class="btn btn-outline-primary" role="button">Back</a>
-                                                    <button type="submit" formmethod="post"
-                                                            formaction="/intervention/settings/intervention_option/{{project_uuid}}"
-                                                            class="btn btn-primary">Next
-                                                    </button>
-                                                </div>
-                                                <div class="form-group">
-                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div> -->
                             </form>         
                         </div>
                     </div>
                 </div>
+                {% set block1="Y" %}
+                {% set block1_title=["What is the proximal outcome?", "Outcome Data Type"] %}
+                {% set block1_text=["The proximal outcome is a streaming outcome that is collected by your app and is provided to the algorithm after each decision point. The outcome should reflect  the behavior you aim to influence with your intervention component. For example, if your  intervention component promotes  physical activity, a suitable proximal outcome could be the step count (as measured by an activity tracker like a Fitbit) within a short period after each decision point. In the description field, briefly describe your chosen proximal outcome in a manner that helps you and your team remember what you decided.", "The Thompson Sampling algorithm approximates the distribution of proximal outcome using  a normal distribution.  The  algorithm is able to personalize more quickly if the distribution of the proximal outcome is approximately symmetric.   The algorithm can  still personalize for binary and other discrete outcomes.  See the Discussion: Transforming Outcomes."] %}
+                {% set block2="In HeartSteps, the step count in a 30-minute window following each decision point is the proximal outcome. Because step counts are right skewed, they were log-transformed to make their distribution more symmetric. The proximal outcome is therefore written as  “(log) Next 30 min step count” to denote this transformation." %}
+                {% include 'includes/resources.html' %}
             </div>
         </div>
     </div>
