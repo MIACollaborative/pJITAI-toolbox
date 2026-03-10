@@ -877,8 +877,7 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
     treatment_prior_standard_deviation = project_details.get("model_settings", {}).get(
         "treatment_prior_standard_deviation")
 
-    covariates = project_details.get("covariates")
-
+    covariates = dict(reversed((project_details.get("covariates")).items()))
     alpha_vars = f'α<sub>0</sub>~N({intercept_prior_mean}, {intercept_prior_standard_deviation}<sup>2</sup>)<br>'
     beta_vars = f'β<sub>0</sub>~N({treatment_prior_mean}, {treatment_prior_standard_deviation}<sup>2</sup>)<br>'
     
@@ -940,21 +939,21 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
                 cov_beta +=1
         if is_intercept:
             htmll = htmll.replace("RED_NOTE",
-                              f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>0</sub></span>~N(<span><b>μ<sub>α<sub>0</sub></sub></b>, <b>σ<sub>α<sub>0</sub></sub></span></b><sup>2</sup>) <span>  << Fill in these values for this page.</span>')
+                              f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>0</sub></span>~N(<span><b>μ<sub>α<sub>0</sub></sub></b>, <b>σ<sub>α<sub>0</sub></sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>μ<sub>α<sub>0</sub></sub></b>, <b>σ<sub>α<sub>0</sub></sub></span></b>.</span>')
         elif not is_intercept and not is_main_treatment_effect and not is_noise:
             if not covariate_tailored_effect: 
                 htmll = htmll.replace("RED_NOTE",
-                                f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>{cov_alpha}</sub></span>~N(<span><b>μ<sub>α<sub>{cov_alpha}</sub></sub></b>, <b>σ<sub>α<sub>{cov_alpha}</sub></sub></span></b><sup>2</sup>) <span>  << Fill in these values for this page.</span>')
+                                f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>{cov_alpha}</sub></span>~N(<span><b>μ<sub>α<sub>{cov_alpha}</sub></sub></b>, <b>σ<sub>α<sub>{cov_alpha}</sub></sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>μ<sub>α<sub>{cov_alpha}</sub></sub></b>, <b>σ<sub>α<sub>{cov_alpha}</sub></sub></span></b>.</span>')
             else:
                 htmll = htmll.replace("RED_NOTE",
-                                f'''<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>{cov_beta}</sub></span>~N(<span><b>μ<sub>β<sub>{cov_beta}</sub></sub></b>, <b>σ<sub>β<sub>{cov_beta}</sub></sub></span></b><sup>2</sup>) <span>  << Fill in these values for this page.</span>''')
+                                f'''<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>{cov_beta}</sub></span>~N(<span><b>μ<sub>β<sub>{cov_beta}</sub></sub></b>, <b>σ<sub>β<sub>{cov_beta}</sub></sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>μ<sub>β<sub>{cov_beta}</sub></sub></b>, <b>σ<sub>β<sub>{cov_beta}</sub></sub></span></b>.</span>''')
         if is_main_treatment_effect:
             htmll = htmll.replace("RED_NOTE",
-                              f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>0</sub></span>~N(<span><b>μ<sub>β<sub>0</sub></sub></b>, <b>σ<sub>β<sub>0</sub></sub></span></b><sup>2</sup>) <span>  << Fill in these values for this page.</span>')           
+                              f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>0</sub></span>~N(<span><b>μ<sub>β<sub>0</sub></sub></b>, <b>σ<sub>β<sub>0</sub></sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>μ<sub>β<sub>0</sub></sub></b>, <b>σ<sub>β<sub>0</sub></sub></span></b>.</span>')           
         if not is_main_treatment_effect and is_noise:
             htmll = htmll.replace("RED_NOTE",
                                 f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">ϵ</span>~N(<span>0, σ<sup>2</sup>)  \
-                                <br><br> σ<sup>2</sup>~<Inv-Chi2>Inv-χ<sup>2</sup></Inv-Chi2>(<span><b>&nu;</b></span>, <span><b>&sigma;<sub>0</sub></span></b><sup>2</sup>) <span>  << Fill in these values for this page.</span>')
+                                <br><br> σ<sup>2</sup>~<Inv-Chi2>Inv-χ<sup>2</sup></Inv-Chi2>(<span><b>&nu;</b></span>, <span><b>&sigma;<sub>0</sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>&nu;</b>, <b>&sigma;<sub>0</sub></span></b>.</span>')
     else:
         htmll = htmll.replace("RED_NOTE", "")
     return htmll
