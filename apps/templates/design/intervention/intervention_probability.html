@@ -156,11 +156,11 @@ $(document).ready(function(){
                                                 </div>
                                                 <div class="center-buttons">
                                                     <a href="/intervention/settings/decision_point/{{project_uuid}}"
-                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    class="btn btn-outline-primary" role="button">&lt; Back</a>
                                                     
                                                     <button style="margin-left: 3px;" type="submit" type="button"
                                                             formaction="/intervention/settings/update_point/{{project_uuid}}"
-                                                            formmethod="post" class="btn btn-primary">Next
+                                                            formmethod="post" class="btn btn-primary">Next &gt;
                                                     </button>
                                                 </div>
                                                 <div class="form-group">
@@ -169,113 +169,62 @@ $(document).ready(function(){
 
                                             </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="row">
-                                    <!-- [ tabs ] start -->
-                                    <div class="col-sm-12">
-
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                    Example</a>
-                                            </li>
-                                        </ul> -->
-                                        <div class="tab-content" id="myTabContent">
-                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                                aria-labelledby="home-tab"> -->
-                                            <div class="tab-item">
-                                                <h5><b>Likelihood of delivering [Intervention Option A]</b></h5>
-                                                <p>As your algorithm learns the impact of the intervention component on each participant’s behavior, the probability of sending Intervention Option A (the higher intensity option) will vary. It is important that the probability of sending Option A never reaches 0 or 1.0, as this will cause the algorithm to stop learning. To prevent such a case, you need to specify the lower and upper bounds for the probability of sending Option A at each decision point. Once specified, the algorithm will ensure that the probability never goes below the lower or above the upper bounds.</p>
-                                            </div>
-                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                aria-labelledby="profile-tab"> -->
-                                            <div class="tab-item">
-                                                <h5><i>HeartSteps Example</i></h5>
-                                                <p>For the HeartSteps Activity Suggestions component, the lower bound for sending a message (Option A) is 0.1 and the upper bound is 0.8. The wide range between these bounds gives the algorithm quite a bit of latitude to personalize to each participant, but the high upper bound has the potential to expose the participant to a relatively high burden (up to 4 messages per day). Setting the lower bound at 0.1 allows less responsive participants to experience less burden, but still provides some support, with an expectation of 0.5 messages per day, or a message every other day.</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <!-- [ tabs ] end -->
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5><b>Discussion: How do I choose?</b></h5>
-                                                <p>You will want to select the lower and upper bounds to be “reasonable,” so that participants are never exposed to excessive burden or entirely deprived of behavioral support, yet you allow the algorithm to continue to learn about the relative effectiveness of the intervention options. </p>
-                                                <p>The calculator above will show you the expected frequency of selection Option A based on your lower and upper bounds. The actual expected frequency will always lie between that for the lower and upper bounds. Try out different numbers between 0 and 1.0 to see what the minimum and maximum expected delivery of Option A would be per unit of time (i.e., day, week, month). </p>
-                                                <p>This table provides a few examples of values you might choose, depending on your population and intervention goals:</p>
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>    
-                                                            <th>Goal</th>
-                                                            <th>Lower Bound</th>
-                                                            <th>Upper Bound</th>
-                                                            <th>Notes</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td style="word-wrap: break-word; white-space: normal;">Lowest burden, frequent decisions</td>
-                                                            <td>0.05</td>
-                                                            <td>0.20</td>
-                                                            <td style="word-wrap: break-word; white-space: normal;">A lower bound of 0.5 will result in very few selections of Option A, allowing the lowest burden for participants not benefiting from the intervention component; An upper bound of 0.2 will ensure that even the most responsive participants will only receive Option A one out of five times. For an intervention component with 5 decision points per day, this would keep the expected burden to about one delivery per day.</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="word-wrap: break-word; white-space: normal;">High support, infrequent decisions</td>
-                                                            <td>0.5</td>
-                                                            <td>0.9</td>
-                                                            <td style="word-wrap: break-word; white-space: normal;">A lower bound of 0.5 would mean that participants always have a 50% chance of receiving the high intensity option, even if they do not seem to be responsive. If the intervention may take time to show an effect, you might want to make sure the algorithm has many chances to learn. If decision points are infrequent (e.g., once per week or month), you might want to keep the upper bound high(e.g., 90%) so that responsive participants are more likely to receive support</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="word-wrap: break-word; white-space: normal;">Moderate support, moderate burden, moderate frequency, less personalization</td>
-                                                            <td>0.3</td>
-                                                            <td>0.7</td>
-                                                            <td style="word-wrap: break-word; white-space: normal;">Choosing bounds that stay close to 0.5 for decision points that are not too frequent (e.g., once per day) will ensure that participants are neither overly burdened or deprived of support. But this results in less personalization. </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- [ Main Content ] end -->
-                                <!-- <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="form-group">
-                                                    <a href="/intervention/settings/decision_point/{{project_uuid}}"
-                                                    class="btn btn-outline-primary" role="button">Back</a>
-                                                    
-                                                    <button type="submit" type="button"
-                                                            formaction="/intervention/settings/update_point/{{project_uuid}}"
-                                                            formmethod="post" class="btn btn-primary">Next
-                                                    </button>
-                                                </div>
-                                                <div class="form-group">
-                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div> -->
                             </form>
                         </div>
                     </div>
                 </div>
+                {% set block1="Y" %}
+                {% set block1_title=["Likelihood of delivering [Intervention Option A]"] %}
+                {% set block1_text=["As the algorithm learns the relative influence of the intervention options on each participant’s behavior, the probability of delivering  Intervention Option A (the higher intensity option) will change over time. It is important that this probability never reaches 0 or 1, as this will cause the algorithm to stop learning. To avoid this , you must  specify lower and upper bounds for the probability of sending Option A at each decision point. Once specified, the algorithm will ensure that the probability of sending Option A never goes below the lower bound or above the upper bound."] %}
+                {% set block2="In the HeartSteps example, the lower bound for sending a message (Option A) is 0.1 and the upper bound is 0.8. This wide range gives the algorithm substantial flexibility to personalize to each participant. The upper bound corresponds to an  average of  4 messages per day whereas the lower bound corresponds to an average of 0.5 messages per day, that is, on average, a message every other day." %}
+                {% set block3 %}<b>Discussion: How do I choose?</b>
+                When selecting  the lower and upper bounds for the probability of delivering Intervention Option A, aim for values that are “reasonable,” so that participants are never exposed to excessive burden or are entirely deprived of behavioral support. At the same time, the algorithm must retain enough flexibility to continue learning  about the relative effectiveness of the intervention options. 
+
+                The calculator above shows  the expected frequency of selecting Option A based on the chosen lower and upper bounds. Try experimenting with  different numbers between 0 and 1.0 to see how  the minimum and maximum expected delivery of Option A changes  per unit of time (i.e., day, week, month). 
+
+                This table provides a few examples of values you might choose, depending on your population and intervention goals:
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>    
+                            <th>Goal</th>
+                            <th>Lower Bound</th>
+                            <th>Upper Bound</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="word-wrap: break-word; white-space: normal;">Lower support; lower burden</td>
+                            <td>0.05</td>
+                            <td>0.20</td>
+                            <td style="word-wrap: break-word; white-space: normal;">A lower bound of 0.05 means that  participants whose data indicates that they are not benefiting from Option A relative to Option B may only receive intervention option A at 5% of their decision points.  An upper bound of 0.20 implies that even if a participant’s data indicates that the participant is highly responsive, this participant will receive Option A at 20% of their decision points. </td>
+                        </tr>
+                        <tr>
+                            <td style="word-wrap: break-word; white-space: normal;">Higher support; higher burden</td>
+                            <td>0.50</td>
+                            <td>0.90</td>
+                            <td style="word-wrap: break-word; white-space: normal;">A lower bound of 0.70 means that  participants whose data indicates that they are not benefiting from Option A relative to Option B will still receive intervention option A at 70% of their decision points.  An upper bound of 0.90 implies that if a participant’s data indicates that the participant is highly responsive to Option A relative to Option B, then this participant may receive intervention option A at 90% of their decision points.</td>
+                        </tr>
+                        <tr>
+                            <td style="word-wrap: break-word; white-space: normal;">More room to personalize</td>
+                            <td>0.20</td>
+                            <td>0.80</td>
+                            <td style="word-wrap: break-word; white-space: normal;">Choosing a wider range allows the algorithm to deliver very different rates of Option A to different participants. </td>
+                        </tr>
+                        <tr>
+                            <td style="word-wrap: break-word; white-space: normal;">Less room to personalize</td>
+                            <td>0.40</td>
+                            <td>0.60</td>
+                            <td style="word-wrap: break-word; white-space: normal;">Selecting bounds that stay close to 0.5 for all decision points will result in most participants receiving intervention option A on around 50%  of their decision points.  But this results in less personalization.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endset %}
+                {% include 'includes/resources.html' %}
             </div>
         </div>
     </div>
