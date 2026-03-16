@@ -526,7 +526,7 @@ hs1_int_not_tailoring_state_data = {
 }
 
 ## YS: Below are not implemented yet
-hs1_update_point = {
+hs1_update_schedule = {
   "algo_type": "algorithm_type",
   "covariates": {
     "99167b02-95c0-4ad6-a748-91c53e3fc4df": {
@@ -553,7 +553,7 @@ hs1_update_point = {
     "personalized_scenario": "I am using results from an MRT",
     "proximal_outcome_name": "(log) Next 30 min step count",
     "project_description": "Update_day: weekly, Update_hour: 1AM ",
-    "project_name": "HeartSteps_update_point"
+    "project_name": "HeartSteps_update_schedule"
   },
   "id": 11,
   "intervention_settings": {

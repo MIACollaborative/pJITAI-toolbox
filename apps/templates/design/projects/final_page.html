@@ -273,7 +273,7 @@
                     } else {
                       let nd = jsonDataCopy[n];
                       let timestampNext = new Date(nd['content']['timestamp']);
-                      timeDifference = (timestampNext.getHours() - timestampNow.getHours());  // Used .getHours() so that uploads are done on that day regardless of decision point, update point (e.g., Weekly or Monthly)
+                      timeDifference = (timestampNext.getHours() - timestampNow.getHours());  // Used .getHours() so that uploads are done on that day regardless of decision point, update schedule (e.g., Weekly or Monthly)
                       if (timeDifference < 0) timeDifference = (24 + timeDifference);
                       timeDifferenceSave = timeDifference;
                     }

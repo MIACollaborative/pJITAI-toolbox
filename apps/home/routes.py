@@ -398,12 +398,12 @@ def intervention_settings(setting_type, project_uuid):
     elif setting_type == "intervention_probability":
         page_name = setting_type
         page_name_log = "intervention_decision_point"
-    elif setting_type == "update_point":
-        page_name = "intervention_update_point"
+    elif setting_type == "update_schedule":
+        page_name = "intervention_update_schedule"
         page_name_log = "intervention_probability"
     elif setting_type == "summary":
         page_name = "intervention_summary"
-        page_name_log = "intervention_update_point"
+        page_name_log = "intervention_update_schedule"
     else:
         page_name = setting_type
         page_name_log = setting_type
@@ -448,8 +448,8 @@ def intervention_settings(setting_type, project_uuid):
         return render_template("design/intervention/intervention_probability.html", segment="intervention_probability",
                                all_menus=all_menus, menu_number=8, project_name=project_name, modified_on=modified_on,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "update_point":
-        return render_template("design/intervention/update_point.html", segment="intervention_update_point",
+    elif setting_type == "update_schedule":
+        return render_template("design/intervention/update_schedule.html", segment="intervention_update_schedule",
                                all_menus=all_menus, menu_number=9, project_name=project_name, modified_on=modified_on,
                                update_duration=update_duration, settings=intervention_settings,
                                project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)

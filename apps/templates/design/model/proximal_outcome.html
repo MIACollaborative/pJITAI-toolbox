@@ -32,23 +32,16 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <!-- <div class="form-group">
-                                                    <label class="form-control-label" for="max_proximal_outcome">Outcome Data Type</label>
-                                                    <select id="proximal_outcome_type" name="proximal_outcome_type"
-                                                            class="form-control" aria-label="Default select example">
-                                                        <option selected>Continuous</option>
-                                                    </select>
-                                                </div> -->
                                                 {% if proximal_outcome_type|string == 'Continuous' %}
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="min_proximal_outcome">Minimum Allowed Value</label>
+                                                    <label class="form-control-label" for="min_proximal_outcome">Minimum Value</label>
                                                     <input type="number" step="0.01"
                                                         value="{{settings.min_proximal_outcome}}"
                                                         id="min_proximal_outcome" name="min_proximal_outcome"
                                                         class="form-control" placeholder="The minimum value of the proximal outcome" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="max_proximal_outcome">Maximum Allowed Value</label>
+                                                    <label class="form-control-label" for="max_proximal_outcome">Maximum Value</label>
                                                     <input type="number" step="0.01"
                                                         value="{{settings.max_proximal_outcome}}"
                                                         id="max_proximal_outcome" name="max_proximal_outcome"
@@ -87,88 +80,26 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div class="row">
-                                    <!-- [ tabs ] start -->
-                                    <div class="col-sm-12">
-
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                    Example</a>
-                                            </li>
-                                        </ul> -->
-                                        <div class="tab-content" id="myTabContent">
-                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                                aria-labelledby="home-tab"> -->
-                                            <div class="tab-item">
-                                                <h5><b>Minimum and Maximum Allowed Values</b></h5>
-                                                <p>After determining your proximal outcome, including any transformations you will need to apply before providing them to the algorithm, consider what the allowed range of outcomes should be. Your algorithm will reject any attempts to provide a proximal outcome that falls outside this range as a way of ensuring that it does not use erroneous data for personalization. As an example, if you were to use raw 30-minute step count as your proximal outcome (see break discussion below about why you might not want to do that in practice), it would be invalid to observe an outcome less than zero (negative steps? walking backwards doesn’t count) or greater than 14,000 (equivalent to about 14 miles, which would be the distance that the world’s fastest recorded human, Usain Bolt, could cover in 30 minutes if he could maintain his top 100m speed of ~28mph--if you don’t expect Usain Bolt to be in  your population, you can reasonably set a smaller maximum).</p>
-                                                <h5><b>Notes</b></h5>
-                                                <p>Use this field to capture any decisions made about how the proximal outcome will be captured and, if applicable, transformed. This is information you will need for implementing the intervention and its communication with your pJITAI algorithm.</p>
-                                            </div>
-                                            <div class="tab-item">
-                                                <h5><i>HeartSteps Example</i></h5>
-                                                <p>The 30-minute step count used by the Activity Suggestions intervention component takes on integer values (0, 1,2,...) and is heavily left skewed with many values equal to zero and a long tail of higher step counts stretching towards the maximum expected value.  Thus to transform this proximal outcome so that its distribution is more symmetric, the raw step counts are log transformed, like so:</p>
-                                                <code>prox_outcome = log(raw_steps + 0.5)</code>
-                                                <br>
-                                                <p>The value of 0.5 is added to the raw_steps value because it avoids taking the log of 0 which is undefined.</p>
-                                                <p>If we assume 0 to be the minimum value for the raw 30-minute step count and 3000 to be the maximum value (no Usain Bolts were observed in HeartSteps pilot data), we end up with:</p>
-                                                <code>min_prox_outcome = log(0 + 0.5) = -0.69</code>
-                                                <code>max_prox_outcome = log(3000 + 0.5) = 8.0</code>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <!-- [ tabs ] end -->
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="form-group">
-                                                    <h5><b>Discussion: Transforming Outcomes</b></h5>
-                                                    <p>There are a few situations where you will want to transform the raw observation data that you can collect via your mobile app or wearable sensor before providing it to the algorithm. As noted, the currently supported Thompson Sampling algorithm personalizes more quickly when the proximal outcome has a symmetric or normal distribution. The algorithm still personalizes when proximal outcomes are binary outcomes or discrete but the speed of personalization is generally slower.   At this time the outcomes must be interval data (that is the interval between any two values of the proximal outcome should have the same meaning, see <a href="https://en.wikipedia.org/wiki/Level_of_measurement">https://en.wikipedia.org/wiki/Level_of_measurement</a>).</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- [ Main Content ] end -->
-                                <!-- <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="form-group">
-                                                    <a href="/intervention/settings/summary/{{project_uuid}}"
-                                                    class="btn btn-outline-primary" role="button">Back</a>
-                                                    
-                                                    <button type="submit" type="button"
-                                                            formaction="/covariates/settings/all/{{project_uuid}}"
-                                                            formmethod="post" class="btn btn-primary">Next
-                                                    </button>
-                                                </div>
-                                                <div class="form-group">
-                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div> -->
                             </form>
                         </div>
                     </div>
                 </div>
+                {% set block1="Y" %}
+                {% set block1_title=["Minimum and Maximum Allowed Values", "Notes"] %}
+                {% set block1_text=["After determining your (possibly transformed) proximal outcome, consider what the allowed range of outcomes should be. The  algorithm will reject any (transformed) proximal outcomes that fall outside this range to prevent erroneous data from influencing personalization. As an example, if you use raw 30-minute step count as your proximal outcome (see Discussion below about why you might not want to do that in practice), it would be invalid to observe an outcome less than 0 (negative steps –  walking backwards doesn’t count!) or greater than 14,000. The latter would correspond to roughly 14 miles, which would be the distance that the world’s fastest recorded human, Usain Bolt, could cover in 30 minutes if he could maintain his top 100m speed of ~28mph.  Unless you expect Usain Bolt to join your study, you can reasonably set a smaller maximum.", "Use this field to capture any decisions made about how the proximal outcome will be captured and, if applicable, transformed. This is information you will need for implementing the intervention and its communication with your pJITAI algorithm."] %}
+                {% set block2 %}The 30-minute step count used by the Activity Suggestions intervention component takes on integer values (0, 1, 2,...) and is heavily right skewed with many values equal to zero and a long tail of higher step counts stretching towards the maximum expected value.  Thus to transform this proximal outcome so that its distribution is more symmetric, the raw step counts are log transformed, like so:
+
+                <code>prox_outcome = log(raw_steps + 0.5)</code>
+                The value of 0.5 is added to the raw_steps value because it avoids taking the log of 0 which is undefined.
+
+                If we assume 0 to be the minimum value for the raw 30-minute step count and 3000 to be the maximum value (no Usain Bolts were observed in HeartSteps V1 (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6401341/">link</a>) data), we end up with:
+                
+                <code>min_prox_outcome = log(0 + 0.5) = -0.69</code>
+                <code>max_prox_outcome = log(3000 + 0.5) = 8.0</code>
+                {% endset %}
+                {% set block3 %}There are a few situations where you will want to transform the raw observation data that you can collect via your mobile app or wearable sensor before providing it to the algorithm. As noted, the currently supported Thompson Sampling algorithm personalizes more quickly when the proximal outcome has a symmetric distribution. At this time the outcomes must be interval data (that is the same interval between any two values of the proximal outcome should have the same meaning). For more, see <a href="https://en.wikipedia.org/wiki/Level_of_measurement">the Wikipedia article on “Level of measurement.”</a> 
+                {% endset %}
+                {% include 'includes/resources.html' %}
             </div>
         </div>
     </div>
