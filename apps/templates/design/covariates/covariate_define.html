@@ -1,0 +1,166 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Covariate Name {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<script>
+
+
+function copy_cov_name_to_span(){
+    var cov_name = document.getElementById('covariate_name').value;
+    document.getElementById('cov_name_span1').innerHTML = cov_name;
+    document.getElementById('cov_name_span2').innerHTML = cov_name;
+}
+
+$(document).ready(function(){
+    function is_tailoring_variable(){
+
+
+        $('#tailoring_variable input:radio').on('change', function() {
+          var value = $(this).val();
+          if(value=="yes"){
+            var beta1 = `+ β<sub>1</sub>* <span id="cov_name_span2" style="background:#f2f2f2; font-size:14px;">{{settings.covariate_name}}</span> * <span style="background:#f2f2f2; font-size:14px;"> {{settings.intervention_component_name}} </span> <br>`;
+            document.getElementById('beta_1').innerHTML = beta1;
+          }else{
+               document.getElementById('beta_1').innerHTML = "";
+          }
+        });
+    }
+    is_tailoring_variable();
+});
+
+
+</script>
+<!-- [ Main Content ] start -->
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 id="heading_div">Model Settings / Define Covariate</h3>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label class="form-control-label" for="covariate_name">Name</label>
+                                                            <input onkeyup="copy_cov_name_to_span()"
+                                                                value="{{settings.covariate_name}}" type="text"
+                                                                id="covariate_name" name="covariate_name"
+                                                                class="form-control" placeholder="covariate name" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label" for="tailoring_variable">Tailoring variable?</label><br>
+
+
+                                                            <div class="btn-group">
+                                                                <fieldset id="tailoring_variable">
+                                                                    <label class="btn btn-outline-success">
+                                                                        <input type="radio" name="tailoring_variable"
+                                                                            value="yes" {{ "checked" if
+                                                                        settings.tailoring_variable == "yes" }}> Yes
+                                                                        </input>
+                                                                    </label>
+                                                                    <label class="btn btn-outline-primary">
+                                                                        <input type="radio" name="tailoring_variable"
+                                                                            value="no" {{ "checked" if
+                                                                        settings.tailoring_variable == "no" }}> No
+                                                                    </label>
+                                                                </fieldset>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label" for="covariate_min_val">Minimum allowed value <span style="color: red;">*</span></label>   
+                                                            <input value="{{settings.covariate_min_val}}" step="any"
+                                                            type="number"
+                                                            id="covariate_min_val" name="covariate_min_val"
+                                                            class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label" for="covariate_max_val">Maximum allowed value <span style="color: red;">*</span></label>
+                                                            <input value="{{settings.covariate_max_val}}" step="any"
+                                                            type="number"
+                                                            id="covariate_max_val" name="covariate_max_val"
+                                                            class="form-control" placeholder="" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label" for="notes">Notes</label><br>
+                                                            <input value="{{settings.notes}}" type="text"
+                                                                name="notes" class="form-control"
+                                                                placeholder="Notes...">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="center-buttons">
+                                                    <a href="/covariates/settings/all/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">&lt; Back</a>
+                                                    
+                                                    <button style="margin-left: 3px;" type="submit" type="button"
+                                                            formaction="/covariates/settings/covariate_main_effect/{{project_uuid}}/{{cov_id}}"
+                                                            formmethod="post" class="btn btn-primary">Next &gt;
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Main Content ] end -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% set block1="Y" %}
+                {% set block1_title=["Name", "Tailoring Variable?", "Minimum and Maximum allowed values"] %}
+                {% set block1_text=["Indicate the name of your covariate. See Discussion below about what you should select as covariates for your project.", "Indicate whether the covariate is a tailoring variable. See Discussion below about how to determine whether your covariate is a tailoring variable.", "As you did with the proximal outcome, define the range of acceptable values for each (potentially standardized) covariate. Values outside the defined range will be rejected to prevent corrupting the data used by the algorithm to personalize intervention options."] %}
+                {% set block2 %}The personalized HeartSteps Activity Suggestions intervention component uses two covariates:
+                <ul>
+                    <li>Previous 30-minute step count (log transformed in the same way as the proximal outcome)</li>
+                    <li>Location (1=[Home, Work], 0=other location)</li>
+                </ul>The previous 30-minute step count is not a tailoring variable, as it is assumed (and was observed in the MRT study) to correlate similarly with proximal outcomes both when a message is sent and when it is not.
+
+                The location, on the other hand, is a tailoring variable, as it was found to moderate the effect of sending a message versus not sending a message on the proximal outcome.
+                {% endset %}
+                {% set block3 %}<b>Covariates</b>
+                Your algorithm will use covariates describing the participant’s internal state and external context when deciding between intervention options and when updating its model based on proximal outcomes associated with each decision. The information about participant’s internal state and external context is encoded as covariates in the pJITAI toolbox, which are variables you will provide to your algorithm along with every decision request. For example, you might provide the “previous 30 minute step count” as a covariate, based on the assumption that activity just before a decision point will correlate with the proximal outcome of step count after the decision point, regardless of whether the high-intensity option was chosen or not. 
+
+                <b>Tailoring Variables</b>
+                Some covariates might also be tailoring variables. In contrast to non-tailoring covariates, tailoring variables are assumed to moderate the effect of the intervention options on the proximal outcome.
+
+                For example, the participant’s location, if encoded as a binary variable where 1=[Home,Work] and 0=[Other location], might be assumed to moderate the effect of the Activity Suggestion (i.e., Activity Suggestions may be more likely to be acted upon when at home or at work than when at, say, the grocery store).
+                {% endset %}
+                {% include 'includes/resources.html' %}
+            </div>
+        </div>
+    </div>
+    {% include 'includes/comments.html' %}
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
