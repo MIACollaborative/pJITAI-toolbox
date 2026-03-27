@@ -30,9 +30,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from importlib import import_module
 
 from flask import Flask
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
+from decouple import config as env_config
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -68,4 +69,33 @@ def create_app(config):
     configure_database(app)
     app.jinja_env.policies["json.dumps_kwargs"] = {"sort_keys": False}
     mail.init_app(app)
+    
+    # @app.context_processor
+    # def inject_clarity_user():
+    #     clarity_user_id = None
+
+    #     if getattr(current_user, "is_authenticated", False):
+    #         clarity_user_id = str(current_user.get_id())
+
+    #     return {
+    #         "CLARITY_USER_ID": clarity_user_id,
+    #         "CLARITY_PROJECT_ID": env_config("CLARITY_PROJECT_ID")
+    #     }
+    
+    @app.context_processor
+    def inject_posthog_user():
+        posthog_user_id = None
+        posthog_email = None
+        posthog_displayname = None
+
+        if getattr(current_user, "is_authenticated", False):
+            posthog_user_id = str(current_user.get_id())
+            posthog_email = str(current_user.email)
+            posthog_displayname = str(current_user.displayname)
+
+        return {
+            "POSTHOG_USER_ID": posthog_user_id,
+            "POSTHOG_EMAIL": posthog_email,
+            "POSTHOG_DISPLAYNAME": posthog_displayname
+        }
     return app
