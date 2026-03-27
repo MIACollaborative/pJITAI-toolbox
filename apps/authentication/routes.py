@@ -84,14 +84,6 @@ def register():
         # displayname = request.form['displayname']
         email = request.form['email']
 
-        # Check usename exists
-        # user = Users.query.filter_by(displayname=displayname).first()
-        # if user:
-        #     return render_template('accounts/register.html',
-        #                            msg='Display already registered',
-        #                            success=False,
-        #                            form=create_account_form)
-
         # Check email exists
         user = Users.query.filter_by(email=email).first()
         if user:
@@ -117,7 +109,8 @@ def register():
 @blueprint.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('authentication_blueprint.login'))
+    return render_template('accounts/logout.html')
+    # return redirect(url_for('authentication_blueprint.login'))
 
 
 # Errors
