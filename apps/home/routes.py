@@ -272,12 +272,12 @@ def project_settings(setting_type, project_uuid=None):
     elif setting_type == "team_members":
         page_name = setting_type
         page_name_logs = "general_settings"
-    elif setting_type == "scenario":
-        page_name = "general_scenario"
-        page_name_logs = "personalization_method"
+    elif setting_type == "personalization_method":
+        page_name = "personalization_method"
+        page_name_logs = "team_members"
     elif setting_type == "summary":
         page_name = "general_summary"
-        page_name_logs = "general_scenario"
+        page_name_logs = "personalization_method"
     else:
         page_name = setting_type
         page_name_logs = setting_type
@@ -343,10 +343,13 @@ def project_settings(setting_type, project_uuid=None):
         return render_template("design/projects/team_members.html", segment="general_team_members", all_menus=all_menus,
                                menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name, project_owner=project_owner,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "personalized_method":
-        save_path = "/projects/settings/personalized_method/" + project_uuid  # personalized_method page should be added manually (due to team_members.html next button design. It does not use 'post' request method.)
+    elif setting_type == "personalization_method":
+        save_path = "/projects/settings/personalization_method/" + project_uuid  # personalization_method page should be added manually (due to team_members.html next button design. It does not use 'post' request method.)
         add_menu(user_id, project_uuid, save_path)
-        return render_template("design/projects/personalized_method.html", segment="general_personalized_method",
+        team_members = project_details.get("general_settings", {}).get("team_members", [])
+        timestamp = datetime.now(get_localzone()).isoformat()
+        add_project_logs(project_uuid=project_uuid, created_by=user_id, details=team_members, page_name=page_name_logs, timestamp=timestamp)
+        return render_template("design/projects/personalization_method.html", segment="general_personalization_method",
                                all_menus=all_menus, menu_number=2, project_name=project_name, modified_on=modified_on,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "scenario":
@@ -392,9 +395,6 @@ def intervention_settings(setting_type, project_uuid):
     elif setting_type == "decision_point":
         page_name = "intervention_decision_point"
         page_name_log = "intervention_option"
-    # elif setting_type == "ineligibility":
-    #     page_name = "intervention_ineligibility"
-    #     page_name_log = "intervention_decision_point"
     elif setting_type == "intervention_probability":
         page_name = setting_type
         page_name_log = "intervention_decision_point"
@@ -411,8 +411,8 @@ def intervention_settings(setting_type, project_uuid):
     if request.method == 'POST':
         timestamp = datetime.now(get_localzone()).isoformat()
         add_menu(user_id, project_uuid, request.path)
-        if not setting_type == "proximal_outcome":  # In general summry, details is always empty
-            add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=timestamp)
+        # if not setting_type == "proximal_outcome":  # In general summry, details is always empty
+        add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=timestamp)
         update_intervention_settings(request.form.to_dict(), project_details_obj) # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
         project_details, project_details_obj = get_project_details(project_uuid, user_id) # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
         intervention_settings = project_details.get("intervention_settings")  # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.

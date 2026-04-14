@@ -10,6 +10,7 @@
 {% if POSTHOG_USER_ID %}
 <script>
     posthog.identify('{{ POSTHOG_USER_ID }}', {
+        id: '{{ POSTHOG_USER_ID }}',
         email: '{{ POSTHOG_EMAIL }}',
         displayname: '{{ POSTHOG_DISPLAYNAME }}'
     });
