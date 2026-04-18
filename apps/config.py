@@ -61,9 +61,6 @@ class Config(object):
 
     # Assets Management
     ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
-    
-    # # Microsoft Clarity Project ID
-    # CLARITY_PROJECT_ID = config('CLARITY_PROJECT_ID')
 
 
 class ProductionConfig(Config):

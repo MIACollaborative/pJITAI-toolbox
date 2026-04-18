@@ -69,18 +69,7 @@ def create_app(config):
     configure_database(app)
     app.jinja_env.policies["json.dumps_kwargs"] = {"sort_keys": False}
     mail.init_app(app)
-    
-    # @app.context_processor
-    # def inject_clarity_user():
-    #     clarity_user_id = None
 
-    #     if getattr(current_user, "is_authenticated", False):
-    #         clarity_user_id = str(current_user.get_id())
-
-    #     return {
-    #         "CLARITY_USER_ID": clarity_user_id,
-    #         "CLARITY_PROJECT_ID": env_config("CLARITY_PROJECT_ID")
-    #     }
     
     @app.context_processor
     def inject_posthog_user():
