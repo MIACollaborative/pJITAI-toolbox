@@ -686,7 +686,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     elif setting_type == "covariate_main_effect":
         cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
         is_tailoring = project_details_obj.covariates.get(cov_id).get("tailoring_variable", "no")
-        cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
+        formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=cov_id, is_intercept=False)
         cov_idx = list(all_covariates.keys()).index(cov_id) + 1
         return render_template("design/covariates/covariate_main_effect.html", segment="covariates", formula=formula, cov_idx=cov_idx,
                                cov_name=cov_name, all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
@@ -784,7 +784,6 @@ def configuration_summary(config_type, project_uuid):
     # Add menu
     add_menu(user_id, project_uuid, request.path)
     if config_type == "summary":
-        #print(f'CONFIGURATION SUMMARY {project_details}')
         prox_name = project_details.get('intervention_settings').get('intervention_option_a')
         print(f'INTERVENTION_OPTION_A {prox_name}')
 
@@ -794,13 +793,9 @@ def configuration_summary(config_type, project_uuid):
         tailoring_covs_description = []
 
         for cov in covs:
-            #print(f"COVARIATE {covs.get(cov).get('covariate_name')} {covs.get(cov).get('tailoring_variable')}")  
             if covs.get(cov).get('tailoring_variable') == 'yes':
                 cov_name = covs.get(cov).get('covariate_name')
                 cov_desc = 'XXX'
-                # if covs.get(cov).get('covariate_type') == 'Binary':
-                #     cov_desc = f"Type: {covs.get(cov).get('covariate_type')}, 0: {covs.get(cov).get('covariate_meaning_0')}, 1: {covs.get(cov).get('covariate_meaning_1')}" 
-                # else:
                 cov_desc = f"Type: {covs.get(cov).get('covariate_type')}, Min: {covs.get(cov).get('covariate_min_val')}, Max: {covs.get(cov).get('covariate_max_val')}, Notes: {covs.get(cov).get('notes')}"
                 tailoring_covs_names.append(cov_name)
                 tailoring_covs_description.append(cov_desc)
