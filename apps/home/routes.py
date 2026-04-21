@@ -598,7 +598,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
 
     if project_details.get("covariates"):
         modified_on = project_details.get("modified_on", "")
-        all_covariates = project_details.get("covariates")
+        all_covariates = dict(sorted(project_details.get("covariates").items(), key=lambda item: item[1].get("created_on", ""), reverse=False))
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=cov_id, is_intercept=False)
 
 
@@ -702,7 +702,6 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
         is_tailoring = True
         if tal_val == 'no':
             is_tailoring = False
-        print(f'TTTTTTTTT {is_tailoring}')
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="yes", add_red_note="no", is_intercept=False)
         return render_template("design/covariates/covariate_summary.html", segment="covariates", formula=formula,
                                all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
@@ -869,7 +868,7 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
     treatment_prior_standard_deviation = project_details.get("model_settings", {}).get(
         "treatment_prior_standard_deviation")
 
-    covariates = dict(reversed((project_details.get("covariates")).items()))
+    covariates = dict(sorted((project_details.get("covariates")).items(), key=lambda item: item[1].get("created_on", ""), reverse=False))
     alpha_vars = f'α<sub>0</sub>~N({intercept_prior_mean}, {intercept_prior_standard_deviation}<sup>2</sup>)<br>'
     beta_vars = f'β<sub>0</sub>~N({treatment_prior_mean}, {treatment_prior_standard_deviation}<sup>2</sup>)<br>'
     

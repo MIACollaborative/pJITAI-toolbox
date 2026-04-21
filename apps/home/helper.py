@@ -95,21 +95,14 @@ def update_model_settings(data, project_details_obj):
 
 def update_covariates_settings(data, project_details_obj, project_details, cov_id=None):
     cov_vars = {}
+    current_time = datetime.now().isoformat()
     if project_details_obj:
         settings = copy.deepcopy(project_details_obj.covariates)
-        if settings.get(cov_id):
-            settings.get(cov_id).update(data)
+        if settings.get(cov_id): # Do not update created_on when updating covariate settings
+            settings[cov_id].update(data)
         elif data:
-            # TODO: Assign ID to each covariate
-            # if project_details['covariates']:
-            #     # Add ID to each covariate
-            #     max_id = max(int(item['id']) for item in project_details['covariates'])
-            #     next_id = max_id + 1
-            #     data['id'] = next_id
-            # else:
-            #     data['id'] = 1
             cov_vars[cov_id] = data
-            print(f'cov_vars[cov_id] {cov_vars[cov_id]}')
+            cov_vars[cov_id]['created_on'] = current_time
             settings.update(cov_vars)
         if settings:
             project_details_obj.covariates = settings
