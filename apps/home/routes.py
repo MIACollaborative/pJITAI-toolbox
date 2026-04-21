@@ -344,6 +344,8 @@ def project_settings(setting_type, project_uuid=None):
                                menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name, project_owner=project_owner,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "personalized_method":
+        save_path = "/projects/settings/personalized_method/" + project_uuid  # personalized_method page should be added manually (due to team_members.html next button design. It does not use 'post' request method.)
+        add_menu(user_id, project_uuid, save_path)
         return render_template("design/projects/personalized_method.html", segment="general_personalized_method",
                                all_menus=all_menus, menu_number=2, project_name=project_name, modified_on=modified_on,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
@@ -396,12 +398,12 @@ def intervention_settings(setting_type, project_uuid):
     elif setting_type == "intervention_probability":
         page_name = setting_type
         page_name_log = "intervention_decision_point"
-    elif setting_type == "update_point":
-        page_name = "intervention_update_point"
+    elif setting_type == "update_schedule":
+        page_name = "intervention_update_schedule"
         page_name_log = "intervention_probability"
     elif setting_type == "summary":
         page_name = "intervention_summary"
-        page_name_log = "intervention_update_point"
+        page_name_log = "intervention_update_schedule"
     else:
         page_name = setting_type
         page_name_log = setting_type
@@ -446,8 +448,8 @@ def intervention_settings(setting_type, project_uuid):
         return render_template("design/intervention/intervention_probability.html", segment="intervention_probability",
                                all_menus=all_menus, menu_number=8, project_name=project_name, modified_on=modified_on,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "update_point":
-        return render_template("design/intervention/update_point.html", segment="intervention_update_point",
+    elif setting_type == "update_schedule":
+        return render_template("design/intervention/update_schedule.html", segment="intervention_update_schedule",
                                all_menus=all_menus, menu_number=9, project_name=project_name, modified_on=modified_on,
                                update_duration=update_duration, settings=intervention_settings,
                                project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
@@ -609,15 +611,15 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     if setting_type == "all":
         page_name = "covariates_all"
         page_name_log = "model_proximal_outcome"
-    elif setting_type == "covariate_name":
+    elif setting_type == "covariate_define":
         page_name = setting_type
         page_name_log = "covariates_all"
-    elif setting_type == "covariate_attributes":
-        page_name = setting_type
-        page_name_log = "covariate_name"
+    # elif setting_type == "covariate_attributes":
+    #     page_name = setting_type
+    #     page_name_log = "covariate_define"
     elif setting_type == "covariate_main_effect":
         page_name = setting_type
-        page_name_log = "covariate_attributes"
+        page_name_log = "covariate_define"
     elif setting_type == "covariate_tailored_effect":
         page_name = setting_type
         page_name_log = "covariate_main_effect"
@@ -635,15 +637,10 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
         timestamp = datetime.now(get_localzone()).isoformat()
         add_menu(user_id, project_uuid, request.path)
         add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=timestamp)
-        if "covariate_attributes" in request.referrer:
-            form_data = request.form.to_dict()
-            # if form_data.get("covariate_type") != "Binary":
-            #     form_data.pop("covariate_meaning_0")
-            #     form_data.pop("covariate_meaning_1")
-            #     project_details_obj.covariates.get(cov_id).pop("covariate_meaning_0", None)
-            #     project_details_obj.covariates.get(cov_id).pop("covariate_meaning_1", None)
-        else:
-            form_data = request.form.to_dict()
+        # if "covariate_attributes" in request.referrer:
+        #     form_data = request.form.to_dict()
+        # else:
+        form_data = request.form.to_dict()
 
         if "covariate_main_effect" in request.referrer:
             if project_details_obj.covariates.get(cov_id).get("tailoring_variable", "") == "no":
@@ -676,16 +673,16 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
                                menu_number=14, project_name=project_name, modified_on=modified_on,
                                all_covariates=all_covariates, settings=settings, new_uuid=new_uuid,
                                project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "covariate_name":
-        return render_template("design/covariates/covariate_name.html", segment="covariates", all_menus=all_menus,
+    elif setting_type == "covariate_define":
+        return render_template("design/covariates/covariate_define.html", segment="covariates", all_menus=all_menus,
                                menu_number=14, project_name=project_name, modified_on=modified_on, settings=settings,
                                project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "covariate_attributes":
-        cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
-        return render_template("design/covariates/covariate_attributes.html", segment="covariates", all_menus=all_menus,
-                               menu_number=14, project_name=project_name, modified_on=modified_on,
-                               covariates_types=covariates_types, cov_name=cov_name, settings=settings, project_uuid=project_uuid,
-                               cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
+    # elif setting_type == "covariate_attributes":
+    #     cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
+    #     return render_template("design/covariates/covariate_attributes.html", segment="covariates", all_menus=all_menus,
+    #                            menu_number=14, project_name=project_name, modified_on=modified_on,
+    #                            covariates_types=covariates_types, cov_name=cov_name, settings=settings, project_uuid=project_uuid,
+    #                            cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_main_effect":
         cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
         is_tailoring = project_details_obj.covariates.get(cov_id).get("tailoring_variable", "no")

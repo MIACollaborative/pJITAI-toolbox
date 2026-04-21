@@ -8,12 +8,14 @@
           <div>
             <details>
               <summary class="resources-summary">What should I enter?</summary>
+              <div style="margin-bottom: 10px;">{{block1_pretext}}</div>
               {% for i in range(block1_text|length) %}
               <div>
                 <b>{{ block1_title[i] }}</b>
                 <p style="margin-top: 3px">{{ block1_text[i] }}</p>
               </div>
               {% endfor %}
+              <div>{{block1_posttext}}</div>
             </details>
           </div>
         </div>
@@ -27,7 +29,7 @@
           <div>
             <details>
               <summary class="resources-summary">Heartsteps Example</summary>
-              {{ block2 | default("Something") }}
+              <div style="white-space: pre-line;"> {{block2 | default("Something") }}</div>
             </details>
           </div>
         </div>
@@ -41,7 +43,7 @@
           <div>
             <details>
               <summary class="resources-summary">Discussion</summary>
-              {{ block3 | default("Something") }}
+              <div style="white-space: pre-line;"> {{ block3 | default("Something") }} </div>
             </details>
           </div>
         </div>

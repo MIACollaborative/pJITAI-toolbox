@@ -66,9 +66,9 @@
                 "/intervention/settings/intervention_probability/"+project_uuid in all_menus %}
                 href="/intervention/settings/intervention_probability/{{project_uuid}}" {% endif %}
                 class="">Intervention Probability</a></li>
-            <li class="{% if 'intervention_update_point' in segment %} active {% endif %}"><a {% if
-                "/intervention/settings/update_point/"+project_uuid in all_menus %}
-                href="/intervention/settings/update_point/{{project_uuid}}" {% endif %} class="">Algorithm Update Schedule</a></li>
+            <li class="{% if 'intervention_update_schedule' in segment %} active {% endif %}"><a {% if
+                "/intervention/settings/update_schedule/"+project_uuid in all_menus %}
+                href="/intervention/settings/update_schedule/{{project_uuid}}" {% endif %} class="">Algorithm Update Schedule</a></li>
             <li class="{% if 'intervention_summary' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/summary/"+project_uuid in all_menus %}
                 href="/intervention/settings/summary/{{project_uuid}}" {% endif %} class="">Summary</a></li>

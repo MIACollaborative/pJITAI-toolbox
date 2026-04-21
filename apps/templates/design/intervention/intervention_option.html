@@ -34,9 +34,6 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <!-- <p style="color:#f65959;">Option A and Option B cannot be interchanged.
-                                                        Please read the explanation to make sure that you define them
-                                                        correctly.</p> -->
                                                     <label class="form-control-label" for="intervention_option_a">Intervention
                                                         Option A (Higher Intensity) name</label>
                                                     <input value="{{settings.get('intervention_option_a','')}}" type="text"
@@ -66,64 +63,20 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div class="row">
-                                    <!-- [ tabs ] start -->
-                                    <div class="col-sm-12">
-                                        <div class="tab-content" id="myTabContent">
-                                            <div class="tab-item">
-                                                <h4><b>Intervention Option</b></h4>
-                                                <p>Give names to your two intervention options that will help you remember what they represent in terms of your intervention component.</p>
-
-                                                <h5>Intervention Option A - Higher Intensity</h5>
-                                                <p>The first of the two options that can be selected by your personalizing algorithm should be the one that is more “intense”--both in the sense of burden to the participant and in the sense of expected impact on the outcome. For the typical case of an intervention component that sends a message to the participant, Option A would be the “Send a Message” option.</p>
-
-                                                <h5>Intervention Option B - Lower Intensity</h5>
-                                                <p>The second of the two options should be the option that is lower in intensity, considering both burden and expected outcome. For a push messaging intervention component, this option might be the “No Message” option.</p>
-
-                                                <h5>Note:</h5> It's important not to mix up these two options. The system is built around the assumption that Option A is the more "active" or potentially burdensome option and Option B is less active or passive.
-                                            </div>
-                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                aria-labelledby="profile-tab"> -->
-                                            <div class="tab-item">
-                                                <h5><i>HeartSteps Example</i></h5>
-                                                <p>
-                                                    For the HeartSteps Activity Suggestions example, Intervention Option A is “Send an activity suggestion message” and Intervention Option B is “Do not send a message.”
-                                                </p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <!-- [ tabs ] end -->
-                                </div>
                                 <!-- [ Main Content ] end -->
-                                <!-- <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="form-group">
-                                                    <a href="/intervention/settings/proximal_outcome/{{project_uuid}}"
-                                                    class="btn btn-outline-primary" role="button">Back</a>
-                                                    <button type="submit" type="button"
-                                                            formaction="/intervention/settings/decision_point/{{project_uuid}}"
-                                                            formmethod="post" class="btn btn-primary">Next
-                                                    </button>
-                                                </div>
-                                                <div class="form-group">
-                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div> -->
                             </form>
                         </div>
                     </div>
                 </div>
+                {% set block1="Y" %}
+                {% set block1_pretext="In your intervention component, the personalization algorithm will choose between the following two intervention options at each decision point. Give these options clear names  that help you remember what they represent in terms of your intervention component." %}
+                {% set block1_title=["Intervention Option A - Higher Intensity", "Intervention Option B - Lower Intensity"] %}
+                {% set block1_text=["This is the more “intense” option -- both in the sense of participant burden and expected impact on the outcome. For example, if your intervention component involves  sending  messages to the participants, Option A might be “Send a Message”.", "This is the less intense option, with lower participant burden and a smaller expected impact. In the messaging example described above, Option B might be “No Message.”"] %}
+                {% set block1_posttext %}
+                <b>Note</b>: It's important not to mix up these two options. The system assumes that Option A is the more "active" or potentially burdensome option and Option B is less active or passive." {% endset %}
+                {% set block2 %} For the HeartSteps Activity Suggestions example: 
+                <ul><li>Intervention Option A is “Send an activity suggestion message”</li><li>Intervention Option B is “Do not send a message.”</li></ul>{% endset %}
+                {% include 'includes/resources.html' %}
             </div>
         </div>
     </div>

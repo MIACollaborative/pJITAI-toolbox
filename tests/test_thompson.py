@@ -9,7 +9,7 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
 
 from apps.learning_methods.ThompsonSampling import ThompsonSampling
-from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_point, hs1_decision_freq, hs1_continuous_not_tailoring, hs2_binary_tailoring_continuous_not_tailoring, hs2_state_data, hs1_int_tailoring, hs1_int_state_data, hs1_continuous_tailoring, hs1_continuous_state_data, hs1_binary_not_tailoring, hs1_binary_not_tailoring_state_data, hs1_int_not_tailoring, hs1_int_not_tailoring_state_data, hs2_update_rows
+from tests.test_cases import hs1, hs1_state_data, hs1_update_rows, hs1_update_schedule, hs1_decision_freq, hs1_continuous_not_tailoring, hs2_binary_tailoring_continuous_not_tailoring, hs2_state_data, hs1_int_tailoring, hs1_int_state_data, hs1_continuous_tailoring, hs1_continuous_state_data, hs1_binary_not_tailoring, hs1_binary_not_tailoring_state_data, hs1_int_not_tailoring, hs1_int_not_tailoring_state_data, hs2_update_rows
 
 def _initialize(monkeypatch, config):
   ts = ThompsonSampling(config=config)
@@ -60,8 +60,8 @@ def test_init_hs_example(monkeypatch):
   assert ts._feature_name_list[0] == "Location"  # _feature_name_list contains 'covariate_name'
   assert ts._action_center_ind == np.array([[1]])  # 1 for tailoring
 
-def test_init_hs_update_point(monkeypatch):  ## YS: Currently, update point is not being used anywhere in the TS class
-  ts = _initialize(monkeypatch, hs1_update_point) 
+def test_init_hs_update_schedule(monkeypatch):  ## YS: Currently, update schedule is not being used anywhere in the TS class
+  ts = _initialize(monkeypatch, hs1_update_schedule) 
   # TODO: test that it was initialized as expected
 
 def test_init_hs_decision_freq(monkeypatch):  ## YS: Currently, decision freq is not being used anywhere in the TS class

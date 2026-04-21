@@ -117,23 +117,6 @@
                                                     });
 
                                                 </script>
-                                                <!-- <div id="binary_covariates_div">
-                                                    <div class="form-group">
-                                                        <label class="form-control-label" for="covariate_meaning_0">Meaning
-                                                            of the "Covariate=0"</label><br>
-                                                        <input value="{{settings.covariate_meaning_0}}" type="text"
-                                                            name="covariate_meaning_0" class="form-control"
-                                                            placeholder="">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label class="form-control-label" for="covariate_meaning_1">Meaning
-                                                            of the "Covariate=1"</label><br>
-                                                        <input value="{{settings.covariate_meaning_1}}" type="text"
-                                                            name="covariate_meaning_1" class="form-control"
-                                                            placeholder="">
-                                                    </div>
-                                                </div> -->
                                             </div>
 
                                         </div>
@@ -144,22 +127,7 @@
                                 <div class="row">
                                     <!-- [ tabs ] start -->
                                     <div class="col-sm-12">
-
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                    Example</a>
-                                            </li>
-                                        </ul> -->
                                         <div class="tab-content" id="myTabContent">
-                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                                aria-labelledby="home-tab"> -->
                                             <div class="tab-item">
                                                 <h5><b>Covariate data type</b></h5>
                                                 <p>Indicate whether the covariate is continuous or binary. All are acceptable. </p>
@@ -168,8 +136,6 @@
                                                 <h5><b>Notes</b></h5>
                                                 <p>Use this space to keep track of any decisions regarding data transformations or special meanings of particular values (e.g., 0=[Home,Work]). You will need to provide these to your software development team later!</p>
                                             </div>
-                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                aria-labelledby="profile-tab"> -->
                                             <div class="tab-item">
                                                 <h5>HeartSteps Example</h5>
                                                 <p class="mb-0">In HeartSteps, “Location” is coded as 1 when an individual
@@ -196,7 +162,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="form-group">
-                                                    <a href="/covariates/settings/covariate_name/{{project_uuid}}/{{cov_id}}"
+                                                    <a href="/covariates/settings/covariate_define/{{project_uuid}}/{{cov_id}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
                                                     <button type="submit" type="button"
                                                             formaction="/covariates/settings/covariate_main_effect/{{project_uuid}}/{{cov_id}}"

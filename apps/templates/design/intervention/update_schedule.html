@@ -1,0 +1,96 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Intervention - Update Schedule {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Intervention Settings / Algorithm Update Schedule</h3>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="update_time">When should the pJITAI algorithm update?</label>
+                                                    <div class="input-group">
+                                                        <select id="update_day" name="update_day" class="form-control">
+                                                            {% for udur in update_duration%}
+                                                            <option id="update_day_option" {% if settings.update_day==udur %} selected{% endif %}
+                                                                    value="{{udur}}">{{udur}}
+                                                            </option>
+                                                            {%endfor%}
+
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                                <div class="center-buttons">
+                                                    <a href="/intervention/settings/intervention_probability/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">&lt; Back</a>
+                                                    
+                                                    <button style="margin-left: 3px;" type="submit" type="button"
+                                                            formaction="/intervention/settings/summary/{{project_uuid}}"
+                                                            formmethod="post" class="btn btn-primary">Next &gt;
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% set block1="Y" %}
+                {% set block1_title=["Algorithm Update Schedule"] %}
+                {% set block1_text=["The algorithm does not learn continuously, rather it periodically updates its learning based on decisions made (Option A vs B), the  participant states collected, and proximal outcomes observed after each decision point. Using this data, the algorithm calculates the effect of each intervention  option on the proximal outcome and updates its model, which in turn adjusts probabilities for future decision points."] %}
+                {% set block1_posttext="Because the update process can be computationally intensive, it’s recommended to schedule updates for times when no decision points are expected to occur. Updating too frequently is not beneficial, as data from multiple decision points is needed for the algorithm to make meaningful changes to its model." %}
+                {% set block2="In HeartSteps the updates were performed in the middle of each night (so every 5 decision points since there are 5 decision points per day).   None of the HeartSteps participants were able to schedule one of their decision times  in the middle of the night so the updates would not interfere with the decisions regarding which intervention to provide." %}
+                {% set block3="Usually update times are set times (middle of each night, middle of Sunday night and so on) that there are few other computations being conducted by the intervention system." %}
+                {% include 'includes/resources.html' %}
+            </div>
+        </div>
+    </div>
+    {% include 'includes/comments.html' %}
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+
+localStorage.setItem("update_day_option", $('#update_day_option').val());
+var update_day_option = localStorage.getItem('update_day_option');
+console.log(update_day_option);
+</script>
+
+{% endblock javascripts %}

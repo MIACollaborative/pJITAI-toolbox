@@ -70,28 +70,6 @@
                                             </div>
                                     </div>
                                 </div>
-                                <!-- [ Main Content ] end -->
-                                <!-- <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="form-group">
-                                                    <button type="submit" formmethod="post"
-                                                            formaction="/projects/settings/team_members/{{project_uuid}}"
-                                                            class="btn btn-primary">Next
-                                                    </button>
-                                                    <button type="submit" formmethod="post"
-                                                            formacation="/projects/settings/personalization_method/{{project_uuid}}"
-                                                            class="btn btn-primary">Next
-                                                    </button>
-                                                </div>
-                                                <div class="form-group">
-                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                             </form>
                         </div>
                     </div>
@@ -100,6 +78,19 @@
             {% set block1="Y" %}
             {% set block1_title=["Project name", "Project description (optional)", "Intervention component name"] %}
             {% set block1_text=["Choose a name that will help you and your team remember which intervention component you aim to personalize with RL. For example “Activity Suggestions RL”.", "Add any additional information that will help you and your team understand what this project is all about.", "Provide the name of the intervention component that will be personalized by the RL algorithm. An intervention component is any part of a JITAI that has its own decision rule, for example the component “Morning Motivational Message” might be the name of a component designed to send participants a motivational message at 9am."] %}
+            {% set block2 %}
+            For the running example, we will be using the “Activity Suggestions” intervention component from HeartSteps V1 (see below). This is a component that may send an activity suggestion via push message to each participant at any of 5 times per day (morning commute, lunchtime, mid afternoon, evening commute, and after dinner times). To practice with the HeartSteps V1 example, you can enter “Activity Suggestions RL” into the project name and  “Activity Suggestions” into the “Intervention component name” field.
+            
+            HeartSteps V1 was a microrandomized trial (MRT) of the HeartSteps intervention to promote physical activity. The intervention app included several intervention components, including integration with an activity tracker, activity goals with feedback, and activity planning. It also included two intervention components that were delivered via push messaging: Activity Suggestions and Anti-Sedentary Messages. In the running “HeartSteps Example” used throughout the pJITAI Toolbox, we provide examples of the pJITAI Toolbox settings that might be used to create a pJITAI reinforcement learning (RL) algorithm based on the intervention design and MRT data analysis from the Activity Suggestions component of HeartSteps V1.
+            
+            In some screens of the pJITAI Toolbox, you will also see reference to HeartSteps V2, which is a pJITAI version of HeartSteps that was developed manually (i.e., not with the pJITAI Toolbox) using HeartSteps V1 data. References for both papers are below and when these works are mentioned in subsequent screens, links will be provided to the PubMed entry for the relevant article.
+
+            [HeartSteps V1] Klasnja, Predrag, Shawna Smith, Nicholas J. Seewald, Andy Lee, Kelly Hall, Brook Luers, Eric B. Hekler, and Susan A. Murphy. "Efficacy of contextually tailored suggestions for physical activity: a micro-randomized optimization trial of HeartSteps." Annals of Behavioral Medicine 53, no. 6 (2019): 573-582. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6401341/">[PubMed link]</a>
+
+            [HeartSteps V2] Liao, Peng, Kristjan Greenewald, Predrag Klasnja, and Susan Murphy. "Personalized heartsteps: A reinforcement learning algorithm for optimizing physical activity." Proceedings of the ACM on interactive, mobile, wearable and ubiquitous technologies 4, no. 1 (2020): 1-22. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8439432/">[PubMed link]</a>
+
+            <i>Note: The HeartSteps V1 study is referenced several times across the pages. A full citation is introduced only here, while subsequent mentions include only the link for reference.</i>
+            {% endset %}
             {% include 'includes/resources.html' %}
         </div>
     </div>
