@@ -838,14 +838,7 @@ def configuration_summary(config_type, project_uuid):
 @blueprint.route('/pages/<page_type>', methods=['GET'])
 @login_required
 def static_pages(page_type):
-    if page_type == "about":
-        return render_template("design/static_pages/about_us.html", segment="static_pages")
-    elif page_type == "faqs":
-        return render_template("design/static_pages/faqs.html", segment="static_pages")
-    elif page_type == "contact":
-        return render_template("design/static_pages/contact_us.html", segment="static_pages")
-    else:
-        return "Page not found", 404
+    return "Page not found", 404  # Return 404 for any undefined static page types
 
 
 @blueprint.route('/generate_formula/<project_uuid>/<page_type>/<add_red_note>', methods=['GET', 'POST'])
