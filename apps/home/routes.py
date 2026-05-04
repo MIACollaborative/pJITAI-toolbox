@@ -844,6 +844,20 @@ def static_pages(page_type):
 @blueprint.route('/generate_formula/<project_uuid>/<page_type>/<add_red_note>', methods=['GET', 'POST'])
 @login_required
 def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, covariate_tailored_effect=False, is_intercept=False, is_main_treatment_effect=False, is_noise=False):
+    keys = f"""<div class="keys-container">
+                    <span class="keys-header" style="color: black; font-size: 16px;">Keys</span>
+                    <br><br>
+                    <span style="color: black; background-color: #E5F3FF; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:12px;">Proximal Outcome</span>
+                    <br><br>
+                    <span style="color: black; background-color: #D5EBD9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:12px;">Intervention Options</span>
+                    <br><br>
+                    <span style="color: black; background-color: #DAD5EB; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:12px;">Covariates (not a Tailoring Variable)</span>
+                    <br><br>
+                    <span style="color: black; background-color: #EBD5E9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:12px;">Covariates (Tailoring Variable)</span>
+                    <br><br>
+                    <span style="color: black; background-color: #FFF8E5; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:12px;">Coefficients</span>
+                </div>"""
+    
     user_id = current_user.get_id()
     alphas = ""
     betas = ""
@@ -885,22 +899,28 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
     border_epsilon = "6px" if is_noise else "1px"
     
     htmll = f"""<div class="rightsidebluetextbox">
-
-                    <span style="background-color: #E5F3FF; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{proximal_outcome_name}</span> ~
-                    <br><br><span style="background-color: #FFF8E5; border: {border_alpha} solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> α<sub>0</sub> </span>
-                    
-                    {alphas}
-                    
-                    <br><br>
-                    + <span style="background-color: #FFF8E5; border: {border_main_treatment} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>0</sub></span> * <span style="background-color: #D5EBD9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> {intervention_component_name} </span>
-                                                      
-                    {betas}
-                    
-                    <br><br>+ <span style="background-color: #FFF8E5; border: {border_epsilon} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">ϵ</span> <br><br>
-                    RED_NOTE
-                    <br>
-                    ALPHA_VARS 
-                    BETA_VARS
+                    <div class="row" style="display: flex; flex-direction: row; ">
+                        <div class="col" style="flex: 6;">
+                            <span style="background-color: #E5F3FF; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{proximal_outcome_name}</span> ~
+                            <br><br><span style="background-color: #FFF8E5; border: {border_alpha} solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> α<sub>0</sub> </span>
+                            
+                            {alphas}
+                            
+                            <br><br>
+                            + <span style="background-color: #FFF8E5; border: {border_main_treatment} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>0</sub></span> * <span style="background-color: #D5EBD9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> {intervention_component_name} </span>
+                                                            
+                            {betas}
+                            
+                            <br><br>+ <span style="background-color: #FFF8E5; border: {border_epsilon} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">ϵ</span> <br><br>
+                            RED_NOTE
+                            <br>
+                            ALPHA_VARS 
+                            BETA_VARS
+                        </div>
+                        <div class="col" style="flex: 4;">
+                            {keys}
+                        </div>
+                    </div>
                 </div>"""
     if is_summary_page == "yes":
         htmll = htmll.replace("ALPHA_VARS", alpha_vars)
