@@ -37,18 +37,25 @@ class Config(object):
 
     # Set up the App SECRET_KEY
     SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_007')
+    # Render URL for PostgreSQL connection
+    RENDER_DB_URL = config('RENDER_URL', default=None)
+    
+    if RENDER_DB_URL:
+        # Connect to Render PostgreSQL database
+        SQLALCHEMY_DATABASE_URI = RENDER_DB_URL
+    else:
+        # In local environment
+        # This will create a file in <app> FOLDER
+        # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+        SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
+            config('DB_ENGINE', default='mysql+pymysql'),
+            config('DB_USERNAME', default='root'),
+            config('DB_PASS', default='passpass'),
+            config('DB_HOST', default='localhost'),
+            config('DB_PORT', default=3306),
+            config('DB_NAME', default='pJITAI'),
 
-    # This will create a file in <app> FOLDER
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
-    SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
-        config('DB_ENGINE', default='mysql+pymysql'),
-        config('DB_USERNAME', default='root'),
-        config('DB_PASS', default='passpass'),
-        config('DB_HOST', default='localhost'),
-        config('DB_PORT', default=3306),
-        config('DB_NAME', default='pJITAI'),
-
-    )
+        )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SERVER = config('MAIL_SERVER', default='smtp.gmail.com')
