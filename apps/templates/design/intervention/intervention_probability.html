@@ -179,50 +179,19 @@ $(document).ready(function(){
                 </div>
                 {% set block1="Y" %}
                 {% set block1_title=["Likelihood of delivering [Intervention Option A]"] %}
-                {% set block1_text=["As the algorithm learns the relative influence of the intervention options on each participant’s behavior, the probability of delivering  Intervention Option A (the higher intensity option) will change over time. It is important that this probability never reaches 0 or 1, as this will cause the algorithm to stop learning. To avoid this , you must  specify lower and upper bounds for the probability of sending Option A at each decision point. Once specified, the algorithm will ensure that the probability of sending Option A never goes below the lower bound or above the upper bound."] %}
-                {% set block2="In the HeartSteps example, the lower bound for sending a message (Option A) is 0.1 and the upper bound is 0.8. This wide range gives the algorithm substantial flexibility to personalize to each participant. The upper bound corresponds to an  average of  4 messages per day whereas the lower bound corresponds to an average of 0.5 messages per day, that is, on average, a message every other day." %}
-                {% set block3 %}<b>Discussion: How do I choose?</b>
-                When selecting  the lower and upper bounds for the probability of delivering Intervention Option A, aim for values that are “reasonable,” so that participants are never exposed to excessive burden or are entirely deprived of behavioral support. At the same time, the algorithm must retain enough flexibility to continue learning  about the relative effectiveness of the intervention options. 
+                {% set block1_text=["As the algorithm learns the relative influence of the intervention options on each participant’s behavior, the probability of delivering  Intervention Option A (the higher intensity option) will change over time. It is important that this probability never reaches 0 or 1, as this will cause the algorithm to stop learning. To avoid this, you must  specify lower and upper bounds for the probability of sending Option A at each decision point. Once specified, the algorithm will ensure that the probability of sending Option A never goes below the lower bound or above the upper bound."] %}
+                {% set block2="Y" %}
+                {% set block2_title="How do I choose?" %}
+                {% set block2_text %}
+                When selecting the lower and upper bounds for the probability of delivering Intervention Option A, aim for values that are “reasonable,” so that individuals are never exposed to excessive burden or are entirely deprived of behavioral support. At the same time, the algorithm must retain enough flexibility to continue learning about the relative effectiveness of the intervention options. 
 
-                The calculator above shows  the expected frequency of selecting Option A based on the chosen lower and upper bounds. Try experimenting with  different numbers between 0 and 1.0 to see how  the minimum and maximum expected delivery of Option A changes  per unit of time (i.e., day, week, month). 
-
-                This table provides a few examples of values you might choose, depending on your population and intervention goals:
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>    
-                            <th>Goal</th>
-                            <th>Lower Bound</th>
-                            <th>Upper Bound</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="word-wrap: break-word; white-space: normal;">Lower support; lower burden</td>
-                            <td>0.05</td>
-                            <td>0.20</td>
-                            <td style="word-wrap: break-word; white-space: normal;">A lower bound of 0.05 means that  participants whose data indicates that they are not benefiting from Option A relative to Option B may only receive intervention option A at 5% of their decision points.  An upper bound of 0.20 implies that even if a participant’s data indicates that the participant is highly responsive, this participant will receive Option A at 20% of their decision points. </td>
-                        </tr>
-                        <tr>
-                            <td style="word-wrap: break-word; white-space: normal;">Higher support; higher burden</td>
-                            <td>0.50</td>
-                            <td>0.90</td>
-                            <td style="word-wrap: break-word; white-space: normal;">A lower bound of 0.70 means that  participants whose data indicates that they are not benefiting from Option A relative to Option B will still receive intervention option A at 70% of their decision points.  An upper bound of 0.90 implies that if a participant’s data indicates that the participant is highly responsive to Option A relative to Option B, then this participant may receive intervention option A at 90% of their decision points.</td>
-                        </tr>
-                        <tr>
-                            <td style="word-wrap: break-word; white-space: normal;">More room to personalize</td>
-                            <td>0.20</td>
-                            <td>0.80</td>
-                            <td style="word-wrap: break-word; white-space: normal;">Choosing a wider range allows the algorithm to deliver very different rates of Option A to different participants. </td>
-                        </tr>
-                        <tr>
-                            <td style="word-wrap: break-word; white-space: normal;">Less room to personalize</td>
-                            <td>0.40</td>
-                            <td>0.60</td>
-                            <td style="word-wrap: break-word; white-space: normal;">Selecting bounds that stay close to 0.5 for all decision points will result in most participants receiving intervention option A on around 50%  of their decision points.  But this results in less personalization.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                The calculator above shows  the expected frequency of selecting Option A based on the chosen lower and upper bounds. Try experimenting with  different numbers between (but not including) 0.0 and 1.0 to see how  the minimum and maximum expected delivery of Option A changes per unit of time (i.e., day, week, month). 
+                {% endset %}
+                {% set block3="Y" %}
+                {% set block3_title="Intervention Probabilities in HeartSteps" %}
+                {% set block3_text %}
+                In the HeartSteps example, there were 5 decision points per day. 
+                The lower bound for sending a message (Option A) was set to 0.1 and the upper bound was 0.8. The lower bound results in an average of 1 message every other day, which was thought to be tolerable if the individual’s data so far is indicating that Option A is not better than Option B. On the other hand, even if the individual’s data so far was indicating that Option A is better than Option B, it was felt that no more than an average of 4 messages per day should be delivered (to manage burden). 
                 {% endset %}
                 {% include 'includes/resources.html' %}
             </div>
