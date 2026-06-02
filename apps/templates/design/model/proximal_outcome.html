@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Model - Proximal Outcome {% endblock %}
+{% block title %} Model - Standardized Proximal Outcome Attributes {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -21,7 +21,7 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3>Model Settings / Proximal Outcome Attribute</h3>
+                                                <h3>Model Settings / Standardized Proximal Outcome Attributes</h3>
                                             </div>
 
                                         </div>
@@ -86,18 +86,32 @@
                 </div>
                 {% set block1="Y" %}
                 {% set block1_title=["Minimum and Maximum Allowed Values", "Notes"] %}
-                {% set block1_text=["After determining your (possibly transformed) proximal outcome, consider what the allowed range of outcomes should be. The  algorithm will reject any (transformed) proximal outcomes that fall outside this range to prevent erroneous data from influencing personalization. As an example, if you use raw 30-minute step count as your proximal outcome (see Discussion below about why you might not want to do that in practice), it would be invalid to observe an outcome less than 0 (negative steps –  walking backwards doesn’t count!) or greater than 14,000. The latter would correspond to roughly 14 miles, which would be the distance that the world’s fastest recorded human, Usain Bolt, could cover in 30 minutes if he could maintain his top 100m speed of ~28mph.  Unless you expect Usain Bolt to join your study, you can reasonably set a smaller maximum.", "Use this field to capture any decisions made about how the proximal outcome will be captured and, if applicable, transformed. This is information you will need for implementing the intervention and its communication with your pJITAI algorithm."] %}
-                {% set block2 %}The 30-minute step count used by the Activity Suggestions intervention component takes on integer values (0, 1, 2,...) and is heavily right skewed with many values equal to zero and a long tail of higher step counts stretching towards the maximum expected value.  Thus to transform this proximal outcome so that its distribution is more symmetric, the raw step counts are log transformed, like so:
+                {% set block1_text=["Recall that the proximal outcome should be approximately standardized.  That is, the proximal outcome should be coded so that the average value of the proximal outcome will be roughly 0 and the standard deviation of the proximal outcome will be roughly 1.
+                    After determining your approximately standardized proximal outcome, consider what the allowed range of outcomes should be. The algorithm will reject any standardized proximal outcomes that fall outside this range to prevent erroneous data from influencing personalization.", 
+                    "If you decide to transform the proximal outcome (like in HeartSteps, see below), then the transformed proximal outcome will be referred to as the proximal outcome going forward. That is the terminology used throughout the pJITAI toolbox."] %}
+                {% set block2="Y" %}
+                {% set block2_title="Transforming the proximal outcome in HeartSteps" %}
+                {% set block2_text %}
+                Recall that in HeartSteps, the step count in a 30-minute window following each decision point is the proximal outcome. This 30-minute step count takes on integer values (0, 1, 2,...) and is heavily right-skewed with many values equal to zero and a long tail of higher step counts stretching towards the maximum expected value. Thus, to transform this proximal outcome so that its distribution is more symmetric, the raw step counts are log-transformed, like so:
 
-                <code>prox_outcome = log(raw_steps + 0.5)</code>
-                The value of 0.5 is added to the raw_steps value because it avoids taking the log of 0 which is undefined.
+                <code>transformed_prox_outcome = log(raw_steps + 0.5)</code>
 
-                If we assume 0 to be the minimum value for the raw 30-minute step count and 3000 to be the maximum value (no Usain Bolts were observed in HeartSteps V1 (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6401341/">link</a>) data), we end up with:
-                
-                <code>min_prox_outcome = log(0 + 0.5) = -0.69</code>
+                The value of 0.5 is added to the raw_steps value because it avoids taking the log of 0, which is undefined. If we assume 0 to be the minimum value for the raw 30-minute step count and 3000 to be the maximum value (no Usain Bolts were observed in HeartSteps V1 (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6401341/">link</a>) data), we end up with:
+
+                <code>min_prox_outcome = log(0 + 0.5) = -0.7</code>
                 <code>max_prox_outcome = log(3000 + 0.5) = 8.0</code>
-                {% endset %}
-                {% set block3 %}There are a few situations where you will want to transform the raw observation data that you can collect via your mobile app or wearable sensor before providing it to the algorithm. As noted, the currently supported Thompson Sampling algorithm personalizes more quickly when the proximal outcome has a symmetric distribution. At this time the outcomes must be interval data (that is the same interval between any two values of the proximal outcome should have the same meaning). For more, see <a href="https://en.wikipedia.org/wiki/Level_of_measurement">the Wikipedia article on “Level of measurement.”</a> 
+
+                Following this log transformation, the proximal outcome needs to be approximately standardized for the algorithm. Standardization transforms the (transformed) proximal outcome so that it has an approximate mean of 0 and an approximate standard deviation of 1. The formula for standardization is: 
+                
+                Y<sub>standardized</sub> = (Y<sub>transformed</sub> - μ<sub>Y</sub>) / σ<sub>Y</sub>
+                
+                where:
+                <ul>
+                    <li>Y<sub>transformed</sub> is the log-transformed proximal outcome.</li>
+                    <li>μ<sub>Y</sub> is the sample mean of the transformed proximal outcome.</li>
+                    <li>σ<sub>Y</sub> is the sample standard deviation of the transformed proximal outcome.</li>
+                </ul>
+                The original HeartSteps implementation did not standardize the proximal outcome. However, in order to standardize the proximal outcome for HeartSteps for this illustration, we can use the rough rule of thumb: the average value of the (transformed) proximal outcome is roughly the center of this range (use (8.0-(-0.7))/2=4.4)  and the standard deviation is roughly the length of the range divided by 4 (use (8.0-(-0.7))/4=2.2). Using those values, the minimum and maximum value for the standardized proximal outcome for HeartSteps will be -2.3 (use (-0.7 - 4.4)/2.2)  and 1.7 (use (8.0 - 4.4)/2.2) respectively.
                 {% endset %}
                 {% include 'includes/resources.html' %}
             </div>
