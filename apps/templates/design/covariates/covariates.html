@@ -217,59 +217,44 @@ $(document).ready(function() {
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <!-- <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="tab-content" id="myTabContent">
-                                            <div class="tab-item">
-                                                <h5>Explanation</h5>
-                                                <p>Please use “Add another covariate” to add a covariate that is likely to
-                                                    be correlated with (predictive of) the proximal outcome.</p>
-
-                                                <p>Each covariate is associated with a set of parameters that are needed to
-                                                    configure a pJITAI, including whether a covariate is a tailoring
-                                                    variable (i.e., likely to interact with the intervention). Please click
-                                                    “Edit” to fill these parameters out. Once you fill them out, the summary
-                                                    of these parameters can be found by clicking the arrow next to the
-                                                    trashcan.</p>
-
-                                                <p>If you want to remove a covariate, please click the trashcan.</p>
-                                            </div>
-                                            <div class="tab-item">
-                                                <h5>Covariates</h5>
-                                                <ul>
-                                                    <li>Location of the individual</li>
-                                                    <li>30-minute step count prior to a decision point</li>
-                                                </ul>
-                                                <p>In HeartSteps, both the location of the individual and 30-minute step
-                                                    count just prior to a decision point were found to be correlated with the
-                                                    <u>proximal outcome of (log) Next 30 minute step count.</u>
-                                                </p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div> -->
                             </form>
                         </div>
                     </div>
                 </div>
-                {% set block2 %}The personalized HeartSteps Activity Suggestions intervention component uses two covariates:
+                {% set block2="Y" %}
+                {% set block2_title="Covariates in HeartSteps" %}
+                {% set block2_text%}
+                The personalized HeartSteps Activity Suggestions intervention component used two covariates:
                 <ul>
-                    <li>Previous 30-minute step count (log transformed in the same way as the proximal outcome)</li>
+                    <li>Previous 30-minute step count (log transformed and standardized in the same way as the proximal outcome)</li>
                     <li>Location (1=[Home, Work], 0=other location)</li>
-                </ul>The previous 30-minute step count is not a tailoring variable, as it is assumed (and was observed in the MRT study) to correlate similarly with proximal outcomes both when a message is sent and when it is not.
+                </ul>
+
+                The previous 30-minute step count is not a tailoring variable, as it is assumed (and was observed in the MRT study) to correlate similarly with proximal outcomes both when a message is sent and when it is not.
 
                 The location, on the other hand, is a tailoring variable, as it was found to moderate the effect of sending a message versus not sending a message on the proximal outcome.
                 {% endset %}
-                {% set block3 %}<b>Covariates</b>
-                Your algorithm will use covariates describing the participant’s internal state and external context when deciding between intervention options and when updating its model based on proximal outcomes associated with each decision. The information about participant’s internal state and external context is encoded as covariates in the pJITAI toolbox, which are variables you will provide to your algorithm along with every decision request. For example, you might provide the “previous 30 minute step count” as a covariate, based on the assumption that activity just before a decision point will correlate with the proximal outcome of step count after the decision point, regardless of whether the high-intensity option was chosen or not. 
+                {% set block3="Y" %}
+                {% set block3_title="Covariates and Tailoring Variables" %}
+                {% set block3_text %}
+                <b>Covariates</b>
+                Your algorithm will use covariates describing the individual’s internal state (e.g. mood) and external context (e.g. location, weather) when deciding between intervention options and when updating its model based on proximal outcomes associated with each decision. The information about an individual's  internal state and external context is encoded as covariates in the pJITAI toolbox, which are variables you will provide to your algorithm along with every decision request. For example, you might provide the “previous 30 minute step count” as a covariate, based on the assumption that activity just before a decision point will correlate with the proximal outcome of step count after the decision point, regardless of whether the high-intensity option was chosen or not. 
 
                 <b>Tailoring Variables</b>
                 Some covariates might also be tailoring variables. In contrast to non-tailoring covariates, tailoring variables are assumed to moderate the effect of the intervention options on the proximal outcome.
 
-                For example, the participant’s location, if encoded as a binary variable where 1=[Home,Work] and 0=[Other location], might be assumed to moderate the effect of the Activity Suggestion (i.e., Activity Suggestions may be more likely to be acted upon when at home or at work than when at, say, the grocery store).
+                For example, the individual’s location, if encoded as a binary covariate where 1=[Home,Work] and -1=[Other location], might be assumed to moderate the effect of the Activity Suggestion (i.e., Activity Suggestions may be more likely to be acted upon when at home or at work than when at, say, the grocery store).
+
+                <b>Standardization</b>
+                The algorithm will expect that the proximal outcome is approximately standardized. That is, the proximal outcome should be coded so that the average value of the proximal outcome will be roughly 0 and the standard deviation of the proximal outcome will be roughly 1.
+                
+                If the proximal outcome is binary then the proximal outcome might be coded using -1,1 instead of the usual 0,1.
+                
+                A rough rule-of-thumb for standardizing is to guess the usual range of the proximal outcome. Then the average value of the proximal outcome is roughly the center of this range and the standard deviation is roughly the length of the range divided by 4. 
+                
+                <ul>
+                    <li>[NOTE] When the personalization algorithm is running or actively deployed and receiving real-time data, the covariates should be standardized using the same values you used here!</li>
+                </ul>
                 {% endset %}
                 {% include 'includes/resources.html' %}
             </div>
