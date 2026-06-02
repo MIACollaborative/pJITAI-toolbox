@@ -41,15 +41,6 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="form-control-label" for="proximal_outcome_type">Outcome data type <span style="color: red;">*</span></label>
-                                                        <select id="proximal_outcome_type" name="proximal_outcome_type"
-                                                                class="form-control" aria-label="Default select example">
-                                                            <option value="Continuous" {% if settings.get('proximal_outcome_type') == 'Continuous' %}selected{% endif %}>Continuous</option>
-                                                            <option value="Binary" {% if settings.get('proximal_outcome_type') == 'Binary' %}selected{% endif %}>Binary</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="form-group">
                                                         <label class="form-control-label" for="proximal_outcome_description">Proximal outcome description</label>
                                                         <textarea name="proximal_outcome_description" id="proximal_outcome_description"
                                                                 rows="4" class="form-control"
@@ -79,9 +70,41 @@
                     </div>
                 </div>
                 {% set block1="Y" %}
-                {% set block1_title=["What is the proximal outcome?", "Outcome Data Type"] %}
-                {% set block1_text=["The proximal outcome is a streaming outcome that is collected by your app and is provided to the algorithm after each decision point. The outcome should reflect  the behavior you aim to influence with your intervention component. For example, if your  intervention component promotes  physical activity, a suitable proximal outcome could be the step count (as measured by an activity tracker like a Fitbit) within a short period after each decision point. In the description field, briefly describe your chosen proximal outcome in a manner that helps you and your team remember what you decided.", "The Thompson Sampling algorithm approximates the distribution of proximal outcome using  a normal distribution.  The  algorithm is able to personalize more quickly if the distribution of the proximal outcome is approximately symmetric.   The algorithm can  still personalize for binary and other discrete outcomes.  See the Discussion: Transforming Outcomes."] %}
-                {% set block2="In HeartSteps, the step count in a 30-minute window following each decision point is the proximal outcome. Because step counts are right skewed, they were log-transformed to make their distribution more symmetric. The proximal outcome is therefore written as  “(log) Next 30 min step count” to denote this transformation." %}
+                {% set block1_title=["What is the proximal outcome?"] %}
+                {% set block1_text=['The proximal outcome is a longitudinal outcome that is collected by your app or a wearable and is provided to the algorithm after each decision point. The outcome should reflect  the behavior you aim to influence with your intervention component. For example, if your  intervention component promotes  physical activity, a suitable proximal outcome could be the step count (as measured by an activity tracker) within a short period after each decision point. In the description field, briefly describe your chosen proximal outcome in a manner that helps you and your team remember what you decided.
+
+                At this time the proximal outcome must be interval data (that is the same interval between any two values of the proximal outcome should have the same meaning). For more, see the <a href="https://en.wikipedia.org/wiki/Level_of_measurement">Wikipedia article on “Level of measurement.” </a>
+
+                Standardization
+                The algorithm will expect that the proximal outcome is approximately standardized. That is, the proximal outcome should be coded so that the average value of the proximal outcome will be roughly 0 and the standard deviation of the proximal outcome will be roughly 1.
+                
+                If the proximal outcome is binary then the proximal outcome might be coded using -1,1 instead of the usual 0,1.
+                
+                A rough rule-of-thumb for standardizing is to guess the usual range of the proximal outcome. Then the average value of the proximal outcome is roughly the center of this range and the standard deviation is roughly the length of the range divided by 4.  
+                <ul>
+                    <li>
+                        [NOTE] When the personalization algorithm is running or actively deployed and receiving real-time data, the proximal outcome needs to be standardized using the  same values you used here!
+                    </li>
+                </ul>
+                '] %}
+                {% set block2="Y" %}
+                {% set block2_title="Transforming the Proximal Outcome in HeartSteps" %}
+                {% set block2_text %}
+                In HeartSteps, the step count in a 30-minute window following each decision point is the proximal outcome. Because step counts are right skewed, they were log-transformed to make their distribution more symmetric and approximately standardized. Then, the proximal outcome might be written as “(log) Next 30 min step count” to denote this transformation.
+
+                The 30-minute step count used by the HeartSteps Activity Suggestions intervention component takes on integer values (0, 1, 2,...) and is heavily right skewed with many values equal to zero and a long tail of higher step counts stretching towards the maximum expected value.  Thus to transform this proximal outcome so that its distribution is more symmetric, the raw step counts are log transformed, like so:
+                
+                <code>prox_outcome = log(raw_steps + 0.5)</code>
+                
+                The value of 0.5 is added to the raw_steps value because it avoids taking the log of 0 which is undefined.
+                
+                To standardize, suppose we assume 0 to be the minimum value for the raw 30-minute step count and 3000 to be the maximum value, we end up with:
+                
+                <code>min_prox_outcome = log(0 + 0.5) = -0.7</code>
+                <code>max_prox_outcome = log(3000 + 0.5) = 8.0</code>
+
+                Then from the above, we can use the rough rule of thumb: the average value of the proximal outcome is roughly the center of this range (use (8.0-(-0.7))/2=4.4)  and the standard deviation is roughly the length of the range divided by 4 (use (8.0-(-0.7))/4=2.2).  
+                {% endset %}
                 {% include 'includes/resources.html' %}
             </div>
         </div>

@@ -532,13 +532,11 @@ def model_settings(setting_type, project_uuid):
     all_comments = get_all_comments(project_uuid, page_name)
     comments_for_that_page = get_comments(project_uuid, page_name)
     user = user_id
-    proximal_outcome_type = project_details.get("intervention_settings", {}).get("proximal_outcome_type", "")
 
     if setting_type == "proximal_outcome":
         return render_template("design/model/proximal_outcome.html",
                                segment="model_proximal_outcome", all_menus=all_menus, menu_number=11,
                                project_name=project_name, modified_on=modified_on, settings=model_settings,
-                               proximal_outcome_type=proximal_outcome_type,
                                project_uuid=project_uuid,
                                all_covariates=all_covs, 
                                tailoring_covariates=tailoring_covariates, all_covariates_count=len(all_covariates), 
