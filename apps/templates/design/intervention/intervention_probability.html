@@ -39,19 +39,24 @@ $(document).ready(function(){
 
         if (lower >= upper) {
             if (showAlert) alert("Lower bound must be less than upper bound.");
-            // $('#intervention_probability_lower_bound').val('');
-            // $('#intervention_probability_upper_bound').val('');
             return false;
         }
         return true;
     }
 
-    $('#intervention_probability_lower_bound, #intervention_probability_upper_bound')
-        .on('input change', function () { 
-        check_lower_upper(true);
-        });
+    $('.next-submit-btn').on('click', function (event) {
+        if (!check_lower_upper(true)) {
+            event.preventDefault(); 
+            return false;
+        }
+    });
 
-    check_lower_upper(false);
+    // $('#intervention_probability_lower_bound, #intervention_probability_upper_bound')
+    //     .on('input change', function () { 
+    //     check_lower_upper(true);
+    //     });
+
+    // check_lower_upper(false);
 
     $("input[name=intervention_probability_lower_bound]").on('keyup', function () {
         $('#interven_lower').html($(this).val());
@@ -160,7 +165,7 @@ $(document).ready(function(){
                                                     
                                                     <button style="margin-left: 3px;" type="submit" type="button"
                                                             formaction="/intervention/settings/update_schedule/{{project_uuid}}"
-                                                            formmethod="post" class="btn btn-primary">Next &gt;
+                                                            formmethod="post" class="btn btn-primary next-submit-btn">Next &gt;
                                                     </button>
                                                 </div>
                                                 <div class="form-group">
