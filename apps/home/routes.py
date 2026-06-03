@@ -855,6 +855,14 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
                     <span style="color: black; background-color: #EBD5E9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:12px;">Covariates (Tailoring Variable)</span>
                     <br><br>
                     <span style="color: black; background-color: #FFF8E5; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:12px;">Coefficients</span>
+                    <br><br>
+                    <ul>
+                        <li>α<sub>0</sub>: Intercept</li>
+                        <li>Other α coefficients: Main effects of covariates</li>
+                        <li>β<sub>0</sub>: Main Treatment Effect</li>
+                        <li>Other β coefficients: Interaction effects (tailoring variables * treatment)</li>
+                        <li>ϵ: Error term</li>
+                    </ul>
                 </div>"""
     
     user_id = current_user.get_id()
