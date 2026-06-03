@@ -116,9 +116,13 @@ $(document).ready(function(){
                                                     class="btn btn-outline-primary" role="button">&lt; Back</a>
                                                     
                                                     <button style="margin-left: 3px;" type="submit" type="button"
-                                                            formaction="/covariates/settings/covariate_main_effect/{{project_uuid}}/{{cov_id}}"
+                                                            formaction="/covariates/settings/all/{{project_uuid}}/{{cov_id}}"
                                                             formmethod="post" class="btn btn-primary">Next &gt;
                                                     </button>
+                                                    <!-- <button style="margin-left: 3px;" type="submit" type="button"
+                                                            formaction="/covariates/settings/covariate_main_effect/{{project_uuid}}/{{cov_id}}"
+                                                            formmethod="post" class="btn btn-primary">Next &gt;
+                                                    </button> -->
                                                 </div>
                                                 <div class="form-group">
                                                     Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
