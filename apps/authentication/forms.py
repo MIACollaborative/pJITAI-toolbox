@@ -36,9 +36,6 @@ from wtforms.validators import Email, DataRequired
 
 
 class LoginForm(FlaskForm):
-    # displayname = TextField('Displayname',
-    #                      id='displayname_login',
-    #                      validators=[DataRequired()])
     email = TextField('Email',
                       id='email_login',
                       validators=[DataRequired()])

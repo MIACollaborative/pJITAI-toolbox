@@ -6,6 +6,23 @@
 
 {% block content %}
 
+<script>
+$(document).ready(function() {
+    function validateCheckbox() {
+        if (!$('#proximal_outcome_standardized').is(':checked')) {
+            alert('The algorithm expects that the proximal outcome is approximately standardized. You cannot proceed without checking the box confirming that your proximal outcome is approximately standardized.');
+            return false;
+        }
+        return true;
+    }
+    $('.next-submit-btn').on('click', function(e) {
+        if (!validateCheckbox()) {
+            e.preventDefault();
+            return false;
+        }
+    });
+});
+</script>
 <!-- [ Main Content ] start -->
 <div class="grid-container">
     <div class="pcoded-main-container">
@@ -39,6 +56,19 @@
                                                             value="{{settings.get('proximal_outcome_name','')}}" required
                                                             class="form-control" placeholder="Proximal outcome name">
                                                     </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label class="d-block mb-2" style="cursor: pointer;" for="proximal_outcome_standardized">
+                                                            Proximal outcome is approximately standardized <span style="color: red;">*</span>
+                                                        </label>
+
+                                                        <div class="checkbox checkbox-fill"> 
+                                                            <input type="checkbox" name="proximal_outcome_standardized" id="proximal_outcome_standardized"
+                                                                value="on" style="padding-bottom: 0;" {% if settings.get('proximal_outcome_standardized') == 'on' %}checked{% endif %}>
+                                                            <!-- Need the below line due to CSS format -->
+                                                            <label for="proximal_outcome_standardized" class="cr"></label>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="form-group">
                                                         <label class="form-control-label" for="proximal_outcome_description">Proximal outcome description</label>
@@ -53,7 +83,7 @@
                                                         class="btn btn-outline-primary" role="button">&lt; Back</a>
                                                     <button style="margin-left: 3px;" type="submit" formmethod="post"
                                                             formaction="/intervention/settings/intervention_option/{{project_uuid}}"
-                                                            class="btn btn-primary">Next &gt;
+                                                            class="btn btn-primary next-submit-btn">Next &gt;
                                                     </button>
                                                 </div>
                                                 <div class="modified-on">
@@ -75,7 +105,7 @@
 
                 At this time the proximal outcome must be interval data (that is the same interval between any two values of the proximal outcome should have the same meaning). For more, see the <a href="https://en.wikipedia.org/wiki/Level_of_measurement">Wikipedia article on “Level of measurement.” </a>
 
-                Standardization
+                <b>Standardization</b>
                 The algorithm will expect that the proximal outcome is approximately standardized. That is, the proximal outcome should be coded so that the average value of the proximal outcome will be roughly 0 and the standard deviation of the proximal outcome will be roughly 1.
                 
                 If the proximal outcome is binary then the proximal outcome might be coded using -1,1 instead of the usual 0,1.

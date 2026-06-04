@@ -409,6 +409,7 @@ def intervention_settings(setting_type, project_uuid):
         page_name_log = setting_type
 
     if request.method == 'POST':
+        print(f"POSTED DATA {request.form.to_dict()}")
         timestamp = datetime.now(get_localzone()).isoformat()
         add_menu(user_id, project_uuid, request.path)
         if not setting_type == "proximal_outcome":  # In general summry, details is always empty
