@@ -214,7 +214,7 @@ $(document).ready(function() {
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Covariate
                                             </p></a>
                                             <div class="center-buttons">
-                                                <a href="/model/settings/proximal_outcome/{{project_uuid}}"
+                                                <a href="/model/settings/standardized_proximal_outcome/{{project_uuid}}"
                                                 class="btn btn-outline-primary" role="button">&lt; Back</a>
                                                 <button style="margin-left: 3px;" type="submit" type="button"
                                                         formaction="/model/settings/intercept/{{project_uuid}}"
@@ -253,7 +253,7 @@ $(document).ready(function() {
                 <b>Tailoring Variables</b>
                 Some covariates might also be tailoring variables. In contrast to non-tailoring covariates, tailoring variables are assumed to moderate the effect of the intervention options on the proximal outcome.
 
-                For example, the individual’s location, if encoded as a binary covariate where 1=[Home,Work] and -1=[Other location], might be assumed to moderate the effect of the Activity Suggestion (i.e., Activity Suggestions may be more likely to be acted upon when at home or at work than when at, say, the grocery store).
+                For example, the individual’s location, if encoded as a binary covariate where 1=[Home,Work] and 0=[Other location], might be assumed to moderate the effect of the Activity Suggestion (i.e., Activity Suggestions may be more likely to be acted upon when at home or at work than when at, say, the grocery store).
 
                 <b>Standardization</b>
                 The algorithm will expect that the proximal outcome is approximately standardized. That is, the proximal outcome should be coded so that the average value of the proximal outcome will be roughly 0 and the standard deviation of the proximal outcome will be roughly 1.

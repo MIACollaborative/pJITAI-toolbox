@@ -475,8 +475,8 @@ def model_settings(setting_type, project_uuid):
     project_name = project_details.get("general_settings", {}).get("project_name", "")
     full_url = request.url
 
-    if setting_type == "proximal_outcome":
-        page_name = "model_proximal_outcome"
+    if setting_type == "standardized_proximal_outcome":
+        page_name = "model_standardized_proximal_outcome"
         page_name_log = "intervention_summary"
     elif setting_type == "intercept":
         page_name = "model_intercept"
@@ -533,8 +533,8 @@ def model_settings(setting_type, project_uuid):
     comments_for_that_page = get_comments(project_uuid, page_name)
     user = user_id
 
-    if setting_type == "proximal_outcome":
-        return render_template("design/model/proximal_outcome.html",
+    if setting_type == "standardized_proximal_outcome":
+        return render_template("design/model/standardized_proximal_outcome.html",
                                segment="model_proximal_outcome", all_menus=all_menus, menu_number=11,
                                project_name=project_name, modified_on=modified_on, settings=model_settings,
                                project_uuid=project_uuid,
