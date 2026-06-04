@@ -11,7 +11,7 @@
               <div style="margin-bottom: 10px;">{{block1_pretext}}</div>
               {% for i in range(block1_text|length) %}
               <div>
-                <b>{{ block1_title[i] }}</b>
+                <b>{{ block1_title[i]|safe }}</b>
                 <p style="margin-top: 3px;white-space: pre-line;">{{ block1_text[i] | safe}}</p>
               </div>
               {% endfor %}

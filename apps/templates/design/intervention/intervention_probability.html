@@ -51,13 +51,6 @@ $(document).ready(function(){
         }
     });
 
-    // $('#intervention_probability_lower_bound, #intervention_probability_upper_bound')
-    //     .on('input change', function () { 
-    //     check_lower_upper(true);
-    //     });
-
-    // check_lower_upper(false);
-
     $("input[name=intervention_probability_lower_bound]").on('keyup', function () {
         $('#interven_lower').html($(this).val());
         dp_freq = $('#dp_freq').text()
