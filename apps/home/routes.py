@@ -613,9 +613,6 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     elif setting_type == "covariate_define":
         page_name = setting_type
         page_name_log = "covariates_all"
-    # elif setting_type == "covariate_attributes":
-    #     page_name = setting_type
-    #     page_name_log = "covariate_define"
     elif setting_type == "covariate_main_effect":
         page_name = setting_type
         page_name_log = "covariate_define"
@@ -677,12 +674,6 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
         return render_template("design/covariates/covariate_define.html", segment="covariates", all_menus=all_menus,
                                menu_number=14, project_name=project_name, modified_on=modified_on, settings=settings,
                                project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    # elif setting_type == "covariate_attributes":
-    #     cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
-    #     return render_template("design/covariates/covariate_attributes.html", segment="covariates", all_menus=all_menus,
-    #                            menu_number=14, project_name=project_name, modified_on=modified_on,
-    #                            covariates_types=covariates_types, cov_name=cov_name, settings=settings, project_uuid=project_uuid,
-    #                            cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_main_effect":
         cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
         is_tailoring = project_details_obj.covariates.get(cov_id).get("tailoring_variable", "no")
