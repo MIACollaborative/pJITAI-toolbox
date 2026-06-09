@@ -33,32 +33,6 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <!-- <div class="row congratstextbox" style="margin-bottom: 30px;">
-                                                    <div class="col-1">
-                                                        <img src="{{ config.ASSETS_ROOT }}/images/pjitai/celebration.png"
-                                                            class="img-responsive">
-                                                    </div>
-                                                    <div class="col-11" style="padding-left: 30px;">
-
-
-                                                        <p>Great work! You have completed the intervention settings. Please review the settings below. If you want to change these or any settings later, you can go Back or use the navigation on the left. 
-
-                                                        Next we will ask you to input Model Settings. These are the settings that will be used to establish initial values of the parameters in the model for the proximal outcome.  The closer the settings are to describing likely effects in your study, the more quickly the algorithm will personalize.
-
-                                                        For this section, we will assume that you have access to previous results from a Micro-Randomized Trial (MRT). You will be asked about various features of your MRT data, such as the mean and standard deviation of the proximal outcome and covariates.
-
-                                                        If you don’t have such data ready to hand, you can enter estimates for the requested values from various sources, including:</p>
-                                                        <ul>
-                                                            <li>published information about similar intervention components</li>
-                                                            <li>the HeartSteps example values, if appropriate</li>
-                                                            <li>using your expertise and clinical judgement</li>
-                                                        </ul>
-                                                        
-
-                                                    </div>
-
-                                                </div> -->
-
 
                                                 <h5>Proximal Outcome</h5>
                                                 <hr>
@@ -68,14 +42,6 @@
                                                         type="text" id="proximal_outcome_name"
                                                         name="proximal_outcome_name" class="form-control"
                                                         placeholder="Proximal outcome name" required>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="form-control-label" for="proximal_outcome_type">Outcome data type</label>
-                                                    <select disabled id="proximal_outcome_type" name="proximal_outcome_type"
-                                                            class="form-control" aria-label="Default select example">
-                                                        <option selected>{{settings.get('proximal_outcome_type')}}</option>
-                                                    </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="proximal_outcome_description">Proximal outcome description</label>
@@ -193,7 +159,7 @@
                                                     <a href="/intervention/settings/update_schedule/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">&lt; Back</a>
                                                     <button style="margin-left: 3px;" type="submit" formmethod="post"
-                                                            formaction="/model/settings/proximal_outcome/{{project_uuid}}"
+                                                            formaction="/model/settings/standardized_proximal_outcome/{{project_uuid}}"
                                                             class="btn btn-primary" role="button">Go to Model Settings &gt;
                                                     </button>
                                                 </div>
@@ -215,7 +181,7 @@
                                                 <div class="form-group">                                                    <a href="/intervention/settings/update_schedule/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
                                                     <button type="submit" formmethod="post"
-                                                            formaction="/model/settings/proximal_outcome/{{project_uuid}}"
+                                                            formaction="/model/settings/standardized_proximal_outcome/{{project_uuid}}"
                                                             class="btn btn-primary" role="button">Go to Model Settings
                                                     </button>
                                                 </div>

@@ -7085,7 +7085,7 @@ select.form-control-lg:not([size]):not([multiple]) {
       Radio & Checked css start
 ==========================  **/
 .checkbox {
-  padding: 10px 0;
+  padding: 10px 0 0 0;
   min-height: auto;
   position: relative;
   margin-right: 5px;
@@ -7102,7 +7102,6 @@ select.form-control-lg:not([size]):not([multiple]) {
   content: "\e83f";
   width: 22px;
   height: 22px;
-  display: inline-block;
   margin-right: 10px;
   border: 2px solid #e9eaec;
   border-radius: 3px;
