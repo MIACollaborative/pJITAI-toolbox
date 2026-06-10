@@ -675,13 +675,13 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
                                menu_number=14, project_name=project_name, modified_on=modified_on, settings=settings,
                                project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_main_effect":
-        cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
-        is_tailoring = project_details_obj.covariates.get(cov_id).get("tailoring_variable", "no")
-        formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=cov_id, is_intercept=False)
-        cov_idx = list(all_covariates.keys()).index(cov_id) + 1
-        return render_template("design/covariates/covariate_main_effect.html", segment="covariates", formula=formula, cov_idx=cov_idx,
-                               cov_name=cov_name, all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
-                               is_tailoring=is_tailoring, settings=settings, project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
+        for c in all_covariates.keys():
+            f = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=c, is_intercept=False)
+            all_covariates[c]['formula'] = f
+            all_covariates[c]['idx'] = list(all_covariates.keys()).index(c) + 1
+        return render_template("design/covariates/covariate_main_effect.html", segment="covariates", all_covariates=all_covariates,
+                               all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
+                               project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_tailored_effect":
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=cov_id, covariate_tailored_effect=True, is_intercept=False)
         cov_name = all_covariates.get(cov_id, {}).get("covariate_name")

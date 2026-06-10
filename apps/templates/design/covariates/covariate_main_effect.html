@@ -21,7 +21,7 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3>Covariates / {{cov_name}} / Main Effect</h3>
+                                                <h3>Covariates / Main Effect</h3>
                                             </div>
 
                                         </div>
@@ -33,18 +33,20 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
+                                                {% for key, cov in all_covariates.items() %}
                                                 <div class="row" style="display: flex; flex-direction: row; ">
-                                                    <div class="col" style="flex: 4;">
+                                                    <div class="col" style="flex: 5;">
+                                                        <h4>Main Effect of the Covariate: {{ cov.covariate_name }}</h4>
                                                         <div class="form-group">
-                                                            <label class="form-control-label" for="main_effect_prior_mean">Main effect of the covariate: prior mean (<b>&mu;<sub>&alpha;{{cov_idx}}</sub></b>)</label>
-                                                            <input value="{{settings.main_effect_prior_mean}}" type="number"
+                                                            <label class="form-control-label" for="main_effect_prior_mean">Main effect of the covariate: prior mean (<b>&mu;<sub>&alpha;{{cov.idx}}</sub></b>)</label>
+                                                            <input value="{{cov.main_effect_prior_mean}}" type="number"
                                                                 step="0.01" name="main_effect_prior_mean"
                                                                 class="form-control" placeholder="" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="form-control-label"
-                                                                for="main_effect_prior_standard_deviation">Main effect of the covariate: prior standard deviation (<b>&sigma;<sub>&alpha;{{cov_idx}}</sub></b>)</label>
-                                                            <input value="{{settings.main_effect_prior_standard_deviation}}"
+                                                                for="main_effect_prior_standard_deviation">Main effect of the covariate: prior standard deviation (<b>&sigma;<sub>&alpha;{{cov.idx}}</sub></b>)</label>
+                                                            <input value="{{cov.main_effect_prior_standard_deviation}}"
                                                                 type="number" min="0" step="0.01"
                                                                 name="main_effect_prior_standard_deviation"
                                                                 oninput="check(this)"
@@ -64,82 +66,34 @@
 
                                                     </div>
 
-                                                    <div class="col" style="flex: 6;">
-                                                        {{formula|safe}}
+                                                    <div class="col" style="flex: 5;">
+                                                        {{cov.formula|safe}}
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="row">
-                                    <!-- [ tabs ] start -->
-                                    <div class="col-sm-12">
-                                        <div class="tab-content" id="myTabContent">
-                                            <div class="tab-item">
-                                                <h5>Explanation</h5>
-                                                <p>We are asking about the main effect of the covariate in the Bayesian
-                                                    linear regression. This coefficient corresponds to the amount of change
-                                                    in the proximal outcome per unit change of the covariate when
-                                                    intervention option B is provided (i.e., “do nothing” in the HeartSteps
-                                                    example) and all the other covariates are fixed.</p>
-
-                                                <p>Many papers may not provide the prior mean and the prior standard
-                                                    deviation of the main effect. If you don’t have good information 
-                                                    about the prior mean, then we suggest you set the prior mean to 0. 
-                                                    If you don’t have good information about the prior standard deviation, 
-                                                    then we suggest you set the prior standard deviation to 3.16.</p> 
-                                                    
-                                                <p>If you have access to data from an MRT, please read [tutorial] to see how
-                                                    to run an analysis to find these values.</p>
-
-                                                <p>Please read [tutorial] for more details.</p>
-                                            </div>
-                                            <div class="tab-item">
-                                                <h5>HeartSteps Example</h5>
-                                                <h6>Prior Mean</h6>
-                                                <p>0</p>
-                                                <h6>Prior Standard Deviation</h6>
-                                                <p>3.16</p>
-                                                <p class="mb-0">This information is not reported in the HeartSteps V1 paper.
-                                                    Thus, we demonstrate using the default values here, i.e., prior mean = 0
-                                                    and prior standard deviation = 3.16.</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <!-- [ tabs ] end -->
-                                </div>
-                                <!-- [ Main Content ] end -->
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="form-group">
-                                                    <a href="/covariates/settings/covariate_define/{{project_uuid}}/{{cov_id}}"
-                                                    class="btn btn-outline-primary" role="button">Back</a>
-                                                    {% if is_tailoring=="yes" %}
+                                                {% endfor %}
+                                                <div class="center-buttons">
+                                                    <a href="/model/settings/intercept/{{project_uuid}}"
+                                                        class="btn btn-outline-primary" role="button">Back</a>
+                                                    <button style="margin-left: 3px;" type="submit" type="button"
+                                                            formaction="/model/settings/main_treatment_effect/{{project_uuid}}"
+                                                            formmethod="post" class="btn btn-primary">Next
+                                                    </button>
+                                                    <!-- {% if is_tailoring=="yes" %}
                                                     <button type="submit" type="button"
                                                             formaction="/covariates/settings/covariate_tailored_effect/{{project_uuid}}/{{cov_id}}"
                                                             formmethod="post" class="btn btn-primary">Next
                                                     </button>
                                                     {% else %}
-                                                    <button type="submit" type="button"
+                                                    <button style="margin-left: 3px;" type="submit" type="button"
                                                             formaction="/covariates/settings/covariate_summary/{{project_uuid}}/{{cov_id}}"
                                                             formmethod="post" class="btn btn-primary">Next
                                                     </button>
-                                                    {% endif %}
+                                                    {% endif %} -->
                                                 </div>
                                                 <div class="form-group">
                                                     Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -147,6 +101,41 @@
                         </div>
                     </div>
                 </div>
+                {% set block1="Y" %}
+                {% set block1_title=["Prior mean and standard deviation of the main effect of the covariate"] %}
+                {% set block1_text=["Here you should enter the expected (or “prior”) effect of the covariate on the proximal outcome. This value corresponds to the average amount that the proximal outcome is expected to change per unit change in the covariate. "]%}
+                {% set block2="Y" %}
+                {% set block2_title="Normal Prior" %}
+                {% set block2_text %}
+                <b>Normal Prior Introduction</b>
+
+                <b>Prior Mean:</b> A prior mean of 0 encodes the prior of “no effect” by the covariate; often used when no data has yet been collected. The personalization algorithm must find sufficient evidence in your data to move the estimated main effect of a covariate away from zero.
+
+                <b>Prior Standard Deviation:</b> The smaller the value you select, the greater the data evidence has to be for the algorithm to produce an estimated effect of the covariate away from the prior mean; smaller values communicate that you suspect that the true main effect coefficient is close to the value of the prior mean. The larger the prior standard deviation is the more you are communicating that you want the value of the estimated main effect to be primarily determined by the data and not the prior. Often data scientists will not use a large prior standard deviation because the amount of data the algorithm has on an individual early in the study is very small; they don’t want the estimate to be unduly impacted by small amounts of data with potentially unusual values or errors.
+                {% endset %}
+                {% set block3="Y" %}
+                {% set block3_title="How to set prior values?" %}
+                {% set block3_text %}
+                Assuming all covariates and the proximal outcome provided to the personalization algorithm will be approximately standardized (so average value of each standardized covariate/proximal outcome is roughly close to 0 and the standard deviation of each standardized covariate/proximal outcome is roughly 1), here are some rules of thumb for setting the prior mean and standard deviation for a main effect regression coefficient:
+                <ul>
+                    <li>
+                        <b>Using MRT data to select the prior mean and standard deviation:</b> To obtain prior means and standard deviations, we suggest you fit person-specific regression models, one per person in the MRT data (using approximately standardized covariates and proximal outcome). If a person does not have a minimum number of decision points, you might use <a href="https://en.wikipedia.org/wiki/Ridge_regression">ridge regression</a>. The estimators as well as their variability across the individual person-specific regression can be used to select the prior mean and standard deviation. This approach utilizes the between individual heterogeneity in regression coefficients to proxy the subjective prior uncertainty about the true regression coefficients. And the average of these regression coefficients across individuals proxies the consensus viewpoint of what the regression coefficient might be.
+
+                        If the consensus regression coefficient is scientifically significant with, for example, a value of 5, then you might set the <b>Prior Mean</b> of the main effect to 5 and set the <b>Prior Standard Deviation</b> to the standard deviation of the individual estimates of this main effect regression coefficient.
+
+                        If the consensus regression coefficient is not scientifically significant, then you might set the <b>Prior Mean</b> to 0. Furthermore, you can set the <b>Prior Standard Deviation</b> to ½ of the standard deviation of the individual estimates of this main effect regression coefficient. The smaller you set the Prior Standard Deviation, the more evidence is required from the data that this particular coefficient is actually not zero. For other  ways to set priors, please refer to <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8439432/">HeartSteps</a>, <a href="https://arxiv.org/abs/2406.13127">Oralytics</a> and <a href="https://arxiv.org/abs/2408.15076">MiWaves</a>.
+                    </li>
+
+                    <li>
+                        If the covariate is not present in the MRT data, then a <b>Prior Mean</b> = 0 and <b>Prior Standard Deviation</b> = 3.16 is often used as a <a href="https://github.com/stan-dev/stan/wiki/prior-choice-recommendations">weakly informative prior</a>.
+
+                        Note that prior standard deviation = 3.16, though it seems specific, is chosen because its square is approximately 10 (i.e. variance = 10). It expresses uncertainty. This communicates that the true main effect is likely within the range of -6 to +6 (recall the proximal outcome is approximately standardized). This choice of prior standard deviation is viewed as flexible enough to let the data speak for itself while providing robustness to errors when the amount of data is small.
+
+                        For a more detailed discussion about how to set priors, see <a href="https://github.com/stan-dev/stan/wiki/prior-choice-recommendations">here</a>. 
+                    </li>
+                </ul>
+                {% endset %}
+                {% include 'includes/resources.html' %}
             </div>
         </div>
     </div>
