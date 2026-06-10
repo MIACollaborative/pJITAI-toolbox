@@ -56,9 +56,6 @@
                 "/intervention/settings/decision_point/"+project_uuid in all_menus %}
                 href="/intervention/settings/decision_point/{{project_uuid}}" {% endif %} class="">Decision Points</a>
             </li>
-            <!-- <li class="{% if 'intervention_ineligibility' in segment %} active {% endif %}"><a {% if
-                "/intervention/settings/ineligibility/"+project_uuid in all_menus %}
-                href="/intervention/settings/ineligibility/{{project_uuid}}" {% endif %} class="">Ineligibility</a></li> -->
             <li class="{% if 'intervention_probability' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/intervention_probability/"+project_uuid in all_menus %}
                 href="/intervention/settings/intervention_probability/{{project_uuid}}" {% endif %}
@@ -87,7 +84,7 @@
             <li class="{% if 'model_intercept' in segment %} active {% endif %}"><a {% if
                 "/model/settings/intercept/"+project_uuid in all_menus %}
                 href="/model/settings/intercept/{{project_uuid}}" {% endif %} class="">Intercept</a></li>
-            <li class="{% if 'covariate_main_effect' in segment %} active {% endif %}"><a {% if
+            <li class="{% if 'covariates_main_effect' in segment %} active {% endif %}"><a {% if
                 "/covariates/settings/covariate_main_effect/"+project_uuid in all_menus %}
                 href="/covariates/settings/covariate_main_effect/{{project_uuid}}" {% endif %} class="">Covariates Main Effect</a></li>
             <li class="{% if 'model_main_treatment_effect' in segment %} active {% endif %}"><a {% if

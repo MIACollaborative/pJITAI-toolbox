@@ -409,7 +409,6 @@ def intervention_settings(setting_type, project_uuid):
         page_name_log = setting_type
 
     if request.method == 'POST':
-        print(f"POSTED DATA {request.form.to_dict()}")
         timestamp = datetime.now(get_localzone()).isoformat()
         add_menu(user_id, project_uuid, request.path)
         if not setting_type == "proximal_outcome":  # In general summry, details is always empty
@@ -683,13 +682,13 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
             f = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=c, is_intercept=False)
             all_covariates[c]['formula'] = f
             all_covariates[c]['idx'] = list(all_covariates.keys()).index(c) + 1
-        return render_template("design/covariates/covariate_main_effect.html", segment="covariate_main_effect", all_covariates=all_covariates,
+        return render_template("design/covariates/covariate_main_effect.html", segment="covariates_main_effect", all_covariates=all_covariates,
                                all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
                                project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_tailored_effect":
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=cov_id, covariate_tailored_effect=True, is_intercept=False)
         cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
-        return render_template("design/covariates/covariate_tailored_effect.html", segment="covariate_tailored_effect",
+        return render_template("design/covariates/covariate_tailored_effect.html", segment="covariates_tailored_effect",
                                formula=formula, cov_name=cov_name, all_menus=all_menus, menu_number=14, project_name=project_name,
                                modified_on=modified_on, settings=settings, project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_summary":
