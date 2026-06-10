@@ -32,9 +32,6 @@
                     "/projects/settings/personalized_method/"+project_uuid in all_menus %}
                     href="/projects/settings/personalized_method/{{project_uuid}}" {% endif %} class="">Personalization
                     Method</a></li>
-                <!-- <li class="{% if 'scenario' in segment %} active {% endif %}"><a {% if
-                    "/projects/settings/scenario/"+project_uuid in all_menus %}
-                    href="/projects/settings/scenario/{{project_uuid}}" {% endif %} class="">Scenario</a></li> -->
                 <li class="{% if 'general_summary' in segment %} active {% endif %}"><a {% if
                     "/projects/settings/summary/"+project_uuid in all_menus %}
                     href="/projects/settings/summary/{{project_uuid}}" {% endif %} class="">Summary</a></li>
@@ -84,12 +81,15 @@
                 "/model/settings/standardized_proximal_outcome/"+project_uuid in all_menus %}
                 href="/model/settings/standardized_proximal_outcome/{{project_uuid}}" {% endif %} class="">Proximal Outcome Attribute
                 </a></li>
-            <li class="{% if 'covariates' in segment %} active {% endif %}"><a {% if
+            <li class="{% if 'covariates_all' in segment %} active {% endif %}"><a {% if
                 "/covariates/settings/all/"+project_uuid in all_menus %}
-                href="/covariates/settings/all/{{project_uuid}}" {% endif %} class="">Covariates</a></li>
+                href="/covariates/settings/all/{{project_uuid}}" {% endif %} class="">Covariates Define</a></li>
             <li class="{% if 'model_intercept' in segment %} active {% endif %}"><a {% if
                 "/model/settings/intercept/"+project_uuid in all_menus %}
                 href="/model/settings/intercept/{{project_uuid}}" {% endif %} class="">Intercept</a></li>
+            <li class="{% if 'covariate_main_effect' in segment %} active {% endif %}"><a {% if
+                "/covariates/settings/covariate_main_effect/"+project_uuid in all_menus %}
+                href="/covariates/settings/covariate_main_effect/{{project_uuid}}" {% endif %} class="">Covariates Main Effect</a></li>
             <li class="{% if 'model_main_treatment_effect' in segment %} active {% endif %}"><a {% if
                 "/model/settings/main_treatment_effect/"+project_uuid in all_menus %}
                 href="/model/settings/main_treatment_effect/{{project_uuid}}" {% endif %} class="">Main Treatment

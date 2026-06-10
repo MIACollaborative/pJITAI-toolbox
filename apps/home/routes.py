@@ -494,8 +494,6 @@ def model_settings(setting_type, project_uuid):
     else:
         page_name = setting_type
 
-    # proximal_outcome_name (general settings)
-    # intervention_component_name (general settings)
     if request.method == 'POST':
         timestamp = datetime.now(get_localzone()).isoformat()
         add_menu(user_id, project_uuid, request.path)
@@ -506,7 +504,13 @@ def model_settings(setting_type, project_uuid):
                 if project_details.get("covariates"):
                     all_covariates = project_details.get("covariates")
                     add_project_logs(project_uuid=project_uuid, created_by=user_id, details=all_covariates, page_name=page_name_log, timestamp=timestamp)
-        update_model_settings(request.form.to_dict(), project_details_obj)
+        if setting_type == "main_treatment_effect": # update covariate main effect here
+           for k, v in request.form.to_dict().items():
+               cov_id = k.split("_")[-1]
+               k_new_name = k.rsplit("_", 1)[0]
+               update_covariates_settings(data={k_new_name: v}, project_details_obj=project_details_obj, cov_id=cov_id)
+        else:
+            update_model_settings(request.form.to_dict(), project_details_obj)
         project_details, project_details_obj = get_project_details(project_uuid, user_id)
 
     if project_details.get("model_settings"):
@@ -521,7 +525,7 @@ def model_settings(setting_type, project_uuid):
         # model_settings['noise_scale'] = 3.16 # TWH Why was this overriding inputs here?
         # model_settings['noise_degree_of_freedom'] = 5 # TWH Why was this overriding inputs here?
         for c in all_covariates:
-            print(f'model settings {all_covariates[c]}')
+            # print(f'model settings {all_covariates[c]}')
             all_covs.append(all_covariates[c])
             if all_covariates[c]['tailoring_variable'] == 'yes':
                 tailoring_covariates.append(all_covariates[c])
@@ -649,7 +653,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
                 db.session.commit()
                 
         if cov_id:
-            update_covariates_settings(form_data, project_details_obj, project_details, cov_id)
+            update_covariates_settings(form_data, project_details_obj, cov_id)
             project_details, project_details_obj = get_project_details(project_uuid, user_id)
             all_covariates = project_details.get("covariates")
             settings = project_details.get("covariates").get(cov_id)            
@@ -666,12 +670,12 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     if setting_type == "all":
         new_uuid = uuid4()
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="no", cov_id=cov_id, is_intercept=False, is_all=True)
-        return render_template("design/covariates/covariates.html", segment="covariates", all_menus=all_menus,
+        return render_template("design/covariates/covariates.html", segment="covariates_all", all_menus=all_menus,
                                menu_number=14, project_name=project_name, modified_on=modified_on, formula=formula,
                                all_covariates=all_covariates, settings=settings, new_uuid=new_uuid,
                                project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_define":
-        return render_template("design/covariates/covariate_define.html", segment="covariates", all_menus=all_menus,
+        return render_template("design/covariates/covariate_define.html", segment="covariates_define", all_menus=all_menus,
                                menu_number=14, project_name=project_name, modified_on=modified_on, settings=settings,
                                project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_main_effect":
@@ -679,13 +683,13 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
             f = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=c, is_intercept=False)
             all_covariates[c]['formula'] = f
             all_covariates[c]['idx'] = list(all_covariates.keys()).index(c) + 1
-        return render_template("design/covariates/covariate_main_effect.html", segment="covariates", all_covariates=all_covariates,
+        return render_template("design/covariates/covariate_main_effect.html", segment="covariate_main_effect", all_covariates=all_covariates,
                                all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
                                project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_tailored_effect":
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=cov_id, covariate_tailored_effect=True, is_intercept=False)
         cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
-        return render_template("design/covariates/covariate_tailored_effect.html", segment="covariates",
+        return render_template("design/covariates/covariate_tailored_effect.html", segment="covariate_tailored_effect",
                                formula=formula, cov_name=cov_name, all_menus=all_menus, menu_number=14, project_name=project_name,
                                modified_on=modified_on, settings=settings, project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_summary":
@@ -694,7 +698,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
         if tal_val == 'no':
             is_tailoring = False
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="yes", add_red_note="no", is_intercept=False)
-        return render_template("design/covariates/covariate_summary.html", segment="covariates", formula=formula,
+        return render_template("design/covariates/covariate_summary.html", segment="covariate_summary", formula=formula,
                                all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
                                all_covariates=all_covariates, covariates_types=covariates_types, settings=settings,
                                project_uuid=project_uuid, cov_id=cov_id, is_tailoring=is_tailoring, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
