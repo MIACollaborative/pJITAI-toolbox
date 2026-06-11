@@ -91,9 +91,13 @@
                 "/model/settings/main_treatment_effect/"+project_uuid in all_menus %}
                 href="/model/settings/main_treatment_effect/{{project_uuid}}" {% endif %} class="">Main Treatment
                 Effect</a></li>
-            <li class="{% if 'main_noise' in segment %} active {% endif %}"><a {% if
-                "/model/settings/main_noise/"+project_uuid in all_menus %}
-                href="/model/settings/main_noise/{{project_uuid}}" {% endif %} class="">Noise</a></li>
+            <li class="{% if 'covariates_interaction_effect' in segment %} active {% endif %}"><a {% if
+                "/model/settings/main_treatment_effect/"+project_uuid in all_menus %}
+                href="/covariates/settings/covariate_interaction_effect/{{project_uuid}}" {% endif %} class="">Covariates Interaction
+                Effect</a></li>
+            <li class="{% if 'main_error' in segment %} active {% endif %}"><a {% if
+                "/model/settings/main_error/"+project_uuid in all_menus %}
+                href="/model/settings/main_error/{{project_uuid}}" {% endif %} class="">Error</a></li>
             <li class="{% if 'model_summary' in segment %} active {% endif %}"><a {% if
                 "/model/settings/summary/"+project_uuid in all_menus %} href="/model/settings/summary/{{project_uuid}}"
                 {% endif %} class="">Summary</a></li>

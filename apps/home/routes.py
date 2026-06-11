@@ -484,12 +484,12 @@ def model_settings(setting_type, project_uuid):
     elif setting_type == "main_treatment_effect":
         page_name = "model_main_treatment_effect"
         page_name_log = "model_intercept"
-    elif setting_type == "main_noise":
-        page_name = "model_main_noise"
+    elif setting_type == "main_error":
+        page_name = "model_main_error"
         page_name_log = "model_main_treatment_effect"
     elif setting_type == "summary":
         page_name = "model_summary"
-        page_name_log = "model_main_noise"
+        page_name_log = "model_main_error"
     else:
         page_name = setting_type
 
@@ -521,10 +521,7 @@ def model_settings(setting_type, project_uuid):
             "proximal_outcome_name")
         model_settings["intervention_component_name"] = project_details.get("general_settings", {}).get(
             "intervention_component_name")
-        # model_settings['noise_scale'] = 3.16 # TWH Why was this overriding inputs here?
-        # model_settings['noise_degree_of_freedom'] = 5 # TWH Why was this overriding inputs here?
         for c in all_covariates:
-            # print(f'model settings {all_covariates[c]}')
             all_covs.append(all_covariates[c])
             if all_covariates[c]['tailoring_variable'] == 'yes':
                 tailoring_covariates.append(all_covariates[c])
@@ -561,10 +558,10 @@ def model_settings(setting_type, project_uuid):
                                all_covariates=all_covs, formula=formula,
                                tailoring_covariates=tailoring_covariates, all_covariates_count=len(all_covariates), 
                                tailoring_covariates_count=len(tailoring_covariates), comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "main_noise":#@Anand - noise page
+    elif setting_type == "main_error":#@Anand - error page
         '''@Anand - check this menu_number = 14'''
-        formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", is_intercept=False, is_noise=True)
-        return render_template("design/model/main_noise.html", segment="model_main_noise",
+        formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", is_intercept=False, is_error=True)
+        return render_template("design/model/main_error.html", segment="model_main_error",
                                all_menus=all_menus, menu_number=14 , project_name=project_name, modified_on=modified_on,
                                settings=model_settings, project_uuid=project_uuid,
                                all_covariates=all_covs, formula=formula,
@@ -591,7 +588,6 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     settings = {}
     modified_on = ""
     all_covariates = {}
-    covariates_types = ['Continuous', 'Binary']
     formula = ""
 
     project_details, project_details_obj = get_project_details(project_uuid, user_id)
@@ -619,12 +615,12 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     elif setting_type == "covariate_main_effect":
         page_name = setting_type
         page_name_log = "covariate_define"
-    elif setting_type == "covariate_tailored_effect":
+    elif setting_type == "covariate_interaction_effect":
         page_name = setting_type
         page_name_log = "covariate_main_effect"
     elif setting_type == "covariate_summary":
         page_name = setting_type
-        page_name_log = "covariate_tailored_effect"
+        page_name_log = "covariate_interaction_effect"
     else:
         page_name = setting_type
         page_name_log = setting_type
@@ -685,22 +681,27 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
         return render_template("design/covariates/covariate_main_effect.html", segment="covariates_main_effect", all_covariates=all_covariates,
                                all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
                                project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "covariate_tailored_effect":
-        formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=cov_id, covariate_tailored_effect=True, is_intercept=False)
-        cov_name = all_covariates.get(cov_id, {}).get("covariate_name")
-        return render_template("design/covariates/covariate_tailored_effect.html", segment="covariates_tailored_effect",
-                               formula=formula, cov_name=cov_name, all_menus=all_menus, menu_number=14, project_name=project_name,
-                               modified_on=modified_on, settings=settings, project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "covariate_summary":
-        tal_val = project_details_obj.covariates.get(cov_id).get("tailoring_variable", "no")
-        is_tailoring = True
-        if tal_val == 'no':
-            is_tailoring = False
-        formula = generate_formula(project_uuid=project_uuid, is_summary_page="yes", add_red_note="no", is_intercept=False)
-        return render_template("design/covariates/covariate_summary.html", segment="covariate_summary", formula=formula,
-                               all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
-                               all_covariates=all_covariates, covariates_types=covariates_types, settings=settings,
-                               project_uuid=project_uuid, cov_id=cov_id, is_tailoring=is_tailoring, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
+    elif setting_type == "covariate_interaction_effect":
+        all_tailoring_covariates = {}
+        for k, c in all_covariates.items():
+            if c['tailoring_variable'] == 'yes':
+                all_tailoring_covariates[k] = all_covariates[k]
+                f = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=k, is_intercept=False, covariate_interaction_effect=True)
+                all_tailoring_covariates[k]['formula'] = f
+                all_tailoring_covariates[k]['idx'] = list(all_covariates.keys()).index(k) + 1
+        return render_template("design/covariates/covariate_interaction_effect.html", segment="covariates_interaction_effect", all_tailoring_covariates=all_tailoring_covariates,
+                               all_menus=all_menus, menu_number=14, project_name=project_name,
+                               modified_on=modified_on, project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
+    # elif setting_type == "covariate_summary":
+    #     tal_val = project_details_obj.covariates.get(cov_id).get("tailoring_variable", "no")
+    #     is_tailoring = True
+    #     if tal_val == 'no':
+    #         is_tailoring = False
+    #     formula = generate_formula(project_uuid=project_uuid, is_summary_page="yes", add_red_note="no", is_intercept=False)
+    #     return render_template("design/covariates/covariate_summary.html", segment="covariate_summary", formula=formula,
+    #                            all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
+    #                            all_covariates=all_covariates, covariates_types=covariates_types, settings=settings,
+    #                            project_uuid=project_uuid, cov_id=cov_id, is_tailoring=is_tailoring, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
 
 
 @blueprint.route('/covariates/settings/delete/<project_uuid>/<cov_id>', methods=['GET'])
@@ -837,7 +838,7 @@ def static_pages(page_type):
 
 @blueprint.route('/generate_formula/<project_uuid>/<page_type>/<add_red_note>', methods=['GET', 'POST'])
 @login_required
-def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, covariate_tailored_effect=False, is_intercept=False, is_main_treatment_effect=False, is_noise=False, is_all=False):
+def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, covariate_interaction_effect=False, is_intercept=False, is_main_treatment_effect=False, is_error=False, is_all=False):
     keys = f"""<div class="keys-container">
                     <span class="keys-header" style="color: black; font-size: 16px;">Keys</span>
                     <br><br>
@@ -887,18 +888,18 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
         name = covariates.get(acov, {}).get("covariate_name")
         is_tailoring = cov_vars.get("tailoring_variable")
         bg_color = "#EBD5E9" if is_tailoring == "yes" else "#DAD5EB"
-        border_alpha = "6px" if acov == cov_id and not covariate_tailored_effect and not is_all else "1px"
+        border_alpha = "6px" if acov == cov_id and not covariate_interaction_effect and not is_all else "1px"
         alphas += f"""<br><br>+ <span style="background-color: #FFF8E5; border: {border_alpha} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>{alpha_counter}</sub></span> * <span id="cov_name_span1" style="background-color: {bg_color}; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{name}</span> """
         alpha_vars += f'α<sub>{alpha_counter}</sub>~N({cov_vars.get("main_effect_prior_mean")}, {cov_vars.get("main_effect_prior_standard_deviation")}<sup>2</sup>)<br>'
         alpha_counter += 1
         if is_tailoring == "yes":
-            border_beta = "6px" if acov == cov_id and covariate_tailored_effect and not is_all else "1px"
+            border_beta = "6px" if acov == cov_id and covariate_interaction_effect and not is_all else "1px"
             betas += f"""<br><br><span id="beta_{beta_counter}">+ <span style="background-color: #FFF8E5; border: {border_beta} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>{beta_counter}</sub></span> * <span id="cov_name_span2" style="background-color: {bg_color}; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{name}</span>  * <span style="background-color: #D5EBD9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> {intervention_component_name} </span></span>"""
             beta_vars += f'β<sub>{beta_counter}</sub>~N({cov_vars.get("main_effect_prior_mean")}, {cov_vars.get("main_effect_prior_standard_deviation")}<sup>2</sup>)<br>'
             beta_counter += 1
     border_alpha = "6px" if is_intercept else "1px"
     border_main_treatment = "6px" if is_main_treatment_effect else "1px"
-    border_epsilon = "6px" if is_noise else "1px"
+    border_epsilon = "6px" if is_error else "1px"
     
     htmll = f"""<div class="rightsidebluetextbox">
                     <div class="row" style="display: flex; flex-direction: row; ">
@@ -946,8 +947,8 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
         if is_intercept:
             htmll = htmll.replace("RED_NOTE",
                               f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>0</sub></span>~N(<span><b>μ<sub>α<sub>0</sub></sub></b>, <b>σ<sub>α<sub>0</sub></sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>μ<sub>α<sub>0</sub></sub></b>, <b>σ<sub>α<sub>0</sub></sub></span></b>.</span>')
-        elif not is_intercept and not is_main_treatment_effect and not is_noise:
-            if not covariate_tailored_effect: 
+        elif not is_intercept and not is_main_treatment_effect and not is_error:
+            if not covariate_interaction_effect: 
                 htmll = htmll.replace("RED_NOTE",
                                 f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>{cov_alpha}</sub></span>~N(<span><b>μ<sub>α<sub>{cov_alpha}</sub></sub></b>, <b>σ<sub>α<sub>{cov_alpha}</sub></sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>μ<sub>α<sub>{cov_alpha}</sub></sub></b>, <b>σ<sub>α<sub>{cov_alpha}</sub></sub></span></b>.</span>')
             else:
@@ -956,10 +957,10 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
         if is_main_treatment_effect:
             htmll = htmll.replace("RED_NOTE",
                               f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>0</sub></span>~N(<span><b>μ<sub>β<sub>0</sub></sub></b>, <b>σ<sub>β<sub>0</sub></sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>μ<sub>β<sub>0</sub></sub></b>, <b>σ<sub>β<sub>0</sub></sub></span></b>.</span>')           
-        if not is_main_treatment_effect and is_noise:
+        if not is_main_treatment_effect and is_error:
             htmll = htmll.replace("RED_NOTE",
                                 f'<span style="background-color: #FFF8E5; border: 6px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">ϵ</span>~N(<span>0, σ<sup>2</sup>)  \
-                                <br><br> σ<sup>2</sup>~<Inv-Chi2>Inv-χ<sup>2</sup></Inv-Chi2>(<span><b>&nu;</b></span>, <span><b>&sigma;<sub>0</sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>&nu;</b>, <b>&sigma;<sub>0</sub></span></b>.</span>')
+                                <br><br> σ<sup>2</sup>~<Inv-Chi2>Scaled-Inv-χ<sup>2</sup></Inv-Chi2>(<span><b>&nu;</b></span>, <span><b>&sigma;<sub>0</sub></span></b><sup>2</sup>) <span>  << Fill in the values for <b>&nu;</b>, <b>&sigma;<sub>0</sub><sup>2</sup></span></b>.</span>')
     else:
         htmll = htmll.replace("RED_NOTE", "")
     return htmll

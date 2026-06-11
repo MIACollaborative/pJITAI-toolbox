@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Model - Main Treatment Effect {% endblock %}
+{% block title %} Covariate Interaction Effect {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -21,7 +21,7 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3>Model Settings / Main Treatment Effect</h3>
+                                                <h3>Covariates / Interaction Effect</h3>
                                             </div>
 
                                         </div>
@@ -33,26 +33,28 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <div class="row">
-                                                    <div class="col">
+                                                {% for key, cov in all_tailoring_covariates.items() %}
+                                                <div class="row"style="display: flex; flex-direction: row; ">
+                                                    <div class="col" style="flex: 5;">
+                                                        <h4>Interaction Effect of the Covariate: {{ cov.covariate_name }}</h4>
                                                         <div class="form-group">
-                                                            <label class="form-control-label" for="treatment_prior_mean">Prior
-                                                                mean (<b>&mu;<sub>&beta;0</sub></b>)</label>
-                                                            <input type="number" step="0.01"
-                                                                value="{{settings.treatment_prior_mean}}"
-                                                                id="treatment_prior_mean" name="treatment_prior_mean"
-                                                                class="form-control" required>
+                                                            <label class="form-control-label"
+                                                                for="interaction_coefficient_prior_mean_{{key}}">Prior mean</label>
+                                                            <input value="{{cov.interaction_coefficient_prior_mean}}"
+                                                                type="number" step="0.01"
+                                                                name="interaction_coefficient_prior_mean_{{key}}"
+                                                                class="form-control" placeholder="" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="form-control-label"
-                                                                for="treatment_prior_standard_deviation">Standard
-                                                                deviation (<b>&sigma;<sub>&beta;0</sub></b>)</label>
-                                                            <input type="number" step="0.01" min="0"
-                                                                value="{{settings.treatment_prior_standard_deviation}}"
-                                                                id="treatment_prior_standard_deviation"
-                                                                name="treatment_prior_standard_deviation"
+                                                                for="interaction_coefficient_prior_standard_deviation_{{key}}">
+                                                                Standard deviation</label><br>
+                                                            <input value="{{cov.interaction_coefficient_prior_standard_deviation}}"
+                                                                type="number" min="0" step="0.01"
+                                                                name="interaction_coefficient_prior_standard_deviation_{{key}}"
                                                                 oninput="check(this)"
-                                                                class="form-control" required>
+                                                                class="form-control" placeholder="">
+
                                                         </div>
                                                         <script>
                                                             function check(input) {
@@ -67,15 +69,16 @@
 
                                                     </div>
 
-                                                    <div class="col">
-                                                        {{formula|safe}}
+                                                    <div class="col" style="flex: 5;">
+                                                        {{cov.formula|safe}}
                                                     </div>
                                                 </div>
+                                                {% endfor %}
                                                 <div class="center-buttons">
-                                                    <a href="/covariates/settings/covariate_main_effect/{{project_uuid}}"
+                                                    <a href="/model/settings/main_treatment_effect/{{project_uuid}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
                                                     <button style="margin-left: 3px;" type="submit" type="button"
-                                                            formaction="/covariates/settings/covariate_interaction_effect/{{project_uuid}}"
+                                                            formaction="/model/settings/main_error/{{project_uuid}}"
                                                             formmethod="post" class="btn btn-primary">Next
                                                     </button>
                                                 </div>
@@ -83,6 +86,7 @@
                                                     Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -91,10 +95,8 @@
                     </div>
                 </div>
                 {% set block1="Y" %}
-                {% set block1_title=["Prior mean and standard deviation of the Main Treatment Effect β<sub>0</sub>"] %}
-                {% set block1_text=["The prior mean of the main treatment effect is a rough guess at the mean change in the proximal outcome when an intervention option A is provided versus intervention option B and all covariates are set to be 0.
-
-                If you don’t have good information about the prior mean, see the Discussion below on selecting reasonable defaults."] %}
+                {% set block1_title=["Prior mean and standard deviation of the Interaction Effect"] %}
+                {% set block1_text=["The interaction effect of a tailoring covariate is the effect it has on the proximal outcome depending on the intervention option that is chosen. More specifically, the interaction effect is how much the contrast between intervention option A vs intervention option B changes due to one unit change in the standardized tailoring variable."] %}
                 {% set block2="Y" %}
                 {% set block2_title="Normal Prior" %}
                 {% set block2_text %}

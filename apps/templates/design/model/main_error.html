@@ -1,0 +1,129 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Model - Noise {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="grid-container">
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Model Settings / Noise</h3>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label class="form-control-label" for="noise_scale">Scale (&sigma;<sub>0</sub><sup>2</sup>)</label>
+                                                            <input type="number" step="0.01"
+                                                                value="{{settings.noise_scale}}"
+                                                                id="noise_scale" name="noise_scale"
+                                                                oninput="check(this)"
+                                                                class="form-control" required>
+                                                        </div>
+                                                        <script>
+                                                            function check(input) {
+                                                            if (input.value == 0) {
+                                                                input.setCustomValidity('The number must not be zero.');
+                                                            } else {
+                                                                // input is fine -- reset the error message
+                                                                input.setCustomValidity('');
+                                                            }
+                                                            }
+                                                        </script>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label"
+                                                                for="noise_degree_of_freedom">Degree of freedom (&nu;) </label>
+                                                            <input type="number"  min="3"
+                                                                value="{{settings.noise_degree_of_freedom}}"
+                                                                id="noise_degree_of_freedom"
+                                                                name="noise_degree_of_freedom"
+                                                                class="form-control" required>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col">
+                                                        {{formula|safe}}
+                                                    </div>
+                                                </div>
+                                                <div class="center-buttons">
+                                                    <a href="/covariates/settings/covariate_interaction_effect/{{project_uuid}}"
+                                                    class="btn btn-outline-primary" role="button">Back</a>
+                                                    <button style="margin-left: 3px;" type="submit" type="button"
+                                                            formaction="/model/settings/summary/{{project_uuid}}"
+                                                            formmethod="post" class="btn btn-primary">Next
+                                                    </button>
+                                                </div>
+                                                <div class="form-group">
+                                                    Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% set block1="Y" %}
+                {% set block1_title=["Prior for the variance of the error term, &epsilon;"] %}
+                {% set block1_text=["The prior distribution of the error variance in the Bayesian Linear regression is a “scaled  inverse chi-square distribution.”  The “scale” is denoted by &sigma;<sub>0</sub><sup>2</sup> and the “degrees of freedom” are denoted by &nu; in the above formula."] %}
+                {% set block2="Y" %}
+                {% set block2_title="How to set prior values?" %}
+                {% set block2_text %}
+                This discussion assumes that the proximal outcome is approximately standardized.  
+
+                Values for the scale and the degrees of freedom define your "prior belief" about the variance, &sigma;<sup>2</sup> of the error term (&epsilon;).
+                <ul>
+                    <li>
+                        <b>Degree of Freedom, &nu;, (Recommended: 5)</b>
+                        <br/>
+                        This setting controls the model’s sensitivity to outliers (unusual proximal outcomes).
+                        <ul>
+                            <li>A high value for the degrees of freedom implies that the error term in the linear regression has close to a Normal distribution with &sigma;<sup>2</sup> approximately equal to &sigma;<sub>0</sub><sup>2</sup>.  However, if there are likely to be unusual error terms (i.e. outliers resulting from unusual values for the proximal outcome such as some unusually high 30 minute step counts in the case of HeartSteps) then it is better to choose a lower value of &nu;.</li>
+                            <li>Setting the degrees of freedom to a lower value like 5 means that the error term in the linear regression has a distribution closer to a <b><u>Student's t-distribution</u></b>. This distribution has "heavy tails", meaning it expects some outliers and automatically down-weights their influence, leading to a more robust statistical analysis if there are outliers.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <b>Scale, &sigma;<sub>0</sub><sup>2</sup></b>
+                        <br/>
+                        For the scale, you can either use the average of the person-specific error variances from your MRT analyses or since the proximal outcome is approximately standardized you can use &sigma;<sub>0</sub><sup>2</sup>=1. 
+                    </li>
+                </ul>
+                {% endset %}
+                {% include 'includes/resources.html' %}
+            </div>
+        </div>
+    </div>
+    {% include 'includes/comments.html' %}
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

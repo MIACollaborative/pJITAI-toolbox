@@ -143,7 +143,7 @@
 
                                                     </div>
                                                     {% if all_covariates.get(cov_id).get("tailoring_variable")=="yes" %}
-                                                    <h5>Covariate Tailored Effect</h5>
+                                                    <h5>Covariate Interaction Effect</h5>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label class="form-control-label"
@@ -195,7 +195,7 @@
                                             <div class="card-header">
                                                 <div class="form-group">
                                                     {% if is_tailoring %}
-                                                    <a href="/covariates/settings/covariate_tailored_effect/{{project_uuid}}/{{cov_id}}"
+                                                    <a href="/covariates/settings/covariate_interaction_effect/{{project_uuid}}/{{cov_id}}"
                                                     class="btn btn-outline-primary" role="button">Back</a>
                                                     {% else %}
                                                     <a href="/covariates/settings/covariate_main_effect/{{project_uuid}}/{{cov_id}}"
