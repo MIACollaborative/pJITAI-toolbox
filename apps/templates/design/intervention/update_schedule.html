@@ -70,10 +70,12 @@
                 </div>
                 {% set block1="Y" %}
                 {% set block1_title=["Algorithm Update Schedule"] %}
-                {% set block1_text=["The algorithm does not learn continuously, rather it periodically updates its learning based on decisions made (Option A vs B), the  participant states collected, and proximal outcomes observed after each decision point. Using this data, the algorithm calculates the effect of each intervention  option on the proximal outcome and updates its model, which in turn adjusts probabilities for future decision points."] %}
-                {% set block1_posttext="Because the update process can be computationally intensive, it’s recommended to schedule updates for times when no decision points are expected to occur. Updating too frequently is not beneficial, as data from multiple decision points is needed for the algorithm to make meaningful changes to its model." %}
-                {% set block2="In HeartSteps the updates were performed in the middle of each night (so every 5 decision points since there are 5 decision points per day).   None of the HeartSteps participants were able to schedule one of their decision times  in the middle of the night so the updates would not interfere with the decisions regarding which intervention to provide." %}
-                {% set block3="Usually update times are set times (middle of each night, middle of Sunday night and so on) that there are few other computations being conducted by the intervention system." %}
+                {% set block1_text=["The algorithm does not learn continuously, rather it periodically updates its learning based on data about the individual collected at each decision point, including the intervention decisions (Option A vs B), the individual’s internal state (e.g. mood) and external context (e.g. location, weather) , and subsequent proximal outcomes. Using the individual’s data, the algorithm calculates the effect of each intervention option on the proximal outcome and updates its model, which in turn adjusts probabilities for future decision points."] %}
+                {% set block2="Y" %}
+                {% set block2_title="How do I choose?" %}
+                {% set block2_text %}
+                Usually update times are set times (middle of each night, middle of Sunday night and so on) that there are few other computations being conducted by the intervention system. Updating too frequently is not beneficial, as data from multiple decision points is needed for the algorithm to make meaningful changes to its model.
+                {% endset %}
                 {% include 'includes/resources.html' %}
             </div>
         </div>

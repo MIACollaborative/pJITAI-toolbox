@@ -37,10 +37,7 @@
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="intercept_prior_mean">Prior
-                                                                mean of the intercept <span data-toggle='tooltip'
-                                                                                            data-bs-placement="right"
-                                                                                            title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior mean is the mean of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
-                                                                        class=" align-text-top questionmark far fa-question-circle"></i></span></label>
+                                                                mean of the intercept</label>
                                                             <input type="number" step="0.01"
                                                                 value="{{settings.intercept_prior_mean}}"
                                                                 id="intercept_prior_mean" name="intercept_prior_mean"
@@ -49,10 +46,7 @@
                                                         <div class="form-group">
                                                             <label class="form-control-label"
                                                                 for="intercept_prior_standard_deviation">Prior standard
-                                                                deviation of the intercept <span data-toggle='tooltip'
-                                                                                                data-bs-placement="right"
-                                                                                                title='Prior is a probability distribution that encodes a scientist’s belief about an unknown quantity. Prior standard deviation is the standard deviation of the prior distribution. The algorithm will use both the scientist’s belief and the evidence from the data to make a decision.'> <i
-                                                                        class=" align-text-top questionmark far fa-question-circle"></i></span></label>
+                                                                deviation of the intercept </label>
                                                             <input type="number" step="0.01" min="0"
                                                                 value="{{settings.intercept_prior_standard_deviation}}"
                                                                 id="intercept_prior_standard_deviation"
@@ -76,77 +70,11 @@
                                                         {{formula|safe}}
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="row">
-                                    <!-- [ tabs ] start -->
-                                    <div class="col-sm-12">
-
-                                        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab"
-                                                href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    Explanation</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="profile-tab" data-toggle="tab"
-                                                href="#profile" role="tab" aria-controls="profile" aria-selected="false">HeartSteps
-                                                    Example</a>
-                                            </li>
-                                        </ul> -->
-                                        <div class="tab-content" id="myTabContent">
-                                            <!-- <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                                aria-labelledby="home-tab"> -->
-                                            <div class="tab-item">
-                                                <h5>Explanation</h5>
-                                                <p>The intercept refers to the intercept term in the linear regression model
-                                                    of the proximal outcome. The intercept corresponds to the value of the
-                                                    proximal outcome when all the covariates are zero.</p>
-
-                                                <p>Many papers may not provide the prior mean and the prior standard
-                                                    deviation of the intercept. If you don’t have good information 
-                                                    about the prior mean, then we suggest you set the prior mean to 0. 
-                                                    If you don’t have good information about the prior standard deviation, 
-                                                    then we suggest you set the prior standard deviation to 3.16.</p> 
-                                                        
-                                                <p>If you have access to data from an MRT, please read [tutorial] to see how
-                                                        to run an analysis to find these values.</p>
-        
-                                                <p>Please read [tutorial] for more details.</p>
-                                            </div>
-                                            <!-- <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                aria-labelledby="profile-tab"> -->
-                                            <div class="tab-item">
-                                                <h5>HeartSteps Example</h5>
-                                                <h6>Prior Mean</h6>
-                                                <p>0</p>
-                                                <h6>Prior Standard Deviation</h6>
-                                                <p>3.16</p>
-                                                <p>The prior of the intercept cannot be found from the HeartSteps V1 paper.
-                                                    Thus, we demonstrate using the default values here, i.e., prior mean = 0
-                                                    and prior standard deviation = 3.16.</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                    <!-- [ tabs ] end -->
-                                </div>
-                                <!-- [ Main Content ] end -->
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="form-group">
+                                                <div class="center-buttons">
                                                     <a href="/covariates/settings/all/{{project_uuid}}"
-                                                    class="btn btn-outline-primary" role="button">Back</a>
-                                                    <button type="submit" type="button"
+                                                        class="btn btn-outline-primary" role="button">Back</a>
+                                                    <button style="margin-left: 3px;" type="submit" type="button"
                                                             formaction="/model/settings/main_treatment_effect/{{project_uuid}}"
                                                             formmethod="post" class="btn btn-primary">Next
                                                     </button>
@@ -155,7 +83,6 @@
                                                     Last save time: {{modified_on.strftime('%b %d %Y %I:%M %p')}} UTC
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -163,6 +90,33 @@
                         </div>
                     </div>
                 </div>
+                {% set block1="Y" %}
+                {% set block1_title=["Prior mean and standard deviation of the intercept, α<sub>0</sub>"]%}
+                {% set block1_text=["The intercept refers to the intercept term in the linear regression model for the proximal outcome. The intercept corresponds to the mean of the proximal outcome when the values of the standardized covariates are set to zero."] %}
+                {% set block2="Y" %}
+                {% set block2_title="Normal Prior" %}
+                {% set block2_text %}
+                The algorithm uses a normal distribution to describe prior information about each parameter in the linear regression model—this includes the intercept parameter, α<sub>0</sub>. Thus to set the prior you must specify a prior mean and a prior standard deviation for each parameter in the linear regression model.
+                {% endset %}
+                {% set block3="Y" %}
+                {% set block3_title="How to set prior values?" %}
+                {% set block3_text %}
+                <b>Using MRT data to inform your choice of prior mean and standard deviation</b>
+                To obtain prior means and standard deviations, we suggest you fit person-specific regression models, one per person in the MRT data (using approximately standardized covariates and proximal outcome). If a person does not have a minimum number of decision points, you might use <a href="https://en.wikipedia.org/wiki/Ridge_regression">ridge regression</a>. The estimators as well as their variability across the individual person-specific regression can be used to inform the prior. This approach utilizes the between individual heterogeneity in intercept to proxy the subjective prior uncertainty about the true intercept. And the average of the estimated intercepts across individuals proxies the consensus of the mean for the intercept.
+
+                Assuming all covariates and the proximal outcome provided to the personalization algorithm will be approximately standardized (so average value of each standardized covariate/proximal outcome is roughly close to 0 and the standard deviation of each standardized covariate/proximal outcome is roughly 1), here are some rules of thumb for setting the prior mean and standard deviation for the intercept:
+                <ul>
+                    <li><b>The proximal outcome is approximately standardized:</b> A natural choice for the prior mean of the intercept is 0, and the prior standard deviation is 1.0 (due to the approximate standardization).</li>
+                    <li><b>A second option is to use a weakly informative prior:</b> A prior of Normal (mean = 0, standard deviation = 3.16) is a standard <a href="https://github.com/stan-dev/stan/wiki/prior-choice-recommendations">weakly informative prior</a>, which is a widely recommended best practice. Here is what it means:
+                        <li>
+                            <b>Prior Standard Deviation = 3.16:</b> The value seems specific because its square is approximately 10 (i.e. variance = 10). It expresses uncertainty due to the fact that a different group of individuals are going to experience the pJITAI as compared to individuals in the MRT.
+                        </li>
+                    </li>
+                    <li>[NOTE] When the personalization algorithm is running or actively deployed and receiving real-time data, the proximal outcome (Y) needs to be standardized as well and must utilize the exact same baseline values of the sample mean ($\mu_{Y}$) and variance ($\sigma_(Y)$) used during the original MRT standardization and analysis. Do not recalculate or update $\mu_{Y}$ or $\sigma_(Y)$ using incoming post-deployment data, as shifting these reference points will alter the scaling of your proximal outcome.</li>
+                </ul>
+                For a more detailed discussion about how to set priors, see <a href="https://github.com/stan-dev/stan/wiki/prior-choice-recommendations">here</a>. 
+                {% endset %}
+                {% include 'includes/resources.html' %}
             </div>
         </div>
     </div>

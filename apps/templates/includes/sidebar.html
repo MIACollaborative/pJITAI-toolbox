@@ -81,8 +81,8 @@
                 <ul class="pcoded-submenu" {% if
                 'model' not in segment and not 'covariates' %} style="display: none;" {% endif %}>
             <li class="{% if 'model_proximal_outcome' in segment %} active {% endif %}"><a {% if
-                "/model/settings/proximal_outcome/"+project_uuid in all_menus %}
-                href="/model/settings/proximal_outcome/{{project_uuid}}" {% endif %} class="">Proximal Outcome Attribute
+                "/model/settings/standardized_proximal_outcome/"+project_uuid in all_menus %}
+                href="/model/settings/standardized_proximal_outcome/{{project_uuid}}" {% endif %} class="">Proximal Outcome Attribute
                 </a></li>
             <li class="{% if 'covariates' in segment %} active {% endif %}"><a {% if
                 "/covariates/settings/all/"+project_uuid in all_menus %}

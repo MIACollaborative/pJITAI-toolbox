@@ -116,7 +116,7 @@ $(document).ready(function(){
                                                     class="btn btn-outline-primary" role="button">&lt; Back</a>
                                                     
                                                     <button style="margin-left: 3px;" type="submit" type="button"
-                                                            formaction="/covariates/settings/covariate_main_effect/{{project_uuid}}/{{cov_id}}"
+                                                            formaction="/covariates/settings/all/{{project_uuid}}/{{cov_id}}"
                                                             formmethod="post" class="btn btn-primary">Next &gt;
                                                     </button>
                                                 </div>
@@ -135,22 +135,32 @@ $(document).ready(function(){
                 </div>
                 {% set block1="Y" %}
                 {% set block1_title=["Name", "Tailoring Variable?", "Minimum and Maximum allowed values"] %}
-                {% set block1_text=["Indicate the name of your covariate. See Discussion below about what you should select as covariates for your project.", "Indicate whether the covariate is a tailoring variable. See Discussion below about how to determine whether your covariate is a tailoring variable.", "As you did with the proximal outcome, define the range of acceptable values for each (potentially standardized) covariate. Values outside the defined range will be rejected to prevent corrupting the data used by the algorithm to personalize intervention options."] %}
-                {% set block2 %}The personalized HeartSteps Activity Suggestions intervention component uses two covariates:
+                {% set block1_text=["Indicate the name of your covariate. See Discussion below about what you should select as covariates for your project.", "Indicate whether the covariate is a tailoring variable. See Discussion below about how to determine whether your covariate is a tailoring variable.", "As you did with the proximal outcome, define the range of acceptable values for each standardized covariate. Values outside the defined range will be rejected to prevent corrupting the data used by the algorithm to personalize intervention options."] %}
+                {% set block2="Y" %}
+                {% set block2_title="Covariates in HeartSteps" %}
+                {% set block2_text %}
+                The personalized HeartSteps Activity Suggestions intervention component has two covariates:
                 <ul>
                     <li>Previous 30-minute step count (log transformed in the same way as the proximal outcome)</li>
                     <li>Location (1=[Home, Work], 0=other location)</li>
-                </ul>The previous 30-minute step count is not a tailoring variable, as it is assumed (and was observed in the MRT study) to correlate similarly with proximal outcomes both when a message is sent and when it is not.
+                </ul>
+                The previous 30-minute step count is not a tailoring variable, as it is assumed (and was observed in the MRT study) to correlate similarly with proximal outcomes both when a message is sent and when it is not.
 
                 The location, on the other hand, is a tailoring variable, as it was found to moderate the effect of sending a message versus not sending a message on the proximal outcome.
                 {% endset %}
-                {% set block3 %}<b>Covariates</b>
-                Your algorithm will use covariates describing the participant’s internal state and external context when deciding between intervention options and when updating its model based on proximal outcomes associated with each decision. The information about participant’s internal state and external context is encoded as covariates in the pJITAI toolbox, which are variables you will provide to your algorithm along with every decision request. For example, you might provide the “previous 30 minute step count” as a covariate, based on the assumption that activity just before a decision point will correlate with the proximal outcome of step count after the decision point, regardless of whether the high-intensity option was chosen or not. 
+                {% set block3="Y" %}
+                {% set block3_title="Covariates and Tailoring Variables" %}
+                {% set block3_text %}
+                <b>Covariates</b>
+                Your algorithm will use covariates describing the individual’s internal state and external context when deciding between intervention options and when updating its model based on proximal outcomes associated with each decision. The information about an individual's internal state and external context is encoded as covariates in the pJITAI toolbox, which are variables you will provide to your algorithm along with every decision request.
 
                 <b>Tailoring Variables</b>
-                Some covariates might also be tailoring variables. In contrast to non-tailoring covariates, tailoring variables are assumed to moderate the effect of the intervention options on the proximal outcome.
+                Some covariates might also be tailoring variables. In contrast to non-tailoring covariates, tailoring variables are assumed to moderate the effect of the intervention options on the proximal outcome. Some covariates might also be tailoring variables.
 
-                For example, the participant’s location, if encoded as a binary variable where 1=[Home,Work] and 0=[Other location], might be assumed to moderate the effect of the Activity Suggestion (i.e., Activity Suggestions may be more likely to be acted upon when at home or at work than when at, say, the grocery store).
+                For example, the individual’s location,(1=[Home,Work] and 0=[Other location]) might be assumed to moderate the effect of the Activity Suggestion (i.e., Activity Suggestions may be more likely to be acted upon when at home or at work than when at, say, the grocery store).
+                
+                <b>Non-Tailoring Covariates</b>
+                Non-tailoring covariates are included in the algorithm primarily to reduce statistical noise. For example, you might provide the “previous 30 minute step count” as a covariate, based on the assumption that activity just before a decision point will correlate with the proximal outcome of step count after the decision point, regardless of whether the high-intensity option was chosen or not. 
                 {% endset %}
                 {% include 'includes/resources.html' %}
             </div>
