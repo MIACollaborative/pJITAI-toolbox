@@ -618,9 +618,6 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     elif setting_type == "covariate_interaction_effect":
         page_name = setting_type
         page_name_log = "covariate_main_effect"
-    elif setting_type == "covariate_summary":
-        page_name = setting_type
-        page_name_log = "covariate_interaction_effect"
     else:
         page_name = setting_type
         page_name_log = setting_type
@@ -692,16 +689,6 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
         return render_template("design/covariates/covariate_interaction_effect.html", segment="covariates_interaction_effect", all_tailoring_covariates=all_tailoring_covariates,
                                all_menus=all_menus, menu_number=14, project_name=project_name,
                                modified_on=modified_on, project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    # elif setting_type == "covariate_summary":
-    #     tal_val = project_details_obj.covariates.get(cov_id).get("tailoring_variable", "no")
-    #     is_tailoring = True
-    #     if tal_val == 'no':
-    #         is_tailoring = False
-    #     formula = generate_formula(project_uuid=project_uuid, is_summary_page="yes", add_red_note="no", is_intercept=False)
-    #     return render_template("design/covariates/covariate_summary.html", segment="covariate_summary", formula=formula,
-    #                            all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
-    #                            all_covariates=all_covariates, covariates_types=covariates_types, settings=settings,
-    #                            project_uuid=project_uuid, cov_id=cov_id, is_tailoring=is_tailoring, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
 
 
 @blueprint.route('/covariates/settings/delete/<project_uuid>/<cov_id>', methods=['GET'])
