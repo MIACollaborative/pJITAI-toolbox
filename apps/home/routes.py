@@ -272,12 +272,12 @@ def project_settings(setting_type, project_uuid=None):
     elif setting_type == "team_members":
         page_name = setting_type
         page_name_logs = "general_settings"
-    elif setting_type == "scenario":
-        page_name = "general_scenario"
-        page_name_logs = "personalization_method"
+    elif setting_type == "personalization_method":
+        page_name = setting_type
+        page_name_logs = "team_members"
     elif setting_type == "summary":
         page_name = "general_summary"
-        page_name_logs = "general_scenario"
+        page_name_logs = "personalization_method"
     else:
         page_name = setting_type
         page_name_logs = setting_type
@@ -344,14 +344,10 @@ def project_settings(setting_type, project_uuid=None):
                                menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name, project_owner=project_owner,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "personalization_method":
-        save_path = "/projects/settings/personalization_method/" + project_uuid  # personalization_method page should be added manually (due to team_members.html next button design. It does not use 'post' request method.)
+        save_path = "/projects/settings/personalization_method/" + project_uuid  # Save this line. personalization_method page should be added manually (due to team_members.html next button design. It does not use 'post' request method.)
         add_menu(user_id, project_uuid, save_path)
         return render_template("design/projects/personalization_method.html", segment="general_personalization_method",
                                all_menus=all_menus, menu_number=2, project_name=project_name, modified_on=modified_on,
-                               general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "scenario":
-        return render_template("design/projects/scenario.html", segment="general_scenario", modified_on=modified_on,
-                               all_menus=all_menus, menu_number=3, project_name=project_name,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "summary":
         return render_template("design/projects/summary.html", segment="general_summary", modified_on=modified_on,
@@ -392,9 +388,6 @@ def intervention_settings(setting_type, project_uuid):
     elif setting_type == "decision_point":
         page_name = "intervention_decision_point"
         page_name_log = "intervention_option"
-    # elif setting_type == "ineligibility":
-    #     page_name = "intervention_ineligibility"
-    #     page_name_log = "intervention_decision_point"
     elif setting_type == "intervention_probability":
         page_name = setting_type
         page_name_log = "intervention_decision_point"
@@ -416,10 +409,7 @@ def intervention_settings(setting_type, project_uuid):
         update_intervention_settings(request.form.to_dict(), project_details_obj) # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
         project_details, project_details_obj = get_project_details(project_uuid, user_id) # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
         intervention_settings = project_details.get("intervention_settings")  # TWH: Get updated settings before page rendering so that fields in adjacent pages display properly.
-        if 'ineligibility' in request.referrer:
-            for k in list(intervention_settings.keys()):
-                if k.startswith("condition"):
-                    intervention_settings.pop(k)
+        
     all_menus = get_project_menu_pages(user_id, project_uuid)
 
     all_comments = get_all_comments(project_uuid, page_name)
@@ -440,10 +430,6 @@ def intervention_settings(setting_type, project_uuid):
                                all_menus=all_menus, menu_number=6, project_name=project_name, modified_on=modified_on,
                                decision_point_frequency_time=decision_point_frequency_time,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif setting_type == "ineligibility":
-        return render_template("design/intervention/ineligibility.html", segment="intervention_ineligibility",
-                               all_menus=all_menus, menu_number=7, project_name=project_name, modified_on=modified_on,
-                               conditions=conditions, settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "intervention_probability":
         return render_template("design/intervention/intervention_probability.html", segment="intervention_probability",
                                all_menus=all_menus, menu_number=8, project_name=project_name, modified_on=modified_on,
@@ -480,18 +466,19 @@ def model_settings(setting_type, project_uuid):
         page_name_log = "intervention_summary"
     elif setting_type == "intercept":
         page_name = "model_intercept"
-        page_name_log = "covariates_all"
+        page_name_log = "covariate_define"
     elif setting_type == "main_treatment_effect":
         page_name = "model_main_treatment_effect"
-        page_name_log = "model_intercept"
+        page_name_log = "covariate_main_effect"
     elif setting_type == "main_error":
         page_name = "model_main_error"
-        page_name_log = "model_main_treatment_effect"
+        page_name_log = "covariate_interaction_effect"
     elif setting_type == "summary":
         page_name = "model_summary"
         page_name_log = "model_main_error"
     else:
         page_name = setting_type
+        page_name_log = setting_type
 
     if request.method == 'POST':
         timestamp = datetime.now(get_localzone()).isoformat()
@@ -608,16 +595,16 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
 
     if setting_type == "all":
         page_name = "covariates_all"
-        page_name_log = "model_proximal_outcome"
+        page_name_log = "model_standardized_proximal_outcome"
     elif setting_type == "covariate_define":
         page_name = setting_type
         page_name_log = "covariates_all"
     elif setting_type == "covariate_main_effect":
         page_name = setting_type
-        page_name_log = "covariate_define"
+        page_name_log = "model_intercept"
     elif setting_type == "covariate_interaction_effect":
         page_name = setting_type
-        page_name_log = "covariate_main_effect"
+        page_name_log = "model_main_treatment_effect"
     else:
         page_name = setting_type
         page_name_log = setting_type
@@ -629,9 +616,6 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
         timestamp = datetime.now(get_localzone()).isoformat()
         add_menu(user_id, project_uuid, request.path)
         add_project_logs(project_uuid=project_uuid, created_by=user_id, details=request.form.to_dict(), page_name=page_name_log, timestamp=timestamp)
-        # if "covariate_attributes" in request.referrer:
-        #     form_data = request.form.to_dict()
-        # else:
         form_data = request.form.to_dict()
 
         if "covariate_main_effect" in request.referrer:
