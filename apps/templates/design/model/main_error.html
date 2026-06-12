@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Model - Noise {% endblock %}
+{% block title %} Model - Error {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -21,7 +21,7 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3>Model Settings / Noise</h3>
+                                                <h3>Model Settings / Error</h3>
                                             </div>
 
                                         </div>
@@ -36,10 +36,10 @@
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-group">
-                                                            <label class="form-control-label" for="noise_scale">Scale (&sigma;<sub>0</sub><sup>2</sup>)</label>
+                                                            <label class="form-control-label" for="error_scale">Scale (&sigma;<sub>0</sub><sup>2</sup>)</label>
                                                             <input type="number" step="0.01"
-                                                                value="{{settings.noise_scale}}"
-                                                                id="noise_scale" name="noise_scale"
+                                                                value="{{settings.error_scale}}"
+                                                                id="error_scale" name="error_scale"
                                                                 oninput="check(this)"
                                                                 class="form-control" required>
                                                         </div>
@@ -55,11 +55,11 @@
                                                         </script>
                                                         <div class="form-group">
                                                             <label class="form-control-label"
-                                                                for="noise_degree_of_freedom">Degree of freedom (&nu;) </label>
+                                                                for="error_degree_of_freedom">Degree of freedom (&nu;) </label>
                                                             <input type="number"  min="3"
-                                                                value="{{settings.noise_degree_of_freedom}}"
-                                                                id="noise_degree_of_freedom"
-                                                                name="noise_degree_of_freedom"
+                                                                value="{{settings.error_degree_of_freedom}}"
+                                                                id="error_degree_of_freedom"
+                                                                name="error_degree_of_freedom"
                                                                 class="form-control" required>
                                                         </div>
 

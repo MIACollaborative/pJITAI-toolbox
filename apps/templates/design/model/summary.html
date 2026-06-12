@@ -28,80 +28,16 @@
                                     </div>
                                 </div>
 
-                                
-                                <!-- <div class="row">
-                                    <div class="col">
-
-                                        <div class="row">
-                                        <div class="row congratstextbox" style="margin-bottom: 30px;">
-                                            <div class="col-1">
-                                                <img src="{{ config.ASSETS_ROOT }}/images/pjitai/celebration.png"
-                                                    class="img-responsive">
-                                            </div>
-                                            <div class="col-11">
-
-                                                <p>
-                                                    Congrats! You have finished setting up Model Settings.<br>
-                                                    Please review and confirm.<br>
-                                                    If you confirm, please click “Go to Configuration Summary.”
-                                                </p>
-                                            </div>
-
-                                        </div>
-                                    </div>                                    
-                                    </div>
-
-                                    <div class="col">
-                                        <p class="rightsidebluetextbox">
-
-                                            <span style="background:#888; font-size:14px;">{{settings.proximal_outcome_name}}</span>
-                                            ~ <br>
-                                            α<sub>0</sub> + <br>
-                                            {% for i in range(all_covariates_count) %}
-                                            α<sub>{{i+1}}</sub> * <span style="background:#888; font-size:14px;"> {{all_covs[i]['covariate_name']}} </span> + <br>
-                                            {% endfor %}
-                                            β<sub>0</sub> * <span style="background:#888; font-size:14px;"> {{settings.intervention_component_name}} </span> + <br>
-                                            {% for i in range(tailoring_covariates_count) %}
-                                            β<sub>{{i+1}}</sub> * <span style="background:#888; font-size:14px;"> {{tailoring_covariates[i]['covariate_name']}} </span> * <span style="background:#888; font-size:14px;"> {{settings.intervention_component_name}} </span> + <br>
-                                            {% endfor %}
-                                            + ϵ <br>
-                                            α<sub>0</sub>~N(<span style="color:#f65959;">μ<sub>α<sub>0</sub></sub>, σ<sub>α<sub>0</sub></sub></span><sup>2</sup>)
-                                            <br>
-                                            <span style="color:#f65959;"> We're asking for the red values.</span>
-
-                                        </p>
-                                    </div>
-                                </div> -->
-
-
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <div class="row congratstextbox" style="margin-bottom: 30px;">
-                                            <div class="col-1">
-                                                <img src="{{ config.ASSETS_ROOT }}/images/pjitai/celebration.png"
-                                                    class="img-responsive">
-                                            </div>
-                                            <div class="col-11">
-
-                                                <p>
-                                                    Congrats! You have finished setting up Model Settings.<br>
-                                                    Please review and confirm.<br>
-                                                    If you confirm, please click “Go to Configuration Summary.”
-                                                </p>
-                                            </div>
-
-                                        </div>
-
-
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5>Covariates</h5>
                                                 <hr>
                                                 {% if all_covariates|length==0%}
-                                                <div class="alert alert-primary" role="alert">
-                                                    There is no covariate.
-                                                </div>
-
+                                                    <div class="alert alert-primary" role="alert">
+                                                        There is no covariate.
+                                                    </div>
                                                 {%endif%}
                                                 <!--START OF THE COLLAPSABLE MENU-->
                                                 <div class="row">
@@ -111,27 +47,19 @@
                                                     <div class="col-3">
                                                         <b>Is this covariate a tailoring variable?</b>
                                                     </div>
-                                                    <div class="col-3">
-
-                                                    </div>
-
                                                 </div>
                                                 <hr>
+
                                                 {% for acov in all_covariates%}
-
-
                                                 <div class="card">
                                                     <div class="card-header" id="headingOne">
-
                                                         <div class="row">
                                                             <div class="col-6">
-
                                                                 <a href="#!" data-toggle="collapse"
                                                                 data-target="#collapseOne" aria-expanded="true"
                                                                 aria-controls="collapseOne">
                                                                     {{all_covariates.get(acov).get("covariate_name")}}
                                                                 </a>
-
                                                             </div>
                                                             <div class="col-3">
                                                                 {{all_covariates.get(acov).get("tailoring_variable")}}
@@ -143,11 +71,8 @@
                                                                 aria-controls="collapse_{{acov}}">
                                                                     <i class="fas fa-book-open"></i> View
                                                                 </a>
-
                                                             </div>
                                                         </div>
-
-
                                                     </div>
                                                     <div id="collapse_{{acov}}" class=" card-body collapse"
                                                         aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -162,10 +87,6 @@
                                                                 <td>The maximum value of the covariate</td>
                                                                 <td>{{all_covariates.get(acov).get("covariate_max_val")}}
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Type of the covariate</td>
-                                                                <td>{{all_covariates.get(acov).get("covariate_type")}}</td>
                                                             </tr>
                                                             {% if all_covariates.get(acov).get("covariate_type")=="Binary"
                                                             %}
@@ -218,64 +139,49 @@
                                                 {%endfor%}
                                                 <!--END OF THE COLLAPSABLE MENU-->
 
-                                                <h5>Proximal Outcome Attributes</h5>
+                                                <h5>Standardized Proximal Outcome Attributes</h5>
                                                 <hr>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="min_proximal_outcome">The minimum
-                                                        value of the proximal outcome</label>
+                                                    <label class="form-control-label" for="min_proximal_outcome">Minimum Allowed Value</label>
                                                     <input disabled type="text" value="{{settings.min_proximal_outcome}}"
                                                         id="min_proximal_outcome" name="min_proximal_outcome"
                                                         class="form-control" placeholder="Option A">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="max_proximal_outcome">The maximum
-                                                        value of the proximal outcome</label>
+                                                    <label class="form-control-label" for="max_proximal_outcome">Maximum Allowed Value</label>
                                                     <input disabled type="text" value="{{settings.max_proximal_outcome}}"
                                                         id="max_proximal_outcome" name="max_proximal_outcome"
                                                         class="form-control" placeholder="Option B">
-                                                </div>
-                                                <!-- <div class="form-group">
-                                                    <label class="form-control-label" for="max_proximal_outcome">Type of the
-                                                        proximal outcome</label>
-                                                    <select disabled id="proximal_outcome_type" name="proximal_outcome_type"
-                                                            class="form-control" aria-label="Default select example">
-                                                        <option selected>Continuous</option>
-                                                    </select> -->
                                                 </div>
 
                                                 <h5>Intercept</h5>
                                                 <hr>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="intercept_prior_mean">Prior mean
-                                                        of the intercept</label>
+                                                    <label class="form-control-label" for="intercept_prior_mean">Prior mean</label>
                                                     <input disabled type="text" value="{{settings.intercept_prior_mean}}"
                                                         id="intercept_prior_mean" name="intercept_prior_mean"
-                                                        class="form-control" required>
+                                                        class="form-control">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-control-label"
-                                                        for="intercept_prior_standard_deviation">Prior standard deviation
-                                                        of the intercept</label>
+                                                        for="intercept_prior_standard_deviation">Prior standard deviation</label>
                                                     <input disabled type="text"
                                                         value="{{settings.intercept_prior_standard_deviation}}"
                                                         id="intercept_prior_standard_deviation"
-                                                        name="intercept_prior_standard_deviation" class="form-control"
-                                                        required>
+                                                        name="intercept_prior_standard_deviation" class="form-control">
                                                 </div>
 
                                                 <h5>Main Treatment Effects</h5>
                                                 <hr>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="treatment_prior_mean">Prior mean
-                                                        of the main treatment effect</label>
+                                                    <label class="form-control-label" for="treatment_prior_mean">Prior mean</label>
                                                     <input disabled type="text" value="{{settings.treatment_prior_mean}}"
                                                         id="treatment_prior_mean" name="treatment_prior_mean"
                                                         class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-control-label"
-                                                        for="treatment_prior_standard_deviation">Prior standard deviation
-                                                        of the main treatment effect</label>
+                                                        for="treatment_prior_standard_deviation">Standard deviation</label>
                                                     <input disabled type="text"
                                                         value="{{settings.treatment_prior_standard_deviation}}"
                                                         id="treatment_prior_standard_deviation"
@@ -284,21 +190,21 @@
                                                 </div>
                                                 
 
-                                                <h5>Noise</h5>
+                                                <h5>Error</h5>
                                                 <hr>
                                                 <div class="form-group">
-                                                    <label class="form-control-label" for="noise_scale">Scale</label>
-                                                    <input disabled type="text" value="{{settings.noise_scale}}"
-                                                        id="noise_scale" name="noise_scale"
+                                                    <label class="form-control-label" for="error_scale">Scale</label>
+                                                    <input disabled type="text" value="{{settings.error_scale}}"
+                                                        id="error_scale" name="error_scale"
                                                         class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-control-label"
-                                                        for="noise_degree_of_freedom">Degree of freedom</label>
+                                                        for="error_degree_of_freedom">Degree of freedom</label>
                                                     <input disabled type="text"
-                                                        value="{{settings.noise_degree_of_freedom}}"
-                                                        id="noise_degree_of_freedom"
-                                                        name="noise_degree_of_freedom" class="form-control"
+                                                        value="{{settings.error_degree_of_freedom}}"
+                                                        id="error_degree_of_freedom"
+                                                        name="error_degree_of_freedom" class="form-control"
                                                         required>
                                                 </div>
 

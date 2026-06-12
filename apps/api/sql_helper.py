@@ -233,7 +233,7 @@ def get_tuned_params(proj_uuid: str):
             'theta_mu': [ts._theta_mu_ini],
             'theta_Sigma': [ts._theta_Sigma_ini],
             'degree': [ts._L_ini], 
-            'scale': [ts._noise_ini]
+            'scale': [ts._error_ini]
         }
         return tuned_params
 

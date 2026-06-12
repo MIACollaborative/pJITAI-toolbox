@@ -73,17 +73,17 @@ def compute_probability(data, action_state_dict):
 
         count=count+1
 
-    # Set up parameters in the model settings (TO-DO'S: NOTICE THAT WE NEED THE NOISE VARIANCE TOO)
+    # Set up parameters in the model settings (TO-DO'S: NOTICE THAT WE NEED THE ERROR VARIANCE TOO)
 
     ### TO-DO's
 
-    L=float(data['model_settings']['noise_degree_of_freedom'])
-    # Need to check if var_noise is the default. If yes, then set it to zero.
-    std_var_noise=float(data['model_settings']['noise_scale'])
-    if(std_var_noise==3.16):
-        var_noise=0
+    L=float(data['model_settings']['error_degree_of_freedom'])
+    # Need to check if var_error is the default. If yes, then set it to zero.
+    std_var_error=float(data['model_settings']['error_scale'])
+    if(std_var_error==3.16):
+        var_error=0
     else:
-        var_noise=std_var_noise**2
+        var_error=std_var_error**2
 
     ###
 
@@ -129,16 +129,16 @@ def compute_probability(data, action_state_dict):
     upper_clip=float(data['intervention_settings']['intervention_probability_upper_bound'])
 
     # Here is the list of parameters we need:
-    # default_alpha_ind, alpha0_mu, alpha0_std_Sigma, default_beta_ind, beta_mu, beta_std_Sigma, L, var_noise, action_center_ind
+    # default_alpha_ind, alpha0_mu, alpha0_std_Sigma, default_beta_ind, beta_mu, beta_std_Sigma, L, var_error, action_center_ind
     # lower_clip, upper_clip
-    # If the var_noise is using default values, set it to be zero for function init_theta
+    # If the var_error is using default values, set it to be zero for function init_theta
     
     state_med = 0.5* (state_lower + state_upper)
     state_half_range = 0.5* (state_upper - state_lower)
     reward_med = 0.5* (reward_lower + reward_upper)
     reward_half_range = 0.5* (reward_upper - reward_lower)
 
-    stand_beta_mu, stand_beta_Sigma, L, stand_noise = init_theta(default_alpha_ind, alpha0_mu, alpha0_std_Sigma, default_beta_ind, beta_mu, beta_std_Sigma, L, var_noise, \
+    stand_beta_mu, stand_beta_Sigma, L, stand_error = init_theta(default_alpha_ind, alpha0_mu, alpha0_std_Sigma, default_beta_ind, beta_mu, beta_std_Sigma, L, var_error, \
                state_med, state_half_range, reward_med, reward_half_range, action_center_ind, default_alpha_std_ind, default_beta_std_ind)
 
 
@@ -166,29 +166,29 @@ def compute_probability(data, action_state_dict):
         curr_stand_action_state= (v-beta_state_med[k])/(beta_state_half_range[k])
         stand_action_state.append(curr_stand_action_state)
     
-    pi = decision(stand_action_state, stand_beta_mu, stand_beta_Sigma, L, stand_noise, lower_clip, upper_clip)
+    pi = decision(stand_action_state, stand_beta_mu, stand_beta_Sigma, L, stand_error, lower_clip, upper_clip)
 
     return pi*100
 
 # The following is my helper function
 
 
-def init_theta(default_alpha_ind, alpha0_mu, alpha0_std_Sigma, default_beta_ind, beta_mu, beta_std_Sigma, L, var_noise, \
+def init_theta(default_alpha_ind, alpha0_mu, alpha0_std_Sigma, default_beta_ind, beta_mu, beta_std_Sigma, L, var_error, \
                state_med, state_half_range, reward_med, reward_half_range, action_center_ind, default_alpha_std_ind, default_beta_std_ind):
-    # First setup L and the noise
+    # First setup L and the error
     if(L < 3):
         L = _default_L
-    if(var_noise == 0):
-        var_noise = _default_sigma0_2 * reward_half_range**2
-        stand_noise = _default_sigma0_2
+    if(var_error == 0):
+        var_error = _default_sigma0_2 * reward_half_range**2
+        stand_error = _default_sigma0_2
     else:
-        stand_noise = var_noise / (reward_half_range**2)
+        stand_error = var_error / (reward_half_range**2)
           
     default_beta_ind_no_intercept = np.copy(default_beta_ind)
     default_beta_std_ind_no_intercept = np.copy(default_beta_std_ind)
         
-    # First, transform the standard deviation of alpha0 and beta to a scale of the noise variance (Eq. A.7)
-    beta_sigma_2 = (beta_std_Sigma**2)/var_noise*(L-2)/L
+    # First, transform the standard deviation of alpha0 and beta to a scale of the error variance (Eq. A.7)
+    beta_sigma_2 = (beta_std_Sigma**2)/var_error*(L-2)/L
             
     # Setup the unstandardized beta priors with the default (without the intercept)
     default_beta_ind_no_intercept[-1] = 0
@@ -241,9 +241,9 @@ def init_theta(default_alpha_ind, alpha0_mu, alpha0_std_Sigma, default_beta_ind,
     stand_beta_mu=1/reward_half_range*np.matmul(B_beta,beta_mu)
     stand_beta_Sigma=np.matmul(np.matmul(B_beta,Sigma_beta),np.transpose(B_beta))
         
-    return stand_beta_mu, stand_beta_Sigma, L, stand_noise
+    return stand_beta_mu, stand_beta_Sigma, L, stand_error
 
-def decision(stand_action_state, stand_beta_mu, stand_beta_Sigma, L, stand_noise, lower_clip, upper_clip):
+def decision(stand_action_state, stand_beta_mu, stand_beta_Sigma, L, stand_error, lower_clip, upper_clip):
 
         
     # mu_t and Sigma_t are associated with the f(S)*beta
@@ -254,8 +254,8 @@ def decision(stand_action_state, stand_beta_mu, stand_beta_Sigma, L, stand_noise
     mu_t=np.matmul(np.transpose(stand_action_state),stand_beta_mu)
     Sigma_t=np.matmul(np.transpose(stand_action_state),stand_beta_Sigma)
         
-    # Notice that the posterior variance of f(S)*beta is scaled by noise
-    Sigma_t= stand_noise*np.matmul(Sigma_t,stand_action_state)
+    # Notice that the posterior variance of f(S)*beta is scaled by error
+    Sigma_t= stand_error*np.matmul(Sigma_t,stand_action_state)
     scale_t=np.sqrt(Sigma_t[0,0])
     pi=1-t.cdf(0, L, loc=mu_t[0,0], scale=scale_t)
     pi=max(lower_clip,pi)
