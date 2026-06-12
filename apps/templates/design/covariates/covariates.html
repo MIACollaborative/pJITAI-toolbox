@@ -129,25 +129,6 @@ $(document).ready(function() {
                                                                     <div class="col">
                                                                         {{all_covariates.get(acov).get("tailoring_variable")}}
                                                                     </div>
-                                                                    <!-- <div class="col-2">
-                                                                        <a href="/covariates/settings/covariate_define/{{project_uuid}}/{{acov}}"
-                                                                        class="btn-primary btn-sm"><i class="fas fa-edit"></i>
-                                                                            Edit</a>
-                                                                    </div>
-                                                                    <div class="col-2">
-                                                                        <a href="/covariates/settings/delete/{{project_uuid}}/{{acov}}"
-                                                                        class="btn-danger btn-sm" role="button"
-                                                                        onclick="return confirm('Are you sure you want to delete covariate?');"><i
-                                                                                class="far fa-trash-alt"></i> Delete</a>
-                                                                    </div>
-                                                                    <div class="col-1">
-                                                                        <a href="#!" class="btn-info btn-sm" data-toggle="collapse"
-                                                                        data-target="#collapse_{{acov}}" aria-expanded="true"
-                                                                        aria-controls="collapse_{{acov}}">
-                                                                            <i class="fas fa-book-open"></i> More details
-                                                                        </a>
-
-                                                                    </div> -->
                                                                 </div>
 
 
@@ -157,44 +138,15 @@ $(document).ready(function() {
                                                                 <table class="table table-hover">
                                                                     <tbody>
                                                                     <tr>
-                                                                        <td>The minimum value of the covariate</td>
+                                                                        <td>Minimum Allowed Value</td>
                                                                         <td>{{all_covariates.get(acov).get("covariate_min_val")}}
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td>The maximum value of the covariate</td>
+                                                                        <td>Maximum Allowed Value</td>
                                                                         <td>{{all_covariates.get(acov).get("covariate_max_val")}}
                                                                         </td>
                                                                     </tr>
-                                                                    <tr>
-                                                                        <td>Prior mean of the main effect</td>
-                                                                        <td>
-                                                                            {{all_covariates.get(acov).get("main_effect_prior_mean")}}
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Prior standard deviation of the main effect</td>
-                                                                        <td>
-                                                                            {{all_covariates.get(acov).get("main_effect_prior_standard_deviation")}}
-                                                                        </td>
-                                                                    </tr>
-                                                                    {% if all_covariates.get(acov).get("tailoring_variable")=="yes"
-                                                                    %}
-                                                                    <tr>
-                                                                        <td>Prior mean of the interaction coefficient</td>
-                                                                        <td>
-                                                                            {{all_covariates.get(acov).get("interaction_coefficient_prior_mean")}}
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Prior standard deviation of the interaction
-                                                                            coefficient
-                                                                        </td>
-                                                                        <td>
-                                                                            {{all_covariates.get(acov).get("interaction_coefficient_prior_standard_deviation")}}
-                                                                        </td>
-                                                                    </tr>
-                                                                    {% endif %}
                                                                     </tbody>
                                                                 </table>
                                                             </div>
