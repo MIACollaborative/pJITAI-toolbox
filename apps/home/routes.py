@@ -42,10 +42,10 @@ from apps.algorithms.models import Projects
 from apps.home import blueprint
 from apps.home.helper import get_project_details, update_general_settings, update_intervention_settings, \
     update_model_settings, update_covariates_settings, add_menu, get_project_menu_pages, get_all_users, \
-    update_general_settings_team_members, delete_general_settings_team_members, get_survey_details, add_project_logs
+    update_general_settings_team_members, delete_general_settings_team_members, add_project_logs
 from apps.home.summary_page_probability import compute_probability
 from apps.api.models import Comment
-from apps.api.sql_helper import get_comments, get_all_comments, save_survey, update_survey
+from apps.api.sql_helper import get_comments, get_all_comments
 
 @blueprint.route('/comment/delete/<comment_id>', methods=['GET'])
 @login_required
@@ -243,12 +243,10 @@ def mark_project_finalized(project_uuid):
     project_details, project_details_obj = get_project_details(project_uuid=project_uuid, user_id=user_id)
     team_members = project_details.get('general_settings', {}).get('team_members', {})
     displayname = current_user.displayname
-    final_survey_link = 'https://docs.google.com/forms/d/e/1FAIpQLScS9CuvxoQlWsb41tMo4cvLd7fIG053h--yoE9Wu1f5VKtl_A/viewform?usp=header'
     for t in team_members: # Send for everyone intluding MP
         msg = Message("[pJITAI] Project Finalized",
                     recipients=[t["email"]])
-        email_msg = f"The Main Participant '{displayname}' finalized the project '{project_details.get('general_settings').get('project_name')}'." + \
-                    f"\nPlease open this link to complete the final survey: {final_survey_link}" 
+        email_msg = f"The Main Participant '{displayname}' finalized the project '{project_details.get('general_settings').get('project_name')}'."
         msg.body = email_msg
         mail.send(msg)    
 
@@ -722,10 +720,6 @@ def configuration_summary(config_type, project_uuid):
 
     if config_type == "summary":
         page_name = "configuration_summary"
-    elif config_type == "final_survey":
-        survey_details, survey_details_obj = get_survey_details(project_uuid=project_uuid, user_id=user_id)
-        survey_details = survey_details.get("survey_questions", {})
-        page_name = "configuration_final_survey"
     else:
         page_name = "configuration_final"
 
@@ -756,8 +750,7 @@ def configuration_summary(config_type, project_uuid):
         for cov in covs:
             if covs.get(cov).get('tailoring_variable') == 'yes':
                 cov_name = covs.get(cov).get('covariate_name')
-                cov_desc = 'XXX'
-                cov_desc = f"Type: {covs.get(cov).get('covariate_type')}, Min: {covs.get(cov).get('covariate_min_val')}, Max: {covs.get(cov).get('covariate_max_val')}, Notes: {covs.get(cov).get('notes')}"
+                cov_desc = f"Min: {covs.get(cov).get('covariate_min_val')}, Max: {covs.get(cov).get('covariate_max_val')}, Notes: {covs.get(cov).get('notes')}"
                 tailoring_covs_names.append(cov_name)
                 tailoring_covs_description.append(cov_desc)
         
@@ -778,19 +771,6 @@ def configuration_summary(config_type, project_uuid):
                                tailoring_covs_description = tailoring_covs_description,
                                all_menus=all_menus, menu_number=16, modified_on=modified_on, project_uuid=project_uuid, 
                                probability=prob_str, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif config_type == "final_survey":
-        return render_template("design/config_summary/final_survey.html", segment="static_pages_survey", settings=settings,
-                               all_menus=all_menus, menu_number=17, modified_on=modified_on, project_uuid=project_uuid, survey=survey_details,
-                               comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-    elif config_type == "add_edit_survey":
-        survey_details, survey_details_obj = get_survey_details(project_uuid=project_uuid, user_id=user_id)
-        if request.method == 'POST':
-            survey = request.form.to_dict()
-            if not survey_details_obj:
-                save_survey(project_uuid=project_uuid, survey=survey, user_id=user_id)
-            else:
-                update_survey(data=survey, survey_details_obj=survey_details_obj)
-        return redirect("/projects/in_progress")
     elif config_type == "final":
         return render_template("design/config_summary/final.html", segment="configuration_final", settings=settings,
                                all_menus=all_menus, menu_number=18, modified_on=modified_on, project_uuid=project_uuid,

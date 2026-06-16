@@ -131,14 +131,13 @@ function showControl() {
                         <li data-target="#myCarousel" data-slide-to="4"></li>
                         <li data-target="#myCarousel" data-slide-to="5"></li>
                         <li data-target="#myCarousel" data-slide-to="6"></li>
-                        <li data-target="#myCarousel" data-slide-to="7"></li>
                     </ol>
                     <div class="carousel-inner" role="listbox">
                         <div class="carousel-item active">
                             <h3>Why use the pJITAI toolbox?</h3>
                             <div class="row">
                                 <div class="col-9">
-                                    <p class="pull-left">This toolbox helps you design a reinforcement learning algorithm for a  personalizing Just-in-Time Adaptive Intervention (pJITAI) component.</p>
+                                    <p class="pull-left">This toolbox helps you design a reinforcement learning algorithm for a personalizing Just-in-Time Adaptive Intervention (pJITAI) component. </p>
                                 </div>
                                 <div class="col-3">
                                     <img src="{{ config.ASSETS_ROOT }}/images/pjitai/social-care_1.png"
@@ -163,37 +162,31 @@ function showControl() {
                         <div class="carousel-item">
                             <h3>What is a Decision Point?</h3>
                             <div class="col-9">
-                                <p>In a JITAI, a decision point is a point in time where an intervention component decides what type of intervention to deliver, or whether to deliver an intervention at all. For example, an intervention component that promotes walking might include a decision point in the morning before the person goes to work.</p>
+                                <p>In a JITAI, a decision point is a point in time where an intervention component decides what type of intervention to deliver, or whether to deliver an intervention at all. For example, an intervention component that promotes walking might include a decision point in the morning before the person goes to work. </p>
                             </div>
                         </div>
                         <div class="carousel-item">
                             <h3>What is Personalization (for JITAIs)?</h3>
                             <div class="col-9">
-                                <p>Whereas some JITAI decision rules may be designed with fixed probabilities or deterministic rules (e.g., IF the user did not meet their step goal yesterday THEN deliver a walking suggestion at 9am today), a personalizing JITAI component will employ an algorithm that seeks to learn under what conditions a particular intervention option is more effective for an individual, and to adjust the likelihood of sending that option to optimize overall effectiveness. For example, if a user is more likely to take walks after receiving a reminder on weekends than on weekdays, the algorithm may choose to send a message (rather than send nothing) more often on weekends than on weekdays.</p>
+                                <p>Whereas some JITAI decision rules may be designed with fixed probabilities or deterministic rules (e.g., IF the user did not meet their step goal yesterday THEN deliver a walking suggestion at 9am today), a personalizing JITAI component will employ an algorithm that seeks to learn under what conditions a particular intervention option is more effective for an individual, and to adjust the likelihood of sending that option to optimize overall effectiveness. For example, if a user is more likely to take walks after receiving a reminder on weekends than on weekdays, the algorithm may choose to send a message (rather than send nothing) more often on weekends than on weekdays. </p>
                             </div>
                         </div>
                         <div class="carousel-item">
                             <h3>How can I use the pJITAI Toolbox?</h3>
                             <div class="col-9">
-                                <p>The pJITAI Toolbox will walk you through the steps of configuring a personalizing reinforcement learning algorithm. Providing the information requested by the Toolbox will ensure that the algorithm is set up properly for the intervention component you plan to personalize, and that the algorithm is initialized with starting parameters that will allow it to perform reasonably well at the beginning and learn each user’s responsiveness quickly. The current version of the Toolbox assumes that you have prior data from a Micro-randomized Trial (a common way to generate initialization data for a personalizing algorithm), but if you don’t have such data you can come up with estimates from related prior work or simply take your best guess!</p>
+                                <p>The pJITAI Toolbox will walk you through the steps of configuring a personalizing reinforcement learning algorithm. Providing the information requested by the Toolbox will ensure that the algorithm is set up properly for the intervention component you plan to personalize, and that the algorithm is initialized with starting parameters that will allow it to perform reasonably well at the beginning and learn each user's responsiveness quickly. The current version of the Toolbox assumes that you have prior data from a Micro-randomized Trial (a common way to generate initialization data for a personalizing algorithm). If certain fields are missing, feel free to refer to the general instructions “What should I enter?” and discussions at the bottom of each screen that will help you decide what to enter.</p>
                             </div>
                         </div>
                         <div class="carousel-item">
                             <h3>How do I start? </h3>
                             <div class="col-9">
-                                <p>Simply click “New Project” from the options on the left. On each of the screens that follow, in addition to general instructions and explanations, you will find examples drawn from the HeartSteps project. A great way to get familiar with the pJITAI toolbox is to create your own “HeartSteps Activity Suggestions” project and walk through the Toolbox entering values from the running example. After you finish that, come back here and start a new project to personalize your own Intervention Component!</p>
+                                <p>Please make sure to have a previously run MRT study with you before you get started. Then simply click “New Project” from the options on the left. As previously explained, refer to the general instructions and discussions that will help you decide what to enter and get familiar with the toolbox.</p>
                             </div>
                         </div>
                         <div class="carousel-item">
                             <h3>pJITAI Toolbox Structure</h3>
                             <img src="{{ config.ASSETS_ROOT }}/images/pjitai/pJITAI-table.png">
                             <p>Notes: Elements in green are not provided by the pJITAI Toolbox. Work with your software development team to create these elements and integrate them with the pJITAI Toolbox. Use the pJITAI Toolbox interface to create and configure a pJITAI algorithm that is specific to one intervention component in your intervention app.</p>
-                        </div>
-                        <div class="carousel-item">
-                            <h3>How is the pJITAI Toolbox connected to the App Client?</h3>
-                            <p>All data and requests between the pJITAI Toolbox and your app client (e.g., mobile app) are made via API calls. 
-                                At the end of creating a project, you will be directed to a page that explains how to connect to your app client using API.
-                                You can find more details about the API in the Intervention Application Guide documentation (link at #TODO).</p>
                         </div>
                     </div>
 
