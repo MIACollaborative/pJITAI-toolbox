@@ -32,7 +32,7 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5>Covariates</h5>
+                                                <h5>Covariates Define</h5>
                                                 <hr>
                                                 {% if all_covariates|length==0%}
                                                     <div class="alert alert-primary" role="alert">
@@ -79,31 +79,16 @@
                                                         <table class="table table-hover">
                                                             <tbody>
                                                             <tr>
-                                                                <td>The minimum value of the covariate</td>
+                                                                <td>Minimum Allowed Value</td>
                                                                 <td>{{all_covariates.get(acov).get("covariate_min_val")}}
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>The maximum value of the covariate</td>
+                                                                <td>Maximum Allowed Value</td>
                                                                 <td>{{all_covariates.get(acov).get("covariate_max_val")}}
                                                                 </td>
                                                             </tr>
-                                                            {% if all_covariates.get(acov).get("covariate_type")=="Binary"
-                                                            %}
-                                                            <tr>
-                                                                <td>Meaning of “Covariate=0”</td>
-                                                                <td>
-                                                                    {{all_covariates.get(acov).get("covariate_meaning_0")}}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Meaning of “Covariate=1”</td>
-                                                                <td>
-                                                                    {{all_covariates.get(acov).get("covariate_meaning_1")}}
-                                                                </td>
-                                                            </tr>
-                                                            {%endif%}
-                                                            <tr>
+                                                            <!-- <tr>
                                                                 <td>Prior mean of the main effect</td>
                                                                 <td>
                                                                     {{all_covariates.get(acov).get("main_effect_prior_mean")}}
@@ -131,7 +116,7 @@
                                                                     {{all_covariates.get(acov).get("interaction_coefficient_prior_standard_deviation")}}
                                                                 </td>
                                                             </tr>
-                                                            {% endif %}
+                                                            {% endif %} -->
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -171,6 +156,29 @@
                                                         name="intercept_prior_standard_deviation" class="form-control">
                                                 </div>
 
+                                                <h5>Covariates Main Effect</h5>
+                                                <div class="row">
+                                                    <div class="col-12"> <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width: 50%;">Name of the covariate</th>
+                                                                    <th style="width: 25%;">Main Effect Prior Mean</th>
+                                                                    <th style="width: 25%;">Main Effect Standard Deviation</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for acov in all_covariates %}
+                                                                <tr>
+                                                                    <td>{{ all_covariates.get(acov).get("covariate_name") }}</td>
+                                                                    <td>{{ all_covariates.get(acov).get("main_effect_prior_mean") }}</td>
+                                                                    <td>{{ all_covariates.get(acov).get("main_effect_prior_standard_deviation") }}</td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
                                                 <h5>Main Treatment Effects</h5>
                                                 <hr>
                                                 <div class="form-group">
@@ -189,6 +197,30 @@
                                                         required>
                                                 </div>
                                                 
+                                                <h5>Covariates Interaction Effect</h5>
+                                                <div class="row">
+                                                    <div class="col-12"> <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width: 50%;">Name of the covariate</th>
+                                                                    <th style="width: 25%;">Interaction Effect Prior Mean</th>
+                                                                    <th style="width: 25%;">Interaction Effect Standard Deviation</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for acov in all_covariates %}
+                                                                {% if all_covariates.get(acov).get("tailoring_variable") == "yes" %}
+                                                                <tr>
+                                                                    <td>{{ all_covariates.get(acov).get("covariate_name") }}</td>
+                                                                    <td>{{ all_covariates.get(acov).get("interaction_coefficient_prior_mean") }}</td>
+                                                                    <td>{{ all_covariates.get(acov).get("interaction_coefficient_prior_standard_deviation") }}</td>
+                                                                </tr>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
 
                                                 <h5>Error</h5>
                                                 <hr>

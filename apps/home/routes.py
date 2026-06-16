@@ -490,7 +490,7 @@ def model_settings(setting_type, project_uuid):
                 if project_details.get("covariates"):
                     all_covariates = project_details.get("covariates")
                     add_project_logs(project_uuid=project_uuid, created_by=user_id, details=all_covariates, page_name=page_name_log, timestamp=timestamp)
-        if setting_type == "main_treatment_effect": # update covariate main effect here
+        if setting_type == "main_treatment_effect" or setting_type=="main_error": # update covariate main effect, cov interaction effect here
            for k, v in request.form.to_dict().items():
                cov_id = k.split("_")[-1]
                k_new_name = k.rsplit("_", 1)[0]
@@ -555,16 +555,12 @@ def model_settings(setting_type, project_uuid):
                                tailoring_covariates=tailoring_covariates, all_covariates_count=len(all_covariates), 
                                tailoring_covariates_count=len(tailoring_covariates), comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "summary":
-        print(f'XXXXX Summary {model_settings}')
-        print(f'XXXXX Summaryyyyy {model_settings["proximal_outcome_name"]}')
+        all_covariates = dict(sorted(project_details.get("covariates").items(), key=lambda item: item[1].get("created_on", ""), reverse=False))
         return render_template("design/model/summary.html", segment="model_summary", all_menus=all_menus,
                                menu_number=16, project_name=project_name, modified_on=modified_on,
                                all_covariates=all_covariates, settings=model_settings, project_uuid=project_uuid,
-                               all_covs=all_covs, 
                                proximal_outcome_name = model_settings['proximal_outcome_name'],
-                               tailoring_covariates=tailoring_covariates, all_covariates_count=len(all_covariates), 
-                               tailoring_covariates_count=len(tailoring_covariates), comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
-
+                               tailoring_covariates=tailoring_covariates, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
 
 
 @blueprint.route('/covariates/settings/<setting_type>/<project_uuid>', methods=['GET', 'POST'])
