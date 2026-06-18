@@ -3,12 +3,45 @@
 {% block title %} Finalize Project {% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 
 <!-- [ Main Content ] start -->
 <div class="grid-container">
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="text-center">
+            <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <h4 class="text-white mt-3">Finalizing project and sending emails...</h4>
+            <p class="text-white-50">Please do not close this window.</p>
+        </div>
+    </div>
     <div class="pcoded-main-container">
         <div class="pcoded-wrapper">
             <div class="pcoded-content">
@@ -61,10 +94,11 @@
                                                         class="img-responsive center-block">
                                                     <p></p>
                                                     <!-- <a href="/projects/finalize/{{project_uuid}}"
-                                                    class="btn btn-outline-primary" role="button">Finalize and Generate
-                                                        your API</a> -->
-                                                    <a href="/projects/finalize/{{project_uuid}}"
-                                                    class="btn btn-outline-primary" role="button">Finalize Your Project</a>
+                                                    class="btn btn-outline-primary" role="button">Finalize Your Project</a> -->
+                                                    <a href="/projects/finalize/{{project_uuid}}" id="finalizeBtn" class="btn btn-outline-primary" role="button">
+                                                        <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" style="margin-right: 5px;"></span>
+                                                        <span id="btnText">Finalize Your Project</span>
+                                                    </a>
                                                 </div>
                                             </div>
 
@@ -104,4 +138,16 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script>
+document.getElementById('finalizeBtn').addEventListener('click', function(e) {
+    if (this.classList.contains('disabled')) {
+        e.preventDefault();
+        return;
+    }
+    this.classList.add('disabled');
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.classList.add('active');
+});
+</script>
+{% endblock javascripts %}
