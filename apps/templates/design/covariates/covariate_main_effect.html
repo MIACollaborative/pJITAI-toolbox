@@ -116,7 +116,7 @@
                     </li>
 
                     <li>
-                        If the covariate is not present in the MRT data, then a <b>Prior Mean</b> = 0 and <b>Prior Standard Deviation</b> = 3.16 is often used as a <a href="https://github.com/stan-dev/stan/wiki/prior-choice-recommendations">weakly informative prior</a>.
+                        If the covariate is not present in the MRT data, then a <b>Prior Mean</b> = 0 and <b>Prior Standard Deviation</b> = 3.16 is often used as a <i><a href="https://github.com/stan-dev/stan/wiki/prior-choice-recommendations">weakly informative prior</a></i>.
 
                         Note that prior standard deviation = 3.16, though it seems specific, is chosen because its square is approximately 10 (i.e. variance = 10). It expresses uncertainty. This communicates that the true main effect is likely within the range of -6 to +6 (recall the proximal outcome is approximately standardized). This choice of prior standard deviation is viewed as flexible enough to let the data speak for itself while providing robustness to errors when the amount of data is small.
 
