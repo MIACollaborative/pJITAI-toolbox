@@ -35,7 +35,7 @@
                                             <div class="card-header">
                                                 {% for key, cov in all_tailoring_covariates.items() %}
                                                 <div class="row"style="display: flex; flex-direction: row; ">
-                                                    <div class="col" style="flex: 5;">
+                                                    <div class="col" style="flex: 4;">
                                                         <h4>Interaction Effect of the Covariate: {{ cov.covariate_name }}</h4>
                                                         <div class="form-group">
                                                             <label class="form-control-label"
@@ -69,7 +69,7 @@
 
                                                     </div>
 
-                                                    <div class="col" style="flex: 5;">
+                                                    <div class="col" style="flex: 6;">
                                                         {{cov.formula|safe}}
                                                     </div>
                                                 </div>

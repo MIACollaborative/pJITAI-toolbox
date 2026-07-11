@@ -836,12 +836,12 @@ def generate_formula(project_uuid, is_summary_page, add_red_note, cov_id=None, c
         is_tailoring = cov_vars.get("tailoring_variable")
         bg_color = "#EBD5E9" if is_tailoring == "yes" else "#DAD5EB"
         border_alpha = "6px" if acov == cov_id and not covariate_interaction_effect and not is_all else "1px"
-        alphas += f"""<br><br>+ <span style="background-color: #FFF8E5; border: {border_alpha} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>{alpha_counter}</sub></span> * <span id="cov_name_span1" style="background-color: {bg_color}; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{name}</span> """
+        alphas += f"""<br><br>+ <span style="display: inline-block; background-color: #FFF8E5; border: {border_alpha} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">α<sub>{alpha_counter}</sub></span> * <span id="cov_name_span1" style="background-color: {bg_color}; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{name}</span> """
         alpha_vars += f'α<sub>{alpha_counter}</sub>~N({cov_vars.get("main_effect_prior_mean")}, {cov_vars.get("main_effect_prior_standard_deviation")}<sup>2</sup>)<br>'
         alpha_counter += 1
         if is_tailoring == "yes":
             border_beta = "6px" if acov == cov_id and covariate_interaction_effect and not is_all else "1px"
-            betas += f"""<br><br><span id="beta_{beta_counter}">+ <span style="background-color: #FFF8E5; border: {border_beta} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>{beta_counter}</sub></span> * <span id="cov_name_span2" style="background-color: {bg_color}; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{name}</span>  * <span style="background-color: #D5EBD9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> {intervention_component_name} </span></span>"""
+            betas += f"""<br><br><span id="beta_{beta_counter}">+ <span style="display: inline-block; background-color: #FFF8E5; border: {border_beta} solid #888; padding: 5px; border-radius: 3px; font-size:14px;">β<sub>{beta_counter}</sub></span> * <span id="cov_name_span2" style="background-color: {bg_color}; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;">{name}</span>  * <span style="background-color: #D5EBD9; border: 1px solid #888; padding: 5px; border-radius: 3px; font-size:14px;"> {intervention_component_name} </span></span>"""
             beta_vars += f'β<sub>{beta_counter}</sub>~N({cov_vars.get("main_effect_prior_mean")}, {cov_vars.get("main_effect_prior_standard_deviation")}<sup>2</sup>)<br>'
             beta_counter += 1
     border_alpha = "6px" if is_intercept else "1px"

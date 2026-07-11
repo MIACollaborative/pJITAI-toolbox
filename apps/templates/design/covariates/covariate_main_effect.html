@@ -35,7 +35,7 @@
                                             <div class="card-header">
                                                 {% for key, cov in all_covariates.items() %}
                                                 <div class="row" style="display: flex; flex-direction: row; ">
-                                                    <div class="col" style="flex: 5;">
+                                                    <div class="col" style="flex: 4;">
                                                         <h4>Main Effect of the Covariate: {{ cov.covariate_name }}</h4>
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="main_effect_prior_mean_{{key}}">Prior mean (<b>&mu;<sub>&alpha;{{cov.idx}}</sub></b>)</label>
@@ -66,7 +66,7 @@
 
                                                     </div>
 
-                                                    <div class="col" style="flex: 5;">
+                                                    <div class="col" style="flex: 6;">
                                                         {{cov.formula|safe}}
                                                     </div>
                                                 </div>
