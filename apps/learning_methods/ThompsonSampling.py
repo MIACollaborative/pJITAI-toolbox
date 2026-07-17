@@ -55,7 +55,7 @@ class ThompsonSampling(LearningMethodBase):
         self.type = "ThompsonSampling"  # this should be same as class name
         self.description = 'This is the thomson sampling algorithm definition.'
         self.project_uuid = config["uuid"]
-        # TODO: for all sigma range (0 to +inf) and for all mu, (-inf, +inf), Noise is same like sigma
+        # TODO: for all sigma range (0 to +inf) and for all mu, (-inf, +inf), Error is same like sigma
         # technical section: param section for behav scitn.
         # help /FAQ
         # more info/tutorial
@@ -101,8 +101,8 @@ class ThompsonSampling(LearningMethodBase):
         standalone_parameters['alpha_0_sigma_bias'] = config['model_settings']['intercept_prior_standard_deviation']
         standalone_parameters['beta_mu_bias'] = config['model_settings']['treatment_prior_mean']
         standalone_parameters['beta_sigma_bias'] = config['model_settings']['treatment_prior_standard_deviation']
-        standalone_parameters['noise_degree'] = config['model_settings']['noise_degree_of_freedom']
-        standalone_parameters['noise_scale'] = config['model_settings']['noise_scale']
+        standalone_parameters['error_degree'] = config['model_settings']['error_degree_of_freedom']
+        standalone_parameters['error_scale'] = config['model_settings']['error_scale']
         ### Jane2
         standalone_parameters['min_proximal_outcome'] = config['model_settings']['min_proximal_outcome']
         standalone_parameters['max_proximal_outcome'] = config['model_settings']['max_proximal_outcome']
@@ -193,11 +193,11 @@ class ThompsonSampling(LearningMethodBase):
         else:
             default_beta_sigma_ind.append(0)
 
-        # self._degree_ini = float(self.standalone_parameters['noise_degree']) 
-        # self._scale_ini = float(self.standalone_parameters['noise_scale']) 
+        # self._degree_ini = float(self.standalone_parameters['error_degree']) 
+        # self._scale_ini = float(self.standalone_parameters['error_scale']) 
         ## Jane2
-        L= float(self.standalone_parameters['noise_degree']) 
-        std_noise = float(self.standalone_parameters['noise_scale']) 
+        L= float(self.standalone_parameters['error_degree']) 
+        std_error = float(self.standalone_parameters['error_scale']) 
 
         self._lower_clip = float(self.other_parameters['lower_clip']) 
         self._upper_clip = float(self.other_parameters['upper_clip']) 
@@ -227,10 +227,10 @@ class ThompsonSampling(LearningMethodBase):
         # Eventually the standardization would need to happen here
 
         ### Jane2
-        self.init_theta(default_alpha_mu_ind, alpha0_mu, default_alpha_sigma_ind, alpha0_std_sigma, default_beta_mu_ind, beta_mu, default_beta_sigma_ind, beta_std_sigma, L, std_noise)
+        self.init_theta(default_alpha_mu_ind, alpha0_mu, default_alpha_sigma_ind, alpha0_std_sigma, default_beta_mu_ind, beta_mu, default_beta_sigma_ind, beta_std_sigma, L, std_error)
 
         ### Jane2: Comment this out
-        # # Right now we haven't changed theta_Sigma with respect to the scaling parameter of the noise
+        # # Right now we haven't changed theta_Sigma with respect to the scaling parameter of the error
         # theta_mu_ini = np.array([alpha0_mu + beta_mu + beta_mu]).T
         # theta_sigma_list = alpha0_std_sigma + beta_std_sigma + beta_std_sigma
         # theta_Sigma_ini = np.diag(np.array(theta_sigma_list) ** 2 / (self._scale_ini**2))
@@ -255,13 +255,13 @@ class ThompsonSampling(LearningMethodBase):
             theta_mu = np.array(tuned_params.iloc[0]['theta_mu'])
             theta_Sigma = np.array(tuned_params.iloc[0]['theta_Sigma'])
             degree = tuned_params.iloc[0]['degree']
-            noise = np.array(tuned_params.iloc[0]['scale'])
+            error = np.array(tuned_params.iloc[0]['scale'])
 
         except Exception as e:  # Something is wrong or data is missing, assuming defaults
             theta_mu = self._theta_mu_ini
             theta_Sigma = self._theta_Sigma_ini
             degree = self._L_ini
-            noise = self._noise_ini
+            error = self._error_ini
 
         # Setup the state
         state = []
@@ -299,7 +299,7 @@ class ThompsonSampling(LearningMethodBase):
             Sigma_t = np.matmul(np.transpose(self.action_center(state)), beta_Sigma)
 
             # Notice that the posterior variance of f(S)*beta is scaled by the scale of the inverse chi-square distribution
-            Sigma_t = noise * np.matmul(Sigma_t, self.action_center(state))
+            Sigma_t = error * np.matmul(Sigma_t, self.action_center(state))
 
             # f(S)*beta is a multivariate t distribution with mean mu_t, variance Sigma_t, and degree of freedom L
             scale_t=np.sqrt(Sigma_t[0,0])
@@ -336,12 +336,12 @@ class ThompsonSampling(LearningMethodBase):
         for u in data.user_id.unique():
             result_data = [time_8601(), u]
 
-            theta_mu, theta_Sigma, degree, noise = self.update_parameters(data[data.user_id == u])
+            theta_mu, theta_Sigma, degree, error = self.update_parameters(data[data.user_id == u])
 
             result_data.append(theta_mu.tolist())
             result_data.append(theta_Sigma.tolist())
             result_data.append(degree)
-            result_data.append(noise.tolist())
+            result_data.append(error.tolist())
             temp = pd.DataFrame([result_data], columns=columns)
             result = pd.concat([result, temp], ignore_index=True)
 
@@ -396,15 +396,15 @@ class ThompsonSampling(LearningMethodBase):
         theta_mu = np.matmul(np.linalg.inv(self._theta_Sigma_ini), self._theta_mu_ini) + np.matmul(Phi_all, reward_all)
         theta_mu = np.matmul(theta_Sigma, theta_mu)
 
-        # Now we update the noise
+        # Now we update the error
         degree = self._L_ini + len(reward_all)
         tmp0 = reward_all - np.matmul(np.transpose(Phi_all), self._theta_mu_ini)
         tmp = np.linalg.solve(
             np.matmul(np.matmul(np.transpose(Phi_all), self._theta_Sigma_ini), Phi_all) + np.identity(len(reward_all)),
             tmp0)
-        noise = 1 / degree * (self._L_ini * self._noise_ini + np.matmul(np.transpose(tmp0), tmp))
+        error = 1 / degree * (self._L_ini * self._error_ini + np.matmul(np.transpose(tmp0), tmp))
         
-        return theta_mu, theta_Sigma, degree, noise
+        return theta_mu, theta_Sigma, degree, error
 
     # The follows are helper functions for Thompson sampling
 
@@ -421,26 +421,26 @@ class ThompsonSampling(LearningMethodBase):
         self._reward_half_range = reward_half_range
         
     ### Jane2
-    def init_theta(self, default_alpha_mu_ind, alpha0_mu, default_alpha_sigma_ind, alpha0_std_Sigma, default_beta_mu_ind, beta_mu, default_beta_sigma_ind, beta_std_Sigma, L, std_noise):
+    def init_theta(self, default_alpha_mu_ind, alpha0_mu, default_alpha_sigma_ind, alpha0_std_Sigma, default_beta_mu_ind, beta_mu, default_beta_sigma_ind, beta_std_Sigma, L, std_error):
         if(L < 3):
             L = self._default_L
         
-        # stand_noise is the noise variance applied to the standardized model
-        if(std_noise == self._default_sigma0):
-            var_noise = self._default_sigma0_2 * self._reward_half_range**2
-            stand_noise = self._default_sigma0_2
+        # stand_error is the error variance applied to the standardized model
+        if(std_error == self._default_sigma0):
+            var_error = self._default_sigma0_2 * self._reward_half_range**2
+            stand_error = self._default_sigma0_2
         else:
-            var_noise = std_noise**2
-            stand_noise = self._default_sigma0_2 / (self._reward_half_range**2)
+            var_error = std_error**2
+            stand_error = self._default_sigma0_2 / (self._reward_half_range**2)
 
         default_alpha_mu_ind_no_intercept = np.copy(default_alpha_mu_ind)
         default_alpha_sigma_ind_no_intercept = np.copy(default_alpha_sigma_ind)
         default_beta_mu_ind_no_intercept = np.copy(default_beta_mu_ind)
         default_beta_sigma_ind_no_intercept = np.copy(default_beta_sigma_ind)
 
-        # First, transform the standard deviation of alpha0 and beta to a scale of the noise variance (Eq. A.7)
-        alpha0_sigma_2 = (alpha0_std_Sigma**2)/var_noise*(L-2)/L
-        beta_sigma_2 = (beta_std_Sigma**2)/var_noise*(L-2)/L
+        # First, transform the standard deviation of alpha0 and beta to a scale of the error variance (Eq. A.7)
+        alpha0_sigma_2 = (alpha0_std_Sigma**2)/var_error*(L-2)/L
+        beta_sigma_2 = (beta_std_Sigma**2)/var_error*(L-2)/L
 
         # Setup the unstandardized alpha prior means with the default (without the intercept)
         default_alpha_mu_ind_no_intercept[-1] = 0
@@ -545,7 +545,7 @@ class ThompsonSampling(LearningMethodBase):
 
         
         self._L_ini = L
-        self._noise_ini = stand_noise
+        self._error_ini = stand_error
         
 
         
@@ -603,8 +603,8 @@ class ThompsonSampling(LearningMethodBase):
     #     beta_std_sigma.append(float(self.standalone_parameters['beta_sigma_bias']))
 
     #     # Let's setup all the global parameters
-    #     self._degree_ini = float(self.standalone_parameters['noise_degree'])
-    #     self._scale_ini = float(self.standalone_parameters['noise_scale'])
+    #     self._degree_ini = float(self.standalone_parameters['error_degree'])
+    #     self._scale_ini = float(self.standalone_parameters['error_scale'])
     #     self._lower_clip = float(self.other_parameters['lower_clip'])
     #     self._upper_clip = float(self.other_parameters['upper_clip'])
     #     self._state_dim = len(self.features.items())  # Number of states
@@ -615,7 +615,7 @@ class ThompsonSampling(LearningMethodBase):
 
     #     # We can initialize theta_mu and theta_sigma here
     #     # Eventually the standardization would need to happen here
-    #     # Right now we haven't changed theta_Sigma with respect to the scaling parameter of the noise
+    #     # Right now we haven't changed theta_Sigma with respect to the scaling parameter of the error
     #     theta_mu_ini = np.array([alpha0_mu + beta_mu + beta_mu]).T
     #     theta_sigma_list = alpha0_std_sigma + beta_std_sigma + beta_std_sigma
     #     theta_Sigma_ini = np.diag(np.array(theta_sigma_list) ** 2 / self._scale_ini)

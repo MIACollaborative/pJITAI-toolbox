@@ -32,9 +32,6 @@
                     "/projects/settings/personalization_method/"+project_uuid in all_menus %}
                     href="/projects/settings/personalization_method/{{project_uuid}}" {% endif %} class="">Personalization
                     Method</a></li>
-                <!-- <li class="{% if 'scenario' in segment %} active {% endif %}"><a {% if
-                    "/projects/settings/scenario/"+project_uuid in all_menus %}
-                    href="/projects/settings/scenario/{{project_uuid}}" {% endif %} class="">Scenario</a></li> -->
                 <li class="{% if 'general_summary' in segment %} active {% endif %}"><a {% if
                     "/projects/settings/summary/"+project_uuid in all_menus %}
                     href="/projects/settings/summary/{{project_uuid}}" {% endif %} class="">Summary</a></li>
@@ -59,9 +56,6 @@
                 "/intervention/settings/decision_point/"+project_uuid in all_menus %}
                 href="/intervention/settings/decision_point/{{project_uuid}}" {% endif %} class="">Decision Points</a>
             </li>
-            <!-- <li class="{% if 'intervention_ineligibility' in segment %} active {% endif %}"><a {% if
-                "/intervention/settings/ineligibility/"+project_uuid in all_menus %}
-                href="/intervention/settings/ineligibility/{{project_uuid}}" {% endif %} class="">Ineligibility</a></li> -->
             <li class="{% if 'intervention_probability' in segment %} active {% endif %}"><a {% if
                 "/intervention/settings/intervention_probability/"+project_uuid in all_menus %}
                 href="/intervention/settings/intervention_probability/{{project_uuid}}" {% endif %}
@@ -84,19 +78,26 @@
                 "/model/settings/standardized_proximal_outcome/"+project_uuid in all_menus %}
                 href="/model/settings/standardized_proximal_outcome/{{project_uuid}}" {% endif %} class="">Proximal Outcome Attribute
                 </a></li>
-            <li class="{% if 'covariates' in segment %} active {% endif %}"><a {% if
+            <li class="{% if 'covariates_all' in segment %} active {% endif %}"><a {% if
                 "/covariates/settings/all/"+project_uuid in all_menus %}
-                href="/covariates/settings/all/{{project_uuid}}" {% endif %} class="">Covariates</a></li>
+                href="/covariates/settings/all/{{project_uuid}}" {% endif %} class="">Covariates Define</a></li>
             <li class="{% if 'model_intercept' in segment %} active {% endif %}"><a {% if
                 "/model/settings/intercept/"+project_uuid in all_menus %}
                 href="/model/settings/intercept/{{project_uuid}}" {% endif %} class="">Intercept</a></li>
+            <li class="{% if 'covariates_main_effect' in segment %} active {% endif %}"><a {% if
+                "/covariates/settings/covariate_main_effect/"+project_uuid in all_menus %}
+                href="/covariates/settings/covariate_main_effect/{{project_uuid}}" {% endif %} class="">Covariates Main Effect</a></li>
             <li class="{% if 'model_main_treatment_effect' in segment %} active {% endif %}"><a {% if
                 "/model/settings/main_treatment_effect/"+project_uuid in all_menus %}
                 href="/model/settings/main_treatment_effect/{{project_uuid}}" {% endif %} class="">Main Treatment
                 Effect</a></li>
-            <li class="{% if 'main_noise' in segment %} active {% endif %}"><a {% if
-                "/model/settings/main_noise/"+project_uuid in all_menus %}
-                href="/model/settings/main_noise/{{project_uuid}}" {% endif %} class="">Noise</a></li>
+            <li class="{% if 'covariates_interaction_effect' in segment %} active {% endif %}"><a {% if
+                "/model/settings/main_treatment_effect/"+project_uuid in all_menus %}
+                href="/covariates/settings/covariate_interaction_effect/{{project_uuid}}" {% endif %} class="">Covariates Interaction
+                Effect</a></li>
+            <li class="{% if 'main_error' in segment %} active {% endif %}"><a {% if
+                "/model/settings/main_error/"+project_uuid in all_menus %}
+                href="/model/settings/main_error/{{project_uuid}}" {% endif %} class="">Error</a></li>
             <li class="{% if 'model_summary' in segment %} active {% endif %}"><a {% if
                 "/model/settings/summary/"+project_uuid in all_menus %} href="/model/settings/summary/{{project_uuid}}"
                 {% endif %} class="">Summary</a></li>

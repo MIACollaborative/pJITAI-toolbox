@@ -34,20 +34,20 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="row">
-                                                    <div class="col">
+                                                    <div class="col" style="flex: 4;">
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="intercept_prior_mean">Prior
-                                                                mean of the intercept</label>
-                                                            <input type="number" step="0.01"
+                                                                mean (<b>&mu;<sub>&alpha;0</sub></b>)</label>
+                                                            <input {% if project_status == 1 %}readonly{% endif %} type="number" step="0.01"
                                                                 value="{{settings.intercept_prior_mean}}"
                                                                 id="intercept_prior_mean" name="intercept_prior_mean"
                                                                 class="form-control" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="form-control-label"
-                                                                for="intercept_prior_standard_deviation">Prior standard
-                                                                deviation of the intercept </label>
-                                                            <input type="number" step="0.01" min="0"
+                                                                for="intercept_prior_standard_deviation">Standard
+                                                                deviation (<b>&sigma;<sub>&alpha;0</sub></b>)</label>
+                                                            <input {% if project_status == 1 %}readonly{% endif %} type="number" step="0.01" min="0"
                                                                 value="{{settings.intercept_prior_standard_deviation}}"
                                                                 id="intercept_prior_standard_deviation"
                                                                 name="intercept_prior_standard_deviation"
@@ -66,7 +66,7 @@
                                                         </script>
                                                     </div>
 
-                                                    <div class="col">
+                                                    <div class="col" style="flex: 6;">
                                                         {{formula|safe}}
                                                     </div>
                                                 </div>
@@ -75,7 +75,7 @@
                                                     <a href="/covariates/settings/all/{{project_uuid}}"
                                                         class="btn btn-outline-primary" role="button">Back</a>
                                                     <button style="margin-left: 3px;" type="submit" type="button"
-                                                            formaction="/model/settings/main_treatment_effect/{{project_uuid}}"
+                                                            formaction="/covariates/settings/covariate_main_effect/{{project_uuid}}"
                                                             formmethod="post" class="btn btn-primary">Next
                                                     </button>
                                                 </div>

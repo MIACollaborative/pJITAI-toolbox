@@ -36,7 +36,7 @@
                                                 <div class="form-group">
                                                     <label class="form-control-label" for="update_time">When should the pJITAI algorithm update?</label>
                                                     <div class="input-group">
-                                                        <select id="update_day" name="update_day" class="form-control">
+                                                        <select {% if project_status == 1 %}disabled{% endif %} id="update_day" name="update_day" class="form-control">
                                                             {% for udur in update_duration%}
                                                             <option id="update_day_option" {% if settings.update_day==udur %} selected{% endif %}
                                                                     value="{{udur}}">{{udur}}
