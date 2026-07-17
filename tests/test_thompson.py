@@ -28,7 +28,7 @@ def _decision(monkeypatch, example, state_data):
       'theta_mu': [ts._theta_mu_ini], #can't figure out the dimensions of any of these
       'theta_Sigma': [ts._theta_Sigma_ini],
       'degree': [ts._L_ini], 
-      'scale': [ts._noise_ini]
+      'scale': [ts._error_ini]
   }
   tuned_params = pd.DataFrame(tuned_params_dict)
 

@@ -102,12 +102,9 @@
                       document.getElementById('no-match-user').style.display = 'none';
                       document.getElementById('invite-btn').style.display = 'none';
                       document.getElementById('use-other-user').style.display = 'none';
-                      // console.log('checking email: ', email);
                       const allUsers = JSON.parse('{{ all_users | tojson | safe }}');
                       const thisUser = JSON.parse('{{ this_user | tojson | safe }}');
                       let found = false;
-
-                      // document.getElementById('user-email').value = '';
 
                       if (email == thisUser) {
                         document.getElementById('use-other-user').style.display = 'block';

@@ -93,7 +93,7 @@ def update_model_settings(data, project_details_obj):
         db.session.commit()
 
 
-def update_covariates_settings(data, project_details_obj, project_details, cov_id=None):
+def update_covariates_settings(data, project_details_obj, cov_id=None):
     cov_vars = {}
     current_time = datetime.now().isoformat()
     if project_details_obj:

@@ -21,11 +21,7 @@
                                     <div class="card">
                                         <div class="card-header">
 
-                                            <h3>Intervention Components <span data-toggle='tooltip'
-                                                                              data-bs-placement="right"
-                                                                              title='If you want to edit, duplicate, or delete an intervention component, you can click the three dots in the top right corner of the intervention component. You can find your finalized design by clicking "Finalized" in the left-hand menu.'> <i
-                                                    class=" align-text-top questionmark far fa-question-circle"></i></span>
-                                            </h3>
+                                            <h3>Intervention Components</h3>
                                         </div>
 
                                     </div>
@@ -85,11 +81,11 @@
                                             <p class="card-text">Intervention:
                                                 {{proj.get("intervention_component_name")}}</p>
                                             <a class="small">{{proj.get("project_description")[:70]}}</a>
-                                            {% if proj.get("project_status")==1 %}
+                                            <!-- {% if proj.get("project_status")==1 %}
                                             <p><a href="/api/projects/{{proj.get('project_uuid')}}" class="btn btn-info"><i class="fas fa-code-branch"></i> Get
                                                 your API</a></p>
 
-                                            {% endif %}
+                                            {% endif %} -->
                                         </div>
                                     </div>
                                 </div>
