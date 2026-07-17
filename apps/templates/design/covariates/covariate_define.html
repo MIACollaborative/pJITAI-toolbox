@@ -64,7 +64,7 @@ $(document).ready(function(){
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="covariate_name">Name</label>
-                                                            <input onkeyup="copy_cov_name_to_span()"
+                                                            <input {% if project_status == 1 %}readonly{% endif %} onkeyup="copy_cov_name_to_span()"
                                                                 value="{{settings.covariate_name}}" type="text"
                                                                 id="covariate_name" name="covariate_name"
                                                                 class="form-control" placeholder="covariate name" required>
@@ -76,13 +76,13 @@ $(document).ready(function(){
                                                             <div class="btn-group">
                                                                 <fieldset id="tailoring_variable">
                                                                     <label class="btn btn-outline-success">
-                                                                        <input type="radio" name="tailoring_variable"
+                                                                        <input {% if project_status == 1 %}disabled{% endif %} type="radio" name="tailoring_variable"
                                                                             value="yes" {{ "checked" if
                                                                         settings.tailoring_variable == "yes" }}> Yes
                                                                         </input>
                                                                     </label>
                                                                     <label class="btn btn-outline-primary">
-                                                                        <input type="radio" name="tailoring_variable"
+                                                                        <input {% if project_status == 1 %}disabled{% endif %} type="radio" name="tailoring_variable"
                                                                             value="no" {{ "checked" if
                                                                         settings.tailoring_variable == "no" }}> No
                                                                     </label>
@@ -91,21 +91,21 @@ $(document).ready(function(){
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="covariate_min_val">Minimum allowed value <span style="color: red;">*</span></label>   
-                                                            <input value="{{settings.covariate_min_val}}" step="any"
+                                                            <input {% if project_status == 1 %}readonly{% endif %} value="{{settings.covariate_min_val}}" step="any"
                                                             type="number"
                                                             id="covariate_min_val" name="covariate_min_val"
                                                             class="form-control" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="covariate_max_val">Maximum allowed value <span style="color: red;">*</span></label>
-                                                            <input value="{{settings.covariate_max_val}}" step="any"
+                                                            <input {% if project_status == 1 %}readonly{% endif %} value="{{settings.covariate_max_val}}" step="any"
                                                             type="number"
                                                             id="covariate_max_val" name="covariate_max_val"
                                                             class="form-control" placeholder="" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="notes">Notes</label><br>
-                                                            <input value="{{settings.notes}}" type="text"
+                                                            <input {% if project_status == 1 %}readonly{% endif %} value="{{settings.notes}}" type="text"
                                                                 name="notes" class="form-control"
                                                                 placeholder="Notes...">
                                                         </div>

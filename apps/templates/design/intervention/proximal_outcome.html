@@ -52,7 +52,7 @@ $(document).ready(function() {
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
                                                         <label class="form-control-label" for="proximal_outcome_name">Proximal outcome name <span style="color: red;">*</span></label>
-                                                        <input type="text" name="proximal_outcome_name" id="proximal_outcome_name"
+                                                        <input {% if project_status == 1 %}readonly{% endif %} type="text" name="proximal_outcome_name" id="proximal_outcome_name"
                                                             value="{{settings.get('proximal_outcome_name','')}}" required
                                                             class="form-control" placeholder="Proximal outcome name">
                                                     </div>
@@ -72,7 +72,7 @@ $(document).ready(function() {
 
                                                     <div class="form-group">
                                                         <label class="form-control-label" for="proximal_outcome_description">Proximal outcome description</label>
-                                                        <textarea name="proximal_outcome_description" id="proximal_outcome_description"
+                                                        <textarea {% if project_status == 1 %}readonly{% endif %} name="proximal_outcome_description" id="proximal_outcome_description"
                                                                 rows="4" class="form-control"
                                                                 placeholder="Proximal outcome description...">{{settings.get('proximal_outcome_description','')}}</textarea>
                                                     </div>

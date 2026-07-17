@@ -37,7 +37,7 @@
                                                     <div class="col" style="flex: 4;">
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="error_scale">Scale (&sigma;<sub>0</sub><sup>2</sup>)</label>
-                                                            <input type="number" step="0.01"
+                                                            <input {% if project_status == 1 %}readonly{% endif %} type="number" step="0.01"
                                                                 value="{{settings.error_scale}}"
                                                                 id="error_scale" name="error_scale"
                                                                 oninput="check(this)"
@@ -56,7 +56,7 @@
                                                         <div class="form-group">
                                                             <label class="form-control-label"
                                                                 for="error_degree_of_freedom">Degree of freedom (&nu;) </label>
-                                                            <input type="number"  min="3"
+                                                            <input {% if project_status == 1 %}readonly{% endif %} type="number"  min="3"
                                                                 value="{{settings.error_degree_of_freedom}}"
                                                                 id="error_degree_of_freedom"
                                                                 name="error_degree_of_freedom"
