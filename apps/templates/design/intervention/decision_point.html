@@ -37,7 +37,7 @@
                                                         Points</label>
                                                     <div class="form-group">
 
-                                                        <select id="decision_point_frequency" name="decision_point_frequency"
+                                                        <select {% if project_status == 1 %}disabled{% endif %} id="decision_point_frequency" name="decision_point_frequency"
                                                                 class="form-select" aria-label="Default select example">
                                                             {% for n in range(1,61) %}
                                                             <option {% if settings.decision_point_frequency==n|string %}
@@ -45,7 +45,7 @@
                                                             </option>
                                                             {% endfor %}
                                                         </select> times per
-                                                        <select id="decision_point_frequency_time"
+                                                        <select {% if project_status == 1 %}disabled{% endif %} id="decision_point_frequency_time"
                                                                 name="decision_point_frequency_time" class="form-select"
                                                                 aria-label="Default select example">
                                                             {% for tm in decision_point_frequency_time %}

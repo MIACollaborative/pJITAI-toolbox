@@ -283,9 +283,11 @@ def project_settings(setting_type, project_uuid=None):
     comments_for_that_page = get_comments(project_uuid, page_name)
     all_comments = get_all_comments(project_uuid, page_name)
 
+    project_status = 0
     if project_details.get("general_settings"):
         general_settings = project_details.get("general_settings", {})
         modified_on = project_details.get("modified_on", "")
+        project_status = project_details.get("project_status", 0)
 
     if request.method == 'POST':
         timestamp = datetime.now(get_localzone()).isoformat()
@@ -335,16 +337,16 @@ def project_settings(setting_type, project_uuid=None):
 
     if setting_type == "general":
         return render_template("design/projects/general_settings.html", segment="general_settings", all_menus=all_menus,
-                               menu_number=1, project_name=project_name, modified_on=modified_on,
+                               menu_number=1, project_name=project_name, modified_on=modified_on, project_status=project_status,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "team_members":
-        return render_template("design/projects/team_members.html", segment="general_team_members", all_menus=all_menus,
+        return render_template("design/projects/team_members.html", segment="general_team_members", all_menus=all_menus, project_status=project_status,
                                menu_number=0, project_name=project_name, modified_on=modified_on, team_members=team_members, all_users=all_users, this_user=this_user, this_user_name=this_user_name, project_owner=project_owner,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "personalization_method":
         save_path = "/projects/settings/personalization_method/" + project_uuid  # Save this line. personalization_method page should be added manually (due to team_members.html next button design. It does not use 'post' request method.)
         add_menu(user_id, project_uuid, save_path)
-        return render_template("design/projects/personalization_method.html", segment="general_personalization_method",
+        return render_template("design/projects/personalization_method.html", segment="general_personalization_method", project_status=project_status,
                                all_menus=all_menus, menu_number=2, project_name=project_name, modified_on=modified_on,
                                general_settings=general_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "summary":
@@ -365,7 +367,7 @@ def intervention_settings(setting_type, project_uuid):
     project_name = project_details.get("general_settings", {}).get("project_name", "")
 
     full_url = request.url
-
+    project_status = 0
     if project_details.get("intervention_settings"):
         intervention_settings = project_details.get("intervention_settings")
         modified_on = project_details.get("modified_on", "")
@@ -373,6 +375,7 @@ def intervention_settings(setting_type, project_uuid):
         for k, v in intervention_settings.items():
             if k.startswith("condition"):
                 conditions[k] = v
+        project_status = project_details.get("project_status", 0)
 
     if not modified_on:
         modified_on = datetime.now()
@@ -415,25 +418,25 @@ def intervention_settings(setting_type, project_uuid):
     user = user_id
 
     if setting_type == "proximal_outcome":
-        return render_template("design/intervention/proximal_outcome.html", segment="intervention_proximal_outcome",
+        return render_template("design/intervention/proximal_outcome.html", segment="intervention_proximal_outcome", project_status=project_status,
                                all_menus=all_menus, menu_number=1, project_name=project_name, modified_on=modified_on,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "intervention_option":
-        return render_template("design/intervention/intervention_option.html", segment="intervention_option",
+        return render_template("design/intervention/intervention_option.html", segment="intervention_option", project_status=project_status,
                                all_menus=all_menus, menu_number=5, project_name=project_name, modified_on=modified_on,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
 
     elif setting_type == "decision_point":
-        return render_template("design/intervention/decision_point.html", segment="intervention_decision_point",
+        return render_template("design/intervention/decision_point.html", segment="intervention_decision_point", project_status=project_status,
                                all_menus=all_menus, menu_number=6, project_name=project_name, modified_on=modified_on,
                                decision_point_frequency_time=decision_point_frequency_time,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "intervention_probability":
-        return render_template("design/intervention/intervention_probability.html", segment="intervention_probability",
+        return render_template("design/intervention/intervention_probability.html", segment="intervention_probability", project_status=project_status,
                                all_menus=all_menus, menu_number=8, project_name=project_name, modified_on=modified_on,
                                settings=intervention_settings, project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "update_schedule":
-        return render_template("design/intervention/update_schedule.html", segment="intervention_update_schedule",
+        return render_template("design/intervention/update_schedule.html", segment="intervention_update_schedule", project_status=project_status,
                                all_menus=all_menus, menu_number=9, project_name=project_name, modified_on=modified_on,
                                update_duration=update_duration, settings=intervention_settings,
                                project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
@@ -497,6 +500,7 @@ def model_settings(setting_type, project_uuid):
             update_model_settings(request.form.to_dict(), project_details_obj)
         project_details, project_details_obj = get_project_details(project_uuid, user_id)
 
+    project_status = 0
     if project_details.get("model_settings"):
         all_covariates = project_details.get("covariates")
         model_settings = project_details.get("model_settings")
@@ -510,6 +514,7 @@ def model_settings(setting_type, project_uuid):
             all_covs.append(all_covariates[c])
             if all_covariates[c]['tailoring_variable'] == 'yes':
                 tailoring_covariates.append(all_covariates[c])
+        project_status = project_details.get("project_status", 0)
 
     if not modified_on:
         modified_on = datetime.now()
@@ -520,7 +525,7 @@ def model_settings(setting_type, project_uuid):
     user = user_id
 
     if setting_type == "standardized_proximal_outcome":
-        return render_template("design/model/standardized_proximal_outcome.html",
+        return render_template("design/model/standardized_proximal_outcome.html", project_status=project_status,
                                segment="model_proximal_outcome", all_menus=all_menus, menu_number=11,
                                project_name=project_name, modified_on=modified_on, settings=model_settings,
                                project_uuid=project_uuid,
@@ -529,7 +534,7 @@ def model_settings(setting_type, project_uuid):
                                tailoring_covariates_count=len(tailoring_covariates), comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "intercept":
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", is_intercept=True)
-        return render_template("design/model/intercept.html", segment="model_intercept", all_menus=all_menus,
+        return render_template("design/model/intercept.html", project_status=project_status, segment="model_intercept", all_menus=all_menus,
                                menu_number=12, project_name=project_name, modified_on=modified_on,
                                settings=model_settings, project_uuid=project_uuid, 
                                all_covariates=all_covs, formula=formula,
@@ -537,7 +542,7 @@ def model_settings(setting_type, project_uuid):
                                tailoring_covariates_count=len(tailoring_covariates), comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "main_treatment_effect":
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", is_intercept=False, is_main_treatment_effect=True)
-        return render_template("design/model/main_treatment_effect.html", segment="model_main_treatment_effect",
+        return render_template("design/model/main_treatment_effect.html", project_status=project_status, segment="model_main_treatment_effect",
                                all_menus=all_menus, menu_number=13, project_name=project_name, modified_on=modified_on,
                                settings=model_settings, project_uuid=project_uuid,
                                all_covariates=all_covs, formula=formula,
@@ -546,7 +551,7 @@ def model_settings(setting_type, project_uuid):
     elif setting_type == "main_error":#@Anand - error page
         '''@Anand - check this menu_number = 14'''
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", is_intercept=False, is_error=True)
-        return render_template("design/model/main_error.html", segment="model_main_error",
+        return render_template("design/model/main_error.html", project_status=project_status, segment="model_main_error",
                                all_menus=all_menus, menu_number=14 , project_name=project_name, modified_on=modified_on,
                                settings=model_settings, project_uuid=project_uuid,
                                all_covariates=all_covs, formula=formula,
@@ -575,6 +580,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     project_name = project_details.get("general_settings", {}).get("project_name", "")
     full_url = request.url
 
+    project_status = 0
     if project_details.get("covariates"):
         modified_on = project_details.get("modified_on", "")
         all_covariates = dict(sorted(project_details.get("covariates").items(), key=lambda item: item[1].get("created_on", ""), reverse=False))
@@ -586,6 +592,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
             settings["proximal_outcome_name"] = project_details.get("general_settings", {}).get("proximal_outcome_name")
             settings["intervention_component_name"] = project_details.get("general_settings", {}).get(
                 "intervention_component_name")
+        project_status = project_details.get("project_status", 0)
 
     if setting_type == "all":
         page_name = "covariates_all"
@@ -640,12 +647,12 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
     if setting_type == "all":
         new_uuid = uuid4()
         formula = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="no", cov_id=cov_id, is_intercept=False, is_all=True)
-        return render_template("design/covariates/covariates.html", segment="covariates_all", all_menus=all_menus,
+        return render_template("design/covariates/covariates.html", segment="covariates_all", all_menus=all_menus, project_status=project_status,
                                menu_number=14, project_name=project_name, modified_on=modified_on, formula=formula,
                                all_covariates=all_covariates, settings=settings, new_uuid=new_uuid,
                                project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_define":
-        return render_template("design/covariates/covariate_define.html", segment="covariates_define", all_menus=all_menus,
+        return render_template("design/covariates/covariate_define.html", segment="covariates_define", all_menus=all_menus, project_status=project_status,
                                menu_number=14, project_name=project_name, modified_on=modified_on, settings=settings,
                                project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_main_effect":
@@ -653,7 +660,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
             f = generate_formula(project_uuid=project_uuid, is_summary_page="no", add_red_note="yes", cov_id=c, is_intercept=False)
             all_covariates[c]['formula'] = f
             all_covariates[c]['idx'] = list(all_covariates.keys()).index(c) + 1
-        return render_template("design/covariates/covariate_main_effect.html", segment="covariates_main_effect", all_covariates=all_covariates,
+        return render_template("design/covariates/covariate_main_effect.html", segment="covariates_main_effect", all_covariates=all_covariates, project_status=project_status,
                                all_menus=all_menus, menu_number=14, project_name=project_name, modified_on=modified_on,
                                project_uuid=project_uuid, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
     elif setting_type == "covariate_interaction_effect":
@@ -665,7 +672,7 @@ def covariates_settings(setting_type, project_uuid, cov_id=None):
                 all_tailoring_covariates[k]['formula'] = f
                 all_tailoring_covariates[k]['idx'] = list(all_covariates.keys()).index(k) + 1
         return render_template("design/covariates/covariate_interaction_effect.html", segment="covariates_interaction_effect", all_tailoring_covariates=all_tailoring_covariates,
-                               all_menus=all_menus, menu_number=14, project_name=project_name,
+                               all_menus=all_menus, menu_number=14, project_name=project_name, project_status=project_status,
                                modified_on=modified_on, project_uuid=project_uuid, cov_id=cov_id, comments_for_that_page=comments_for_that_page, all_comments=all_comments, user=user, page_name=page_name, full_url=full_url)
 
 

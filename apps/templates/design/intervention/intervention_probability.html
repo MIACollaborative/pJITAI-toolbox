@@ -100,7 +100,7 @@ $(document).ready(function(){
                                                             for="intervention_probability_lower_bound">Intervention
                                                             probability lower bound (when eligible)</label>
                                                         <div class="input-group-probability" style="display: flex; flex-direction: row; width: 100%;">
-                                                            <input min="0.01" max="0.99" step="0.01"
+                                                            <input {% if project_status == 1 %}readonly{% endif %} min="0.01" max="0.99" step="0.01"
                                                                 value="{{settings.intervention_probability_lower_bound}}"
                                                                 type="number" id="intervention_probability_lower_bound"
                                                                 name="intervention_probability_lower_bound"
@@ -127,7 +127,7 @@ $(document).ready(function(){
                                                             for="intervention_probability_upper_bound">Intervention
                                                             probability upper bound (when eligible)</label>
                                                         <div class="input-group-probability" style="display: flex; flex-direction: row; width: 100%;">
-                                                            <input min="0.01" max="0.99" step="0.01"
+                                                            <input {% if project_status == 1 %}readonly{% endif %} min="0.01" max="0.99" step="0.01"
                                                                 value="{{settings.intervention_probability_upper_bound}}"
                                                                 type="number" id="intervention_probability_upper_bound"
                                                                 name="intervention_probability_upper_bound"

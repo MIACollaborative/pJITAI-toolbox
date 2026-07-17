@@ -38,7 +38,7 @@
                                                         <div class="form-group">
                                                             <label class="form-control-label" for="personalization_method">Personalization
                                                                 Method</label>
-                                                            <select id="personalization_method"
+                                                            <select {% if project_status==1 %}readonly{% endif %} id="personalization_method"
                                                                     name="personalization_method" class="form-control">
                                                                 <option value="ThompsonSampling"
                                                                         selected>Thompson Sampling - Two intervention option
